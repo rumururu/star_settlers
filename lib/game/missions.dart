@@ -108,28 +108,30 @@ const storySteps = [
   StoryStep('새 정거장 건설', 'stations', 2, [
     (Speaker.advisor, '이제 영역을 넓힐 때예요! 행성에서 떨어진 빈 우주에 정거장을 지어봐요.'),
   ], credits: 300, gems: 10),
-  StoryStep('섹터 두목 격파', 'sectorBosses', 1, [
-    (Speaker.pirate, '내 구역을 휘젓고 다니는 꼬마 선장이 있다며? 직접 상대해주지!'),
-    (Speaker.advisor, '섹터 두목이 나타났어요! 무기를 강화하고 맞서세요!'),
+  StoryStep('항성계 발전도 100%', 'devPercent', 100, [
+    (Speaker.advisor, '모든 행성을 Lv.3까지 키우면 다음 항성계가 열려요. 오른쪽 위 항성계 버튼에서 확인해요!'),
   ], credits: 500, gems: 15),
-  StoryStep('워프 게이트로 다음 섹터 이동', 'sector', 1, [
-    (Speaker.advisor, '두목을 쓰러뜨려서 워프 게이트가 열렸어요! 미니맵의 보라색 게이트로 가봐요.'),
+  StoryStep('워프 게이트로 다음 항성계 이동', 'sector', 1, [
+    (Speaker.advisor, '워프 게이트가 열렸어요! 미니맵의 보라색 게이트로 가봐요.'),
     (Speaker.captain, '새로운 우주가 기다리고 있어!'),
   ], credits: 300, gems: 10),
 ];
 
-/// 무한 스토리: 기본 단계 이후 섹터마다 두목 → 워프 반복
+/// 스토리 단계가 목표로 하는 항성계 번호 (발전도 단계용)
+int storySectorAt(int index) =>
+    index < storySteps.length ? 0 : (index - storySteps.length) ~/ 2 + 1;
+
+/// 무한 스토리: 기본 단계 이후 항성계마다 발전 → 워프 반복
 StoryStep storyStepAt(int index) {
   if (index < storySteps.length) return storySteps[index];
   final k = index - storySteps.length;
   final sector = k ~/ 2 + 1;
   if (k.isEven) {
-    // 섹터 두목은 섹터마다 처음 한 번만 카운트되므로 누적 수로 판단
-    return StoryStep('섹터 ${sector + 1} 두목 격파', 'sectorBosses', sector + 1, [
-      (Speaker.advisor, '이 섹터의 두목을 찾아 쓰러뜨려요! 위협도가 오르면 나타나요.'),
+    return StoryStep('항성계 ${sector + 1} 발전도 100%', 'devPercent', 100, [
+      (Speaker.advisor, '새 항성계의 행성들을 모두 Lv.3까지 키워요!'),
     ], credits: 500 * (sector + 1), gems: 15);
   }
-  return StoryStep('${euro('섹터 ${sector + 2}')} 워프', 'sector', sector + 1, [
+  return StoryStep('${euro('항성계 ${sector + 2}')} 워프', 'sector', sector + 1, [
     (Speaker.advisor, '게이트가 열렸어요. 더 깊은 우주로 가볼까요?'),
   ], credits: 300 * (sector + 1), gems: 10);
 }

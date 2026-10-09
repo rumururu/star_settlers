@@ -17,7 +17,7 @@ class InputState {
   bool autoAim = false;
 }
 
-enum UpgradeKind { weapon, hull, engine, missile, shield, drone }
+enum UpgradeKind { weapon, hull, engine, missile, shield, drone, magnet }
 
 extension UpgradeInfo on UpgradeKind {
   String get label => switch (this) {
@@ -27,9 +27,10 @@ extension UpgradeInfo on UpgradeKind {
         UpgradeKind.missile => '유도 미사일',
         UpgradeKind.shield => '에너지 실드',
         UpgradeKind.drone => '전투 드론',
+        UpgradeKind.magnet => '자석',
       };
   int get maxLevel => switch (this) {
-        UpgradeKind.missile || UpgradeKind.shield || UpgradeKind.drone => 5,
+        UpgradeKind.missile || UpgradeKind.shield || UpgradeKind.drone || UpgradeKind.magnet => 5,
         _ => 8,
       };
 }
@@ -44,8 +45,12 @@ class SectorSave {
     required this.bossesSpawned,
     required this.idleCredits,
     required this.idleOre,
+    this.buildings = const [],
   });
   final List<int> colonyLevels;
+
+  /// 행성별 식민지 건물 레벨 (ColonyBuilding.index 순서)
+  final List<List<int>> buildings;
   final List<Map<String, dynamic>> stations;
   final double elapsed;
   final bool bossDefeated;
@@ -61,6 +66,7 @@ class SectorSave {
         'bosses': bossesSpawned,
         'ic': idleCredits,
         'io': idleOre,
+        'bld': buildings,
       };
 
   static SectorSave fromJson(Map<String, dynamic> j) => SectorSave(
@@ -71,6 +77,9 @@ class SectorSave {
         bossesSpawned: j['bosses'] as int,
         idleCredits: (j['ic'] as num).toDouble(),
         idleOre: (j['io'] as num).toDouble(),
+        buildings: [
+          for (final b in (j['bld'] as List?) ?? const []) (b as List).cast<int>(),
+        ],
       );
 }
 
@@ -95,14 +104,24 @@ class GameWorld {
         profile = profile ?? Profile() {
     _rng = Random(this.seed);
     _loadSector(0, null);
-    player.pos = const Offset(0, 160);
+    player.pos = homePos + const Offset(0, 160);
     player.hp = playerMaxHp;
     say(Speaker.advisor, '선장님, 환영합니다! 저는 부관 미나예요.');
     _startStoryStep();
   }
 
   static const double worldHalf = 4000;
+
+  /// 항성은 원점, 본거지는 그 아래쪽
+  static const homePos = Offset(0, 900);
+  static const starRadius = 140.0;
+
+  /// 공전 궤도: 테라노바(첫 행성) 전용 안쪽 궤도 + 나머지 두 개씩
+  static const innerOrbit = 1350.0;
+  static const outerOrbits = [1850.0, 2350.0, 2850.0, 3350.0, 3750.0];
+  static const backGatePos = Offset(-520, 900);
   static const int maxAsteroids = 110;
+  /// 기본 승무원 정원. 실제 정원은 [rosterCap]
   static const int maxRoster = 12;
 
   final int seed;
@@ -175,7 +194,10 @@ class GameWorld {
       roster.where((c) => c.assigned && c.role == r).fold(0, (s, c) => s + c.bonusPct) /
       100;
 
-  int get crewSlots => 3 + (profile.extraCrewSlot ? 1 : 0);
+  int get crewSlots => 3 + profile.extraCrewSlots;
+
+  /// 승무원 정원 (기본 12, 젬으로 +4씩 최대 24)
+  int get rosterCap => maxRoster + profile.rosterPacks * Profile.rosterPackSize;
   int get assignedCount => roster.where((c) => c.assigned).length;
 
   ShipType get ship => shipTypeById(profile.shipType);
@@ -200,7 +222,13 @@ class GameWorld {
       (buffs.containsKey(PowerUpKind.rapid) ? 0.45 : 1);
   double get magnetRadius =>
       (buffs.containsKey(PowerUpKind.magnet) ? 450.0 : 170.0) * ship.magnetMul +
-      level(UpgradeKind.drone) * 30;
+      level(UpgradeKind.drone) * 30 +
+      magnetLevel * magnetRangePerLevel;
+
+  // 자석: 레벨마다 끌어오는 범위 +60, 끌어오는 힘 +30%
+  int get magnetLevel => level(UpgradeKind.magnet);
+  static const magnetRangePerLevel = 60.0;
+  double get magnetPull => 1400 * (1 + 0.3 * magnetLevel);
 
   // 전투 드론
   int get droneLevel => level(UpgradeKind.drone);
@@ -215,7 +243,11 @@ class GameWorld {
   double get missileCooldownMax => 8 * cooldownMul;
   double get shieldCooldownMax => 18 * cooldownMul;
   double get boostCooldownMax => 4 * cooldownMul;
-  bool get shielded => player.shieldTime > 0 || buffs.containsKey(PowerUpKind.shield);
+  bool get shielded =>
+      player.shieldTime > 0 || buffs.containsKey(PowerUpKind.shield);
+
+  /// 함선 고유 수호막(오로라)이 충전되어 있는가
+  bool get guardReady => ship.guardInterval > 0 && player.guardCooldown <= 0;
 
   double get sectorMul => 1 + sector * 0.5;
   double get costMul => 1 + sector * 0.3;
@@ -224,12 +256,18 @@ class GameWorld {
 
   int get colonyCount => planets.where((p) => p.colonyLevel > 0).length;
 
+  /// 시간이 올리는 위협도 상한: 항성계에 9분 머물면 +6에서 멈춘다 (안 그러면 끝없이 오른다)
+  static const threatTimeCap = 6.0;
+
   double get threat =>
       1 +
       sector * 1.0 +
-      sectorElapsed / 90 +
+      min(sectorElapsed / 90, threatTimeCap) +
       colonyCount * 0.3 +
       stations.fold<int>(0, (s, st) => s + st.habitatLevel - 1) * 0.15;
+
+  /// 전체 수입 배율 (승무원·프리미엄·명예·내 행성)
+  double get incomeMul => _incomeMul;
 
   double get _incomeMul =>
       (1 + crewBonus(CrewRole.trader)) * (profile.premium ? 1.25 : 1) *
@@ -243,12 +281,21 @@ class GameWorld {
   /// 환생 시 얻는 명예 점수
   int get honorGain => max(1, sqrt(empireValue / 500).floor());
 
+  /// 보급 기지 보너스: 가장 센 보급 기지 하나만 적용
+  double supportBonusAt(Planet p) {
+    var best = 0.0;
+    for (final s in stations) {
+      if (s.supportBonus > best && (s.pos - p.pos).distance < Station.supportRange) best = s.supportBonus;
+    }
+    return best;
+  }
+
   double planetCreditRate(Planet p) =>
-      p.raided ? 0 : p.ratePerLevel.$1 * p.colonyLevel * sectorMul * _incomeMul;
+      p.raided ? 0 : p.baseCreditRate * sectorMul * _incomeMul * (1 + supportBonusAt(p));
   double planetOreRate(Planet p) => p.raided
       ? 0
-      : p.ratePerLevel.$2 *
-          p.colonyLevel *
+      : p.baseOreRate *
+          (1 + supportBonusAt(p)) *
           sectorMul *
           (1 + crewBonus(CrewRole.miner)) *
           profile.home.oreMul;
@@ -267,10 +314,12 @@ class GameWorld {
 
   /// 제국 가치 (진행도 점수)
   int get empireValue =>
-      planets.fold<int>(0, (s, p) => s + p.colonyLevel * 100) +
+      planets.fold<int>(0, (s, p) => s + p.colonyLevel * 100 +
+          p.buildings.values.fold<int>(0, (a, b) => a + b) * 60) +
       stations.fold<int>(0, (s, st) => s + (st.habitatLevel + st.turretLevel) * 120) +
       sectors.values.fold<int>(
-          0, (s, e) => s + e.colonyLevels.fold<int>(0, (a, b) => a + b) * 100) +
+          0, (s, e) => s + e.colonyLevels.fold<int>(0, (a, b) => a + b) * 100 +
+              e.buildings.fold<int>(0, (a, l) => a + l.fold<int>(0, (x, y) => x + y)) * 60) +
       levels.values.fold<int>(0, (s, l) => s + l) * 80 +
       roster.fold<int>(0, (s, c) => s + c.rarity * c.level * 30) +
       sector * 1000 +
@@ -292,8 +341,14 @@ class GameWorld {
           (250 * pow(1.8, lv)).round(),
           50 * (lv + 1)
         ),
+      UpgradeKind.magnet => ((150 * pow(1.7, lv)).round(), 20 * (lv + 1)),
       _ => ((100 * pow(1.6, lv)).round(), 30 * lv),
     };
+  }
+
+  Cost colonyBuildingCost(Planet p, ColonyBuilding b) {
+    final c = p.buildingBaseCost(b);
+    return ((c.$1 * costMul).round(), (c.$2 * costMul).round());
   }
 
   Cost get stationBuildCost =>
@@ -310,6 +365,9 @@ class GameWorld {
 
   int get recruitCost => 300 + recruitCount * 150;
   static const recruitGemCost = 30;
+
+  /// ★4 전설 확정 모집 가격
+  static const legendaryGemCost = 500;
 
   double get orePrice =>
       (2 + sector * 0.6) * (1 + 0.35 * sin(totalTime / 40));
@@ -332,38 +390,63 @@ class GameWorld {
     final r = Random(seed + index * 7919);
     final kinds = PlanetKind.values;
     final names = [..._planetPool]..shuffle(r);
-    planets.add(Planet(index == 0 ? '테라노바' : names.removeLast(),
-        const Offset(900, -350), 110, index == 0 ? PlanetKind.garden : kinds[r.nextInt(kinds.length)]));
+    // 이름·종류·크기는 예전과 같은 난수 순서로 뽑는다 (저장된 식민지가 행성 번호로 묶여 있음).
+    // 예전 배치 좌표는 간격 검사에만 쓰고 버린다.
+    final drafts = <(String, double, PlanetKind)>[
+      (index == 0 ? '테라노바' : names.removeLast(), 110,
+          index == 0 ? PlanetKind.garden : kinds[r.nextInt(kinds.length)]),
+    ];
+    final legacyPos = <Offset>[const Offset(900, -350)];
     var tries = 0;
-    while (planets.length < 11 && tries < 2000) {
+    while (drafts.length < 1 + outerOrbits.length * 2 && tries < 2000) {
       tries++;
       final pos = Offset(randRange(r, -worldHalf + 400, worldHalf - 400),
           randRange(r, -worldHalf + 400, worldHalf - 400));
       if (pos.distance < 700) continue;
-      if (planets.any((p) => (p.pos - pos).distance < 1100)) continue;
+      if (legacyPos.any((p) => (p - pos).distance < 1100)) continue;
       final kind = kinds[r.nextInt(kinds.length)];
       final radius =
           kind == PlanetKind.gas ? randRange(r, 150, 200) : randRange(r, 90, 140);
-      planets.add(Planet(names.removeLast(), pos, radius, kind));
+      legacyPos.add(pos);
+      drafts.add((names.removeLast(), radius, kind));
+    }
+    // 궤도 배치: 첫 행성은 본거지 근처에서 출발, 나머지는 한 궤도에 두 개씩 마주 보게
+    final orbitRng = Random(seed + index * 31 + 7);
+    for (var i = 0; i < drafts.length; i++) {
+      final (name, radius, kind) = drafts[i];
+      final double orbit;
+      final double phase;
+      if (i == 0) {
+        orbit = innerOrbit;
+        phase = pi / 2 - 0.55;
+      } else {
+        orbit = outerOrbits[(i - 1) ~/ 2];
+        phase = (i - 1).isEven
+            ? orbitRng.nextDouble() * 2 * pi
+            : planets.last.orbitPhase + pi + randRange(orbitRng, -0.4, 0.4);
+      }
+      planets.add(Planet(name, radius, kind, orbitRadius: orbit, orbitPhase: phase));
     }
 
-    // 워프 게이트: 앞으로 가는 게이트는 멀리, 돌아가는 게이트는 시작점 근처
-    Offset gatePos;
-    var gt = 0;
-    do {
-      final a = r.nextDouble() * 2 * pi;
-      gatePos = OffsetX.fromAngle(a, randRange(r, 2600, 3400));
-      gt++;
-    } while (gt < 100 &&
-        (gatePos.dx.abs() > worldHalf - 200 ||
-            gatePos.dy.abs() > worldHalf - 200 ||
-            planets.any((p) => (p.pos - gatePos).distance < p.radius + 300)));
+    // 워프 게이트: 앞으로 가는 게이트는 모든 궤도 바깥 모서리, 돌아가는 게이트는 본거지 옆
+    final corner = orbitRng.nextInt(4);
+    final gatePos = Offset(corner.isEven ? 3550 : -3550, corner < 2 ? -3550 : 3550);
     gates.add(WarpGate(gatePos, true));
-    if (index > 0) gates.add(WarpGate(const Offset(-450, 250), false));
+    if (index > 0) gates.add(WarpGate(backGatePos, false));
 
     if (save != null) {
       for (var i = 0; i < save.colonyLevels.length && i < planets.length; i++) {
         planets[i].colonyLevel = save.colonyLevels[i];
+      }
+      for (var i = 0; i < save.buildings.length && i < planets.length; i++) {
+        final lv = save.buildings[i];
+        for (final b in ColonyBuilding.values) {
+          if (b.index < lv.length) planets[i].buildings[b] = lv[b.index];
+        }
+      }
+      // 방어막은 저장하지 않는다: 불러오면 가득 찬 상태
+      for (final p in planets) {
+        if (p.colonyLevel > 0) p.shieldHp = p.shieldMax(sectorMul);
       }
       for (final s in save.stations) {
         stations.add(_stationFromJson(s));
@@ -372,31 +455,40 @@ class GameWorld {
       bossDefeated = save.bossDefeated;
       bossesSpawned = save.bossesSpawned;
     } else {
-      stations.add(Station(index == 0 ? '헤이븐 기지' : '$sectorName 전진기지', Offset.zero)
-        ..turretLevel = 1
-        ..hp = 300);
+      final home = Station(index == 0 ? '헤이븐 기지' : '$sectorName 전진기지', homePos,
+          role: StationRole.home)
+        ..turretLevel = 1;
+      stations.add(home..hp = home.maxHp);
       sectorElapsed = 0;
       bossDefeated = false;
       bossesSpawned = 0;
     }
     if (stations.isEmpty) {
-      stations.add(Station('$sectorName 전진기지', Offset.zero));
+      final home = Station('$sectorName 전진기지', homePos, role: StationRole.home);
+      stations.add(home..hp = home.maxHp);
     }
     sectorBossSpawned = false;
+    for (final p in planets) {
+      p.placeOnOrbit(sectorElapsed);
+    }
+    _devAnnounced = development >= 1;
     for (var i = 0; i < maxAsteroids; i++) {
-      _spawnAsteroid(awayFrom: Offset.zero, minDist: 500);
+      _spawnAsteroid(awayFrom: homePos, minDist: 500);
     }
   }
 
   SectorSave _saveCurrentSector() => SectorSave(
         colonyLevels: planets.map((p) => p.colonyLevel).toList(),
+        buildings: [
+          for (final p in planets) [for (final b in ColonyBuilding.values) p.building(b)],
+        ],
         stations: stations.map(_stationToJson).toList(),
         elapsed: sectorElapsed,
         bossDefeated: bossDefeated,
         bossesSpawned: bossesSpawned,
-        idleCredits: planets.fold(0.0, (s, p) => s + p.ratePerLevel.$1 * p.colonyLevel * sectorMul) +
+        idleCredits: planets.fold(0.0, (s, p) => s + p.baseCreditRate * sectorMul) +
             stations.fold(0.0, (s, st) => s + st.baseCreditRate * sectorMul),
-        idleOre: planets.fold(0.0, (s, p) => s + p.ratePerLevel.$2 * p.colonyLevel * sectorMul),
+        idleOre: planets.fold(0.0, (s, p) => s + p.baseOreRate * sectorMul),
       );
 
   WarpGate? get nearbyGate {
@@ -406,7 +498,23 @@ class GameWorld {
     return null;
   }
 
-  bool gateOpen(WarpGate g) => !g.forward || bossDefeated;
+  // ---------- 항성계 발전도 ----------
+  /// 행성 하나가 발전도에 기여하는 최대 식민지 레벨
+  static const devLevelCap = 3;
+
+  /// 행성 레벨 목록으로 발전도(0~1). 모든 행성이 Lv.3 이상이면 1.
+  static double developmentOf(List<int> levels) => levels.isEmpty
+      ? 0
+      : levels.fold<int>(0, (s, l) => s + min(l, devLevelCap)) / (levels.length * devLevelCap);
+
+  /// 현재 항성계 발전도
+  double get development => developmentOf([for (final p in planets) p.colonyLevel]);
+
+  /// 발전도 100%가 되면 다음 항성계로 가는 게이트가 열린다 (한 번 가 본 곳은 계속 열림)
+  bool gateOpen(WarpGate g) => !g.forward || development >= 1 || counter('maxSector') > sector;
+
+  /// 발전 완료 알림을 이미 했는지 (섹터를 불러올 때 현재 상태로 맞춘다)
+  bool _devAnnounced = false;
 
   bool warp(WarpGate g) {
     if (!gateOpen(g) || !player.alive) return false;
@@ -424,7 +532,7 @@ class GameWorld {
     offerTimer = 0;
     // 도착 위치
     final arrive = g.forward
-        ? (to > 0 ? const Offset(-450, 250) : Offset.zero)
+        ? (to > 0 ? backGatePos : homePos)
         : gates.firstWhere((x) => x.forward).pos;
     player
       ..pos = arrive + const Offset(0, 180)
@@ -447,6 +555,7 @@ class GameWorld {
       final pos = Offset(randRange(_rng, -worldHalf, worldHalf),
           randRange(_rng, -worldHalf, worldHalf));
       if ((pos - awayFrom).distance < minDist) continue;
+      if (pos.distance < starRadius + 250) continue;
       if (planets.any((p) => (p.pos - pos).distance < p.radius + 120)) continue;
       if (stations.any((s) => (s.pos - pos).distance < 250)) continue;
       if (gates.any((g) => (g.pos - pos).distance < 200)) continue;
@@ -486,6 +595,13 @@ class GameWorld {
       case 'sector':
         final g = gates.where((g) => g.forward && gateOpen(g));
         return g.isEmpty ? null : g.first.pos;
+      case 'devPercent':
+        // 아직 Lv.3이 안 된 가장 가까운 행성
+        final todo = planets.where((p) => p.colonyLevel < devLevelCap).toList();
+        if (todo.isEmpty) return null;
+        todo.sort((a, b) =>
+            (a.pos - player.pos).distance.compareTo((b.pos - player.pos).distance));
+        return todo.first.pos;
       default:
         return null;
     }
@@ -510,6 +626,116 @@ class GameWorld {
     return null;
   }
 
+  // ---------- 본거지 방어 ----------
+  /// 섹터의 첫 정거장(알파 성역에서는 헤이븐 기지)이 본거지다.
+  /// 안전 구역 안으로 들어온 해적 탄은 본거지가 대신 맞고(함선은 무사), 레이저 포대가 해적을 쏜다.
+  /// 내구도가 0이 되면 [baseDisableTime]초 기능 정지(레이저·안전 구역 꺼짐) 후 30%로 재가동한다.
+  /// 수치는 [Station.baseLevel] 강화 단계에 따른다 (models.dart Station 참고).
+  Station get homeBase => stations.first;
+
+  /// Lv.1 안전 구역 반경 (실제 값은 homeBase.safeRadius)
+  static const havenSafeRadius = 520.0;
+
+  /// 두목은 한 발에 최대 체력의 이 비율까지만 깎인다
+  static const havenBossDamageRatio = 0.04;
+  static const baseDisableTime = 25.0;
+  static const baseRebootRatio = 0.3;
+
+  final beams = <LaserBeam>[];
+  double _havenLaserCooldown = 0;
+
+  bool inHaven(Offset pos) =>
+      !homeBase.disabled && (pos - homeBase.pos).distance < homeBase.safeRadius;
+
+  Cost baseUpgradeCost(Station s) {
+    final c = s.baseUpgradeCost;
+    return ((c.$1 * costMul).round(), (c.$2 * costMul).round());
+  }
+
+  bool upgradeBase(Station s) {
+    if (!s.isHome || s.baseLevel >= Station.maxBaseLevel) return false;
+    if (!_pay(baseUpgradeCost(s))) return false;
+    s.baseLevel++;
+    if (!s.disabled) s.hp = s.maxHp;
+    sfx.add(Sfx.upgrade);
+    say(Speaker.advisor, '${s.name} 강화 Lv.${s.baseLevel}! 레이저가 더 세졌어요.');
+    _burst(s.pos, const Color(0xFFFFD54F), 40);
+    return true;
+  }
+
+  void _disableBase(Station s) {
+    s.hp = 0;
+    if (s.disabled) return;
+    s.disabledTime = baseDisableTime;
+    _burst(s.pos, const Color(0xFFFF5252), 80);
+    sfx.add(Sfx.alarm);
+    shake = min(20, shake + 10);
+    _float(s.pos, '기능 정지!', const Color(0xFFFF5252), big: true);
+    say(Speaker.advisor, '본거지 기능 정지! ${baseDisableTime.toInt()}초간 보호가 꺼져요!');
+  }
+
+  void _updateHaven(double dt) {
+    for (final b in beams) {
+      b.life -= dt;
+    }
+    beams.removeWhere((b) => b.life <= 0);
+    final hb = homeBase;
+    final base = hb.pos;
+    hb.sinceHit += dt;
+    if (hb.disabled) {
+      hb.disabledTime -= dt;
+      hb.hp = 0;
+      if (hb.disabledTime <= 0) {
+        hb
+          ..disabledTime = 0
+          ..hp = hb.maxHp * baseRebootRatio;
+        sfx.add(Sfx.upgrade);
+        _float(base, '재가동!', const Color(0xFF69F0AE), big: true);
+        say(Speaker.advisor, '본거지 재가동! 내구도 30%로 복구됐어요.');
+      }
+    } else if (hb.hp <= 0) {
+      _disableBase(hb);
+    } else if (hb.sinceHit >= Station.regenDelay && hb.hp < hb.maxHp) {
+      hb.hp = min(hb.maxHp, hb.hp + hb.maxHp * hb.baseRegenRatio * dt);
+    }
+    // 안전 구역에 들어온 해적 탄은 본거지가 대신 맞는다. 방어 기지 근처 탄은 소멸
+    bullets.removeWhere((b) {
+      if (b.fromPlayer) return false;
+      if (!hb.disabled && (b.pos - base).distance < hb.safeRadius) {
+        hb.takeHit(b.damage);
+        _spark(b.pos, const Color(0xFFFF8A80));
+        return true;
+      }
+      final guarded =
+          stations.any((s) => s.guardRange > 0 && (s.pos - b.pos).distance < s.guardRange);
+      if (!guarded) return false;
+      _spark(b.pos, const Color(0xFFFFE082));
+      return true;
+    });
+    if (hb.hp <= 0) _disableBase(hb);
+    if (hb.disabled) return;
+    _havenLaserCooldown -= dt;
+    if (_havenLaserCooldown > 0) return;
+    Pirate? best;
+    var bestD = hb.laserRange;
+    for (final e in pirates) {
+      final d = (e.pos - base).distance;
+      if (d < bestD) {
+        bestD = d;
+        best = e;
+      }
+    }
+    if (best == null) return;
+    _havenLaserCooldown = hb.laserInterval;
+    beams.add(LaserBeam(base, best.pos));
+    final dmg = best.kind == PirateKind.boss
+        ? min(hb.laserDamage, best.maxHp * havenBossDamageRatio)
+        : hb.laserDamage;
+    _hitPirate(best, dmg, best.pos);
+    _burst(best.pos, const Color(0xFFFFE082), 10);
+    sfx.add(Sfx.shoot);
+  }
+
   Station? get nearbyStation {
     for (final s in stations) {
       if ((s.pos - player.pos).distance < 220) return s;
@@ -528,6 +754,7 @@ class GameWorld {
       player.alive &&
       nearbyStation == null &&
       planets.every((p) => (p.pos - player.pos).distance > p.radius + 300) &&
+      player.pos.distance > starRadius + 400 &&
       stations.every((s) => (s.pos - player.pos).distance > 900) &&
       gates.every((g) => (g.pos - player.pos).distance > 400);
 
@@ -549,8 +776,10 @@ class GameWorld {
       _count('colonies');
       profile.addStat('colonies');
       say(Speaker.captain, '${p.name}에 깃발을 꽂았다! 정착 완료!');
+      _raiseDome(p);
+      if (!profile.colonyTutorialSeen) colonyTutorialPending = true;
     } else {
-      say(Speaker.advisor, '${p.name} 식민지가 Lv.${p.colonyLevel}로 성장했어요.');
+      _float(p.pos + Offset(0, -p.radius - 30), 'Lv.${p.colonyLevel}!', const Color(0xFF7CFFB2), big: true);
     }
     if (p.colonyLevel == Planet.maxLevel) profile.maxStat('maxColony', 1);
     sfx.add(Sfx.upgrade);
@@ -558,15 +787,111 @@ class GameWorld {
     return true;
   }
 
-  bool buildStation() {
-    if (!canBuildStationHere) return false;
+  bool buildColony(Planet p, ColonyBuilding b) {
+    if (p.colonyLevel == 0 || p.building(b) >= p.buildingCap) return false;
+    if (!_pay(colonyBuildingCost(p, b))) return false;
+    p.buildings[b] = p.building(b) + 1;
+    profile.addStat('colonyBuilds');
+    sfx.add(Sfx.upgrade);
+    _float(p.pos + Offset(0, -p.radius - 30), '${b.icon} Lv.${p.building(b)}', const Color(0xFF8AD8FF), big: true);
+    _burst(p.pos + Offset(0, -p.radius), const Color(0xFF8AD8FF), 24);
+    return true;
+  }
+
+  // ---------- 행성 방어막 ----------
+  /// 모든 식민지는 방어막 돔을 두른다. 돔은 해적 탄환을 대신 맞아 내구도가 깎이고,
+  /// 해적을 밀어낸다. 0이 되면 깨졌다가 재충전되어 다시 켜진다.
+  /// 함선은 돔 안에 있을 때만 보호받는다.
+
+  /// 첫 정착 직후 UI가 식민지 안내를 띄워야 함
+  bool colonyTutorialPending = false;
+
+  /// 깨진 방어막이 재충전을 시작하기까지
+  static const shieldBrokenDelay = 10.0;
+
+  Planet? domeAt(Offset pos) {
+    for (final p in planets) {
+      if (p.domeUp && (pos - p.pos).distance < p.domeRadius) return p;
+    }
+    return null;
+  }
+
+  void _raiseDome(Planet p) {
+    p
+      ..shieldHp = p.shieldMax(sectorMul)
+      ..shieldBroken = false
+      ..sinceShieldHit = 99;
+    bullets.removeWhere((b) => !b.fromPlayer && (b.pos - p.pos).distance < p.domeRadius);
+    sfx.add(Sfx.shield);
+  }
+
+  void _hitDome(Planet p, double dmg) {
+    p
+      ..shieldHp = max(0, p.shieldHp - dmg)
+      ..sinceShieldHit = 0;
+    if (p.shieldHp == 0) {
+      p.shieldBroken = true;
+      _burst(p.pos + Offset(0, -p.domeRadius), const Color(0xFF80D8FF), 40);
+      _float(p.pos + Offset(0, -p.radius - 60), '🛡 파괴!', const Color(0xFFFF5252), big: true);
+      sfx.add(Sfx.bigExplode);
+      shake = min(16, shake + 8);
+    }
+  }
+
+  // ---------- 공전 ----------
+  void _updateOrbits() {
+    for (final p in planets) {
+      p.placeOnOrbit(sectorElapsed);
+      // 지나가는 행성이 소행성을 밀어낸다
+      for (final a in asteroids) {
+        final d = a.pos - p.pos;
+        final minD = p.radius + a.radius + 10;
+        if (d.distance < minD) a.pos = p.pos + (d.distance == 0 ? const Offset(1, 0) : d.normalized()) * minD;
+      }
+    }
+    // 항성은 단단하다: 함선·해적을 밀어내고 탄환을 삼킨다
+    Offset outOfStar(Offset pos, double r) {
+      final minD = starRadius + r;
+      return pos.distance < minD ? (pos.distance == 0 ? const Offset(1, 0) : pos.normalized()) * minD : pos;
+    }
+
+    player.pos = outOfStar(player.pos, 16);
+    for (final e in pirates) {
+      e.pos = outOfStar(e.pos, e.radius);
+    }
+    bullets.removeWhere((b) => b.pos.distance < starRadius);
+  }
+
+  void _updateShields(double dt) {
+    for (final p in planets) {
+      if (p.colonyLevel == 0) continue;
+      p.sinceShieldHit += dt;
+      final cap = p.shieldMax(sectorMul);
+      if (p.shieldHp > cap) p.shieldHp = cap;
+      final delay = p.shieldBroken ? shieldBrokenDelay : Planet.shieldRegenDelay;
+      if (p.sinceShieldHit < delay || p.shieldHp >= cap) continue;
+      final assisted = stations.any((s) =>
+          s.role == StationRole.repair && (s.pos - p.pos).distance < Station.shieldAssistRange);
+      p.shieldHp = min(cap, p.shieldHp + p.shieldRegen(sectorMul) * (assisted ? 2 : 1) * dt);
+      if (p.shieldBroken && p.shieldHp >= cap * Planet.shieldRebootRatio) {
+        p.shieldBroken = false;
+        sfx.add(Sfx.shield);
+        _float(p.pos + Offset(0, -p.radius - 60), '🛡 재가동', const Color(0xFF80D8FF), big: true);
+      }
+    }
+  }
+
+  bool buildStation(StationRole role) {
+    if (role == StationRole.home || !canBuildStationHere) return false;
     if (!_pay(stationBuildCost)) return false;
-    final st = Station('정거장 ${stations.length + 1}호', player.pos + const Offset(0, -140));
+    final st = Station('${role.label} ${stations.length + 1}호', player.pos + const Offset(0, -140),
+        role: role);
+    if (role == StationRole.defense) st.turretLevel = 1;
     st.hp = st.maxHp;
     stations.add(st);
     profile.addStat('stations');
     sfx.add(Sfx.upgrade);
-    say(Speaker.advisor, '${st.name} 건설 완료! 수입이 늘어납니다.');
+    say(Speaker.advisor, '${st.name} 건설 완료! ${role.blurb}');
     _burst(st.pos, const Color(0xFF8AD8FF), 40);
     return true;
   }
@@ -610,6 +935,8 @@ class GameWorld {
       case UpgradeKind.drone:
         profile.maxStat('drone', 1);
         say(Speaker.captain, level(k) == 1 ? '전투 드론 출격! 든든한 친구가 생겼다.' : '드론 강화!');
+      case UpgradeKind.magnet:
+        say(Speaker.captain, '자석 강화! 크레딧이 알아서 붙는다!');
     }
     return true;
   }
@@ -709,15 +1036,22 @@ class GameWorld {
 
   // ---------- 승무원 ----------
   CrewMember? recruitWithCredits() {
-    if (roster.length >= maxRoster) return null;
+    if (roster.length >= rosterCap) return null;
     if (!_pay((recruitCost, 0))) return null;
     return _addCrew(CrewMember.random(_rng, _nextId++, odds: CrewMember.creditOdds));
   }
 
   CrewMember? recruitWithGems() {
-    if (roster.length >= maxRoster) return null;
+    if (roster.length >= rosterCap) return null;
     if (!profile.spendGems(recruitGemCost)) return null;
     return _addCrew(CrewMember.random(_rng, _nextId++, odds: CrewMember.gemOdds));
+  }
+
+  /// ★4 전설 확정 모집 (젬)
+  CrewMember? recruitLegendary() {
+    if (roster.length >= rosterCap) return null;
+    if (!profile.spendGems(legendaryGemCost)) return null;
+    return grantCrew(4);
   }
 
   CrewMember _addCrew(CrewMember c) {
@@ -725,9 +1059,9 @@ class GameWorld {
     if (assignedCount < crewSlots) c.assigned = true;
     roster.add(c);
     profile.addStat('crew');
-    if (c.rarity == 3) profile.addStat('crew3');
+    if (c.rarity >= 3) profile.addStat('crew3');
     sfx.add(Sfx.gem);
-    say(Speaker.advisor, '${c.stars} ${c.role.label} ${iGa(c.name)} 합류했어요!');
+    say(Speaker.advisor, '${c.stars} ${c.role.label} ${iGa(c.displayName)} 합류했어요!');
     if (c.role == CrewRole.engineer) player.hp = min(player.hp, playerMaxHp);
     return c;
   }
@@ -846,6 +1180,8 @@ class GameWorld {
   StoryStep get story => storyStepAt(storyIndex);
 
   int storyValue(String key) => switch (key) {
+        // 발전 목표는 그 단계가 가리키는 항성계에서만 센다 (이미 발전한 옛 항성계로 돌아가 깨는 것 방지)
+        'devPercent' => sector == storySectorAt(storyIndex) ? (development * 100).floor() : 0,
         'shipLevels' => levels.values.fold(0, (s, l) => s + l),
         'crew' => roster.length,
         'stations' => stations.length,
@@ -926,6 +1262,9 @@ class GameWorld {
   }
 
   // ---------- 부활 ----------
+  /// 재출격 비용 비율: 수리 기지에서 나오면 싸다
+  static double respawnCostRatio(Station s) => s.role == StationRole.repair ? 0.10 : 0.25;
+
   void reviveHere() {
     if (player.alive) return;
     player
@@ -947,12 +1286,11 @@ class GameWorld {
 
   void respawnAtBase() {
     if (player.alive) return;
-    final lost = (credits * 0.25).floor();
+    final base = stations.reduce(
+        (a, b) => (a.pos - player.pos).distance < (b.pos - player.pos).distance ? a : b);
+    final lost = (credits * respawnCostRatio(base)).floor();
     credits -= lost;
-    final home = stations
-        .reduce((a, b) =>
-            (a.pos - player.pos).distance < (b.pos - player.pos).distance ? a : b)
-        .pos;
+    final home = base.pos;
     player
       ..alive = true
       ..awaitingRevive = false
@@ -1003,11 +1341,15 @@ class GameWorld {
     }
     shake = max(0, shake - dt * 30);
     boostTime = max(0, boostTime - dt);
+    _updateShields(dt);
+    _updateOrbits();
 
     _updatePlayer(dt, input);
     _updateDrone(dt);
     _updatePirates(dt);
     _updateStations(dt);
+    _updateHaven(dt);
+    _updateColonies(dt);
     _updateMissiles(dt);
     _updateBullets(dt);
     _updateAsteroids(dt);
@@ -1025,6 +1367,11 @@ class GameWorld {
     _secondTimer += dt;
     if (_secondTimer > 0.5) {
       _secondTimer = 0;
+      if (!_devAnnounced && development >= 1) {
+        _devAnnounced = true;
+        sfx.add(Sfx.warp);
+        say(Speaker.advisor, '$sectorName 발전 완료! 다음 항성계로 가는 워프 게이트가 열렸어요.');
+      }
       _checkStory();
       profile.maxStat('credits', credits.floor());
     }
@@ -1053,6 +1400,12 @@ class GameWorld {
       return;
     }
     p.invulnerable = max(0, p.invulnerable - dt);
+    p.sinceHit += dt;
+    p.guardCooldown = max(0, p.guardCooldown - dt);
+    // 자가 수리 (오로라): 한동안 맞지 않으면 체력이 차오른다
+    if (ship.regenRate > 0 && p.sinceHit >= ShipType.regenDelay && p.hp < playerMaxHp) {
+      p.hp = min(playerMaxHp, p.hp + playerMaxHp * ship.regenRate * dt);
+    }
     final move = input.move.clampLength(1);
     p.thrusting = move.distance > 0.1;
     if (p.thrusting) {
@@ -1085,8 +1438,12 @@ class GameWorld {
       }
     }
 
-    if (nearbyStation != null && p.hp < playerMaxHp) {
-      p.hp = min(playerMaxHp, p.hp + 20 * (1 + crewBonus(CrewRole.engineer)) * dt);
+    if (p.hp < playerMaxHp) {
+      var rate = 0.0;
+      for (final s in stations) {
+        if (s.repairRate > rate && (s.pos - p.pos).distance < s.repairRange) rate = s.repairRate;
+      }
+      if (rate > 0) p.hp = min(playerMaxHp, p.hp + rate * (1 + crewBonus(CrewRole.engineer)) * dt);
     }
 
     p.fireCooldown -= dt;
@@ -1100,7 +1457,7 @@ class GameWorld {
         final crit = ship.crit > 0 && _rng.nextDouble() < ship.crit;
         bullets.add(Bullet(p.pos + dir * 22, dir * 760 + p.vel * 0.5,
             playerDamage * (crit ? 2.5 : 1), true,
-            big: crit));
+            big: crit, pierce: ship.pierce));
       }
       sfx.add(Sfx.shoot);
     }
@@ -1162,10 +1519,18 @@ class GameWorld {
   void _damagePlayer(double dmg) {
     final p = player;
     if (!p.alive || p.invulnerable > 0) return;
+    if (inHaven(p.pos)) return; // 본거지 안전 구역
     if (shielded) {
       _float(p.pos, '막음!', const Color(0xFF80D8FF));
       return;
     }
+    if (guardReady) {
+      p.guardCooldown = ship.guardInterval;
+      _float(p.pos, '수호막!', const Color(0xFF80D8FF));
+      sfx.add(Sfx.shield);
+      return;
+    }
+    p.sinceHit = 0;
     p.hp -= dmg;
     shake = min(14, shake + 4 + dmg * 0.2);
     sfx.add(Sfx.hurt);
@@ -1283,9 +1648,15 @@ class GameWorld {
       _burst(e.pos, const Color(0xFFFFAB40), 50);
       sfx.add(Sfx.explode);
       shake = min(16, shake + 6);
-      if (player.alive && (player.pos - e.pos).distance < 100) _damagePlayer(e.damage);
+      for (final p in planets) {
+        if (p.domeUp && (p.pos - e.pos).distance < p.domeRadius + 100) _hitDome(p, e.damage);
+      }
+      if (player.alive && (player.pos - e.pos).distance < 100 && domeAt(player.pos) == null) {
+        _damagePlayer(e.damage);
+      }
       for (final s in stations) {
-        if ((s.pos - e.pos).distance < 120) s.hp -= e.damage;
+        // 본거지는 안전 구역 안의 폭발을 대신 맞는다
+        if ((s.pos - e.pos).distance < 120 || (s == homeBase && inHaven(e.pos))) s.takeHit(e.damage);
       }
     }
   }
@@ -1336,7 +1707,7 @@ class GameWorld {
       e.wanderAngle += pi;
     });
     e.angle += dt;
-    if (d < e.radius + 16 && e.contactCooldown <= 0) {
+    if (d < e.radius + 16 && e.contactCooldown <= 0 && domeAt(player.pos) == null) {
       e.contactCooldown = 0.8;
       _damagePlayer(e.damage * (1 + sector * 0.3));
     }
@@ -1345,8 +1716,9 @@ class GameWorld {
   void _updateStations(double dt) {
     for (final s in stations) {
       s.spin += dt * 0.3;
-      if (s.hp < s.maxHp) s.hp = min(s.maxHp, s.hp + 2 * dt);
-      if (s.turretLevel == 0) continue;
+      // 본거지 재생·정지는 _updateHaven에서
+      if (!s.isHome && s.hp < s.maxHp) s.hp = min(s.maxHp, s.hp + 2 * dt);
+      if (s.turretLevel == 0 || s.disabled) continue;
       s.turretCooldown -= dt;
       if (s.turretCooldown > 0) continue;
       Pirate? best;
@@ -1363,6 +1735,47 @@ class GameWorld {
         s.turretCooldown = s.turretInterval;
         final dir = (best.pos - s.pos).normalized();
         bullets.add(Bullet(s.pos + dir * 50, dir * 700, s.turretDamage * sectorMul, true));
+      }
+    }
+  }
+
+  void _updateColonies(double dt) {
+    for (final p in planets) {
+      if (p.colonyLevel == 0) continue;
+      if (p.domeUp) {
+        for (final e in pirates) {
+          final d = e.pos - p.pos;
+          final edge = p.domeRadius + e.radius;
+          if (d.distance < edge) {
+            final n = d.distance == 0 ? const Offset(1, 0) : d.normalized();
+            e.pos = p.pos + n * edge;
+            e.vel = n * 200;
+          }
+        }
+      }
+      if (p.building(ColonyBuilding.dock) > 0 &&
+          player.alive &&
+          player.hp < playerMaxHp &&
+          (player.pos - p.pos).distance < p.dockRange) {
+        player.hp = min(playerMaxHp, player.hp + p.dockHealRate * dt);
+      }
+      if (p.building(ColonyBuilding.turret) == 0) continue;
+      p.turretCooldown -= dt;
+      if (p.turretCooldown > 0) continue;
+      Pirate? best;
+      var bestD = p.turretRange;
+      for (final e in pirates) {
+        if (!e.isPirate) continue;
+        final d = (e.pos - p.pos).distance;
+        if (d < bestD) {
+          bestD = d;
+          best = e;
+        }
+      }
+      if (best != null) {
+        p.turretCooldown = p.turretInterval;
+        final dir = (best.pos - p.pos).normalized();
+        bullets.add(Bullet(p.pos + dir * (p.radius + 10), dir * 700, p.turretDamage * sectorMul, true));
       }
     }
   }
@@ -1425,15 +1838,29 @@ class GameWorld {
       }
       if (b.fromPlayer) {
         for (final e in pirates) {
+          if (b.hits?.contains(e) ?? false) continue;
           if ((e.pos - b.pos).distance < e.radius) {
             _hitPirate(e, b.damage, b.pos, crit: b.big);
-            dead.add(b);
             _spark(b.pos, const Color(0xFFFFF59D));
             sfx.add(Sfx.hit);
+            if (b.pierce > 0) {
+              // 관통탄: 맞힌 적을 기억하고 계속 날아간다
+              b.pierce--;
+              (b.hits ??= {}).add(e);
+            } else {
+              dead.add(b);
+            }
             break;
           }
         }
       } else {
+        final dome = domeAt(b.pos);
+        if (dome != null) {
+          _hitDome(dome, b.damage);
+          dead.add(b);
+          _spark(b.pos, const Color(0xFF80D8FF));
+          continue;
+        }
         if (player.alive && (player.pos - b.pos).distance < (shielded ? 30 : 18)) {
           _damagePlayer(b.damage);
           dead.add(b);
@@ -1442,7 +1869,7 @@ class GameWorld {
         }
         for (final s in stations) {
           if ((s.pos - b.pos).distance < 60) {
-            s.hp -= b.damage;
+            s.takeHit(b.damage);
             dead.add(b);
             _spark(b.pos, const Color(0xFFFF8A80));
             break;
@@ -1472,8 +1899,8 @@ class GameWorld {
 
     final destroyed = stations.where((s) => s.hp <= 0).toList();
     for (final s in destroyed) {
-      if (s == stations.first) {
-        s.hp = 1;
+      if (s == homeBase) {
+        _disableBase(s);
         continue;
       }
       stations.remove(s);
@@ -1521,10 +1948,15 @@ class GameWorld {
       _dropPickups(e.pos, PickupKind.ore, (120 * sectorMul).round(), 6);
       _dropPickups(e.pos, PickupKind.gem, 5, 5);
       if (e.sectorBoss) {
-        if (!bossDefeated) _count('sectorBosses');
+        if (!bossDefeated) {
+          _count('sectorBosses');
+          // 게이트는 발전도로 열린다. 두목은 큰 보상을 주는 도전 과제.
+          final reward = (1000 * sectorMul).round();
+          credits += reward;
+          say(Speaker.advisor, '섹터 두목 격파! 보상 💰$reward');
+        }
         bossDefeated = true;
         say(Speaker.pirate, '으아악! 이 섹터는… 네 것이다…');
-        say(Speaker.advisor, '섹터 두목 격파! 워프 게이트가 열렸어요! 🌀');
       } else {
         say(Speaker.pirate, '으아악! 기억해 두겠다, 선장!');
       }
@@ -1576,7 +2008,7 @@ class GameWorld {
       final to = player.pos - k.pos;
       final d = to.distance;
       if (player.alive && d < magnet) {
-        k.vel += to.normalized() * 1400 * dt;
+        k.vel += to.normalized() * magnetPull * dt;
       }
       k.vel = k.vel * pow(0.2, dt).toDouble();
       k.pos += k.vel * dt;
@@ -1642,7 +2074,9 @@ class GameWorld {
         case EventKind.raid:
           final attackers = pirates.where((e) => e.eventId == ev.id).toList();
           final planet = ev.planet!;
-          planet.raided = attackers.any((e) => (e.pos - planet.pos).distance < planet.radius + 450);
+          // 방어막이 버티는 동안은 생산이 계속된다
+          planet.raided = !planet.domeUp &&
+              attackers.any((e) => (e.pos - planet.pos).distance < planet.radius + 450);
           if (attackers.isEmpty) {
             ev.finished = true;
             planet.raided = false;
@@ -1655,7 +2089,9 @@ class GameWorld {
             ev.finished = true;
             planet.raided = false;
             pirates.removeWhere((e) => e.eventId == ev.id);
-            if (planet.colonyLevel > 1) {
+            if (planet.domeUp) {
+              // 방어막이 끝까지 버텼다
+            } else if (planet.colonyLevel > 1) {
               planet.colonyLevel--;
               say(Speaker.advisor, '${iGa(planet.name)} 약탈당해 Lv.${planet.colonyLevel}로 떨어졌어요… 😢');
             } else {
@@ -1768,7 +2204,7 @@ class GameWorld {
 
   bool buyMerchantCrew() {
     final c = merchantCrew;
-    if (c == null || roster.length >= maxRoster) return false;
+    if (c == null || roster.length >= rosterCap) return false;
     if (!_pay((merchantCrewPrice, 0))) return false;
     merchantCrew = null;
     _addCrew(c);
@@ -1910,14 +2346,26 @@ class GameWorld {
         'y': s.pos.dy,
         'hab': s.habitatLevel,
         'tur': s.turretLevel,
+        'base': s.baseLevel,
+        'role': s.role.name,
+        'hp': s.hp,
+        'off': s.disabledTime,
       };
 
   static Station _stationFromJson(Map<String, dynamic> s) {
-    final st = Station(s['name'] as String,
-        Offset((s['x'] as num).toDouble(), (s['y'] as num).toDouble()))
+    var pos = Offset((s['x'] as num).toDouble(), (s['y'] as num).toDouble());
+    // 예전 저장: 본거지가 원점(지금은 항성 자리)에 있었다
+    if (pos == Offset.zero) pos = homePos;
+    // 예전 저장: 역할이 없으면 본거지 자리는 본거지, 나머지는 보급 기지
+    final role = StationRole.values.where((r) => r.name == s['role']).firstOrNull ??
+        (pos == homePos ? StationRole.home : StationRole.support);
+    final st = Station(s['name'] as String, pos, role: role)
       ..habitatLevel = s['hab'] as int
-      ..turretLevel = s['tur'] as int;
-    st.hp = st.maxHp;
+      ..turretLevel = s['tur'] as int
+      ..baseLevel = (s['base'] as int?) ?? 1
+      // 기능 정지 남은 시간도 저장한다 (불러오기로 정지를 풀 수 없게)
+      ..disabledTime = (s['off'] as num?)?.toDouble() ?? 0;
+    st.hp = min(st.maxHp, (s['hp'] as num?)?.toDouble() ?? st.maxHp);
     return st;
   }
 

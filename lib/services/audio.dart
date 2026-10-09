@@ -8,7 +8,7 @@ class AudioService {
   AudioService._();
   static final instance = AudioService._();
 
-  final _pools = <Sfx, AudioPool>{};
+  final _pools = <Sfx, _SfxPool>{};
   final _last = <Sfx, DateTime>{};
   AudioPlayer? _bgm;
   bool soundOn = true;
@@ -45,9 +45,10 @@ class AudioService {
     _ready = true;
     for (final s in Sfx.values) {
       try {
-        _pools[s] = await AudioPool.createFromAsset(
-          path: 'audio/${_file(s)}.wav',
-          maxPlayers: s == Sfx.shoot || s == Sfx.hit ? 4 : 2,
+        _pools[s] = await _SfxPool.create(
+          'audio/${_file(s)}.wav',
+          s == Sfx.shoot || s == Sfx.hit ? 4 : 2,
+          s == Sfx.shoot ? 0.5 : 0.9,
         );
       } catch (e) {
         debugPrint('sfx load failed: $s $e');
@@ -61,15 +62,15 @@ class AudioService {
     final last = _last[s];
     if (last != null && now.difference(last).inMilliseconds < _gap(s)) return;
     _last[s] = now;
-    final pool = _pools[s];
-    if (pool == null) return;
-    pool.start(volume: s == Sfx.shoot ? 0.5 : 0.9).catchError((Object _) => () async {});
+    _pools[s]?.play();
   }
 
   Future<void> startMusic() async {
     if (!musicOn) return;
     try {
-      _bgm ??= AudioPlayer()..setReleaseMode(ReleaseMode.loop);
+      _bgm ??= AudioPlayer()
+        ..positionUpdater = null // 재생 위치를 안 쓰므로 매 프레임 조회를 끈다
+        ..setReleaseMode(ReleaseMode.loop);
       if (_bgm!.state == PlayerState.playing) return;
       await _bgm!.play(AssetSource('audio/bgm.wav'), volume: 0.45);
     } catch (e) {
@@ -86,5 +87,33 @@ class AudioService {
   Future<void> setMusic(bool on) async {
     musicOn = on;
     on ? await startMusic() : await stopMusic();
+  }
+}
+
+/// 효과음 한 종류를 미리 읽어 둔 플레이어 몇 개로 돌려 쓴다.
+/// audioplayers 기본 AudioPool은 플레이어마다 재생 위치를 매 프레임 플랫폼에 물어봐서
+/// (FramePositionUpdater) 전투 중 소리가 겹치면 프레임이 떨어진다. 여기서는 그걸 끈다.
+class _SfxPool {
+  _SfxPool(this._players);
+  final List<AudioPlayer> _players;
+  int _next = 0;
+
+  static Future<_SfxPool> create(String path, int count, double volume) async {
+    final players = <AudioPlayer>[];
+    for (var i = 0; i < count; i++) {
+      final p = AudioPlayer()..positionUpdater = null;
+      await p.setPlayerMode(PlayerMode.lowLatency);
+      await p.setReleaseMode(ReleaseMode.stop);
+      await p.setVolume(volume);
+      await p.setSource(AssetSource(path));
+      players.add(p);
+    }
+    return _SfxPool(players);
+  }
+
+  void play() {
+    final p = _players[_next];
+    _next = (_next + 1) % _players.length;
+    p.stop().then((_) => p.resume()).catchError((Object _) {});
   }
 }

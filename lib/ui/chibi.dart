@@ -18,6 +18,8 @@ class ChibiStyle {
     this.helmet = false,
     this.glasses = false,
     this.accessory = Accessory.none,
+    this.portrait,
+    this.halo = false,
   });
 
   final Color skin;
@@ -30,7 +32,14 @@ class ChibiStyle {
   final bool glasses;
   final Accessory accessory;
 
-  ChibiStyle copyWith({Color? hair, Color? suit, bool? helmet, Accessory? accessory}) =>
+  /// assets/sprites의 생성 초상화 이름. 있으면 [ChibiPortrait]가 그림 대신 이걸 쓴다.
+  /// (승무원은 외모가 무작위라 없음)
+  final String? portrait;
+
+  /// ★4 전설 승무원의 금빛 후광
+  final bool halo;
+
+  ChibiStyle copyWith({Color? hair, Color? suit, bool? helmet, Accessory? accessory, String? portrait}) =>
       ChibiStyle(
         skin: skin,
         hair: hair ?? this.hair,
@@ -41,12 +50,17 @@ class ChibiStyle {
         helmet: helmet ?? this.helmet,
         glasses: glasses,
         accessory: accessory ?? this.accessory,
+        portrait: portrait ?? this.portrait,
+        halo: halo,
       );
 
   /// 꾸미기 의상을 입은 선장
-  static ChibiStyle captainIn(CaptainOutfit o) =>
-      captain.copyWith(
-          suit: o.suit, hair: o.hair, accessory: o.accessory, helmet: o.accessory == Accessory.none);
+  static ChibiStyle captainIn(CaptainOutfit o) => captain.copyWith(
+      suit: o.suit,
+      hair: o.hair,
+      accessory: o.accessory,
+      helmet: o.accessory == Accessory.none,
+      portrait: 'portrait_captain_${o.id}');
 
   static ChibiStyle forCrew(CrewMember c) => ChibiStyle(
         skin: Color(c.skinColor),
@@ -55,6 +69,7 @@ class ChibiStyle {
         eye: const Color(0xFF263238),
         glasses: c.glasses,
         accessory: c.accessory,
+        halo: c.legendary,
       );
 
   static const merchant = ChibiStyle(
@@ -63,6 +78,7 @@ class ChibiStyle {
     suit: Color(0xFF00897B),
     eye: Color(0xFF3E2723),
     accessory: Accessory.catEars,
+    portrait: 'portrait_merchant',
   );
 
   static const captain = ChibiStyle(
@@ -71,6 +87,7 @@ class ChibiStyle {
     suit: Color(0xFF1E88E5),
     eye: Color(0xFF263238),
     helmet: true,
+    portrait: 'portrait_captain_default',
   );
 
   static const pirate = ChibiStyle(
@@ -80,6 +97,7 @@ class ChibiStyle {
     eye: Color(0xFF263238),
     eyePatch: true,
     bandana: Color(0xFFE53935),
+    portrait: 'portrait_pirate',
   );
 
   static const advisor = ChibiStyle(
@@ -88,6 +106,7 @@ class ChibiStyle {
     suit: Color(0xFF7E57C2),
     eye: Color(0xFF4A148C),
     glasses: true,
+    portrait: 'portrait_advisor',
   );
 
   static ChibiStyle of(Speaker s, {ChibiStyle? captainStyle}) => switch (s) {
@@ -106,6 +125,20 @@ void paintChibi(Canvas canvas, Offset center, double r, ChibiStyle st,
     ..style = PaintingStyle.stroke
     ..strokeWidth = max(1, r * 0.06)
     ..color = const Color(0xFF3E2723).withValues(alpha: 0.85);
+
+  // ★4 전설: 뒤쪽 금빛 오라
+  if (st.halo) {
+    final ac = center + Offset(0, r * 0.3);
+    canvas.drawCircle(
+        ac,
+        r * 1.7,
+        Paint()
+          ..shader = RadialGradient(colors: const [
+            Color(0xAAFFE082),
+            Color(0x55FFB300),
+            Color(0x00FFB300),
+          ]).createShader(Rect.fromCircle(center: ac, radius: r * 1.7)));
+  }
 
   // 몸통 (작게)
   if (withBody) {
@@ -252,6 +285,7 @@ void paintChibi(Canvas canvas, Offset center, double r, ChibiStyle st,
 
   _paintTopAccessory(canvas, center, r, st);
 
+
   // 우주 헬멧 (유리)
   if (st.helmet) {
     final glass = Paint()
@@ -383,7 +417,14 @@ class ChibiPortrait extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
         width: size,
         height: size,
-        child: CustomPaint(painter: _ChibiPainter(style, blink)),
+        child: style.portrait == null
+            ? CustomPaint(painter: _ChibiPainter(style, blink))
+            : Image.asset(
+                'assets/sprites/${style.portrait}.png',
+                filterQuality: FilterQuality.medium,
+                // 파일이 없으면 기존 그림
+                errorBuilder: (_, _, _) => CustomPaint(painter: _ChibiPainter(style, blink)),
+              ),
       );
 }
 

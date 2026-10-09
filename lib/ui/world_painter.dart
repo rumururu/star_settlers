@@ -6,6 +6,7 @@ import '../game/cosmetics.dart';
 import '../game/models.dart';
 import '../game/world.dart';
 import 'chibi.dart';
+import 'sprites.dart';
 
 class _Star {
   _Star(this.x, this.y, this.depth, this.size, this.twinkle);
@@ -92,12 +93,15 @@ class WorldPainter extends CustomPainter {
         center: cam, width: size.width / zoom + 600, height: size.height / zoom + 600);
 
     _paintBoundary(canvas);
+    _paintOrbits(canvas, view);
+    if (view.inflate(GameWorld.starRadius * 2).contains(Offset.zero)) _paintStar(canvas, t);
     for (final g in world.gates) {
       if (view.inflate(200).contains(g.pos)) _paintGate(canvas, g, t);
     }
     for (final p in world.planets) {
       if (view.inflate(p.radius).contains(p.pos)) _paintPlanet(canvas, p, t);
     }
+    if (view.inflate(world.homeBase.safeRadius).contains(world.homeBase.pos)) _paintHavenZone(canvas, t);
     for (final s in world.stations) {
       if (view.contains(s.pos)) _paintStation(canvas, s);
     }
@@ -116,6 +120,19 @@ class WorldPainter extends CustomPainter {
       final f = (p.life / p.maxLife).clamp(0.0, 1.0);
       pp.color = p.color.withValues(alpha: f);
       canvas.drawCircle(p.pos, p.size * (0.5 + f * 0.5), pp);
+    }
+    for (final b in world.beams) {
+      final a = b.life / LaserBeam.duration;
+      canvas.drawLine(b.from, b.to,
+          Paint()
+            ..color = const Color(0xFFFFD54F).withValues(alpha: 0.35 * a)
+            ..strokeWidth = 14
+            ..strokeCap = StrokeCap.round);
+      canvas.drawLine(b.from, b.to,
+          Paint()
+            ..color = Colors.white.withValues(alpha: a)
+            ..strokeWidth = 4
+            ..strokeCap = StrokeCap.round);
     }
     for (final b in world.bullets) {
       _paintBullet(canvas, b);
@@ -232,6 +249,10 @@ class WorldPainter extends CustomPainter {
         PlanetKind.gas => (const Color(0xFFCE93D8), const Color(0xFF5E35B1)),
       };
 
+  /// 스프라이트 한 변 / 행성 지름 (배경 제거 후 가장자리 여백 포함)
+  static const planetSpriteScale = 1.12;
+  static const planetGasSpriteScale = 1.37;
+
   void _paintPlanet(Canvas canvas, Planet p, double t) {
     final (light, dark) = planetColors(p.kind);
     final rect = Rect.fromCircle(center: p.pos, radius: p.radius);
@@ -243,54 +264,59 @@ class WorldPainter extends CustomPainter {
             colors: [light.withValues(alpha: 0.35), light.withValues(alpha: 0)],
             stops: const [0.75, 1],
           ).createShader(Rect.fromCircle(center: p.pos, radius: p.radius * 1.25)));
-    canvas.drawCircle(
-        p.pos,
-        p.radius,
-        Paint()
-          ..shader = RadialGradient(center: const Alignment(-0.4, -0.4), colors: [light, dark])
-              .createShader(rect));
-
-    canvas.save();
-    canvas.clipPath(Path()..addOval(rect));
-    final deco = Paint()..color = Colors.white.withValues(alpha: 0.12);
-    if (p.kind == PlanetKind.gas) {
-      for (var i = -3; i <= 3; i++) {
-        canvas.drawRect(
-            Rect.fromLTWH(p.pos.dx - p.radius, p.pos.dy + i * p.radius * 0.28, p.radius * 2,
-                p.radius * 0.1),
-            deco);
-      }
-    } else {
-      final r = Random(p.name.hashCode);
-      for (var i = 0; i < 6; i++) {
-        final o = Offset(randRange(r, -0.7, 0.7), randRange(r, -0.7, 0.7)) * p.radius;
-        canvas.drawCircle(
-            p.pos + o,
-            p.radius * randRange(r, 0.12, 0.3),
-            Paint()
-              ..color = (p.kind == PlanetKind.lava ? const Color(0xFFFFEB3B) : dark)
-                  .withValues(alpha: 0.35));
-      }
-    }
-    canvas.drawCircle(
-        p.pos,
-        p.radius,
-        Paint()
-          ..shader = RadialGradient(
-            center: const Alignment(-0.45, -0.45),
-            radius: 1.3,
-            colors: [Colors.transparent, Colors.black.withValues(alpha: 0.55)],
-            stops: const [0.45, 1],
-          ).createShader(rect));
-    canvas.restore();
-
-    if (p.kind == PlanetKind.gas) {
-      canvas.drawOval(
-          Rect.fromCenter(center: p.pos, width: p.radius * 3, height: p.radius * 0.6),
+    // 생성 스프라이트 (행성 종류별). 가스 행성은 고리 때문에 그림이 더 넓다.
+    final drawn = Sprites.draw(canvas, 'planet_${p.kind.name}', p.pos,
+        p.radius * 2 * (p.kind == PlanetKind.gas ? planetGasSpriteScale : planetSpriteScale));
+    if (!drawn) {
+      canvas.drawCircle(
+          p.pos,
+          p.radius,
           Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 6
-            ..color = const Color(0x99E1BEE7));
+            ..shader = RadialGradient(center: const Alignment(-0.4, -0.4), colors: [light, dark])
+                .createShader(rect));
+
+      canvas.save();
+      canvas.clipPath(Path()..addOval(rect));
+      final deco = Paint()..color = Colors.white.withValues(alpha: 0.12);
+      if (p.kind == PlanetKind.gas) {
+        for (var i = -3; i <= 3; i++) {
+          canvas.drawRect(
+              Rect.fromLTWH(p.pos.dx - p.radius, p.pos.dy + i * p.radius * 0.28, p.radius * 2,
+                  p.radius * 0.1),
+              deco);
+        }
+      } else {
+        final r = Random(p.name.hashCode);
+        for (var i = 0; i < 6; i++) {
+          final o = Offset(randRange(r, -0.7, 0.7), randRange(r, -0.7, 0.7)) * p.radius;
+          canvas.drawCircle(
+              p.pos + o,
+              p.radius * randRange(r, 0.12, 0.3),
+              Paint()
+                ..color = (p.kind == PlanetKind.lava ? const Color(0xFFFFEB3B) : dark)
+                    .withValues(alpha: 0.35));
+        }
+      }
+      canvas.drawCircle(
+          p.pos,
+          p.radius,
+          Paint()
+            ..shader = RadialGradient(
+              center: const Alignment(-0.45, -0.45),
+              radius: 1.3,
+              colors: [Colors.transparent, Colors.black.withValues(alpha: 0.55)],
+              stops: const [0.45, 1],
+            ).createShader(rect));
+      canvas.restore();
+
+      if (p.kind == PlanetKind.gas) {
+        canvas.drawOval(
+            Rect.fromCenter(center: p.pos, width: p.radius * 3, height: p.radius * 0.6),
+            Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 6
+              ..color = const Color(0x99E1BEE7));
+      }
     }
 
     for (var i = 0; i < p.colonyLevel; i++) {
@@ -336,11 +362,163 @@ class WorldPainter extends CustomPainter {
     _label(canvas, p.pos + Offset(0, p.radius + 22),
         p.colonyLevel > 0 ? '${p.name}  Lv.${p.colonyLevel}' : p.name,
         p.colonyLevel > 0 ? const Color(0xFF7CFFB2) : Colors.white70);
+
+    if (p.colonyLevel > 0) _paintDome(canvas, p, t);
+
+    // 식민지 건물: 포탑 사거리 + 건물 아이콘
+    if (p.building(ColonyBuilding.turret) > 0) {
+      canvas.drawCircle(p.pos, p.turretRange,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1.5
+            ..color = const Color(0x2242A5F5));
+    }
+    final built = [
+      for (final b in ColonyBuilding.values)
+        if (p.building(b) > 0) '${b.icon}${p.building(b)}',
+    ];
+    if (built.isNotEmpty) {
+      _label(canvas, p.pos + Offset(0, p.radius + 42), built.join(' '), const Color(0xFFB3E5FC));
+    }
+  }
+
+  /// 방어막 남은 비율에 따라 하늘색 → 노랑 → 빨강
+  static Color shieldColor(double ratio) => ratio > 0.5
+      ? Color.lerp(const Color(0xFFFFD740), const Color(0xFF40C4FF), (ratio - 0.5) * 2)!
+      : Color.lerp(const Color(0xFFFF1744), const Color(0xFFFFD740), ratio * 2)!;
+
+  void _paintDome(Canvas canvas, Planet p, double t) {
+    final cap = p.shieldMax(world.sectorMul);
+    final ratio = cap <= 0 ? 0.0 : (p.shieldHp / cap).clamp(0.0, 1.0);
+    final r = p.domeRadius;
+    final barTop = p.pos + Offset(0, -r - 34);
+    if (!p.domeUp) {
+      // 깨짐: 희미한 붉은 점선 + 재가동 진행률
+      final dot = Paint()..color = const Color(0x66FF5252);
+      for (var i = 0; i < 48; i++) {
+        canvas.drawCircle(p.pos + OffsetX.fromAngle(i * pi / 24, r), 2.5, dot);
+      }
+      final reboot = (ratio / Planet.shieldRebootRatio).clamp(0.0, 1.0);
+      _shieldBar(canvas, barTop, reboot, const Color(0xFF90A4AE));
+      _label(canvas, barTop + const Offset(0, -16), '재충전 ${(reboot * 100).floor()}%',
+          const Color(0xFFFF8A80));
+      return;
+    }
+    final c = shieldColor(ratio);
+    final hit = p.sinceShieldHit < 0.15;
+    final flicker = ratio < 0.25 ? 0.5 + 0.5 * sin(t * 14) : 1.0;
+    final a = (hit ? 1.0 : 0.65) * (0.6 + 0.4 * flicker);
+    canvas.drawCircle(
+        p.pos,
+        r,
+        Paint()
+          ..shader = RadialGradient(
+            colors: [c.withValues(alpha: 0), c.withValues(alpha: 0.10 * a), c.withValues(alpha: 0.38 * a)],
+            stops: const [0.55, 0.85, 1],
+          ).createShader(Rect.fromCircle(center: p.pos, radius: r)));
+    final node = Paint()..color = Color.lerp(c, Colors.white, 0.5)!.withValues(alpha: 0.75 * a);
+    for (var i = 0; i < 36; i++) {
+      canvas.drawCircle(p.pos + OffsetX.fromAngle(i * pi / 18 + t * 0.15, r), 3, node);
+    }
+    canvas.drawCircle(
+        p.pos,
+        r,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = hit ? 6 : 4
+          ..color = c.withValues(alpha: 0.85 * a));
+    _shieldBar(canvas, barTop, ratio, c);
+    _label(canvas, barTop + const Offset(0, -16), '🛡 ${p.shieldHp.round()}', c);
+  }
+
+  void _shieldBar(Canvas canvas, Offset center, double ratio, Color c) {
+    const w = 120.0, h = 8.0;
+    final rect = Rect.fromCenter(center: center, width: w, height: h);
+    canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(4)),
+        Paint()..color = const Color(0xAA0D0B26));
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(
+            Rect.fromLTWH(rect.left, rect.top, w * ratio, h), const Radius.circular(4)),
+        Paint()..color = c);
+  }
+
+  /// 본거지 안전 구역: 황금빛 테두리. 기능 정지 중이면 흐린 빨간 점선 + 남은 시간
+  void _paintHavenZone(Canvas canvas, double t) {
+    final hb = world.homeBase;
+    final c = hb.pos;
+    final r = hb.safeRadius;
+    if (hb.disabled) {
+      final dash = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4
+        ..color = const Color(0x66FF5252);
+      for (var i = 0; i < 48; i++) {
+        final a = i * pi / 24;
+        canvas.drawArc(Rect.fromCircle(center: c, radius: r), a, pi / 48, false, dash);
+      }
+      _label(canvas, c + const Offset(0, -130), '⚠ 기능 정지 ${hb.disabledTime.ceil()}초',
+          const Color(0xFFFF8A80));
+      return;
+    }
+    canvas.drawCircle(
+        c,
+        r,
+        Paint()
+          ..shader = RadialGradient(
+            colors: [const Color(0x00FFD54F), const Color(0x00FFD54F), const Color(0x22FFD54F)],
+            stops: const [0, 0.8, 1],
+          ).createShader(Rect.fromCircle(center: c, radius: r)));
+    final dot = Paint()..color = const Color(0x88FFD54F);
+    for (var i = 0; i < 60; i++) {
+      canvas.drawCircle(c + OffsetX.fromAngle(i * pi / 30 + t * 0.05, r), 2.5, dot);
+    }
+  }
+
+  /// 공전 궤도: 희미한 원 (궤도마다 한 번 그린다 — 점 수백 개로 그리면 프레임이 떨어진다)
+  static final _orbitPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 3
+    ..color = const Color(0x2E8AD8FF);
+
+  void _paintOrbits(Canvas canvas, Rect view) {
+    for (final r in {for (final p in world.planets) p.orbitRadius}) {
+      canvas.drawCircle(Offset.zero, r, _orbitPaint);
+    }
+  }
+
+  void _paintStar(Canvas canvas, double t) {
+    const r = GameWorld.starRadius;
+    canvas.drawCircle(
+        Offset.zero,
+        r * 3,
+        Paint()
+          ..shader = const RadialGradient(
+            colors: [Color(0x66FFB300), Color(0x22FF6F00), Color(0x00FF6F00)],
+            stops: [0.3, 0.6, 1],
+          ).createShader(Rect.fromCircle(center: Offset.zero, radius: r * 3)));
+    // 스프라이트 몸통은 그림의 약 60% (나머지는 불꽃)
+    if (!Sprites.draw(canvas, 'sun', Offset.zero, r * 2 / 0.6, angle: sin(t * 0.3) * 0.08)) {
+      canvas.drawCircle(Offset.zero, r, Paint()..color = const Color(0xFFFFC107));
+    }
   }
 
   void _paintStation(Canvas canvas, Station s) {
     canvas.save();
     canvas.translate(s.pos.dx, s.pos.dy);
+    // 역할 범위: 방어(빨강, 탄 차단), 수리(초록, 수리 범위), 보급(금색, 생산 보너스 범위)
+    final (roleR, roleC) = switch (s.role) {
+      StationRole.defense => (s.guardRange, const Color(0x55FF5252)),
+      StationRole.repair => (s.repairRange, const Color(0x447CFFB2)),
+      StationRole.support => (Station.supportRange, const Color(0x33FFD54F)),
+      StationRole.home => (0.0, const Color(0x00000000)),
+    };
+    if (roleR > 0) {
+      canvas.drawCircle(Offset.zero, roleR,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 4
+            ..color = roleC);
+    }
     if (s.turretLevel > 0) {
       canvas.drawCircle(Offset.zero, s.turretRange,
           Paint()
@@ -350,39 +528,41 @@ class WorldPainter extends CustomPainter {
     }
     canvas.rotate(s.spin);
     final ringR = 44.0 + s.habitatLevel * 4;
-    final metal = Paint()..color = const Color(0xFF90A4AE);
-    final dark = Paint()..color = const Color(0xFF455A64);
-    for (var i = 0; i < 4; i++) {
-      canvas.save();
-      canvas.rotate(i * pi / 2);
-      canvas.drawRect(Rect.fromLTWH(-4, 0, 8, ringR), dark);
-      canvas.restore();
-    }
-    canvas.drawCircle(Offset.zero, ringR,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 12
-          ..color = const Color(0xFF78909C));
-    if (s.habitatLevel >= 4) {
-      canvas.drawCircle(Offset.zero, ringR + 22,
+    if (!Sprites.draw(canvas, 'station', Offset.zero, (ringR + 56) * 2)) {
+      final metal = Paint()..color = const Color(0xFF90A4AE);
+      final dark = Paint()..color = const Color(0xFF455A64);
+      for (var i = 0; i < 4; i++) {
+        canvas.save();
+        canvas.rotate(i * pi / 2);
+        canvas.drawRect(Rect.fromLTWH(-4, 0, 8, ringR), dark);
+        canvas.restore();
+      }
+      canvas.drawCircle(Offset.zero, ringR,
           Paint()
             ..style = PaintingStyle.stroke
-            ..strokeWidth = 6
-            ..color = const Color(0xFF607D8B));
+            ..strokeWidth = 12
+            ..color = const Color(0xFF78909C));
+      if (s.habitatLevel >= 4) {
+        canvas.drawCircle(Offset.zero, ringR + 22,
+            Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 6
+              ..color = const Color(0xFF607D8B));
+      }
+      final windows = 8 + s.habitatLevel * 2;
+      for (var i = 0; i < windows; i++) {
+        canvas.drawCircle(OffsetX.fromAngle(i * 2 * pi / windows, ringR), 2.5,
+            Paint()..color = const Color(0xFFFFF59D));
+      }
+      for (final sx in [-1.0, 1.0]) {
+        canvas.drawRect(
+            Rect.fromCenter(center: Offset(sx * (ringR + 34), 0), width: 40, height: 18),
+            Paint()..color = const Color(0xFF1E88E5));
+        canvas.drawLine(Offset(sx * ringR, 0), Offset(sx * (ringR + 14), 0), metal..strokeWidth = 4);
+      }
+      canvas.drawCircle(Offset.zero, 22, metal);
+      canvas.drawCircle(Offset.zero, 12, Paint()..color = const Color(0xFF4FC3F7));
     }
-    final windows = 8 + s.habitatLevel * 2;
-    for (var i = 0; i < windows; i++) {
-      canvas.drawCircle(OffsetX.fromAngle(i * 2 * pi / windows, ringR), 2.5,
-          Paint()..color = const Color(0xFFFFF59D));
-    }
-    for (final sx in [-1.0, 1.0]) {
-      canvas.drawRect(
-          Rect.fromCenter(center: Offset(sx * (ringR + 34), 0), width: 40, height: 18),
-          Paint()..color = const Color(0xFF1E88E5));
-      canvas.drawLine(Offset(sx * ringR, 0), Offset(sx * (ringR + 14), 0), metal..strokeWidth = 4);
-    }
-    canvas.drawCircle(Offset.zero, 22, metal);
-    canvas.drawCircle(Offset.zero, 12, Paint()..color = const Color(0xFF4FC3F7));
     for (var i = 0; i < s.turretLevel; i++) {
       final a = i * 2 * pi / max(1, s.turretLevel) + pi / 4;
       canvas.drawCircle(OffsetX.fromAngle(a, ringR), 7, Paint()..color = const Color(0xFFE53935));
@@ -436,6 +616,8 @@ class WorldPainter extends CustomPainter {
   }
 
   void _paintPickup(Canvas canvas, Pickup k, double t) {
+    // 곧 사라질 아이템은 깜빡인다 (끝으로 갈수록 빠르게)
+    if (k.life < Pickup.blinkTime && sin(t * (10 + (Pickup.blinkTime - k.life) * 4)) < 0) return;
     final bob = sin(t * 5 + k.pos.dx) * 2;
     final c = k.pos + Offset(0, bob);
     switch (k.kind) {
@@ -548,81 +730,97 @@ class WorldPainter extends CustomPainter {
             ..close(),
           Paint()..color = world.boostTime > 0 ? const Color(0xFF80D8FF) : const Color(0xFFFFB74D));
     }
-    // 함선 종류별 실루엣: 날개 폭/동체 길이 배율
     final ship = world.ship;
-    canvas.save();
-    canvas.scale(ship.wing / 26, ship.length / 46);
-    final wing = Paint()..color = wingC;
-    if (ship.id == 'phantom') {
-      // 팬텀: 뒤로 꺾인 날개
+    // 생성 스프라이트 (함선 종류 × 스킨). 없으면 도형으로 그린다.
+    // 무지개 스킨은 색이 계속 돌아간다.
+    final drawn = Sprites.draw(canvas, 'ship_${ship.id}_${skin.id}', Offset.zero, 62 * ship.length / 46,
+        filter: skin.rainbow ? ColorFilter.matrix(_hueRotate(t * 90)) : null);
+    if (!drawn) {
+        // 함선 종류별 실루엣: 날개 폭/동체 길이 배율
+      canvas.save();
+      canvas.scale(ship.wing / 26, ship.length / 46);
+      final wing = Paint()..color = wingC;
+      if (ship.id == 'phantom') {
+        // 팬텀: 뒤로 꺾인 날개
+        canvas.drawPath(
+            Path()
+              ..moveTo(-6, -14)
+              ..lineTo(-26, 22)
+              ..lineTo(-8, 10)
+              ..close(),
+            wing);
+        canvas.drawPath(
+            Path()
+              ..moveTo(6, -14)
+              ..lineTo(26, 22)
+              ..lineTo(8, 10)
+              ..close(),
+            wing);
+      }
       canvas.drawPath(
           Path()
-            ..moveTo(-6, -14)
-            ..lineTo(-26, 22)
-            ..lineTo(-8, 10)
+            ..moveTo(-8, -4)
+            ..lineTo(-26, 16)
+            ..lineTo(-8, 14)
             ..close(),
           wing);
       canvas.drawPath(
           Path()
-            ..moveTo(6, -14)
-            ..lineTo(26, 22)
-            ..lineTo(8, 10)
+            ..moveTo(8, -4)
+            ..lineTo(26, 16)
+            ..lineTo(8, 14)
             ..close(),
           wing);
+      // 무기 레벨에 따른 포신
+      if (world.weaponLevel >= 3) {
+        final gun = Paint()..color = const Color(0xFF546E7A);
+        canvas.drawRect(const Rect.fromLTWH(-20, -2, 4, 12), gun);
+        canvas.drawRect(const Rect.fromLTWH(16, -2, 4, 12), gun);
+      }
+      canvas.drawRRect(
+          RRect.fromRectAndRadius(const Rect.fromLTWH(-11, -26, 22, 46), const Radius.circular(11)),
+          Paint()..color = hull);
+      canvas.drawRect(const Rect.fromLTWH(-11, 8, 22, 4), Paint()..color = skin.stripe);
+      if (ship.id == 'fortress') {
+        // 포트리스: 장갑판
+        final plate = Paint()..color = const Color(0xFF78909C);
+        canvas.drawRect(const Rect.fromLTWH(-15, -4, 4, 18), plate);
+        canvas.drawRect(const Rect.fromLTWH(11, -4, 4, 18), plate);
+      } else if (ship.id == 'prospector') {
+        // 프로스펙터: 앞쪽 채굴 집게
+        final claw = Paint()
+          ..color = const Color(0xFFFFB300)
+          ..strokeWidth = 3
+          ..style = PaintingStyle.stroke;
+        canvas.drawArc(const Rect.fromLTWH(-12, -36, 10, 14), pi * 0.5, pi, false, claw);
+        canvas.drawArc(const Rect.fromLTWH(2, -36, 10, 14), -pi * 0.5, pi, false, claw);
+      }
+      canvas.restore();
+      canvas.drawCircle(const Offset(0, -8), 10, Paint()..color = const Color(0xFF263238));
+      canvas.save();
+      canvas.rotate(-(p.angle + pi / 2));
+      paintChibi(canvas, _rot(const Offset(0, -8), p.angle + pi / 2), 6.5,
+          ChibiStyle.captainIn(outfit).copyWith(helmet: false),
+          withBody: false);
+      canvas.restore();
+      canvas.drawCircle(const Offset(0, -8), 10,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 2
+            ..color = const Color(0xAAB3E5FC));
     }
-    canvas.drawPath(
-        Path()
-          ..moveTo(-8, -4)
-          ..lineTo(-26, 16)
-          ..lineTo(-8, 14)
-          ..close(),
-        wing);
-    canvas.drawPath(
-        Path()
-          ..moveTo(8, -4)
-          ..lineTo(26, 16)
-          ..lineTo(8, 14)
-          ..close(),
-        wing);
-    // 무기 레벨에 따른 포신
-    if (world.weaponLevel >= 3) {
-      final gun = Paint()..color = const Color(0xFF546E7A);
-      canvas.drawRect(const Rect.fromLTWH(-20, -2, 4, 12), gun);
-      canvas.drawRect(const Rect.fromLTWH(16, -2, 4, 12), gun);
-    }
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(-11, -26, 22, 46), const Radius.circular(11)),
-        Paint()..color = hull);
-    canvas.drawRect(const Rect.fromLTWH(-11, 8, 22, 4), Paint()..color = skin.stripe);
-    if (ship.id == 'fortress') {
-      // 포트리스: 장갑판
-      final plate = Paint()..color = const Color(0xFF78909C);
-      canvas.drawRect(const Rect.fromLTWH(-15, -4, 4, 18), plate);
-      canvas.drawRect(const Rect.fromLTWH(11, -4, 4, 18), plate);
-    } else if (ship.id == 'prospector') {
-      // 프로스펙터: 앞쪽 채굴 집게
-      final claw = Paint()
-        ..color = const Color(0xFFFFB300)
-        ..strokeWidth = 3
-        ..style = PaintingStyle.stroke;
-      canvas.drawArc(const Rect.fromLTWH(-12, -36, 10, 14), pi * 0.5, pi, false, claw);
-      canvas.drawArc(const Rect.fromLTWH(2, -36, 10, 14), -pi * 0.5, pi, false, claw);
-    }
-    canvas.restore();
-    canvas.drawCircle(const Offset(0, -8), 10, Paint()..color = const Color(0xFF263238));
-    canvas.save();
-    canvas.rotate(-(p.angle + pi / 2));
-    paintChibi(canvas, _rot(const Offset(0, -8), p.angle + pi / 2), 6.5,
-        ChibiStyle.captainIn(outfit).copyWith(helmet: false),
-        withBody: false);
-    canvas.restore();
-    canvas.drawCircle(const Offset(0, -8), 10,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2
-          ..color = const Color(0xAAB3E5FC));
     canvas.restore();
 
+    if (!world.shielded && world.guardReady) {
+      // 오로라 수호막: 충전되어 있으면 옅은 고리
+      canvas.drawCircle(
+          p.pos,
+          34,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1.5
+            ..color = const Color(0xFF80D8FF).withValues(alpha: 0.35 + 0.15 * sin(t * 4)));
+    }
     if (world.shielded) {
       final pulse = 0.5 + 0.5 * sin(t * 10);
       canvas.drawCircle(p.pos, 36,
@@ -635,6 +833,18 @@ class WorldPainter extends CustomPainter {
             ..strokeWidth = 3
             ..color = const Color(0xFF80D8FF).withValues(alpha: 0.6 + 0.3 * pulse));
     }
+  }
+
+  /// 색상환 회전 행렬 (도 단위)
+  static List<double> _hueRotate(double deg) {
+    final r = deg * pi / 180, c = cos(r), sn = sin(r);
+    const lr = 0.213, lg = 0.715, lb = 0.072;
+    return [
+      lr + c * (1 - lr) + sn * -lr, lg + c * -lg + sn * -lg, lb + c * -lb + sn * (1 - lb), 0, 0,
+      lr + c * -lr + sn * 0.143, lg + c * (1 - lg) + sn * 0.140, lb + c * -lb + sn * -0.283, 0, 0,
+      lr + c * -lr + sn * -(1 - lr), lg + c * -lg + sn * lg, lb + c * (1 - lb) + sn * lb, 0, 0,
+      0, 0, 0, 1, 0,
+    ];
   }
 
   void _paintDrone(Canvas canvas, double t) {
@@ -662,87 +872,92 @@ class WorldPainter extends CustomPainter {
       canvas.drawCircle(e.pos, e.radius * (1.5 + 0.1 * sin(t * 12)),
           Paint()..color = const Color(0x44FF1744));
     }
-    final scale = e.radius / 20;
-    canvas.save();
-    canvas.translate(e.pos.dx, e.pos.dy);
-    canvas.rotate(e.angle + pi / 2);
-    canvas.scale(scale);
-    final flash = e.hitFlash > 0;
-    final hullColor = flash
-        ? Colors.white
-        : switch (e.kind) {
-            PirateKind.boss => const Color(0xFF6A1B9A),
-            PirateKind.bomber => const Color(0xFF3E2723),
-            PirateKind.sniper => const Color(0xFF263238),
-            _ => e.name != null ? const Color(0xFF4E342E) : const Color(0xFF37474F),
-          };
-    final hull = Paint()..color = hullColor;
-    switch (e.kind) {
-      case PirateKind.bomber:
-        canvas.drawCircle(Offset.zero, 18, hull);
-        canvas.drawLine(const Offset(0, -18), const Offset(6, -28),
-            Paint()
-              ..color = const Color(0xFFBCAAA4)
-              ..strokeWidth = 3);
-        canvas.drawCircle(const Offset(6, -29), 4 + sin(t * 20) * 2,
-            Paint()..color = const Color(0xFFFFAB40));
-        canvas.drawPath(
-            Path()
-              ..moveTo(-12, 10)
-              ..lineTo(0, 22)
-              ..lineTo(12, 10)
-              ..close(),
-            Paint()..color = const Color(0xFFC62828));
-      case PirateKind.sniper:
-        canvas.drawPath(
-            Path()
-              ..moveTo(0, -30)
-              ..lineTo(6, -6)
-              ..lineTo(20, 14)
-              ..lineTo(6, 10)
-              ..lineTo(0, 20)
-              ..lineTo(-6, 10)
-              ..lineTo(-20, 14)
-              ..lineTo(-6, -6)
-              ..close(),
-            hull);
-        canvas.drawRect(const Rect.fromLTWH(-1.5, -40, 3, 14), Paint()..color = const Color(0xFF90A4AE));
-        canvas.drawCircle(const Offset(0, -38), 2, Paint()..color = const Color(0xFFFF1744));
-      default:
-        canvas.drawPath(
-            Path()
-              ..moveTo(0, -24)
-              ..lineTo(10, -6)
-              ..lineTo(24, -10)
-              ..lineTo(18, 8)
-              ..lineTo(26, 18)
-              ..lineTo(8, 14)
-              ..lineTo(0, 22)
-              ..lineTo(-8, 14)
-              ..lineTo(-26, 18)
-              ..lineTo(-18, 8)
-              ..lineTo(-24, -10)
-              ..lineTo(-10, -6)
-              ..close(),
-            hull);
-        canvas.drawPath(
-            Path()
-              ..moveTo(-18, 8)
-              ..lineTo(18, 8)
-              ..lineTo(0, 22)
-              ..close(),
-            Paint()..color = e.name != null ? const Color(0xFFFFB300) : const Color(0xFFC62828));
+    final hitFilter = e.hitFlash > 0 ? const ColorFilter.mode(Colors.white, BlendMode.srcATop) : null;
+    final drawn = Sprites.draw(canvas, 'pirate_${e.kind.name}', e.pos, e.radius * 2.8,
+        angle: e.angle + pi / 2, filter: hitFilter);
+    if (!drawn) {
+      final scale = e.radius / 20;
+      canvas.save();
+      canvas.translate(e.pos.dx, e.pos.dy);
+      canvas.rotate(e.angle + pi / 2);
+      canvas.scale(scale);
+      final flash = e.hitFlash > 0;
+      final hullColor = flash
+          ? Colors.white
+          : switch (e.kind) {
+              PirateKind.boss => const Color(0xFF6A1B9A),
+              PirateKind.bomber => const Color(0xFF3E2723),
+              PirateKind.sniper => const Color(0xFF263238),
+              _ => e.name != null ? const Color(0xFF4E342E) : const Color(0xFF37474F),
+            };
+      final hull = Paint()..color = hullColor;
+      switch (e.kind) {
+        case PirateKind.bomber:
+          canvas.drawCircle(Offset.zero, 18, hull);
+          canvas.drawLine(const Offset(0, -18), const Offset(6, -28),
+              Paint()
+                ..color = const Color(0xFFBCAAA4)
+                ..strokeWidth = 3);
+          canvas.drawCircle(const Offset(6, -29), 4 + sin(t * 20) * 2,
+              Paint()..color = const Color(0xFFFFAB40));
+          canvas.drawPath(
+              Path()
+                ..moveTo(-12, 10)
+                ..lineTo(0, 22)
+                ..lineTo(12, 10)
+                ..close(),
+              Paint()..color = const Color(0xFFC62828));
+        case PirateKind.sniper:
+          canvas.drawPath(
+              Path()
+                ..moveTo(0, -30)
+                ..lineTo(6, -6)
+                ..lineTo(20, 14)
+                ..lineTo(6, 10)
+                ..lineTo(0, 20)
+                ..lineTo(-6, 10)
+                ..lineTo(-20, 14)
+                ..lineTo(-6, -6)
+                ..close(),
+              hull);
+          canvas.drawRect(const Rect.fromLTWH(-1.5, -40, 3, 14), Paint()..color = const Color(0xFF90A4AE));
+          canvas.drawCircle(const Offset(0, -38), 2, Paint()..color = const Color(0xFFFF1744));
+        default:
+          canvas.drawPath(
+              Path()
+                ..moveTo(0, -24)
+                ..lineTo(10, -6)
+                ..lineTo(24, -10)
+                ..lineTo(18, 8)
+                ..lineTo(26, 18)
+                ..lineTo(8, 14)
+                ..lineTo(0, 22)
+                ..lineTo(-8, 14)
+                ..lineTo(-26, 18)
+                ..lineTo(-18, 8)
+                ..lineTo(-24, -10)
+                ..lineTo(-10, -6)
+                ..close(),
+              hull);
+          canvas.drawPath(
+              Path()
+                ..moveTo(-18, 8)
+                ..lineTo(18, 8)
+                ..lineTo(0, 22)
+                ..close(),
+              Paint()..color = e.name != null ? const Color(0xFFFFB300) : const Color(0xFFC62828));
+      }
+      canvas.drawCircle(const Offset(0, -2), 9, Paint()..color = const Color(0xFF212121));
+      canvas.save();
+      canvas.rotate(-(e.angle + pi / 2));
+      paintChibi(canvas, _rot(const Offset(0, -2), e.angle + pi / 2), 6,
+          e.sectorBoss || e.name != null
+              ? ChibiStyle.pirate.copyWith(accessory: Accessory.captainHat)
+              : ChibiStyle.pirate,
+          withBody: false);
+      canvas.restore();
+      canvas.restore();
     }
-    canvas.drawCircle(const Offset(0, -2), 9, Paint()..color = const Color(0xFF212121));
-    canvas.save();
-    canvas.rotate(-(e.angle + pi / 2));
-    paintChibi(canvas, _rot(const Offset(0, -2), e.angle + pi / 2), 6,
-        e.sectorBoss || e.name != null
-            ? ChibiStyle.pirate.copyWith(accessory: Accessory.captainHat)
-            : ChibiStyle.pirate,
-        withBody: false);
-    canvas.restore();
-    canvas.restore();
 
     if (e.hp < e.maxHp) {
       _bar(canvas, e.pos + Offset(0, -e.radius - 14), e.radius * 2, e.hp / e.maxHp,
@@ -760,38 +975,42 @@ class WorldPainter extends CustomPainter {
   void _paintJelly(Canvas canvas, Pirate e, double t) {
     final c = e.pos;
     final r = e.radius;
-    final tent = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
-      ..strokeCap = StrokeCap.round
-      ..color = const Color(0xAAE040FB);
-    for (var i = 0; i < 5; i++) {
-      final x = c.dx + (i - 2) * r * 0.35;
-      final path = Path()..moveTo(x, c.dy);
-      for (var k = 1; k <= 4; k++) {
-        path.lineTo(x + sin(t * 4 + i + k) * 6, c.dy + k * r * 0.3);
+    final drawn = Sprites.draw(canvas, 'jelly', c + Offset(0, sin(t * 3) * 3), r * 2.6,
+        filter: e.hitFlash > 0 ? const ColorFilter.mode(Colors.white, BlendMode.srcATop) : null);
+    if (!drawn) {
+      final tent = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4
+        ..strokeCap = StrokeCap.round
+        ..color = const Color(0xAAE040FB);
+      for (var i = 0; i < 5; i++) {
+        final x = c.dx + (i - 2) * r * 0.35;
+        final path = Path()..moveTo(x, c.dy);
+        for (var k = 1; k <= 4; k++) {
+          path.lineTo(x + sin(t * 4 + i + k) * 6, c.dy + k * r * 0.3);
+        }
+        canvas.drawPath(path, tent);
       }
-      canvas.drawPath(path, tent);
+      canvas.drawArc(Rect.fromCircle(center: c, radius: r), pi, pi, true,
+          Paint()
+            ..color = e.hitFlash > 0 ? Colors.white : const Color(0xCCCE93D8));
+      canvas.drawArc(Rect.fromCircle(center: c + Offset(-r * 0.3, -r * 0.3), radius: r * 0.35), pi, pi * 0.6,
+          false,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 3
+            ..color = Colors.white54);
+      // 귀여운 얼굴
+      final eye = Paint()..color = const Color(0xFF4A148C);
+      canvas.drawCircle(c + Offset(-r * 0.3, -r * 0.35), r * 0.1, eye);
+      canvas.drawCircle(c + Offset(r * 0.3, -r * 0.35), r * 0.1, eye);
+      canvas.drawArc(Rect.fromCenter(center: c + Offset(0, -r * 0.2), width: r * 0.3, height: r * 0.2), 0.2,
+          pi - 0.4, false,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 2
+            ..color = const Color(0xFF4A148C));
     }
-    canvas.drawArc(Rect.fromCircle(center: c, radius: r), pi, pi, true,
-        Paint()
-          ..color = e.hitFlash > 0 ? Colors.white : const Color(0xCCCE93D8));
-    canvas.drawArc(Rect.fromCircle(center: c + Offset(-r * 0.3, -r * 0.3), radius: r * 0.35), pi, pi * 0.6,
-        false,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3
-          ..color = Colors.white54);
-    // 귀여운 얼굴
-    final eye = Paint()..color = const Color(0xFF4A148C);
-    canvas.drawCircle(c + Offset(-r * 0.3, -r * 0.35), r * 0.1, eye);
-    canvas.drawCircle(c + Offset(r * 0.3, -r * 0.35), r * 0.1, eye);
-    canvas.drawArc(Rect.fromCenter(center: c + Offset(0, -r * 0.2), width: r * 0.3, height: r * 0.2), 0.2,
-        pi - 0.4, false,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2
-          ..color = const Color(0xFF4A148C));
     if (e.hp < e.maxHp) {
       _bar(canvas, c + Offset(0, -r - 10), r * 2, e.hp / e.maxHp, const Color(0xFFE040FB));
     }
@@ -871,6 +1090,14 @@ class MinimapPainter extends CustomPainter {
     final s = size.width / (GameWorld.worldHalf * 2);
     Offset m(Offset p) =>
         Offset((p.dx + GameWorld.worldHalf) * s, (p.dy + GameWorld.worldHalf) * s);
+    final orbitPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.6
+      ..color = const Color(0x338AD8FF);
+    for (final r in {for (final p in world.planets) p.orbitRadius}) {
+      canvas.drawCircle(m(Offset.zero), r * s, orbitPaint);
+    }
+    canvas.drawCircle(m(Offset.zero), max(3.5, GameWorld.starRadius * s), Paint()..color = const Color(0xFFFFC107));
     for (final g in world.gates) {
       canvas.drawCircle(m(g.pos), 4,
           Paint()..color = world.gateOpen(g) ? const Color(0xFFB388FF) : const Color(0xFF757575));

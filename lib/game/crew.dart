@@ -51,6 +51,9 @@ const _hairColors = [
 ];
 const _skinColors = [0xFFFFE0C7, 0xFFFFD3B0, 0xFFF1C27D, 0xFFE0AC69, 0xFFFFE6D5];
 
+/// ★4 전설 승무원 칭호
+const _legendTitles = ['은하수호자', '별의 영웅', '성운의 현자', '혜성 기사', '초신성'];
+
 class CrewMember {
   CrewMember({
     required this.id,
@@ -65,7 +68,7 @@ class CrewMember {
   final int id;
   final String name;
   final CrewRole role;
-  final int rarity; // 1..3
+  final int rarity; // 1..4 (★4 = 전설, 젬 전용)
   final int lookSeed;
   int level;
   bool assigned;
@@ -77,10 +80,18 @@ class CrewMember {
 
   int get levelUpCost => 200 * level * rarity;
 
+  /// ★4 전설
+  bool get legendary => rarity >= 4;
+
+  /// ★4는 칭호가 붙는다 (예: '은하수호자 뭉치')
+  String get displayName =>
+      legendary ? '${_legendTitles[lookSeed % _legendTitles.length]} $name' : name;
+
   int get hairColor => _hairColors[lookSeed % _hairColors.length];
   int get skinColor => _skinColors[(lookSeed ~/ 7) % _skinColors.length];
   bool get glasses => (lookSeed ~/ 13) % 4 == 0;
   Accessory get accessory {
+    if (legendary) return Accessory.crown;
     final opts = [
       Accessory.none, Accessory.none, Accessory.catEars, Accessory.bunnyEars,
       Accessory.antenna, Accessory.flower,
@@ -113,7 +124,12 @@ class CrewMember {
 
   /// 희귀도 확률표 (게임 내 공개용)
   static const creditOdds = {1: 70, 2: 25, 3: 5};
-  static const gemOdds = {2: 80, 3: 20};
+  /// ★4 전설은 고급(젬) 영입에서만 나온다
+  static const gemOdds = {2: 77, 3: 20, 4: 3};
+
+  /// 확률표 안내 문구 ('★2 77% / ★3 20% / ★4 3%')
+  static String oddsText(Map<int, int> odds) =>
+      odds.entries.map((e) => '${'★' * e.key} ${e.value}%').join(' / ');
 
   static CrewMember random(Random r, int id, {required Map<int, int> odds}) {
     final roll = r.nextInt(100);

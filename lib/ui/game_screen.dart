@@ -13,12 +13,15 @@ import '../services/app_state.dart';
 import '../services/audio.dart';
 import '../services/notifications.dart';
 import 'chibi.dart';
+import 'colony_panel.dart';
 import 'home_screen.dart';
 import 'common.dart';
+import 'game_icons.dart';
 import 'merchant_panel.dart';
 import 'meta_screens.dart';
 import 'shop_screen.dart';
 import 'station_panel.dart';
+import 'system_panel.dart';
 import 'world_painter.dart';
 
 class GameScreen extends StatefulWidget {
@@ -33,7 +36,7 @@ class _FrameNotifier extends ChangeNotifier {
   void tick() => notifyListeners();
 }
 
-enum _Overlay { none, station, merchant, pause }
+enum _Overlay { none, station, merchant, colony, buildStation, system, pause }
 
 class _GameScreenState extends State<GameScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
@@ -168,7 +171,26 @@ class _GameScreenState extends State<GameScreen>
     // 다른 오버레이가 사라졌으면 닫기
     if (_overlay == _Overlay.station && w.nearbyStation == null) _setOverlay(_Overlay.none);
     if (_overlay == _Overlay.merchant && w.nearbyMerchant == null) _setOverlay(_Overlay.none);
+    if (_overlay == _Overlay.colony && _nearbyColony == null) _setOverlay(_Overlay.none);
+    // 첫 정착 직후: 식민지 안내 창 자동으로 열기
+    if (w.colonyTutorialPending && _overlay == _Overlay.none && !_modal) {
+      w.colonyTutorialPending = false;
+      if (_nearbyColony != null) _setOverlay(_Overlay.colony);
+    }
     _frame.tick();
+  }
+
+  Planet? get _nearbyColony {
+    final p = w.nearbyPlanet;
+    return p != null && p.colonyLevel > 0 ? p : null;
+  }
+
+  void _finishColonyTutorial() {
+    w.profile
+      ..colonyTutorialSeen = true
+      ..dirty = true;
+    SaveService.saveProfile(w.profile);
+    setState(() {});
   }
 
   bool _targetInRange() => w.pirates.any((e) => (e.pos - w.player.pos).distance < 520);
@@ -184,7 +206,7 @@ class _GameScreenState extends State<GameScreen>
     if (key == LogicalKeyboardKey.keyE) {
       _interact();
     } else if (key == LogicalKeyboardKey.keyB) {
-      _act(w.buildStation);
+      if (w.canBuildStationHere) _setOverlay(_Overlay.buildStation);
     } else if (key == LogicalKeyboardKey.keyQ) {
       w.fireMissiles();
     } else if (key == LogicalKeyboardKey.keyF) {
@@ -210,6 +232,8 @@ class _GameScreenState extends State<GameScreen>
       _setOverlay(_Overlay.station);
     } else if (w.nearbyGate != null) {
       _act(() => w.warp(w.nearbyGate!));
+    } else if (_nearbyColony != null) {
+      _setOverlay(_Overlay.colony);
     } else if (w.nearbyPlanet != null) {
       _act(() => w.upgradePlanet(w.nearbyPlanet!));
     }
@@ -259,7 +283,7 @@ class _GameScreenState extends State<GameScreen>
                 textAlign: TextAlign.center, style: bodyStyle),
             const SizedBox(height: 8),
             Text('💰${compact(c)}  💎${compact(o)}',
-                style: const TextStyle(fontSize: 22, color: Color(0xFFFFD54F))),
+                style: Ts.title.copyWith(color: Color(0xFFFFD54F))),
             if (!premium)
               const Text('사령관 패스: 최대 8시간 + 자동 2배', style: dimStyle),
           ],
@@ -312,7 +336,7 @@ class _GameScreenState extends State<GameScreen>
             const SizedBox(height: 10),
             if (can)
               Text('지금 환생하면 명예 +$gain점!\n(제국 가치가 클수록 많이 받아요)',
-                  style: const TextStyle(color: Color(0xFFFFD54F), fontSize: 16),
+                  style: Ts.body.copyWith(color: Color(0xFFFFD54F)),
                   textAlign: TextAlign.center)
             else
               const Text('섹터 4에 도달하면 환생할 수 있어요.',
@@ -407,6 +431,25 @@ class _GameScreenState extends State<GameScreen>
                   onClose: () => _setOverlay(_Overlay.none),
                 ),
               ),
+            if (_overlay == _Overlay.colony && _nearbyColony != null)
+              Positioned.fill(
+                child: ColonyPanel(
+                  world: w,
+                  planet: _nearbyColony!,
+                  frame: _frame,
+                  act: _act,
+                  onClose: () => _setOverlay(_Overlay.none),
+                  onTutorialDone: _finishColonyTutorial,
+                ),
+              ),
+            if (_overlay == _Overlay.system)
+              Positioned.fill(
+                child: SystemPanel(world: w, frame: _frame, onClose: () => _setOverlay(_Overlay.none)),
+              ),
+            if (_overlay == _Overlay.buildStation)
+              Positioned.fill(
+                child: StationBuildPanel(world: w, act: _act, onClose: () => _setOverlay(_Overlay.none)),
+              ),
             if (_overlay == _Overlay.pause) Positioned.fill(child: _pauseMenu()),
           ],
         ),
@@ -466,12 +509,12 @@ class _GameScreenState extends State<GameScreen>
               children: [
                 _hpBar(p.hp / w.playerMaxHp),
                 const SizedBox(height: 3),
-                _res('💰', w.credits, w.creditIncome),
-                _res('💎', w.ore, w.oreIncome),
+                _res('credits', w.credits, w.creditIncome),
+                _res('ore', w.ore, w.oreIncome),
                 GestureDetector(
                   onTap: () => _openShop(),
-                  child: Text('⭐ ${w.profile.gems}  ＋',
-                      style: const TextStyle(color: Color(0xFFFF80AB), fontSize: 13)),
+                  child: iconValue('gem', '${w.profile.gems}  ＋',
+                      style: Ts.caption.copyWith(color: Color(0xFFFF80AB))),
                 ),
               ],
             ),
@@ -484,15 +527,26 @@ class _GameScreenState extends State<GameScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('🎯 ${w.story.title}',
-                  style: const TextStyle(color: Color(0xFF7CFFB2), fontSize: 12, fontWeight: FontWeight.bold)),
+                  style: Ts.caption.copyWith(color: Color(0xFF7CFFB2), fontWeight: FontWeight.bold)),
               if (st > 1) Text('$sv / $st', style: dimStyle),
               for (final m in w.activeMissions)
                 Text('${m.icon} ${_missionShort(m)}',
-                    style: const TextStyle(color: Colors.white70, fontSize: 11),
+                    style: Ts.caption.copyWith(color: Colors.white70),
                     overflow: TextOverflow.ellipsis),
+              // 공격받는 중이거나 깨진 식민지 방어막만 표시
+              for (final pl in w.planets.where((p) =>
+                  p.colonyLevel > 0 && p.shieldHp < p.shieldMax(w.sectorMul) - 0.5))
+                iconValue(
+                    'dome',
+                    pl.domeUp
+                        ? '${pl.name} ${(100 * pl.shieldHp / pl.shieldMax(w.sectorMul)).floor()}%'
+                        : '${pl.name} 깨짐',
+                    size: 20,
+                    style: Ts.caption.copyWith(color: WorldPainter.shieldColor(
+                            pl.domeUp ? pl.shieldHp / pl.shieldMax(w.sectorMul) : 0), fontWeight: FontWeight.bold)),
               if (w.buffs.isNotEmpty)
                 Text(w.buffs.entries.map((e) => '${e.key.icon}${e.value.ceil()}s').join('  '),
-                    style: const TextStyle(color: Color(0xFFB9F6CA), fontSize: 12)),
+                    style: Ts.caption.copyWith(color: Color(0xFFB9F6CA))),
             ],
           )),
         ),
@@ -512,11 +566,23 @@ class _GameScreenState extends State<GameScreen>
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              glass(Text(
-                '${w.sectorName}\n⚠ 위협 ${w.threat.toStringAsFixed(1)}  🏛 ${compact(w.empireValue)}',
-                textAlign: TextAlign.right,
-                style: const TextStyle(color: Colors.white, fontSize: 11),
-              )),
+              // 누르면 항성계 현황
+              GestureDetector(
+                onTap: () => _setOverlay(_Overlay.system),
+                child: glass(Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const GameIcon('menu_home', size: 30),
+                    const SizedBox(width: Space.xs),
+                    Text(
+                      '${w.sectorName} · 발전 ${(w.development * 100).floor()}%\n'
+                      '⚠ 위협 ${w.threat.toStringAsFixed(1)}  🏛 ${compact(w.empireValue)}',
+                      textAlign: TextAlign.right,
+                      style: Ts.caption.copyWith(color: Colors.white),
+                    ),
+                  ],
+                )),
+              ),
               const SizedBox(width: 6),
               Badge(
                 isLabelVisible: w.profile.claimable.isNotEmpty || w.profile.dailyClaimable > 0,
@@ -531,12 +597,30 @@ class _GameScreenState extends State<GameScreen>
             height: 120,
             child: CustomPaint(painter: MinimapPainter(w, repaint: _frame)),
           ),
+          // 본거지 위기: 내구도 30% 미만 또는 기능 정지
+          if (w.homeBase.disabled || w.homeBase.hp < w.homeBase.maxHp * 0.3)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: glass(
+                iconValue(
+                    'raid',
+                    w.homeBase.disabled
+                        ? '본거지 정지 ${w.homeBase.disabledTime.ceil()}s'
+                        : '본거지 ${(w.homeBase.hp / w.homeBase.maxHp * 100).floor()}%',
+                    size: 20,
+                    style: Ts.caption.copyWith(color: Color(0xFFFF5252))),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              ),
+            ),
           for (final ev in w.events)
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: glass(
-                Text('${ev.title} ${ev.timeLeft.ceil()}s',
-                    style: const TextStyle(color: Color(0xFFFFD740), fontSize: 11)),
+                ev.kind == EventKind.raid
+                    ? iconValue('raid', '${ev.planet?.name ?? ''} ${ev.timeLeft.ceil()}s',
+                        size: 20, style: Ts.caption.copyWith(color: Color(0xFFFF8A80)))
+                    : Text('${ev.title} ${ev.timeLeft.ceil()}s',
+                        style: Ts.caption.copyWith(color: Color(0xFFFFD740))),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               ),
             ),
@@ -550,39 +634,48 @@ class _GameScreenState extends State<GameScreen>
     final gate = w.nearbyGate;
     final pl = w.nearbyPlanet;
     if (merchant != null) {
-      out.add(actionBtn('🛒 상인과 거래 (E)', true, () => _setOverlay(_Overlay.merchant),
-          color: const Color(0xFF00897B)));
+      out.add(actionBtn('상인 (E)', true, () => _setOverlay(_Overlay.merchant),
+          icon: 'act_merchant', color: const Color(0xFF00897B)));
     }
     if (st != null) {
-      out.add(actionBtn('🛠 ${st.name} (E)', true, () => _setOverlay(_Overlay.station)));
+      out.add(actionBtn('${st.name} (E)', true, () => _setOverlay(_Overlay.station),
+          icon: 'act_station'));
     }
     if (gate != null) {
       out.add(w.gateOpen(gate)
-          ? actionBtn(gate.forward ? '🌀 다음 섹터로 워프 (E)' : '🌀 이전 섹터로 (E)', true,
+          ? actionBtn(gate.forward ? '다음 섹터 (E)' : '이전 섹터 (E)', true,
               () => _act(() => w.warp(gate)),
-              color: const Color(0xFF6A1B9A))
-          : actionBtn('🔒 섹터 두목을 쓰러뜨려야 열려요', false, null));
+              icon: 'act_warp', color: const Color(0xFF6A1B9A))
+          : actionBtn('🔒 발전도 100%에서 열려요 (${(w.development * 100).floor()}%)', false, null,
+              icon: 'act_warp'));
     }
     if (pl != null) {
-      if (pl.colonyLevel >= Planet.maxLevel) {
-        out.add(actionBtn('🌟 ${pl.name} 최대 레벨', false, null));
-      } else {
+      if (pl.colonyLevel == 0) {
         final c = w.planetCost(pl);
-        final label = pl.colonyLevel == 0
-            ? '🚩 ${pl.name} 정착 ${costText(c)} (E)'
-            : '⬆ ${pl.name} Lv.${pl.colonyLevel + 1} ${costText(c)} (E)';
-        out.add(actionBtn(label, w.canAfford(c), () => _act(() => w.upgradePlanet(pl))));
+        out.add(actionBtn('${pl.name} 정착', w.canAfford(c), () => _act(() => w.upgradePlanet(pl)),
+            icon: 'act_settle', cost: c));
+      } else {
+        out.add(actionBtn('${pl.name} 관리 (E)', true, () => _setOverlay(_Overlay.colony),
+            icon: pl.raided ? 'raid' : 'colony_levelup', color: const Color(0xFF2E7D32)));
       }
       final (cr, orr) = pl.ratePerLevel;
-      out.add(glass(Text(
-        '${pl.kindLabel} · 레벨당 💰${(cr * w.sectorMul).toStringAsFixed(1)}/s'
-        '${orr > 0 ? ' 💎${(orr * w.sectorMul).toStringAsFixed(1)}/s' : ''}',
-        style: const TextStyle(color: Colors.white70, fontSize: 11),
+      const dim = Ts.caption;
+      out.add(glass(Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('${pl.kindLabel}  ', style: dim),
+          iconValue('credits', '+${(cr * w.sectorMul).toStringAsFixed(1)}/s', size: 14, style: dim),
+          if (orr > 0) ...[
+            const SizedBox(width: 6),
+            iconValue('ore', '+${(orr * w.sectorMul).toStringAsFixed(1)}/s', size: 14, style: dim),
+          ],
+        ],
       )));
     }
     if (w.canBuildStationHere && (w.counter('colonies') > 0 || w.credits >= w.stationBuildCost.$1)) {
       final c = w.stationBuildCost;
-      out.add(actionBtn('🏗 정거장 건설 ${costText(c)} (B)', w.canAfford(c), () => _act(w.buildStation)));
+      out.add(actionBtn('정거장 건설', w.canAfford(c), () => _setOverlay(_Overlay.buildStation),
+          icon: 'tab_station', cost: c));
     }
     return out;
   }
@@ -646,26 +739,25 @@ class _GameScreenState extends State<GameScreen>
                       .withValues(alpha: 0.55),
                   border: Border.all(color: Colors.white38, width: 2),
                 ),
-                child: const Center(
-                    child: Text('발사', style: TextStyle(color: Colors.white, fontSize: 18))),
+                child: const Center(child: Text('발사', style: Ts.heading)),
               ),
             ),
           ),
           Positioned(
             right: 104,
             bottom: 0,
-            child: _skillBtn('💨', p.boostCooldown, w.boostCooldownMax, true, w.boost),
+            child: _skillBtn('cmb_boost', p.boostCooldown, w.boostCooldownMax, true, w.boost),
           ),
           Positioned(
             right: 96,
             bottom: 66,
-            child: _skillBtn('🚀', p.missileCooldown, w.missileCooldownMax,
+            child: _skillBtn('cmb_missile', p.missileCooldown, w.missileCooldownMax,
                 w.level(UpgradeKind.missile) > 0, w.fireMissiles),
           ),
           Positioned(
             right: 28,
             bottom: 104,
-            child: _skillBtn('🛡', p.shieldCooldown, w.shieldCooldownMax,
+            child: _skillBtn('cmb_shield', p.shieldCooldown, w.shieldCooldownMax,
                 w.level(UpgradeKind.shield) > 0, w.activateShield),
           ),
           Positioned(
@@ -674,9 +766,9 @@ class _GameScreenState extends State<GameScreen>
             child: GestureDetector(
               onTap: () => setState(() => _autoFire = !_autoFire),
               child: glass(
-                Text(_autoFire ? '자동 ON' : '자동 OFF',
-                    style: TextStyle(
-                        color: _autoFire ? const Color(0xFF7CFFB2) : Colors.white60, fontSize: 11)),
+                iconValue('cmb_auto', _autoFire ? 'ON' : 'OFF',
+                    size: 22,
+                    style: Ts.caption.copyWith(color: _autoFire ? const Color(0xFF7CFFB2) : Colors.white60)),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               ),
             ),
@@ -704,7 +796,12 @@ class _GameScreenState extends State<GameScreen>
           child: Center(
             child: Opacity(
               opacity: unlocked ? 1 : 0.35,
-              child: Text(unlocked ? icon : '🔒', style: const TextStyle(fontSize: 22)),
+              child: unlocked
+                  ? GameIcon(icon, size: 36)
+                  : Stack(alignment: Alignment.center, children: [
+                      GameIcon(icon, size: 36),
+                      const Icon(Icons.lock, color: Colors.white, size: 18),
+                    ]),
             ),
           ),
         ),
@@ -724,7 +821,7 @@ class _GameScreenState extends State<GameScreen>
           mainAxisSize: MainAxisSize.min,
           children: [
             const ChibiPortrait(style: ChibiStyle.pirate, size: 80),
-            const Text('💥 격추당했습니다!', style: TextStyle(color: Colors.white, fontSize: 22)),
+            const Text('💥 격추당했습니다!', style: Ts.title),
             Text('${max(0, 20 - p.deadTime).ceil()}초 뒤 기지에서 자동 재출격', style: dimStyle),
             const SizedBox(height: 12),
             actionBtn(premium ? '👑 이 자리에서 부활 (무료)' : '📺 광고 보고 이 자리에서 부활', true, _reviveWithAd,
@@ -732,7 +829,8 @@ class _GameScreenState extends State<GameScreen>
             const SizedBox(height: 8),
             actionBtn('⭐10 으로 이 자리에서 부활', true, _reviveWithGems, color: const Color(0xFFAD1457)),
             const SizedBox(height: 8),
-            actionBtn('🏠 기지에서 재출격 (크레딧 25% 손실)', true, w.respawnAtBase,
+            actionBtn('🏠 기지에서 재출격 (크레딧 ${(100 * GameWorld.respawnCostRatio(w.stations.reduce((a, b) => (a.pos - p.deathPos).distance < (b.pos - p.deathPos).distance ? a : b))).round()}% 손실)',
+                true, w.respawnAtBase,
                 color: const Color(0xFF455A64)),
           ],
         ),
@@ -767,10 +865,7 @@ class _GameScreenState extends State<GameScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(name,
-                        style: TextStyle(
-                            color: d.speaker == Speaker.pirate ? const Color(0xFFFF8A80) : kSky,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12)),
+                        style: Ts.caption.copyWith(color: d.speaker == Speaker.pirate ? const Color(0xFFFF8A80) : kSky, fontWeight: FontWeight.bold)),
                     Text(d.text, style: bodyStyle),
                   ],
                 ),
@@ -795,9 +890,9 @@ class _GameScreenState extends State<GameScreen>
         ),
       );
 
-  Widget _res(String icon, double v, double rate) => Text(
-        '$icon ${compact(v)}${rate > 0 ? '  +${rate.toStringAsFixed(1)}/s' : ''}',
-        style: const TextStyle(color: Colors.white, fontSize: 13),
+  Widget _res(String icon, double v, double rate) => iconValue(
+        icon,
+        '${compact(v)}${rate > 0 ? '  +${rate.toStringAsFixed(1)}/s' : ''}',
       );
 
   Widget _iconBtn(IconData icon, VoidCallback onTap) => Material(

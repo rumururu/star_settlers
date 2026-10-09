@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import '../game/crew.dart';
 import '../game/missions.dart';
 import '../game/models.dart';
+import '../game/profile.dart';
 import '../game/ships.dart';
 import '../game/world.dart';
 import 'chibi.dart';
 import 'common.dart';
+import 'game_icons.dart';
+import 'hangar_screen.dart';
 
 typedef ActFn = void Function(bool Function() action);
 
@@ -41,18 +44,18 @@ class StationPanel extends StatelessWidget {
         child: Column(
           children: [
             ListenableBuilder(listenable: frame, builder: (c, _) => _header()),
-            const TabBar(
+            TabBar(
               isScrollable: true,
               tabAlignment: TabAlignment.start,
               labelColor: Colors.white,
               unselectedLabelColor: Colors.white54,
               indicatorColor: kSky,
               tabs: [
-                Tab(text: '🚀 함선'),
-                Tab(text: '🛰 정거장'),
-                Tab(text: '👥 승무원'),
-                Tab(text: '📋 임무'),
-                Tab(text: '📈 시장'),
+                Tab(icon: GameIcon('tab_ship', size: 30), text: '함선', iconMargin: const EdgeInsets.only(bottom: 2)),
+                Tab(icon: GameIcon('tab_station', size: 30), text: '정거장', iconMargin: const EdgeInsets.only(bottom: 2)),
+                Tab(icon: GameIcon('tab_crew', size: 30), text: '승무원', iconMargin: const EdgeInsets.only(bottom: 2)),
+                Tab(icon: GameIcon('tab_mission', size: 30), text: '임무', iconMargin: const EdgeInsets.only(bottom: 2)),
+                Tab(icon: GameIcon('tab_market', size: 30), text: '시장', iconMargin: const EdgeInsets.only(bottom: 2)),
               ],
             ),
             Expanded(
@@ -86,10 +89,16 @@ class StationPanel extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(station.name, style: titleStyle),
-                  Text(
-                    '💰${compact(world.credits)}  💎${compact(world.ore)}  ⭐${world.profile.gems}\n'
-                    '수입 💰${world.creditIncome.toStringAsFixed(1)}/s  💎${world.oreIncome.toStringAsFixed(1)}/s',
-                    style: dimStyle,
+                  Wrap(
+                    spacing: 10,
+                    children: [
+                      iconValue('credits',
+                          '${compact(world.credits)} +${world.creditIncome.toStringAsFixed(1)}/s',
+                          style: dimStyle),
+                      iconValue('ore', '${compact(world.ore)} +${world.oreIncome.toStringAsFixed(1)}/s',
+                          style: dimStyle),
+                      iconValue('gem', '${world.profile.gems}', style: dimStyle),
+                    ],
                   ),
                 ],
               ),
@@ -100,7 +109,7 @@ class StationPanel extends StatelessWidget {
       );
 }
 
-Widget _row(String title, String desc, Widget trailing, {Widget? leading}) => Padding(
+Widget _row(String title, String desc, Widget trailing, {Widget? leading, Widget? badge}) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
@@ -109,7 +118,17 @@ Widget _row(String title, String desc, Widget trailing, {Widget? leading}) => Pa
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                if (badge == null)
+                  Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                else
+                  Wrap(
+                    spacing: Space.s,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      badge,
+                    ],
+                  ),
                 Text(desc, style: dimStyle),
               ],
             ),
@@ -139,6 +158,7 @@ class _ShipTab extends StatelessWidget {
       UpgradeKind.drone => w.level(k) == 0
           ? '곁을 돌며 자동으로 쏘고 아이템을 끌어와요'
           : '피해 ${w.droneDamage.toInt()} · ${w.droneInterval.toStringAsFixed(2)}초마다 발사',
+      UpgradeKind.magnet => '크레딧·광석을 끌어오는 범위 ${w.magnetRadius.toInt()} · 힘 x${(w.magnetPull / 1400).toStringAsFixed(1)}',
     };
   }
 
@@ -151,21 +171,28 @@ class _ShipTab extends StatelessWidget {
           _row(
             '${k.label}  Lv.${world.level(k)}${world.level(k) >= k.maxLevel ? ' (MAX)' : ''}',
             _desc(k),
-            actionBtn(
-              world.level(k) >= k.maxLevel
-                  ? 'MAX'
-                  : (world.level(k) == 0 &&
-                          (k == UpgradeKind.missile || k == UpgradeKind.shield || k == UpgradeKind.drone)
-                      ? '장착 ${costText(world.upgradeCost(k))}'
-                      : costText(world.upgradeCost(k))),
-              world.level(k) < k.maxLevel && world.canAfford(world.upgradeCost(k)),
-              () => act(() => world.upgradeShip(k)),
-            ),
+            world.level(k) >= k.maxLevel
+                ? actionBtn('MAX', false, null)
+                : actionBtn(
+                    world.level(k) == 0 &&
+                            (k == UpgradeKind.missile || k == UpgradeKind.shield || k == UpgradeKind.drone)
+                        ? '장착'
+                        : '',
+                    world.canAfford(world.upgradeCost(k)),
+                    () => act(() => world.upgradeShip(k)),
+                    cost: world.upgradeCost(k),
+                  ),
+            leading: GameIcon(k.iconAsset, size: 44),
           ),
         const SizedBox(height: 8),
         const Text('💨 부스트(Shift / 💨 버튼)는 기본 장착되어 있어요.', style: dimStyle),
         const Divider(color: Colors.white24, height: 28),
-        const Text('🛸 격납고', style: sectionStyle),
+        Row(
+          children: [
+            const Expanded(child: Text('🛸 격납고', style: sectionStyle)),
+            actionBtn('크게 보기', true, () => _openHangar(context, null), icon: 'tab_ship'),
+          ],
+        ),
         const SizedBox(height: 4),
         for (final t in shipTypes) _shipRow(t),
       ],
@@ -193,13 +220,30 @@ class _ShipTab extends StatelessWidget {
       trailing = actionBtn('⭐${t.gemPrice}', p.gems >= t.gemPrice, () => act(() => world.buyShip(t)),
           color: const Color(0xFFAD1457));
     }
+    final ability = t.ability.isEmpty ? '' : '\n✨ ${t.ability}';
+    final unlockHint = unlocked ? '' : (t.premium ? '\n젬으로만 구매할 수 있어요' : '\n해금: ${t.unlockDesc} 또는 젬');
     return _row(
       '${t.name}${unlocked ? '' : ' 🔒'}',
-      '${t.desc}${stats.isEmpty ? '' : '\n$stats'}${unlocked ? '' : '\n해금: ${t.unlockDesc} 또는 젬'}',
+      '${t.desc}${stats.isEmpty ? '' : '\n$stats'}$ability$unlockHint',
       trailing,
+      badge: t.premium ? const PremiumBadge() : null,
+      // 지금 장착한 스킨을 입힌 함선 그림 (잠긴 함선은 흐리게). 누르면 크게 보기
+      leading: Builder(
+        builder: (context) => GestureDetector(
+          onTap: () => _openHangar(context, t.id),
+          child: Opacity(
+        opacity: unlocked ? 1 : 0.45,
+        child: Image.asset('assets/sprites/ship_${t.id}_${p.skin}.png',
+            width: IconSz.row + 8, height: IconSz.row + 8, filterQuality: FilterQuality.medium),
+          ),
+        ),
+      ),
     );
   }
 }
+
+void _openHangar(BuildContext context, String? id) =>
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => HangarScreen(initialId: id)));
 
 class _StationTab extends StatelessWidget {
   const _StationTab({required this.world, required this.station, required this.act});
@@ -213,28 +257,41 @@ class _StationTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(14),
       children: [
+        _row(s.role.label, s.role.blurb, const SizedBox.shrink(),
+            leading: GameIcon(s.role.iconAsset, size: 44)),
         Text('내구도 ${s.hp.toInt()} / ${s.maxHp.toInt()}', style: dimStyle),
         const SizedBox(height: 6),
         _row(
           '거주구역  Lv.${s.habitatLevel}',
           '수입 💰${world.stationCreditRate(s).toStringAsFixed(1)}/s · 내구도 ${s.maxHp.toInt()}',
-          actionBtn(
-            s.habitatLevel >= Station.maxLevel ? 'MAX' : costText(world.habitatCost(s)),
-            s.habitatLevel < Station.maxLevel && world.canAfford(world.habitatCost(s)),
-            () => act(() => world.upgradeHabitat(s)),
-          ),
+          s.habitatLevel >= Station.maxLevel
+              ? actionBtn('MAX', false, null)
+              : actionBtn('', world.canAfford(world.habitatCost(s)), () => act(() => world.upgradeHabitat(s)),
+                  cost: world.habitatCost(s)),
+          leading: const GameIcon('st_habitat', size: 44),
         ),
         _row(
           '방어포탑  Lv.${s.turretLevel}',
           s.turretLevel == 0
               ? '해적을 자동으로 요격해요'
               : '피해 ${(s.turretDamage * world.sectorMul).toInt()} · 사거리 ${s.turretRange.toInt()}',
-          actionBtn(
-            s.turretLevel >= Station.maxLevel ? 'MAX' : costText(world.turretCost(s)),
-            s.turretLevel < Station.maxLevel && world.canAfford(world.turretCost(s)),
-            () => act(() => world.upgradeTurret(s)),
-          ),
+          s.turretLevel >= Station.maxLevel
+              ? actionBtn('MAX', false, null)
+              : actionBtn('', world.canAfford(world.turretCost(s)), () => act(() => world.upgradeTurret(s)),
+                  cost: world.turretCost(s)),
+          leading: const GameIcon('st_turret', size: 44),
         ),
+        if (s.isHome)
+          _row(
+            '본거지 강화  Lv.${s.baseLevel}',
+            '레이저 ${s.laserDamage.toInt()} · 사거리 ${s.laserRange.toInt()} · 내구도 ${s.maxHp.toInt()}'
+                '${s.disabled ? '\n기능 정지 ${s.disabledTime.ceil()}초' : ''}',
+            s.baseLevel >= Station.maxBaseLevel
+                ? actionBtn('MAX', false, null)
+                : actionBtn('', world.canAfford(world.baseUpgradeCost(s)), () => act(() => world.upgradeBase(s)),
+                    cost: world.baseUpgradeCost(s)),
+            leading: const GameIcon('dome', size: 44),
+          ),
         const Divider(color: Colors.white24),
         Text('${world.sectorName} 현황', style: sectionStyle),
         const SizedBox(height: 4),
@@ -268,13 +325,17 @@ class _CrewTab extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: kPanelColor,
-        title: Text(c.rarity == 3 ? '✨ 전설의 동료! ✨' : '새 동료 합류!', textAlign: TextAlign.center),
+        title: Text(
+            c.legendary
+                ? '🌟 전설 등급! 🌟'
+                : (c.rarity == 3 ? '✨ 희귀한 동료! ✨' : '새 동료 합류!'),
+            textAlign: TextAlign.center),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ChibiPortrait(style: ChibiStyle.forCrew(c), size: 140),
-            Text(c.stars, style: const TextStyle(color: Color(0xFFFFD54F), fontSize: 24)),
-            Text('${c.role.icon} ${c.role.label} ${c.name}', style: titleStyle),
+            Text(c.stars, style: Ts.title.copyWith(color: Color(0xFFFFD54F))),
+            Text('${c.role.icon} ${c.role.label} ${c.displayName}', style: titleStyle),
             Text('${c.role.effect} +${c.bonusPct}%', style: bodyStyle),
           ],
         ),
@@ -286,11 +347,13 @@ class _CrewTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = world;
-    final full = w.roster.length >= GameWorld.maxRoster;
+    final full = w.roster.length >= w.rosterCap;
+    final p = w.profile;
+    final slotPrice = p.nextCrewSlotPrice;
     return ListView(
       padding: const EdgeInsets.all(14),
       children: [
-        Text('승무원 ${w.roster.length}/${GameWorld.maxRoster} · 배치 ${w.assignedCount}/${w.crewSlots}',
+        Text('승무원 ${w.roster.length}/${w.rosterCap} · 배치 ${w.assignedCount}/${w.crewSlots}',
             style: sectionStyle),
         const SizedBox(height: 8),
         Wrap(
@@ -303,18 +366,38 @@ class _CrewTab extends StatelessWidget {
                 !full && w.profile.gems >= GameWorld.recruitGemCost,
                 () => _recruit(context, w.recruitWithGems),
                 color: const Color(0xFFAD1457)),
-            if (!w.profile.extraCrewSlot)
-              actionBtn('배치 슬롯 +1 ⭐50', w.profile.gems >= 50, () => act(() {
-                    if (!w.profile.spendGems(50)) return false;
-                    w.profile.extraCrewSlot = true;
-                    return true;
-                  }), color: const Color(0xFFAD1457)),
+            actionBtn('🌟 전설 확정 모집 ⭐${GameWorld.legendaryGemCost}',
+                !full && p.gems >= GameWorld.legendaryGemCost,
+                () => _recruit(context, w.recruitLegendary),
+                color: const Color(0xFFFF6F00)),
           ],
         ),
         const SizedBox(height: 6),
-        const Text(
-          '확률 안내 · 일반 영입: ★1 70% / ★2 25% / ★3 5%\n고급 영입: ★2 80% / ★3 20%',
+        Text(
+          '확률 안내 · 일반 영입: ${CrewMember.oddsText(CrewMember.creditOdds)}\n'
+          '고급 영입: ${CrewMember.oddsText(CrewMember.gemOdds)}\n'
+          '전설 확정 모집: ★4 100%',
           style: dimStyle,
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            actionBtn(
+                slotPrice == null ? '배치 슬롯 MAX (${w.crewSlots})' : '배치 슬롯 +1 ⭐$slotPrice',
+                slotPrice != null && p.gems >= slotPrice,
+                () => act(p.buyCrewSlot),
+                color: const Color(0xFFAD1457)),
+            actionBtn(
+                p.rosterPacks >= Profile.maxRosterPacks
+                    ? '정원 MAX (${w.rosterCap})'
+                    : '정원 +${Profile.rosterPackSize} ⭐${Profile.rosterPackPrice}',
+                p.rosterPacks < Profile.maxRosterPacks && p.gems >= Profile.rosterPackPrice,
+                () => act(p.buyRosterPack),
+                color: const Color(0xFFAD1457)),
+          ],
         ),
         const Divider(color: Colors.white24),
         if (w.roster.isEmpty)
@@ -340,9 +423,11 @@ class _CrewTab extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${c.stars} ${c.name}  Lv.${c.level}',
+                      Text('${c.stars} ${c.displayName}  Lv.${c.level}',
                           style: TextStyle(
-                              color: c.rarity == 3 ? const Color(0xFFFFD54F) : Colors.white,
+                              color: c.legendary
+                                  ? const Color(0xFFFF9E40)
+                                  : (c.rarity == 3 ? const Color(0xFFFFD54F) : Colors.white),
                               fontWeight: FontWeight.bold)),
                       Text('${c.role.icon} ${c.role.label} · ${c.role.effect} +${c.bonusPct}%',
                           style: dimStyle),
@@ -354,16 +439,14 @@ class _CrewTab extends StatelessWidget {
                   children: [
                     actionBtn(c.assigned ? '해제' : '배치',
                         c.assigned || w.assignedCount < w.crewSlots, () => act(() => w.toggleAssign(c)),
-                        color: c.assigned ? const Color(0xFF455A64) : const Color(0xFF1E88E5),
-                        fontSize: 12),
+                        color: c.assigned ? const Color(0xFF455A64) : const Color(0xFF1E88E5)),
                     const SizedBox(height: 4),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         actionBtn(c.level >= CrewMember.maxLevel ? 'MAX' : '⬆ 💰${c.levelUpCost}',
                             c.level < CrewMember.maxLevel && w.credits >= c.levelUpCost,
-                            () => act(() => w.levelUpCrew(c)),
-                            fontSize: 12),
+                            () => act(() => w.levelUpCrew(c))),
                         IconButton(
                           tooltip: '방출',
                           icon: const Icon(Icons.logout, color: Colors.white38, size: 18),

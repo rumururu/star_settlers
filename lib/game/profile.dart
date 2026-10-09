@@ -68,7 +68,35 @@ class Profile {
   int gems = 0;
   bool premium = false;
   bool starterBought = false;
-  bool extraCrewSlot = false;
+
+  /// 젬으로 산 추가 배치 슬롯 수 (0..[crewSlotPrices].length)
+  int extraCrewSlots = 0;
+
+  /// 젬으로 산 승무원 정원 확장 횟수 (1회당 +[rosterPackSize])
+  int rosterPacks = 0;
+
+  /// 배치 슬롯 +1 가격 (단계별로 비싸짐)
+  static const crewSlotPrices = [100, 200, 350];
+  static const rosterPackPrice = 80;
+  static const rosterPackSize = 4;
+  static const maxRosterPacks = 3;
+
+  /// 다음 배치 슬롯 가격. 다 샀으면 null
+  int? get nextCrewSlotPrice =>
+      extraCrewSlots < crewSlotPrices.length ? crewSlotPrices[extraCrewSlots] : null;
+
+  bool buyCrewSlot() {
+    final price = nextCrewSlotPrice;
+    if (price == null || !spendGems(price)) return false;
+    extraCrewSlots++;
+    return true;
+  }
+
+  bool buyRosterPack() {
+    if (rosterPacks >= maxRosterPacks || !spendGems(rosterPackPrice)) return false;
+    rosterPacks++;
+    return true;
+  }
   final ownedSkins = <String>{'default'};
   final ownedOutfits = <String>{'default'};
   String skin = 'default';
@@ -85,6 +113,9 @@ class Profile {
   bool music = true;
   bool haptics = true;
   bool tutorialDone = false;
+
+  /// 식민지 안내(첫 정착 튜토리얼)를 봤는지
+  bool colonyTutorialSeen = false;
 
   /// 결제로 받았지만 아직 월드에 지급하지 않은 ★3 승무원 수
   int pendingStarCrew = 0;
@@ -186,7 +217,8 @@ class Profile {
 
   // ---------- 격납고 ----------
   bool shipUnlocked(ShipType t) =>
-      t.unlockStat == null || ownedShips.contains(t.id) || stat(t.unlockStat!) >= t.unlockTarget;
+      ownedShips.contains(t.id) ||
+      (!t.premium && (t.unlockStat == null || stat(t.unlockStat!) >= t.unlockTarget));
 
   bool buyShip(ShipType t) {
     if (shipUnlocked(t) || !spendGems(t.gemPrice)) return false;
@@ -259,7 +291,8 @@ class Profile {
         'gems': gems,
         'premium': premium,
         'starter': starterBought,
-        'slot': extraCrewSlot,
+        'slots': extraCrewSlots,
+        'rosterPacks': rosterPacks,
         'skins': ownedSkins.toList(),
         'outfits': ownedOutfits.toList(),
         'skin': skin,
@@ -274,6 +307,7 @@ class Profile {
         'music': music,
         'haptics': haptics,
         'tutorial': tutorialDone,
+        'colonyTut': colonyTutorialSeen,
         'pendingCrew': pendingStarCrew,
         'ship': shipType,
         'ships': ownedShips.toList(),
@@ -292,7 +326,10 @@ class Profile {
       ..gems = j['gems'] as int? ?? 0
       ..premium = j['premium'] as bool? ?? false
       ..starterBought = j['starter'] as bool? ?? false
-      ..extraCrewSlot = j['slot'] as bool? ?? false
+      // 예전 저장: 'slot'(bool) 하나 → 슬롯 1개
+      ..extraCrewSlots = (j['slots'] as int? ?? ((j['slot'] as bool? ?? false) ? 1 : 0))
+          .clamp(0, crewSlotPrices.length)
+      ..rosterPacks = (j['rosterPacks'] as int? ?? 0).clamp(0, maxRosterPacks)
       ..skin = j['skin'] as String? ?? 'default'
       ..outfit = j['outfit'] as String? ?? 'default'
       ..lastLoginDay = j['loginDay'] as int? ?? 0
@@ -303,6 +340,7 @@ class Profile {
       ..music = j['music'] as bool? ?? true
       ..haptics = j['haptics'] as bool? ?? true
       ..tutorialDone = j['tutorial'] as bool? ?? false
+      ..colonyTutorialSeen = j['colonyTut'] as bool? ?? false
       ..pendingStarCrew = j['pendingCrew'] as int? ?? 0
       ..shipType = j['ship'] as String? ?? 'scout'
       ..honor = j['honor'] as int? ?? 0

@@ -73,7 +73,7 @@ class AppState {
   static void deliverPending() {
     final w = world;
     if (w == null) return;
-    while (profile.pendingStarCrew > 0 && w.roster.length < GameWorld.maxRoster) {
+    while (profile.pendingStarCrew > 0 && w.roster.length < w.rosterCap) {
       profile.pendingStarCrew--;
       w.grantCrew(3);
     }

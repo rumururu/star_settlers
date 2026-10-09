@@ -68,7 +68,7 @@ class MerchantPanel extends StatelessWidget {
                           style: bodyStyle),
                     ),
                     actionBtn('💰${w.merchantCrewPrice}',
-                        w.credits >= w.merchantCrewPrice && w.roster.length < GameWorld.maxRoster,
+                        w.credits >= w.merchantCrewPrice && w.roster.length < w.rosterCap,
                         () => act(w.buyMerchantCrew)),
                   ],
                 ),

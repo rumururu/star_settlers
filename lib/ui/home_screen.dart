@@ -146,7 +146,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          SizedBox(width: 40, child: Text(t.icon, style: const TextStyle(fontSize: 26))),
+          SizedBox(width: 40, child: Text(t.icon, style: Ts.glyph)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +157,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
             ),
           ),
           actionBtn(t.gemOnly ? '⭐$gem' : costText(cost), can, onBuild,
-              color: t.gemOnly ? const Color(0xFFAD1457) : const Color(0xFF5E35B1), fontSize: 12),
+              color: t.gemOnly ? const Color(0xFFAD1457) : const Color(0xFF5E35B1)),
         ],
       ),
     );
@@ -239,7 +239,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                             Text(homePalettes[i].$1, style: dimStyle),
                             if (!_home.ownedPalettes.contains(i))
                               Text('⭐${homePalettes[i].$4}',
-                                  style: const TextStyle(color: Color(0xFFFF80AB), fontSize: 12)),
+                                  style: Ts.body.copyWith(color: Color(0xFFFF80AB))),
                           ],
                         ),
                       ),
@@ -289,7 +289,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
             const ChibiPortrait(style: ChibiStyle.advisor, size: 90),
             Text('주민 ${_home.residents}명이 모은 선물이에요!', style: bodyStyle),
             const SizedBox(height: 8),
-            Text('💰${r.$1}  ⭐${r.$2}', style: const TextStyle(fontSize: 24, color: Color(0xFFFFD54F))),
+            Text('💰${r.$1}  ⭐${r.$2}', style: Ts.title.copyWith(color: Color(0xFFFFD54F))),
           ],
         ),
         actions: [FilledButton(onPressed: () => Navigator.pop(c), child: const Text('고마워!'))],
@@ -359,7 +359,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                         '체력 +${((_home.hpMul - 1) * 100).round()}%  '
                         '쿨타임 -${((1 - _home.cooldownMul) * 100).round()}%  '
                         '오프라인 ${(_home.offlineEfficiency * 100).round()}%',
-                        style: const TextStyle(color: Color(0xFF7CFFB2), fontSize: 12),
+                        style: Ts.body.copyWith(color: Color(0xFF7CFFB2)),
                         textAlign: TextAlign.center,
                       )),
                     ),
@@ -614,7 +614,7 @@ class _HomePainter extends CustomPainter {
     final tp = TextPainter(
       text: TextSpan(
           text: '★' * s.level,
-          style: const TextStyle(color: Color(0xFFFFD54F), fontSize: 9, fontFamily: 'Jua')),
+          style: Ts.caption.copyWith(color: Color(0xFFFFD54F), fontFamily: 'Jua')),
       textDirection: TextDirection.ltr,
     )..layout();
     tp.paint(canvas, Offset(-tp.width / 2, 4));

@@ -15,6 +15,11 @@ class ShipType {
     this.unlockTarget = 0,
     this.unlockDesc = '',
     this.gemPrice = 0,
+    this.premium = false,
+    this.ability = '',
+    this.pierce = 0,
+    this.regenRate = 0,
+    this.guardInterval = 0,
     this.wing = 26,
     this.length = 46,
   });
@@ -40,6 +45,22 @@ class ShipType {
   final String unlockDesc;
   final int gemPrice;
 
+  /// 프리미엄 함선: 통계로는 해금되지 않고 젬으로만 살 수 있다
+  final bool premium;
+
+  /// 고유 능력 설명 (격납고·상점 표시용)
+  final String ability;
+
+  /// 관통: 탄환이 적을 맞히고도 이만큼 더 날아가 추가로 맞힌다
+  final int pierce;
+
+  /// 자가 수리: 피격 없이 [regenDelay]초가 지나면 초당 최대 체력의 이 비율만큼 회복
+  final double regenRate;
+  static const regenDelay = 3.0;
+
+  /// 보호막: 이 간격(초)마다 재충전되어 피격 1회를 막는다 (0이면 없음)
+  final double guardInterval;
+
   /// 외형
   final double wing;
   final double length;
@@ -63,6 +84,16 @@ const shipTypes = [
       hpMul: 0.9, speedMul: 1.15, crit: 0.25,
       unlockStat: 'sector', unlockTarget: 4, unlockDesc: '섹터 4 도달', gemPrice: 250,
       wing: 30, length: 50),
+  ShipType('nova', '노바 드래곤', '탄환이 적을 꿰뚫는 프리미엄 전투기',
+      speedMul: 1.1, fireMul: 0.85,
+      premium: true, ability: '관통탄: 탄환 하나가 적 2기까지 꿰뚫어요', pierce: 1, gemPrice: 400,
+      wing: 36, length: 54),
+  ShipType('aurora', '오로라', '스스로 고치고 보호막을 두르는 프리미엄 수호선',
+      hpMul: 1.3, fireMul: 0.95,
+      premium: true,
+      ability: '자가 수리: 3초간 피격이 없으면 초당 체력 3% 회복\n수호막: 8초마다 피격 1회 방어',
+      regenRate: 0.03, guardInterval: 8, gemPrice: 600,
+      wing: 34, length: 48),
 ];
 
 ShipType shipTypeById(String id) =>

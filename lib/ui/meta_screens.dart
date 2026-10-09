@@ -5,6 +5,7 @@ import '../game/profile.dart';
 import '../game/save.dart';
 import '../services/app_state.dart';
 import '../services/audio.dart';
+import '../services/feedback.dart';
 import '../services/notifications.dart';
 import 'common.dart';
 
@@ -54,7 +55,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                         AppState.play(Sfx.gem);
                         await SaveService.saveProfile(p);
                         setState(() {});
-                      }, color: const Color(0xFFAD1457), fontSize: 12),
+                      }, color: const Color(0xFFAD1457)),
               ),
             ),
         ],
@@ -158,6 +159,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           const Divider(),
+          ListTile(
+            leading: const Icon(Icons.mail_outline),
+            title: const Text('개발자에게 피드백 보내기'),
+            subtitle: const Text('버그·건의 뭐든 좋아요. 기기와 앱 버전이 자동으로 적혀요.'),
+            onTap: () async {
+              if (!await FeedbackService.send() && context.mounted) {
+                toast(context, '메일 앱이 없어요. ${FeedbackService.email} 으로 보내주세요.');
+              }
+            },
+          ),
           const ListTile(title: Text('STAR SETTLERS · 우주 개척단'), subtitle: Text('버전 1.0.0')),
         ],
       ),
@@ -171,7 +182,7 @@ const privacySummary = '''우주 개척단은 게임 진행 데이터(진행 상
 
 보상형 광고가 적용될 경우 광고 제공사(Google AdMob)가 광고 식별자 등을 수집할 수 있습니다.
 
-문의: 스토어 페이지의 개발자 연락처''';
+문의: mkideabox.feedback@gmail.com (설정 → 개발자에게 피드백 보내기)''';
 
 class DailyQuestScreen extends StatefulWidget {
   const DailyQuestScreen({super.key});
@@ -222,7 +233,7 @@ class _DailyQuestScreenState extends State<DailyQuestScreen> {
                 trailing: p.dailyClaimed.contains(q.id)
                     ? const Text('✅ 완료', style: TextStyle(color: Color(0xFF7CFFB2)))
                     : actionBtn('⭐${q.gems} 받기', p.dailyDone(q), () => _claim(q.id),
-                        color: const Color(0xFFAD1457), fontSize: 12),
+                        color: const Color(0xFFAD1457)),
               ),
             ),
           const SizedBox(height: 8),
@@ -234,7 +245,7 @@ class _DailyQuestScreenState extends State<DailyQuestScreen> {
               trailing: p.dailyClaimed.contains('bonus')
                   ? const Text('✅ 완료', style: TextStyle(color: Color(0xFF7CFFB2)))
                   : actionBtn('⭐$dailyBonusGems 받기', p.dailyBonusReady, () => _claim('bonus'),
-                      color: const Color(0xFFAD1457), fontSize: 12),
+                      color: const Color(0xFFAD1457)),
             ),
           ),
         ],
