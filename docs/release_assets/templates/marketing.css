@@ -1,0 +1,57 @@
+/* Star Settlers store screenshot template. Sizes are driven by --w/--h set on .sheet. */
+@font-face { font-family: "Jua"; src: url("../../../assets/fonts/Jua-Regular.ttf"); }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #0b0820; }
+.sheet {
+  --u: calc(var(--w) * 1px / 100);
+  width: calc(var(--w) * 1px); height: calc(var(--h) * 1px);
+  position: relative; overflow: hidden; color: #fff;
+  font-family: "Jua", "Apple SD Gothic Neo", sans-serif;
+  background: radial-gradient(120% 70% at 50% 0%, var(--glow1) 0%, transparent 60%),
+              radial-gradient(90% 60% at 100% 100%, var(--glow2) 0%, transparent 65%),
+              linear-gradient(180deg, #160f3d 0%, #0d0a2a 55%, #08061c 100%);
+  display: flex; flex-direction: column;
+}
+.violet  { --glow1: #5b3bd6; --glow2: #3a1f8f; --accent: #ffd54a; --ring: #9d86ff; }
+.crimson { --glow1: #8e2a63; --glow2: #4b1f8f; --accent: #ffb74d; --ring: #ff7aa8; }
+.teal    { --glow1: #1f6f9a; --glow2: #1d7a6a; --accent: #7cffb2; --ring: #6fe3ff; }
+.blue    { --glow1: #2e4fc9; --glow2: #3a1f8f; --accent: #8ad8ff; --ring: #7fa6ff; }
+.amber   { --glow1: #8a4a12; --glow2: #4b1f8f; --accent: #ffd54a; --ring: #ffc06b; }
+.magenta { --glow1: #7a2fb0; --glow2: #9a2f6a; --accent: #ff9be3; --ring: #e08bff; }
+.stars { position: absolute; inset: 0; pointer-events: none; }
+.stars i { position: absolute; border-radius: 50%; background: #fff; }
+header { position: relative; z-index: 3; padding: calc(var(--u) * 6.5) calc(var(--u) * 7) 0; }
+.brand { display: flex; align-items: center; gap: calc(var(--u) * 2.2); font-size: calc(var(--u) * 3.6); color: #d9d0ff; letter-spacing: 0.04em; }
+.brand img { height: calc(var(--u) * 8.5); }
+h1 { margin: calc(var(--u) * 4.2) 0 0; font-weight: 400; font-size: calc(var(--u) * 9.4); line-height: 1.16; letter-spacing: -0.01em;
+     text-shadow: 0 calc(var(--u) * 0.5) calc(var(--u) * 1.6) #0008; word-break: keep-all; }
+h1 em { font-style: normal; color: var(--accent); }
+.sub { margin: calc(var(--u) * 2.6) 0 0; font-family: "Apple SD Gothic Neo", sans-serif; font-weight: 600;
+       font-size: calc(var(--u) * 3.5); line-height: 1.45; color: #d4ccff; word-break: keep-all; }
+.stage { position: relative; z-index: 2; flex: 1; min-height: 0; display: flex; justify-content: center;
+         padding: calc(var(--u) * 5.5) 0 calc(var(--u) * 2.5); }
+.device { position: relative; height: 100%; aspect-ratio: var(--cap-ar);
+          border-radius: calc(var(--u) * 6.4); padding: calc(var(--u) * 1.25);
+          background: linear-gradient(150deg, #2b245a, #0c0a22 45%, #231c4f);
+          box-shadow: 0 0 0 calc(var(--u) * 0.35) var(--ring), 0 calc(var(--u) * 2) calc(var(--u) * 7) #000a,
+                      0 0 calc(var(--u) * 9) color-mix(in srgb, var(--ring) 45%, transparent); }
+.device img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: calc(var(--u) * 5.2); }
+.mascot { position: absolute; z-index: 4; width: calc(var(--u) * 25); bottom: calc(var(--u) * 7);
+          filter: drop-shadow(0 calc(var(--u) * 1.2) calc(var(--u) * 2) #000b); }
+.mascot.left { left: calc(var(--u) * -1.5); transform: rotate(-8deg); }
+.mascot.right { right: calc(var(--u) * -1.5); transform: rotate(8deg); }
+footer { position: relative; z-index: 5; display: flex; justify-content: space-between; align-items: center;
+         padding: 0 calc(var(--u) * 7) calc(var(--u) * 5.2); font-family: "Apple SD Gothic Neo", sans-serif;
+         font-weight: 600; font-size: calc(var(--u) * 2.6); color: #b9b0e8; }
+footer .page { letter-spacing: 0.4em; opacity: .6; font-size: calc(var(--u) * 2.1); }
+
+/* landscape tablet: text column left, device right */
+.sheet.land { flex-direction: row; --u: calc(var(--h) * 1px / 100); }
+.land header { width: 42%; padding: calc(var(--u) * 9) calc(var(--u) * 5) 0 calc(var(--u) * 8); }
+.land h1 { font-size: calc(var(--u) * 9); }
+.land .sub { font-size: calc(var(--u) * 3.4); }
+.land .stage { flex: 1; padding: calc(var(--u) * 6) calc(var(--u) * 6) calc(var(--u) * 6) 0; align-items: center; }
+.land .device { height: auto; width: 100%; max-height: 100%; }
+.land footer { position: absolute; left: 0; bottom: 0; width: 42%; }
+.land .mascot { width: calc(var(--u) * 26); bottom: calc(var(--u) * 14); }
+.land .mascot.left, .land .mascot.right { left: calc(var(--u) * 14); right: auto; }

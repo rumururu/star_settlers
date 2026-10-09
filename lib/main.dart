@@ -9,6 +9,7 @@ import 'game/ships.dart';
 import 'game/world.dart';
 import 'services/app_state.dart';
 import 'ui/chibi.dart';
+import 'l10n/l.dart';
 import 'ui/common.dart';
 import 'ui/game_icons.dart';
 import 'ui/game_screen.dart';
@@ -20,7 +21,7 @@ import 'ui/sprites.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future.wait([
-    AppState.init(),
+    AppState.init().then((_) => Lang.apply(AppState.profile.language)),
     // 게임 화면 스프라이트 (함선 종류 × 스킨, 해적, 행성, 정거장)
     Sprites.load([
       for (final t in shipTypes)
@@ -34,8 +35,18 @@ Future<void> main() async {
   AppState.money.confirm = (title, body) async {
     final ctx = navigatorKey.currentContext;
     if (ctx == null) return false;
-    return confirmDialog(ctx, title, body, ok: '확인');
+    return confirmDialog(ctx, title, body, ok: tr.m_ok);
   };
+  // 화면 글자는 전역 tr에서 읽으므로 Localizations 변경만으로는 다시 안 그려진다.
+  // 언어가 바뀌면 모든 위젯을 다시 그린다 (상태는 유지 — 게임 중에 바꿔도 게임이 이어진다).
+  Lang.changed.addListener(() {
+    void rebuild(Element e) {
+      e.markNeedsBuild();
+      e.visitChildren(rebuild);
+    }
+
+    WidgetsBinding.instance.rootElement?.visitChildren(rebuild);
+  });
   runApp(const StarSettlersApp());
 }
 
@@ -43,8 +54,16 @@ class StarSettlersApp extends StatelessWidget {
   const StarSettlersApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: '우주 개척단',
+  Widget build(BuildContext context) => ValueListenableBuilder<Locale>(
+        valueListenable: Lang.changed,
+        builder: (context, locale, _) => _app(locale),
+      );
+
+  Widget _app(Locale locale) => MaterialApp(
+        title: tr.appTitle,
+        locale: locale,
+        supportedLocales: L10n.supportedLocales,
+        localizationsDelegates: L10n.localizationsDelegates,
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -105,21 +124,21 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
       context: context,
       builder: (c) => AlertDialog(
         backgroundColor: kPanelColor,
-        title: const Text('📅 출석 보상', textAlign: TextAlign.center),
+        title: Text(tr.m_loginTitle, textAlign: TextAlign.center),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const ChibiPortrait(style: ChibiStyle.advisor, size: 90),
-            const Text('오늘도 와주셨네요, 선장님!', style: bodyStyle),
+            Text(tr.m_loginWelcome, style: bodyStyle),
             const SizedBox(height: 8),
             Text('⭐ $reward', style: Ts.title.copyWith(color: Color(0xFFFF80AB))),
-            const Text('7일 연속 출석하면 ⭐50!', style: dimStyle),
+            Text(tr.m_loginStreakHint, style: dimStyle),
           ],
         ),
         actions: [
           FilledButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('받기'),
+            child: Text(tr.m_claim),
           ),
         ],
       ),
@@ -137,9 +156,7 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
 
   Future<void> _newGame() async {
     if (_hasSave) {
-      final ok = await confirmDialog(context, '새 게임',
-          '기존 진행 상황이 지워져요.\n(젬, 꾸미기, 업적, 구매 상품은 유지돼요) 계속할까요?',
-          ok: '시작');
+      final ok = await confirmDialog(context, tr.m_newGameTitle, tr.m_newGameBody, ok: tr.m_start);
       if (!ok) return;
       await SaveService.clearWorld();
     }
@@ -149,7 +166,7 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
   Future<void> _continue() async {
     final w = await SaveService.load(AppState.profile);
     if (w == null) {
-      if (mounted) toast(context, '저장 데이터를 불러오지 못했어요.');
+      if (mounted) toast(context, tr.m_loadFailed);
       return;
     }
     await _start(w);
@@ -207,11 +224,13 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                           offset: Offset(0, sin(_anim.value * 2 * pi) * 6), child: child),
                       child: Image.asset('assets/sprites/logo.png', width: logoW),
                     ),
-                    Text('우주 개척단', style: Ts.title.copyWith(fontWeight: FontWeight.bold)),
+                    // 로고가 이미 영문 제목이라, 부제는 로고와 다른 언어(한국어 등)일 때만
+                    if (tr.appTitle != 'Star Settlers')
+                      Text(tr.appTitle, style: Ts.title.copyWith(fontWeight: FontWeight.bold)),
                     if (p.honor > 0)
                       Padding(
                         padding: const EdgeInsets.only(top: Space.xs),
-                        child: Text('🌌 은하 명예 ${p.honor}점 · 수입 +${p.honor * 5}% · 공격 +${p.honor * 3}%',
+                        child: Text(tr.m_honorLine(p.honor, p.honor * 5, p.honor * 3),
                             style: Ts.body.copyWith(color: const Color(0xFFB388FF))),
                       ),
                     const Spacer(flex: 3),
@@ -237,21 +256,21 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                       },
                     ),
                     const SizedBox(height: Space.m),
-                    _menuButton('▶ 이어하기', _hasSave ? _continue : null, primary: _hasSave),
+                    _menuButton(tr.m_continue, _hasSave ? _continue : null, primary: _hasSave),
                     const SizedBox(height: Space.m),
-                    _menuButton('✨ 새 게임', _newGame, primary: !_hasSave),
+                    _menuButton(tr.m_newGame, _newGame, primary: !_hasSave),
                     const SizedBox(height: Space.l),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: Space.s,
                       children: [
-                        _iconMenu('menu_home', '내 행성', () => _open(const HomePlanetScreen()), tileW),
-                        _iconMenu('menu_shop', '상점', () => _open(const ShopScreen()), tileW),
-                        _iconMenu('menu_quest', '퀘스트', () => _open(const DailyQuestScreen()), tileW,
+                        _iconMenu('menu_home', tr.m_menuHome, () => _open(const HomePlanetScreen()), tileW),
+                        _iconMenu('menu_shop', tr.m_menuShop, () => _open(const ShopScreen()), tileW),
+                        _iconMenu('menu_quest', tr.m_menuQuest, () => _open(const DailyQuestScreen()), tileW,
                             badge: p.dailyClaimable > 0),
-                        _iconMenu('menu_trophy', '업적', () => _open(const AchievementsScreen()), tileW,
+                        _iconMenu('menu_trophy', tr.m_menuAchievements, () => _open(const AchievementsScreen()), tileW,
                             badge: p.claimable.isNotEmpty),
-                        _iconMenu('menu_settings', '설정', () => _open(const SettingsScreen()), tileW),
+                        _iconMenu('menu_settings', tr.m_menuSettings, () => _open(const SettingsScreen()), tileW),
                       ],
                     ),
                     const SizedBox(height: Space.l),

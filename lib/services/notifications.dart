@@ -5,6 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../l10n/l.dart';
+
 /// 복귀 알림 (로컬 알림). 앱이 백그라운드로 갈 때 예약하고, 돌아오면 취소한다.
 class NotificationService {
   NotificationService._();
@@ -52,11 +54,11 @@ class NotificationService {
     }
   }
 
-  static const _details = NotificationDetails(
-    android: AndroidNotificationDetails('return', '복귀 알림',
-        channelDescription: '식민지 수입, 출석 보상 알림'),
-    iOS: DarwinNotificationDetails(),
-  );
+  static NotificationDetails get _details => NotificationDetails(
+        android: AndroidNotificationDetails('return', tr.g_notifChannelName,
+            channelDescription: tr.g_notifChannelDesc),
+        iOS: const DarwinNotificationDetails(),
+      );
 
   /// 백그라운드로 갈 때: 오프라인 수입이 가득 차는 시점 + 다음 날 알림 예약
   Future<void> scheduleReturn({required Duration storageFullIn, required bool hasColonies}) async {
@@ -67,8 +69,8 @@ class NotificationService {
       if (hasColonies) {
         await _plugin.zonedSchedule(
           id: 1,
-          title: '📦 식민지 창고가 가득 찼어요!',
-          body: '선장님, 쌓인 크레딧을 받으러 오세요. 더 늦으면 수입이 멈춰요.',
+          title: '📦 ${tr.g_notifStorageTitle}',
+          body: tr.g_notifStorageBody,
           scheduledDate: now.add(storageFullIn),
           notificationDetails: _details,
           androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -76,8 +78,8 @@ class NotificationService {
       }
       await _plugin.zonedSchedule(
         id: 2,
-        title: '🏴‍☠️ 해적들이 다시 날뛰고 있어요!',
-        body: '오늘의 출석 보상과 일일 퀘스트가 기다리고 있어요.',
+        title: '🏴‍☠️ ${tr.g_notifPiratesTitle}',
+        body: tr.g_notifPiratesBody,
         scheduledDate: now.add(const Duration(hours: 22)),
         notificationDetails: _details,
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,

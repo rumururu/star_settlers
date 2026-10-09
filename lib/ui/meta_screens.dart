@@ -7,6 +7,7 @@ import '../services/app_state.dart';
 import '../services/audio.dart';
 import '../services/feedback.dart';
 import '../services/notifications.dart';
+import '../l10n/l.dart';
 import 'common.dart';
 
 class AchievementsScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
       backgroundColor: const Color(0xFF0D0B26),
       appBar: AppBar(
         backgroundColor: const Color(0xFF151236),
-        title: Text('🏆 업적 ($done/${achievements.length})'),
+        title: Text(tr.m_achievementsTitle(done, achievements.length)),
       ),
       body: ListView(
         padding: const EdgeInsets.all(12),
@@ -49,8 +50,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                   ],
                 ),
                 trailing: p.claimed.contains(a.id)
-                    ? const Text('✅ 완료', style: TextStyle(color: Color(0xFF7CFFB2)))
-                    : actionBtn('⭐${a.gems} 받기', p.isComplete(a), () async {
+                    ? Text(tr.m_done, style: const TextStyle(color: Color(0xFF7CFFB2)))
+                    : actionBtn(tr.m_claimGems(a.gems), p.isComplete(a), () async {
                         p.claim(a);
                         AppState.play(Sfx.gem);
                         await SaveService.saveProfile(p);
@@ -77,16 +78,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {});
   }
 
+  /// 언어 선택: 기기 언어(null) 또는 지원 언어 중 하나. 각 언어는 그 언어 자신의 이름으로 보인다.
+  Future<void> _pickLanguage() async {
+    final p = AppState.profile;
+    const system = '';
+    final picked = await showDialog<String>(
+      context: context,
+      builder: (c) => SimpleDialog(
+        backgroundColor: kPanelColor,
+        title: Text(tr.m_settingsLanguage),
+        children: [
+          for (final code in [system, ...L10n.supportedLocales.map((l) => l.languageCode)])
+            ListTile(
+              title: Text(code == system ? tr.m_languageSystem : lookupL10n(Locale(code)).languageName),
+              trailing: (p.language ?? system) == code ? const Icon(Icons.check, color: Color(0xFF7CFFB2)) : null,
+              onTap: () => Navigator.pop(c, code),
+            ),
+        ],
+      ),
+    );
+    if (picked == null) return;
+    p.language = picked == system ? null : picked;
+    Lang.apply(p.language);
+    await _save();
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = AppState.profile;
     return Scaffold(
       backgroundColor: const Color(0xFF0D0B26),
-      appBar: AppBar(backgroundColor: const Color(0xFF151236), title: const Text('⚙ 설정')),
+      appBar: AppBar(backgroundColor: const Color(0xFF151236), title: Text(tr.m_settingsTitle)),
       body: ListView(
         children: [
           SwitchListTile(
-            title: const Text('효과음'),
+            title: Text(tr.m_settingsSound),
             value: p.sound,
             onChanged: (v) {
               p.sound = v;
@@ -95,7 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           SwitchListTile(
-            title: const Text('배경음악'),
+            title: Text(tr.m_settingsMusic),
             value: p.music,
             onChanged: (v) {
               p.music = v;
@@ -104,8 +130,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           SwitchListTile(
-            title: const Text('복귀 알림'),
-            subtitle: const Text('식민지 창고가 가득 차면 알려드려요'),
+            title: Text(tr.m_settingsNotify),
+            subtitle: Text(tr.m_settingsNotifyDesc),
             value: p.notifications,
             onChanged: (v) {
               p.notifications = v;
@@ -114,42 +140,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           SwitchListTile(
-            title: const Text('진동'),
+            title: Text(tr.m_settingsHaptics),
             value: p.haptics,
             onChanged: (v) {
               p.haptics = v;
               _save();
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: Text(tr.m_settingsLanguage == 'Language' ? 'Language' : '${tr.m_settingsLanguage} / Language'),
+            subtitle: Text(p.language == null ? tr.m_languageSystem : lookupL10n(Locale(p.language!)).languageName),
+            onTap: _pickLanguage,
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.restore),
-            title: const Text('구매 복원'),
+            title: Text(tr.m_restorePurchases),
             onTap: () async {
               await AppState.money.restore();
-              if (context.mounted) toast(context, '구매 내역을 확인했어요');
+              if (context.mounted) toast(context, tr.m_restoreDone);
             },
           ),
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
-            title: const Text('개인정보처리방침'),
+            title: Text(tr.m_privacyTitle),
             onTap: () => showDialog<void>(
               context: context,
               builder: (c) => AlertDialog(
                 backgroundColor: kPanelColor,
-                title: const Text('개인정보처리방침'),
-                content: const SingleChildScrollView(child: Text(privacySummary)),
-                actions: [TextButton(onPressed: () => Navigator.pop(c), child: const Text('닫기'))],
+                title: Text(tr.m_privacyTitle),
+                content: SingleChildScrollView(child: Text(tr.m_privacyBody(FeedbackService.email))),
+                actions: [TextButton(onPressed: () => Navigator.pop(c), child: Text(tr.m_close))],
               ),
             ),
           ),
           ListTile(
             leading: const Icon(Icons.delete_forever, color: Colors.redAccent),
-            title: const Text('모든 데이터 초기화', style: TextStyle(color: Colors.redAccent)),
-            subtitle: const Text('진행 상황, 젬, 꾸미기가 모두 삭제돼요'),
+            title: Text(tr.m_wipeTitle, style: const TextStyle(color: Colors.redAccent)),
+            subtitle: Text(tr.m_wipeDesc),
             onTap: () async {
-              if (!await confirmDialog(context, '정말 초기화할까요?', '되돌릴 수 없어요. 구매한 상품은 "구매 복원"으로 되찾을 수 있어요.',
-                  ok: '초기화')) {
+              if (!await confirmDialog(context, tr.m_wipeConfirmTitle, tr.m_wipeConfirmBody,
+                  ok: tr.m_wipeOk)) {
                 return;
               }
               await SaveService.wipeAll();
@@ -161,28 +193,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.mail_outline),
-            title: const Text('개발자에게 피드백 보내기'),
-            subtitle: const Text('버그·건의 뭐든 좋아요. 기기와 앱 버전이 자동으로 적혀요.'),
+            title: Text(tr.m_feedbackTitle),
+            subtitle: Text(tr.m_feedbackDesc),
             onTap: () async {
               if (!await FeedbackService.send() && context.mounted) {
-                toast(context, '메일 앱이 없어요. ${FeedbackService.email} 으로 보내주세요.');
+                toast(context, tr.m_noMailApp(FeedbackService.email));
               }
             },
           ),
-          const ListTile(title: Text('STAR SETTLERS · 우주 개척단'), subtitle: Text('버전 1.0.0')),
+          ListTile(title: Text(tr.m_aboutTitle), subtitle: Text(tr.m_version('1.0.0'))),
         ],
       ),
     );
   }
 }
-
-const privacySummary = '''우주 개척단은 게임 진행 데이터(진행 상황, 설정)를 기기 안에만 저장하며, 개인을 식별할 수 있는 정보를 수집하지 않습니다.
-
-인앱 결제는 Google Play / App Store가 처리하며, 결제 정보는 개발자에게 전달되지 않습니다.
-
-보상형 광고가 적용될 경우 광고 제공사(Google AdMob)가 광고 식별자 등을 수집할 수 있습니다.
-
-문의: mkideabox.feedback@gmail.com (설정 → 개발자에게 피드백 보내기)''';
 
 class DailyQuestScreen extends StatefulWidget {
   const DailyQuestScreen({super.key});
@@ -207,11 +231,11 @@ class _DailyQuestScreenState extends State<DailyQuestScreen> {
     final reset = DateTime(now.year, now.month, now.day + 1).difference(now);
     return Scaffold(
       backgroundColor: const Color(0xFF0D0B26),
-      appBar: AppBar(backgroundColor: const Color(0xFF151236), title: const Text('📅 일일 퀘스트')),
+      appBar: AppBar(backgroundColor: const Color(0xFF151236), title: Text(tr.m_dailyTitle)),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [
-          Text('초기화까지 ${reset.inHours}시간 ${reset.inMinutes % 60}분', style: dimStyle),
+          Text(tr.m_dailyReset(reset.inHours, reset.inMinutes % 60), style: dimStyle),
           const SizedBox(height: 8),
           for (final q in p.dailyQuests)
             Card(
@@ -231,8 +255,8 @@ class _DailyQuestScreenState extends State<DailyQuestScreen> {
                   ],
                 ),
                 trailing: p.dailyClaimed.contains(q.id)
-                    ? const Text('✅ 완료', style: TextStyle(color: Color(0xFF7CFFB2)))
-                    : actionBtn('⭐${q.gems} 받기', p.dailyDone(q), () => _claim(q.id),
+                    ? Text(tr.m_done, style: const TextStyle(color: Color(0xFF7CFFB2)))
+                    : actionBtn(tr.m_claimGems(q.gems), p.dailyDone(q), () => _claim(q.id),
                         color: const Color(0xFFAD1457)),
               ),
             ),
@@ -240,11 +264,11 @@ class _DailyQuestScreenState extends State<DailyQuestScreen> {
           Card(
             color: const Color(0xFF311B92),
             child: ListTile(
-              title: const Text('🎁 모두 완료 보너스', style: bodyStyle),
-              subtitle: const Text('오늘의 퀘스트 3개를 모두 받으면', style: dimStyle),
+              title: Text(tr.m_dailyBonusTitle, style: bodyStyle),
+              subtitle: Text(tr.m_dailyBonusDesc, style: dimStyle),
               trailing: p.dailyClaimed.contains('bonus')
-                  ? const Text('✅ 완료', style: TextStyle(color: Color(0xFF7CFFB2)))
-                  : actionBtn('⭐$dailyBonusGems 받기', p.dailyBonusReady, () => _claim('bonus'),
+                  ? Text(tr.m_done, style: const TextStyle(color: Color(0xFF7CFFB2)))
+                  : actionBtn(tr.m_claimGems(dailyBonusGems), p.dailyBonusReady, () => _claim('bonus'),
                       color: const Color(0xFFAD1457)),
             ),
           ),

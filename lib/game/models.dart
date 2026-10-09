@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../l10n/l.dart';
+
 extension OffsetX on Offset {
   Offset normalized() {
     final d = distance;
@@ -198,10 +200,10 @@ extension PowerUpInfo on PowerUpKind {
         PowerUpKind.doubleCredits => '💰',
       };
   String get label => switch (this) {
-        PowerUpKind.rapid => '연사',
-        PowerUpKind.shield => '실드',
-        PowerUpKind.magnet => '자석',
-        PowerUpKind.doubleCredits => '크레딧 2배',
+        PowerUpKind.rapid => tr.g_powerUpRapid,
+        PowerUpKind.shield => tr.g_powerUpShield,
+        PowerUpKind.magnet => tr.g_powerUpMagnet,
+        PowerUpKind.doubleCredits => tr.g_powerUpDoubleCredits,
       };
   double get duration => switch (this) {
         PowerUpKind.rapid => 8,
@@ -299,11 +301,11 @@ class Planet {
   static const maxLevel = 5;
 
   String get kindLabel => switch (kind) {
-        PlanetKind.garden => '정원 행성',
-        PlanetKind.desert => '사막 행성',
-        PlanetKind.ice => '얼음 행성',
-        PlanetKind.lava => '용암 행성',
-        PlanetKind.gas => '가스 행성',
+        PlanetKind.garden => tr.g_planetKindGarden,
+        PlanetKind.desert => tr.g_planetKindDesert,
+        PlanetKind.ice => tr.g_planetKindIce,
+        PlanetKind.lava => tr.g_planetKindLava,
+        PlanetKind.gas => tr.g_planetKindGas,
       };
 
   /// 레벨당 초당 생산량
@@ -362,11 +364,11 @@ enum ColonyBuilding { turret, mine, trade, dock, shieldGen }
 
 extension ColonyBuildingInfo on ColonyBuilding {
   String get label => switch (this) {
-        ColonyBuilding.turret => '방어포탑',
-        ColonyBuilding.mine => '채굴 시설',
-        ColonyBuilding.trade => '교역소',
-        ColonyBuilding.dock => '수리 도크',
-        ColonyBuilding.shieldGen => '방어막 발생기',
+        ColonyBuilding.turret => tr.g_colonyBldTurret,
+        ColonyBuilding.mine => tr.g_colonyBldMine,
+        ColonyBuilding.trade => tr.g_colonyBldTrade,
+        ColonyBuilding.dock => tr.g_colonyBldDock,
+        ColonyBuilding.shieldGen => tr.g_colonyBldShieldGen,
       };
   String get icon => switch (this) {
         ColonyBuilding.turret => '🔫',
@@ -376,11 +378,11 @@ extension ColonyBuildingInfo on ColonyBuilding {
         ColonyBuilding.shieldGen => '🛡',
       };
   String get blurb => switch (this) {
-        ColonyBuilding.turret => '식민지 근처 해적을 자동으로 요격해요. 습격 방어에 필수!',
-        ColonyBuilding.mine => '광석을 캐서 매초 💎를 보내줘요.',
-        ColonyBuilding.trade => '이 식민지의 크레딧 수입을 25%씩 늘려요.',
-        ColonyBuilding.dock => '근처에 있으면 함선 체력을 회복해요.',
-        ColonyBuilding.shieldGen => '방어막 용량과 충전 속도를 늘려요.',
+        ColonyBuilding.turret => tr.g_colonyBldBlurbTurret,
+        ColonyBuilding.mine => tr.g_colonyBldBlurbMine,
+        ColonyBuilding.trade => tr.g_colonyBldBlurbTrade,
+        ColonyBuilding.dock => tr.g_colonyBldBlurbDock,
+        ColonyBuilding.shieldGen => tr.g_colonyBldBlurbShieldGen,
       };
 }
 
@@ -389,10 +391,10 @@ enum StationRole { home, defense, repair, support }
 
 extension StationRoleInfo on StationRole {
   String get label => switch (this) {
-        StationRole.home => '본거지',
-        StationRole.defense => '방어 기지',
-        StationRole.repair => '수리 기지',
-        StationRole.support => '보급 기지',
+        StationRole.home => tr.g_stationRoleHome,
+        StationRole.defense => tr.g_stationRoleDefense,
+        StationRole.repair => tr.g_stationRoleRepair,
+        StationRole.support => tr.g_stationRoleSupport,
       };
   String get iconAsset => switch (this) {
         StationRole.home => 'act_station',
@@ -401,10 +403,10 @@ extension StationRoleInfo on StationRole {
         StationRole.support => 'b_trade',
       };
   String get blurb => switch (this) {
-        StationRole.home => '레이저 포대와 안전 구역',
-        StationRole.defense => '강한 포탑 · 내구도 2배 · 주변 적 탄환 차단',
-        StationRole.repair => '넓은 범위 빠른 수리 · 재출격 비용 10% · 근처 식민지 방어막 충전 2배',
-        StationRole.support => '근처 식민지 생산 +25% (거주구역 레벨마다 +5%)',
+        StationRole.home => tr.g_stationRoleBlurbHome,
+        StationRole.defense => tr.g_stationRoleBlurbDefense,
+        StationRole.repair => tr.g_stationRoleBlurbRepair,
+        StationRole.support => tr.g_stationRoleBlurbSupport,
       };
 }
 
@@ -517,10 +519,10 @@ class WorldEvent {
   bool finished = false;
 
   String get title => switch (kind) {
-        EventKind.raid => '🏴‍☠️ ${planet?.name ?? ''} 습격',
-        EventKind.meteor => '☄ 유성우',
-        EventKind.merchant => '🛒 떠돌이 상인',
-        EventKind.supply => '📦 보급 캡슐',
+        EventKind.raid => '🏴‍☠️ ${tr.g_eventRaid(planet?.name ?? '')}',
+        EventKind.meteor => '☄ ${tr.g_eventMeteor}',
+        EventKind.merchant => '🛒 ${tr.g_eventMerchant}',
+        EventKind.supply => '📦 ${tr.g_eventSupply}',
       };
 }
 

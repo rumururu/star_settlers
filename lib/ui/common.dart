@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../game/models.dart';
+import '../l10n/l.dart';
 import 'game_icons.dart';
 import 'tokens.dart';
 
@@ -84,7 +85,7 @@ class PremiumBadge extends StatelessWidget {
           gradient: const LinearGradient(colors: [Color(0xFFFFB300), Color(0xFFFF6F00)]),
           borderRadius: BorderRadius.circular(Space.s),
         ),
-        child: Text('프리미엄', style: Ts.caption.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text(tr.u_premium, style: Ts.caption.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
       );
 }
 
@@ -127,7 +128,7 @@ class OverlayPanel extends StatelessWidget {
 
 /// 확인 다이얼로그
 Future<bool> confirmDialog(BuildContext context, String title, String body,
-    {String ok = '확인', String cancel = '취소'}) async {
+    {String? ok, String? cancel}) async {
   final r = await showDialog<bool>(
     context: context,
     builder: (c) => AlertDialog(
@@ -135,8 +136,8 @@ Future<bool> confirmDialog(BuildContext context, String title, String body,
       title: Text(title),
       content: Text(body),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(c, false), child: Text(cancel)),
-        FilledButton(onPressed: () => Navigator.pop(c, true), child: Text(ok)),
+        TextButton(onPressed: () => Navigator.pop(c, false), child: Text(cancel ?? tr.u_cancel)),
+        FilledButton(onPressed: () => Navigator.pop(c, true), child: Text(ok ?? tr.u_ok)),
       ],
     ),
   );

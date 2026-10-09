@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../game/crew.dart';
 import '../game/models.dart';
 import '../game/world.dart';
+import '../l10n/l.dart';
 import 'chibi.dart';
 import 'common.dart';
 import 'station_panel.dart';
@@ -44,8 +45,8 @@ class MerchantPanel extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('떠돌이 상인 냥냥', style: titleStyle),
-                        Text('${event.timeLeft.ceil()}초 뒤에 떠나요 · 💰${compact(w.credits)}',
+                        Text(tr.u_merchantName, style: titleStyle),
+                        Text(tr.u_merchantLeaves(event.timeLeft.ceil(), compact(w.credits)),
                             style: dimStyle),
                       ],
                     ),
@@ -54,9 +55,9 @@ class MerchantPanel extends StatelessWidget {
                 ],
               ),
               const Divider(color: Colors.white24),
-              const Text('희귀 동료 소개', style: sectionStyle),
+              Text(tr.u_rareCrewOffer, style: sectionStyle),
               if (c == null)
-                const Text('오늘의 동료는 이미 팔렸다냥!', style: dimStyle)
+                Text(tr.u_crewSoldOut, style: dimStyle)
               else
                 Row(
                   children: [
@@ -73,19 +74,19 @@ class MerchantPanel extends StatelessWidget {
                   ],
                 ),
               const Divider(color: Colors.white24),
-              const Text('젬 환전 (3회 한정)', style: sectionStyle),
+              Text(tr.u_gemTrade, style: sectionStyle),
               Row(
                 children: [
                   Expanded(
-                      child: Text('💰${w.merchantGemPrice} → ⭐5  (${3 - w.merchantGemTrades}회 남음)',
+                      child: Text(tr.u_gemTradeRow(w.merchantGemPrice, 3 - w.merchantGemTrades),
                           style: bodyStyle)),
-                  actionBtn('환전', w.merchantGemTrades < 3 && w.credits >= w.merchantGemPrice,
+                  actionBtn(tr.u_convert, w.merchantGemTrades < 3 && w.credits >= w.merchantGemPrice,
                       () => act(w.buyGemsFromMerchant),
                       color: const Color(0xFFAD1457)),
                 ],
               ),
               const Divider(color: Colors.white24),
-              const Text('강화 물약 (효과 시간 2배)', style: sectionStyle),
+              Text(tr.u_potions, style: sectionStyle),
               const SizedBox(height: 6),
               Wrap(
                 spacing: 8,

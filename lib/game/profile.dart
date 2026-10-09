@@ -1,65 +1,102 @@
 import 'dart:math';
 
+import '../l10n/l.dart';
 import 'home.dart';
 import 'ships.dart';
 
 /// 새 게임을 시작해도 유지되는 계정 단위 데이터
 /// (젬, 구매 내역, 꾸미기, 업적, 출석, 일일 퀘스트, 함선, 은하 명예, 설정)
 class Achievement {
-  const Achievement(this.id, this.title, this.desc, this.stat, this.target, this.gems);
+  const Achievement(this.id, this.stat, this.target, this.gems);
   final String id;
-  final String title;
-  final String desc;
+  String get title => _achievementText(id).$1;
+  String get desc => _achievementText(id).$2;
   final String stat;
   final int target;
   final int gems;
 }
 
 const achievements = [
-  Achievement('first_blood', '첫 격추', '해적 1척 격추', 'kills', 1, 5),
-  Achievement('hunter', '해적 사냥꾼', '해적 100척 격추', 'kills', 100, 20),
-  Achievement('legend', '전설의 선장', '해적 1000척 격추', 'kills', 1000, 50),
-  Achievement('miner', '광산왕', '광석 1000개 수집', 'ore', 1000, 10),
-  Achievement('miner2', '광석 부자', '광석 10000개 수집', 'ore', 10000, 30),
-  Achievement('colonist', '개척자', '행성 5곳 정착', 'colonies', 5, 15),
-  Achievement('metropolis', '메트로폴리스', '식민지 Lv.5 달성', 'maxColony', 1, 15),
-  Achievement('builder', '건축가', '정거장 3개 건설', 'stations', 3, 15),
-  Achievement('boss1', '두목 사냥', '해적 두목 격파', 'bosses', 1, 10),
-  Achievement('boss10', '두목 킬러', '해적 두목 10회 격파', 'bosses', 10, 30),
-  Achievement('explorer', '탐험가', '섹터 3 도달', 'sector', 3, 20),
-  Achievement('voyager', '항해자', '섹터 6 도달', 'sector', 6, 40),
-  Achievement('rich', '부자 선장', '크레딧 10000 보유', 'credits', 10000, 15),
-  Achievement('crew6', '든든한 동료', '승무원 6명 영입', 'crew', 6, 15),
-  Achievement('crew3star', '전설의 동료', '★3 승무원 영입', 'crew3', 1, 20),
-  Achievement('missions', '해결사', '임무 20개 완료', 'missions', 20, 20),
-  Achievement('jelly', '해파리 박사', '우주 해파리 10마리 처치', 'jelly', 10, 10),
-  Achievement('fashion', '패셔니스타', '꾸미기 아이템 구매', 'cosmetics', 1, 5),
-  Achievement('ascend', '새로운 시작', '은하 명예로 환생', 'ascensions', 1, 30),
-  Achievement('drone', '든든한 드론', '전투 드론 장착', 'drone', 1, 5),
-  Achievement('home5', '행성 건축가', '내 행성에 건물 5개', 'homeBuildings', 5, 15),
-  Achievement('homeMax', '꿈의 행성', '내 행성 최대 레벨', 'homeLevel', 4, 30),
+  Achievement('first_blood', 'kills', 1, 5),
+  Achievement('hunter', 'kills', 100, 20),
+  Achievement('legend', 'kills', 1000, 50),
+  Achievement('miner', 'ore', 1000, 10),
+  Achievement('miner2', 'ore', 10000, 30),
+  Achievement('colonist', 'colonies', 5, 15),
+  Achievement('metropolis', 'maxColony', 1, 15),
+  Achievement('builder', 'stations', 3, 15),
+  Achievement('boss1', 'bosses', 1, 10),
+  Achievement('boss10', 'bosses', 10, 30),
+  Achievement('explorer', 'sector', 3, 20),
+  Achievement('voyager', 'sector', 6, 40),
+  Achievement('rich', 'credits', 10000, 15),
+  Achievement('crew6', 'crew', 6, 15),
+  Achievement('crew3star', 'crew3', 1, 20),
+  Achievement('missions', 'missions', 20, 20),
+  Achievement('jelly', 'jelly', 10, 10),
+  Achievement('fashion', 'cosmetics', 1, 5),
+  Achievement('ascend', 'ascensions', 1, 30),
+  Achievement('drone', 'drone', 1, 5),
+  Achievement('home5', 'homeBuildings', 5, 15),
+  Achievement('homeMax', 'homeLevel', 4, 30),
 ];
+
+(String, String) _achievementText(String id) => switch (id) {
+      'first_blood' => (tr.g_achFirstBloodTitle, tr.g_achFirstBloodDesc),
+      'hunter' => (tr.g_achHunterTitle, tr.g_achHunterDesc),
+      'legend' => (tr.g_achLegendTitle, tr.g_achLegendDesc),
+      'miner' => (tr.g_achMinerTitle, tr.g_achMinerDesc),
+      'miner2' => (tr.g_achMiner2Title, tr.g_achMiner2Desc),
+      'colonist' => (tr.g_achColonistTitle, tr.g_achColonistDesc),
+      'metropolis' => (tr.g_achMetropolisTitle, tr.g_achMetropolisDesc),
+      'builder' => (tr.g_achBuilderTitle, tr.g_achBuilderDesc),
+      'boss1' => (tr.g_achBoss1Title, tr.g_achBoss1Desc),
+      'boss10' => (tr.g_achBoss10Title, tr.g_achBoss10Desc),
+      'explorer' => (tr.g_achExplorerTitle, tr.g_achExplorerDesc),
+      'voyager' => (tr.g_achVoyagerTitle, tr.g_achVoyagerDesc),
+      'rich' => (tr.g_achRichTitle, tr.g_achRichDesc),
+      'crew6' => (tr.g_achCrew6Title, tr.g_achCrew6Desc),
+      'crew3star' => (tr.g_achCrew3starTitle, tr.g_achCrew3starDesc),
+      'missions' => (tr.g_achMissionsTitle, tr.g_achMissionsDesc),
+      'jelly' => (tr.g_achJellyTitle, tr.g_achJellyDesc),
+      'fashion' => (tr.g_achFashionTitle, tr.g_achFashionDesc),
+      'ascend' => (tr.g_achAscendTitle, tr.g_achAscendDesc),
+      'drone' => (tr.g_achDroneTitle, tr.g_achDroneDesc),
+      'home5' => (tr.g_achHome5Title, tr.g_achHome5Desc),
+      'homeMax' => (tr.g_achHomeMaxTitle, tr.g_achHomeMaxDesc),
+      _ => (id, ''),
+    };
 
 const loginRewards = [5, 5, 10, 10, 15, 20, 50];
 
 class DailyQuestDef {
-  const DailyQuestDef(this.id, this.title, this.stat, this.target, this.gems);
+  const DailyQuestDef(this.id, this.stat, this.target, this.gems);
   final String id;
-  final String title;
+  String get title => switch (id) {
+        'kill' => tr.g_dailyKill,
+        'ore' => tr.g_dailyOre,
+        'mission' => tr.g_dailyMission,
+        'colony' => tr.g_dailyColony,
+        'boss' => tr.g_dailyBoss,
+        'power' => tr.g_dailyPower,
+        'play' => tr.g_dailyPlay,
+        'jelly' => tr.g_dailyJelly,
+        _ => id,
+      };
   final String stat;
   final int target;
   final int gems;
 }
 
 const dailyPool = [
-  DailyQuestDef('kill', '해적 30척 격추', 'kills', 30, 5),
-  DailyQuestDef('ore', '광석 300개 수집', 'ore', 300, 5),
-  DailyQuestDef('mission', '임무 2개 완료', 'missions', 2, 10),
-  DailyQuestDef('colony', '식민지 2번 성장', 'colonyUps', 2, 5),
-  DailyQuestDef('boss', '해적 두목 격파', 'bosses', 1, 10),
-  DailyQuestDef('power', '파워업 3개 획득', 'powerups', 3, 5),
-  DailyQuestDef('play', '10분 플레이', 'playMin', 10, 5),
-  DailyQuestDef('jelly', '우주 해파리 3마리 처치', 'jelly', 3, 5),
+  DailyQuestDef('kill', 'kills', 30, 5),
+  DailyQuestDef('ore', 'ore', 300, 5),
+  DailyQuestDef('mission', 'missions', 2, 10),
+  DailyQuestDef('colony', 'colonyUps', 2, 5),
+  DailyQuestDef('boss', 'bosses', 1, 10),
+  DailyQuestDef('power', 'powerups', 3, 5),
+  DailyQuestDef('play', 'playMin', 10, 5),
+  DailyQuestDef('jelly', 'jelly', 3, 5),
 ];
 
 const dailyBonusGems = 10;
@@ -135,6 +172,9 @@ class Profile {
   final dailyClaimed = <String>{};
 
   bool notifications = true;
+
+  /// 언어 설정. null = 기기 언어 따라감
+  String? language;
 
   // 내 행성
   HomePlanet home = HomePlanet();
@@ -318,6 +358,7 @@ class Profile {
         'dailyBase': dailyBase,
         'dailyClaimed': dailyClaimed.toList(),
         'notifications': notifications,
+        'lang': language,
         'home': home.toJson(),
       };
 
@@ -346,7 +387,8 @@ class Profile {
       ..honor = j['honor'] as int? ?? 0
       ..ascensions = j['ascensions'] as int? ?? 0
       ..dailyDay = j['dailyDay'] as int? ?? 0
-      ..notifications = j['notifications'] as bool? ?? true;
+      ..notifications = j['notifications'] as bool? ?? true
+      ..language = j['lang'] as String?;
     if (j['home'] is Map) {
       p.home = HomePlanet.fromJson((j['home'] as Map).cast<String, dynamic>());
     }

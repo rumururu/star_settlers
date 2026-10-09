@@ -1,4 +1,3 @@
-import '../game/josa.dart';
 import 'package:flutter/material.dart';
 
 import '../game/cosmetics.dart';
@@ -8,6 +7,7 @@ import '../game/profile.dart';
 import '../game/save.dart';
 import '../game/ships.dart';
 import '../game/world.dart';
+import '../l10n/l.dart';
 import '../services/app_state.dart';
 import '../services/monetization.dart';
 import 'chibi.dart';
@@ -33,7 +33,7 @@ class _ShopScreenState extends State<ShopScreen> {
     final ok = await AppState.money.buy(id);
     if (!mounted) return;
     setState(() => _busy = false);
-    if (ok) toast(context, '구매 완료! 감사합니다 💜');
+    if (ok) toast(context, tr.m_buyThanks);
   }
 
   Future<void> _freeGems() async {
@@ -42,7 +42,7 @@ class _ShopScreenState extends State<ShopScreen> {
     final ok = await AppState.watchAd();
     if (!mounted) return;
     if (!ok) {
-      toast(context, '광고를 불러오는 중이에요. 잠시 후 다시 시도해 주세요.');
+      toast(context, tr.m_adLoading);
       return;
     }
     AppState.profile.claimAdGems(now);
@@ -54,10 +54,10 @@ class _ShopScreenState extends State<ShopScreen> {
   void _buyCosmetic(int price, VoidCallback give) async {
     final p = AppState.profile;
     if (p.gems < price) {
-      toast(context, '젬이 부족해요');
+      toast(context, tr.m_notEnoughGems);
       return;
     }
-    if (!await confirmDialog(context, '구매 확인', '${eul("⭐$price")} 사용할까요?')) return;
+    if (!await confirmDialog(context, tr.m_buyConfirmTitle, tr.m_spendGemsConfirm(eul('⭐$price')))) return;
     p.spendGems(price);
     give();
     p.addStat('cosmetics');
@@ -76,7 +76,7 @@ class _ShopScreenState extends State<ShopScreen> {
         backgroundColor: const Color(0xFF0D0B26),
         appBar: AppBar(
           backgroundColor: const Color(0xFF151236),
-          title: const Text('⭐ 상점'),
+          title: Text(tr.m_shopTitle),
           actions: [
             Center(
               child: Padding(
@@ -86,16 +86,16 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             tabs: [
-              Tab(text: '젬 충전'),
-              Tab(text: '패키지'),
-              Tab(text: '프리미엄 함선'),
-              Tab(text: '함선 스킨'),
-              Tab(text: '선장 의상'),
-              Tab(text: '무료 젬'),
+              Tab(text: tr.m_tabGems),
+              Tab(text: tr.m_tabPacks),
+              Tab(text: tr.m_tabPremiumShips),
+              Tab(text: tr.m_tabSkins),
+              Tab(text: tr.m_tabOutfits),
+              Tab(text: tr.m_tabFree),
             ],
           ),
         ),
@@ -110,7 +110,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 child: Container(
                   color: const Color(0xCC4A148C),
                   padding: const EdgeInsets.all(6),
-                  child: const Text('🧪 테스트 모드: 실제 결제/광고가 일어나지 않아요',
+                  child: Text(tr.m_testMode,
                       textAlign: TextAlign.center, style: dimStyle),
                 ),
               ),
@@ -128,7 +128,7 @@ class _ShopScreenState extends State<ShopScreen> {
           title: Text(d.title, style: titleStyle),
           subtitle: Text(d.desc, style: dimStyle),
           trailing: owned
-              ? const Text('보유 중', style: TextStyle(color: Color(0xFF7CFFB2)))
+              ? Text(tr.m_owned, style: const TextStyle(color: Color(0xFF7CFFB2)))
               : actionBtn(AppState.money.priceOf(d.id), !_busy, () => _buy(d.id),
                   color: const Color(0xFFAD1457)),
         ),
@@ -143,8 +143,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     d.id == 'gems_100' ? '⭐' : (d.id == 'gems_550' ? '💰' : '🎁'),
                     style: Ts.glyph)),
           const SizedBox(height: 8),
-          const Text('젬은 꾸미기, 고급 영입, 즉시 부활, 크레딧 교환에 쓸 수 있어요.\n'
-              '게임 플레이(업적·출석·두목·보급 캡슐)로도 모을 수 있어요.', style: dimStyle),
+          Text(tr.m_gemsInfo, style: dimStyle),
         ],
       );
 
@@ -161,13 +160,13 @@ class _ShopScreenState extends State<ShopScreen> {
             owned: _p.premium,
             leading: _skinPreview(skinById('gold'))),
         const SizedBox(height: 12),
-        const Text('👩‍🚀 승무원 (젬)', style: sectionStyle),
+        Text(tr.m_crewSection, style: sectionStyle),
         const SizedBox(height: 6),
         ..._crewItems(),
         const SizedBox(height: 12),
-        actionBtn('구매 복원', true, () async {
+        actionBtn(tr.m_restorePurchases, true, () async {
           await AppState.money.restore();
-          if (mounted) toast(context, '구매 내역을 확인했어요');
+          if (mounted) toast(context, tr.m_restoreDone);
         }, color: const Color(0xFF455A64)),
       ],
     );
@@ -183,10 +182,10 @@ class _ShopScreenState extends State<ShopScreen> {
   Future<void> _buyShip(ShipType t) async {
     final p = AppState.profile;
     if (p.gems < t.gemPrice) {
-      toast(context, '젬이 부족해요');
+      toast(context, tr.m_notEnoughGems);
       return;
     }
-    if (!await confirmDialog(context, '구매 확인', '${t.name}에 ${eul("⭐${t.gemPrice}")} 사용할까요?')) return;
+    if (!await confirmDialog(context, tr.m_buyConfirmTitle, tr.m_buyShipConfirm(t.name, eul('⭐${t.gemPrice}')))) return;
     final w = AppState.world;
     final ok = w != null ? w.buyShip(t) : p.buyShip(t);
     if (!ok) return;
@@ -196,7 +195,7 @@ class _ShopScreenState extends State<ShopScreen> {
     }
     await SaveService.saveProfile(p);
     if (mounted) {
-      toast(context, '${t.name} 획득! 바로 탑승했어요');
+      toast(context, tr.m_shipAcquired(t.name));
       setState(() {});
     }
   }
@@ -206,12 +205,12 @@ class _ShopScreenState extends State<ShopScreen> {
     return ListView(
       padding: const EdgeInsets.all(Space.m),
       children: [
-        const Text('🛸 프리미엄 함선', style: sectionStyle),
+        Text(tr.m_premiumSection, style: sectionStyle),
         const SizedBox(height: Space.xs),
-        const Text('젬으로만 얻을 수 있는 특별한 전투기예요. 고유 능력이 있어요.', style: dimStyle),
+        Text(tr.m_premiumDesc, style: dimStyle),
         const SizedBox(height: Space.s),
         Center(
-          child: actionBtn('한 장씩 크게 보기', true, () => _openPremium(null), icon: 'tab_ship', primary: true),
+          child: actionBtn(tr.m_viewLarge, true, () => _openPremium(null), icon: 'tab_ship', primary: true),
         ),
         const SizedBox(height: Space.s),
         for (final t in shipTypes.where((t) => t.premium))
@@ -245,9 +244,9 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                   const SizedBox(width: Space.s),
                   if (p.shipType == t.id)
-                    Text('탑승 중', style: Ts.label.copyWith(color: const Color(0xFF7CFFB2)))
+                    Text(tr.m_boarded, style: Ts.label.copyWith(color: const Color(0xFF7CFFB2)))
                   else if (p.ownedShips.contains(t.id))
-                    Text('보유 중', style: Ts.label.copyWith(color: const Color(0xFF7CFFB2)))
+                    Text(tr.m_owned, style: Ts.label.copyWith(color: const Color(0xFF7CFFB2)))
                   else
                     actionBtn('⭐${t.gemPrice}', p.gems >= t.gemPrice, () => _buyShip(t),
                         color: const Color(0xFFAD1457)),
@@ -257,7 +256,7 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
           ),
         const SizedBox(height: Space.s),
-        const Text('격납고(정거장 → 함선 탭)에서도 구매·교체할 수 있어요.', style: dimStyle),
+        Text(tr.m_premiumHangarHint, style: dimStyle),
       ],
     );
   }
@@ -273,38 +272,38 @@ class _ShopScreenState extends State<ShopScreen> {
     return [
       _gemItemCard(
         icon: '🌟',
-        title: '전설 승무원 확정 모집',
+        title: tr.m_legendTitle,
         desc: w == null
-            ? '★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요'
-            : '★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n승무원 ${w.roster.length}/${w.rosterCap}',
+            ? tr.m_legendDescNoGame
+            : tr.m_legendDesc(w.roster.length, w.rosterCap),
         price: GameWorld.legendaryGemCost,
         enabled: w != null && w.roster.length < w.rosterCap,
         onBuy: () => _buyGemItem(GameWorld.legendaryGemCost, () {
           final c = w?.recruitLegendary();
           if (c != null && w != null) {
             SaveService.save(w);
-            toast(context, '${c.stars} ${c.displayName} 합류!');
+            toast(context, tr.m_crewJoined(c.stars, c.displayName));
           }
           return c != null;
         }),
       ),
       _gemItemCard(
         icon: '🪑',
-        title: '배치 슬롯 +1',
-        desc: '함선에 동시에 배치할 수 있는 승무원 수 · 현재 $slots',
+        title: tr.m_slotTitle,
+        desc: tr.m_slotDesc(slots),
         price: slotPrice,
         enabled: slotPrice != null,
         onBuy: () => _buyGemItem(slotPrice ?? 0, p.buyCrewSlot),
       ),
       _gemItemCard(
         icon: '🛏',
-        title: '승무원 정원 +${Profile.rosterPackSize}',
-        desc: '보유할 수 있는 승무원 수 · 현재 $cap (최대 ${GameWorld.maxRoster + Profile.maxRosterPacks * Profile.rosterPackSize})',
+        title: tr.m_rosterTitle(Profile.rosterPackSize),
+        desc: tr.m_rosterDesc(cap, GameWorld.maxRoster + Profile.maxRosterPacks * Profile.rosterPackSize),
         price: rosterMax ? null : Profile.rosterPackPrice,
         enabled: !rosterMax,
         onBuy: () => _buyGemItem(Profile.rosterPackPrice, p.buyRosterPack),
       ),
-      Text('고급 영입 확률: ${CrewMember.oddsText(CrewMember.gemOdds)} · 전설 확정 모집: ★4 100%',
+      Text(tr.m_crewOdds(CrewMember.oddsText(CrewMember.gemOdds)),
           style: dimStyle),
     ];
   }
@@ -332,7 +331,7 @@ class _ShopScreenState extends State<ShopScreen> {
       );
 
   Future<void> _buyGemItem(int price, bool Function() buy) async {
-    if (!await confirmDialog(context, '구매 확인', '${eul("⭐$price")} 사용할까요?')) return;
+    if (!await confirmDialog(context, tr.m_buyConfirmTitle, tr.m_spendGemsConfirm(eul('⭐$price')))) return;
     if (!mounted || !buy()) return;
     AppState.play(Sfx.gem);
     await SaveService.saveProfile(_p);
@@ -417,11 +416,11 @@ class _ShopScreenState extends State<ShopScreen> {
   }) {
     Widget button;
     if (equipped) {
-      button = const Text('장착 중', style: TextStyle(color: Color(0xFF7CFFB2)));
+      button = Text(tr.m_equipped, style: const TextStyle(color: Color(0xFF7CFFB2)));
     } else if (owned) {
-      button = actionBtn('장착', true, onEquip);
+      button = actionBtn(tr.m_equip, true, onEquip);
     } else if (exclusive != null) {
-      button = Text(exclusive == 'premium_pass' ? '사령관 패스 전용' : '스타터 팩 전용',
+      button = Text(exclusive == 'premium_pass' ? tr.m_passOnly : tr.m_starterOnly,
           style: dimStyle, textAlign: TextAlign.center);
     } else {
       button = actionBtn('⭐$price', true, onBuy, color: const Color(0xFFAD1457));
@@ -450,16 +449,16 @@ class _ShopScreenState extends State<ShopScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text('📺 광고 보고 무료 젬', style: sectionStyle),
+        Text(tr.m_adSection, style: sectionStyle),
         const SizedBox(height: 6),
-        Text('하루 ${3}회, 1회에 ⭐5 · 오늘 $left회 남음', style: bodyStyle),
+        Text(tr.m_adInfo(3, left), style: bodyStyle),
         const SizedBox(height: 8),
-        actionBtn(p.premium ? '⭐5 받기 (사령관 패스: 광고 없음)' : '광고 보고 ⭐5 받기', left > 0, _freeGems,
+        actionBtn(p.premium ? tr.m_adClaimPremium : tr.m_adWatch, left > 0, _freeGems,
             color: const Color(0xFF00897B)),
         const Divider(color: Colors.white24, height: 32),
-        const Text('📅 출석 보상', style: sectionStyle),
+        Text(tr.m_loginTitle, style: sectionStyle),
         const SizedBox(height: 6),
-        Text('연속 출석 ${p.loginStreak}일째', style: bodyStyle),
+        Text(tr.m_loginStreak(p.loginStreak), style: bodyStyle),
         const SizedBox(height: 6),
         Wrap(
           spacing: 6,
@@ -476,7 +475,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(children: [
-                  Text('${i + 1}일', style: dimStyle),
+                  Text(tr.m_dayN(i + 1), style: dimStyle),
                   Text('⭐${[5, 5, 10, 10, 15, 20, 50][i]}', style: bodyStyle),
                 ]),
               ),

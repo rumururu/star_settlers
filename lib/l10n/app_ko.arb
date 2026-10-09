@@ -1,0 +1,3853 @@
+{
+  "@@locale": "ko",
+  "appTitle": "우주 개척단",
+  "languageName": "한국어",
+  "@appTitle": {
+    "description": "앱 이름 (게임 안 제목)"
+  },
+  "@languageName": {
+    "description": "이 언어의 자기 이름 (설정 언어 목록)"
+  },
+  "u_tabShip": "함선",
+  "@u_tabShip": {
+    "description": "Station panel tab: ship upgrades"
+  },
+  "u_tabStation": "정거장",
+  "@u_tabStation": {
+    "description": "Station panel tab: station upgrades"
+  },
+  "u_tabCrew": "승무원",
+  "@u_tabCrew": {
+    "description": "Station panel tab: crew"
+  },
+  "u_tabMission": "임무",
+  "@u_tabMission": {
+    "description": "Station panel tab: missions"
+  },
+  "u_tabMarket": "시장",
+  "@u_tabMarket": {
+    "description": "Station panel tab: ore market"
+  },
+  "u_upWeapon": "공격력 {dmg} · Lv.3 2연발 · Lv.6 3연발",
+  "@u_upWeapon": {
+    "description": "Ship tab, weapon upgrade description",
+    "placeholders": {
+      "dmg": {
+        "type": "int",
+        "description": "current damage"
+      }
+    }
+  },
+  "u_upHull": "최대 체력 {hp}",
+  "@u_upHull": {
+    "description": "Ship tab, hull upgrade description",
+    "placeholders": {
+      "hp": {
+        "type": "int",
+        "description": "max HP"
+      }
+    }
+  },
+  "u_upEngine": "최고 속도 {speed}",
+  "@u_upEngine": {
+    "description": "Ship tab, engine upgrade description",
+    "placeholders": {
+      "speed": {
+        "type": "int",
+        "description": "top speed"
+      }
+    }
+  },
+  "u_upMissileIntro": "적을 추적하는 미사일 (Q키 / 🚀 버튼)",
+  "@u_upMissileIntro": {
+    "description": "Ship tab, missile description before equipping"
+  },
+  "u_upMissile": "{count}발 · 쿨타임 {cooldown}초",
+  "@u_upMissile": {
+    "description": "Ship tab, missile stats",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "missiles per volley"
+      },
+      "cooldown": {
+        "type": "String",
+        "description": "cooldown seconds, formatted"
+      }
+    }
+  },
+  "u_upShieldIntro": "모든 피해를 막는 실드 (F키 / 🛡 버튼)",
+  "@u_upShieldIntro": {
+    "description": "Ship tab, shield description before equipping"
+  },
+  "u_upShield": "{duration}초 · 쿨타임 {cooldown}초",
+  "@u_upShield": {
+    "description": "Ship tab, shield stats",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "description": "shield duration seconds, formatted"
+      },
+      "cooldown": {
+        "type": "String",
+        "description": "cooldown seconds, formatted"
+      }
+    }
+  },
+  "u_upDroneIntro": "곁을 돌며 자동으로 쏘고 아이템을 끌어와요",
+  "@u_upDroneIntro": {
+    "description": "Ship tab, drone description before equipping"
+  },
+  "u_upDrone": "피해 {dmg} · {interval}초마다 발사",
+  "@u_upDrone": {
+    "description": "Ship tab, drone stats",
+    "placeholders": {
+      "dmg": {
+        "type": "int",
+        "description": "drone damage"
+      },
+      "interval": {
+        "type": "String",
+        "description": "seconds between shots, formatted"
+      }
+    }
+  },
+  "u_upMagnet": "크레딧·광석을 끌어오는 범위 {range} · 힘 x{power}",
+  "@u_upMagnet": {
+    "description": "Ship tab, magnet stats",
+    "placeholders": {
+      "range": {
+        "type": "int",
+        "description": "pull radius"
+      },
+      "power": {
+        "type": "String",
+        "description": "pull power multiplier, formatted"
+      }
+    }
+  },
+  "u_equip": "장착",
+  "@u_equip": {
+    "description": "Button to equip a new ship module"
+  },
+  "u_boostNote": "💨 부스트(Shift / 💨 버튼)는 기본 장착되어 있어요.",
+  "@u_boostNote": {
+    "description": "Ship tab footnote"
+  },
+  "u_hangarSection": "🛸 격납고",
+  "@u_hangarSection": {
+    "description": "Ship tab section header for ship list"
+  },
+  "u_viewLarge": "크게 보기",
+  "@u_viewLarge": {
+    "description": "Button opening the full hangar screen"
+  },
+  "u_hp": "체력",
+  "@u_hp": {
+    "description": "Stat label: hit points"
+  },
+  "u_speed": "속도",
+  "@u_speed": {
+    "description": "Stat label: speed"
+  },
+  "u_attack": "공격",
+  "@u_attack": {
+    "description": "Stat label: attack"
+  },
+  "u_fireRate": "연사",
+  "@u_fireRate": {
+    "description": "Stat label: fire rate"
+  },
+  "u_ore": "광석",
+  "@u_ore": {
+    "description": "Stat label: ore gain / ore resource"
+  },
+  "u_crit": "치명타",
+  "@u_crit": {
+    "description": "Stat label: critical hit chance"
+  },
+  "u_boarded": "탑승 중",
+  "@u_boarded": {
+    "description": "Label shown on the ship currently in use"
+  },
+  "u_board": "탑승",
+  "@u_board": {
+    "description": "Button to switch to this ship (short)"
+  },
+  "u_boardNow": "탑승하기",
+  "@u_boardNow": {
+    "description": "Hangar screen button to switch to this ship"
+  },
+  "u_gemsOnly": "젬으로만 구매할 수 있어요",
+  "@u_gemsOnly": {
+    "description": "Hint under a premium ship"
+  },
+  "u_unlockOrGems": "해금: {condition} 또는 젬",
+  "@u_unlockOrGems": {
+    "description": "Hint under a locked ship",
+    "placeholders": {
+      "condition": {
+        "type": "String",
+        "description": "unlock condition text"
+      }
+    }
+  },
+  "u_unlock": "해금: {condition}",
+  "@u_unlock": {
+    "description": "Hangar screen unlock condition",
+    "placeholders": {
+      "condition": {
+        "type": "String",
+        "description": "unlock condition text"
+      }
+    }
+  },
+  "u_durability": "내구도 {hp} / {max}",
+  "@u_durability": {
+    "description": "Station tab, station hull points",
+    "placeholders": {
+      "hp": {
+        "type": "int",
+        "description": "current hull"
+      },
+      "max": {
+        "type": "int",
+        "description": "max hull"
+      }
+    }
+  },
+  "u_habitat": "거주구역",
+  "@u_habitat": {
+    "description": "Station upgrade name"
+  },
+  "u_habitatDesc": "수입 💰{rate}/s · 내구도 {hp}",
+  "@u_habitatDesc": {
+    "description": "Station habitat stats",
+    "placeholders": {
+      "rate": {
+        "type": "String",
+        "description": "credits per second, formatted"
+      },
+      "hp": {
+        "type": "int",
+        "description": "max hull"
+      }
+    }
+  },
+  "u_turret": "방어포탑",
+  "@u_turret": {
+    "description": "Station upgrade name"
+  },
+  "u_turretIntro": "해적을 자동으로 요격해요",
+  "@u_turretIntro": {
+    "description": "Station turret description before building"
+  },
+  "u_turretDesc": "피해 {dmg} · 사거리 {range}",
+  "@u_turretDesc": {
+    "description": "Station turret stats",
+    "placeholders": {
+      "dmg": {
+        "type": "int",
+        "description": "damage"
+      },
+      "range": {
+        "type": "int",
+        "description": "range"
+      }
+    }
+  },
+  "u_baseUpgrade": "본거지 강화",
+  "@u_baseUpgrade": {
+    "description": "Home base upgrade name"
+  },
+  "u_baseDesc": "레이저 {dmg} · 사거리 {range} · 내구도 {hp}",
+  "@u_baseDesc": {
+    "description": "Home base upgrade stats",
+    "placeholders": {
+      "dmg": {
+        "type": "int",
+        "description": "laser damage"
+      },
+      "range": {
+        "type": "int",
+        "description": "laser range"
+      },
+      "hp": {
+        "type": "int",
+        "description": "max hull"
+      }
+    }
+  },
+  "u_disabledSec": "기능 정지 {sec}초",
+  "@u_disabledSec": {
+    "description": "Home base disabled countdown",
+    "placeholders": {
+      "sec": {
+        "type": "int",
+        "description": "seconds left"
+      }
+    }
+  },
+  "u_sectorStatus": "{sector} 현황",
+  "@u_sectorStatus": {
+    "description": "Station tab section header",
+    "placeholders": {
+      "sector": {
+        "type": "String",
+        "description": "sector name"
+      }
+    }
+  },
+  "u_sectorStats": "정착한 행성 {colonies} / {planets}\n정거장 {stations}개\n섹터 보너스: 생산량 x{mul}\n다른 섹터 수입: 💰{other}/s",
+  "@u_sectorStats": {
+    "description": "Station tab sector summary (4 lines)",
+    "placeholders": {
+      "colonies": {
+        "type": "int",
+        "description": "settled planets"
+      },
+      "planets": {
+        "type": "int",
+        "description": "total planets"
+      },
+      "stations": {
+        "type": "int",
+        "description": "station count"
+      },
+      "mul": {
+        "type": "String",
+        "description": "output multiplier, formatted"
+      },
+      "other": {
+        "type": "String",
+        "description": "credits/s from other sectors, formatted"
+      }
+    }
+  },
+  "u_legendaryGet": "🌟 전설 등급! 🌟",
+  "@u_legendaryGet": {
+    "description": "Recruit result title (legendary)"
+  },
+  "u_rareGet": "✨ 희귀한 동료! ✨",
+  "@u_rareGet": {
+    "description": "Recruit result title (rare)"
+  },
+  "u_newCrew": "새 동료 합류!",
+  "@u_newCrew": {
+    "description": "Recruit result title (normal)"
+  },
+  "u_great": "좋아!",
+  "@u_great": {
+    "description": "Recruit result dialog close button"
+  },
+  "u_crewHeader": "승무원 {count}/{cap} · 배치 {assigned}/{slots}",
+  "@u_crewHeader": {
+    "description": "Crew tab header",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "crew owned"
+      },
+      "cap": {
+        "type": "int",
+        "description": "roster capacity"
+      },
+      "assigned": {
+        "type": "int",
+        "description": "assigned crew"
+      },
+      "slots": {
+        "type": "int",
+        "description": "assignment slots"
+      }
+    }
+  },
+  "u_recruit": "영입 💰{cost}",
+  "@u_recruit": {
+    "description": "Recruit with credits button",
+    "placeholders": {
+      "cost": {
+        "type": "int",
+        "description": "credit cost"
+      }
+    }
+  },
+  "u_recruitPremium": "고급 영입 ⭐{cost}",
+  "@u_recruitPremium": {
+    "description": "Recruit with gems button",
+    "placeholders": {
+      "cost": {
+        "type": "int",
+        "description": "gem cost"
+      }
+    }
+  },
+  "u_recruitLegendary": "🌟 전설 확정 모집 ⭐{cost}",
+  "@u_recruitLegendary": {
+    "description": "Guaranteed legendary recruit button",
+    "placeholders": {
+      "cost": {
+        "type": "int",
+        "description": "gem cost"
+      }
+    }
+  },
+  "u_recruitOdds": "확률 안내 · 일반 영입: {normal}\n고급 영입: {premium}\n전설 확정 모집: ★4 100%",
+  "@u_recruitOdds": {
+    "description": "Recruit odds disclosure (3 lines)",
+    "placeholders": {
+      "normal": {
+        "type": "String",
+        "description": "odds text for credit recruit"
+      },
+      "premium": {
+        "type": "String",
+        "description": "odds text for gem recruit"
+      }
+    }
+  },
+  "u_slotMax": "배치 슬롯 MAX ({n})",
+  "@u_slotMax": {
+    "description": "Crew slot purchase button when maxed",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "slot count"
+      }
+    }
+  },
+  "u_slotBuy": "배치 슬롯 +1 ⭐{price}",
+  "@u_slotBuy": {
+    "description": "Buy crew slot button",
+    "placeholders": {
+      "price": {
+        "type": "int",
+        "description": "gem price"
+      }
+    }
+  },
+  "u_rosterMax": "정원 MAX ({n})",
+  "@u_rosterMax": {
+    "description": "Roster expansion button when maxed",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "roster capacity"
+      }
+    }
+  },
+  "u_rosterBuy": "정원 +{size} ⭐{price}",
+  "@u_rosterBuy": {
+    "description": "Buy roster expansion button",
+    "placeholders": {
+      "size": {
+        "type": "int",
+        "description": "added capacity"
+      },
+      "price": {
+        "type": "int",
+        "description": "gem price"
+      }
+    }
+  },
+  "u_noCrew": "아직 동료가 없어요. 영입해서 함선에 배치해봐요!",
+  "@u_noCrew": {
+    "description": "Crew tab empty state"
+  },
+  "u_unassign": "해제",
+  "@u_unassign": {
+    "description": "Crew unassign button"
+  },
+  "u_assign": "배치",
+  "@u_assign": {
+    "description": "Crew assign button"
+  },
+  "u_dismiss": "방출",
+  "@u_dismiss": {
+    "description": "Crew dismiss tooltip"
+  },
+  "u_dismissCrewTitle": "승무원 방출",
+  "@u_dismissCrewTitle": {
+    "description": "Dismiss crew confirm dialog title"
+  },
+  "u_dismissCrewBody": "{name} 떠나보낼까요? 되돌릴 수 없어요.",
+  "@u_dismissCrewBody": {
+    "description": "Dismiss crew confirm body",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "crew name (Korean object particle already attached in code)"
+      }
+    }
+  },
+  "u_missionDeliverHint": "목적지로 이동하세요 (노란 화살표)",
+  "@u_missionDeliverHint": {
+    "description": "Delivery mission progress text"
+  },
+  "u_missionBountyHint": "목표를 찾아 처치하세요 (노란 화살표)",
+  "@u_missionBountyHint": {
+    "description": "Bounty mission progress text"
+  },
+  "u_reward": "보상 {rewards}",
+  "@u_reward": {
+    "description": "Mission reward line",
+    "placeholders": {
+      "rewards": {
+        "type": "String",
+        "description": "reward icons and amounts, e.g. 💰100 ⭐2"
+      }
+    }
+  },
+  "u_activeMissions": "진행 중 ({n}/3)",
+  "@u_activeMissions": {
+    "description": "Mission tab header",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "active missions"
+      }
+    }
+  },
+  "u_noActiveMissions": "진행 중인 임무가 없어요.",
+  "@u_noActiveMissions": {
+    "description": "Mission tab empty state"
+  },
+  "u_abandon": "포기",
+  "@u_abandon": {
+    "description": "Abandon mission button"
+  },
+  "u_missionBoard": "임무 게시판 · 새 임무까지 {sec}초",
+  "@u_missionBoard": {
+    "description": "Mission board header",
+    "placeholders": {
+      "sec": {
+        "type": "int",
+        "description": "seconds until new missions"
+      }
+    }
+  },
+  "u_accept": "수락",
+  "@u_accept": {
+    "description": "Accept mission button"
+  },
+  "u_priceHigh": "📈 비싸요! 팔 때예요",
+  "@u_priceHigh": {
+    "description": "Ore price trend: high"
+  },
+  "u_priceLow": "📉 싸요… 기다려봐요",
+  "@u_priceLow": {
+    "description": "Ore price trend: low"
+  },
+  "u_priceNormal": "➡ 보통",
+  "@u_priceNormal": {
+    "description": "Ore price trend: normal"
+  },
+  "u_orePrice": "광석 시세",
+  "@u_orePrice": {
+    "description": "Market tab header"
+  },
+  "u_sell100": "100개 판매",
+  "@u_sell100": {
+    "description": "Sell 100 ore button"
+  },
+  "u_sellHalf": "절반 판매",
+  "@u_sellHalf": {
+    "description": "Sell half ore button"
+  },
+  "u_sellAll": "전부 판매",
+  "@u_sellAll": {
+    "description": "Sell all ore button"
+  },
+  "u_marketTip": "시세는 시간에 따라 오르내려요. 비쌀 때 팔면 이득!",
+  "@u_marketTip": {
+    "description": "Market tab tip"
+  },
+  "u_gemExchange": "⭐ 스타젬 교환",
+  "@u_gemExchange": {
+    "description": "Market tab section header"
+  },
+  "u_creditPack": "크레딧 꾸러미",
+  "@u_creditPack": {
+    "description": "Gems-to-credits pack name"
+  },
+  "u_exchange": "교환",
+  "@u_exchange": {
+    "description": "Exchange button"
+  },
+  "u_openShop": "⭐ 상점 열기",
+  "@u_openShop": {
+    "description": "Open shop button"
+  },
+  "u_achievementDone": "🏆 업적 달성: {title}! 메뉴의 업적에서 ⭐{gems}를 받으세요.",
+  "@u_achievementDone": {
+    "description": "Advisor line when an achievement completes",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "description": "achievement title"
+      },
+      "gems": {
+        "type": "int",
+        "description": "gem reward"
+      }
+    }
+  },
+  "u_cannotDo": "자원이 부족하거나 지금은 할 수 없어요.",
+  "@u_cannotDo": {
+    "description": "Advisor line when an action fails"
+  },
+  "u_welcomeBack": "어서 오세요, 선장님!",
+  "@u_welcomeBack": {
+    "description": "Offline earnings dialog title"
+  },
+  "u_offlineHm": "자리를 비운 {h}시간 {m}분 동안\n식민지가 열심히 일했어요!",
+  "@u_offlineHm": {
+    "description": "Offline earnings body (hours and minutes)",
+    "placeholders": {
+      "h": {
+        "type": "int",
+        "description": "hours away"
+      },
+      "m": {
+        "type": "int",
+        "description": "minutes away"
+      }
+    }
+  },
+  "u_offlineM": "자리를 비운 {m}분 동안\n식민지가 열심히 일했어요!",
+  "@u_offlineM": {
+    "description": "Offline earnings body (minutes only)",
+    "placeholders": {
+      "m": {
+        "type": "int",
+        "description": "minutes away"
+      }
+    }
+  },
+  "u_passOfflineHint": "사령관 패스: 최대 8시간 + 자동 2배",
+  "@u_passOfflineHint": {
+    "description": "Offline dialog upsell hint"
+  },
+  "u_collect": "받기",
+  "@u_collect": {
+    "description": "Collect offline earnings button"
+  },
+  "u_adLoading": "광고를 불러오는 중이에요. 잠시 후 다시 시도해 주세요.",
+  "@u_adLoading": {
+    "description": "Toast when the ad is not ready"
+  },
+  "u_adLoadingRetry": "광고를 불러오는 중이에요. 잠시 후 다시 눌러주세요.",
+  "@u_adLoadingRetry": {
+    "description": "Advisor line when revive ad is not ready"
+  },
+  "u_collectDouble": "2배로 받기 👑",
+  "@u_collectDouble": {
+    "description": "Offline double collect (premium)"
+  },
+  "u_adDouble": "📺 광고 보고 2배",
+  "@u_adDouble": {
+    "description": "Offline double collect via ad"
+  },
+  "u_galaxyHonor": "🌌 은하 명예",
+  "@u_galaxyHonor": {
+    "description": "Ascension dialog title"
+  },
+  "u_honorStatus": "현재 명예 {honor}점 (환생 {ascensions}회)",
+  "@u_honorStatus": {
+    "description": "Ascension dialog current honor",
+    "placeholders": {
+      "honor": {
+        "type": "int",
+        "description": "honor points"
+      },
+      "ascensions": {
+        "type": "int",
+        "description": "times ascended"
+      }
+    }
+  },
+  "u_honorBonus": "수입 +{income}% · 공격력 +{attack}%",
+  "@u_honorBonus": {
+    "description": "Ascension dialog honor bonus",
+    "placeholders": {
+      "income": {
+        "type": "int",
+        "description": "income bonus percent"
+      },
+      "attack": {
+        "type": "int",
+        "description": "damage bonus percent"
+      }
+    }
+  },
+  "u_ascendExplain": "환생하면 지금 우주(섹터, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.",
+  "@u_ascendExplain": {
+    "description": "Ascension dialog explanation"
+  },
+  "u_ascendGain": "지금 환생하면 명예 +{gain}점!\n(제국 가치가 클수록 많이 받아요)",
+  "@u_ascendGain": {
+    "description": "Ascension dialog gain preview",
+    "placeholders": {
+      "gain": {
+        "type": "int",
+        "description": "honor gained"
+      }
+    }
+  },
+  "u_ascendLocked": "섹터 4에 도달하면 환생할 수 있어요.",
+  "@u_ascendLocked": {
+    "description": "Ascension dialog when not yet allowed"
+  },
+  "u_close": "닫기",
+  "@u_close": {
+    "description": "Close button"
+  },
+  "u_ascendBtn": "환생 (+{gain})",
+  "@u_ascendBtn": {
+    "description": "Ascend button with honor gain",
+    "placeholders": {
+      "gain": {
+        "type": "int",
+        "description": "honor gained"
+      }
+    }
+  },
+  "u_ascendConfirmTitle": "정말 환생할까요?",
+  "@u_ascendConfirmTitle": {
+    "description": "Ascend confirm title"
+  },
+  "u_ascendConfirmBody": "현재 우주가 초기화돼요. 되돌릴 수 없어요.",
+  "@u_ascendConfirmBody": {
+    "description": "Ascend confirm body"
+  },
+  "u_ascend": "환생",
+  "@u_ascend": {
+    "description": "Ascend confirm button"
+  },
+  "u_shieldBroken": "{name} 깨짐",
+  "@u_shieldBroken": {
+    "description": "HUD: planet shield is broken",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "planet name"
+      }
+    }
+  },
+  "u_hudSector": "{sector} · 발전 {dev}%\n⚠ 위협 {threat}  🏛 {value}",
+  "@u_hudSector": {
+    "description": "HUD top-right sector info (2 lines)",
+    "placeholders": {
+      "sector": {
+        "type": "String",
+        "description": "sector name"
+      },
+      "dev": {
+        "type": "int",
+        "description": "development percent"
+      },
+      "threat": {
+        "type": "String",
+        "description": "threat level, formatted"
+      },
+      "value": {
+        "type": "String",
+        "description": "empire value, compact formatted"
+      }
+    }
+  },
+  "u_baseDisabled": "본거지 정지 {sec}s",
+  "@u_baseDisabled": {
+    "description": "HUD: home base disabled",
+    "placeholders": {
+      "sec": {
+        "type": "int",
+        "description": "seconds left"
+      }
+    }
+  },
+  "u_baseHp": "본거지 {pct}%",
+  "@u_baseHp": {
+    "description": "HUD: home base hull percent",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "hull percent"
+      }
+    }
+  },
+  "u_merchantE": "상인 (E)",
+  "@u_merchantE": {
+    "description": "Interact button: merchant"
+  },
+  "u_nextSectorE": "다음 섹터 (E)",
+  "@u_nextSectorE": {
+    "description": "Interact button: warp forward"
+  },
+  "u_prevSectorE": "이전 섹터 (E)",
+  "@u_prevSectorE": {
+    "description": "Interact button: warp back"
+  },
+  "u_gateLocked": "🔒 발전도 100%에서 열려요 ({pct}%)",
+  "@u_gateLocked": {
+    "description": "Locked gate button",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "current development percent"
+      }
+    }
+  },
+  "u_settle": "{name} 정착",
+  "@u_settle": {
+    "description": "Interact button: settle planet",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "planet name"
+      }
+    }
+  },
+  "u_manageE": "{name} 관리 (E)",
+  "@u_manageE": {
+    "description": "Interact button: manage colony",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "planet name"
+      }
+    }
+  },
+  "u_buildStation": "정거장 건설",
+  "@u_buildStation": {
+    "description": "Interact button: build station"
+  },
+  "u_fire": "발사",
+  "@u_fire": {
+    "description": "Touch fire button"
+  },
+  "u_equipAtStation": "정거장 함선 개조에서 장착할 수 있어요!",
+  "@u_equipAtStation": {
+    "description": "Advisor line when a locked skill button is pressed"
+  },
+  "u_shotDown": "💥 격추당했습니다!",
+  "@u_shotDown": {
+    "description": "Death overlay title"
+  },
+  "u_autoRespawn": "{sec}초 뒤 기지에서 자동 재출격",
+  "@u_autoRespawn": {
+    "description": "Death overlay countdown",
+    "placeholders": {
+      "sec": {
+        "type": "int",
+        "description": "seconds left"
+      }
+    }
+  },
+  "u_reviveFree": "👑 이 자리에서 부활 (무료)",
+  "@u_reviveFree": {
+    "description": "Revive button (premium)"
+  },
+  "u_reviveAd": "📺 광고 보고 이 자리에서 부활",
+  "@u_reviveAd": {
+    "description": "Revive button via ad"
+  },
+  "u_reviveGems": "⭐10 으로 이 자리에서 부활",
+  "@u_reviveGems": {
+    "description": "Revive button via gems"
+  },
+  "u_respawnBase": "🏠 기지에서 재출격 (크레딧 {pct}% 손실)",
+  "@u_respawnBase": {
+    "description": "Respawn at base button",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "credit loss percent"
+      }
+    }
+  },
+  "u_spkCaptain": "선장",
+  "@u_spkCaptain": {
+    "description": "Dialog speaker name"
+  },
+  "u_spkPirate": "해적",
+  "@u_spkPirate": {
+    "description": "Dialog speaker name"
+  },
+  "u_spkAdvisor": "부관 미나",
+  "@u_spkAdvisor": {
+    "description": "Dialog speaker name (advisor character)"
+  },
+  "u_spkMerchant": "상인 냥냥",
+  "@u_spkMerchant": {
+    "description": "Dialog speaker name (cat merchant)"
+  },
+  "u_paused": "일시정지",
+  "@u_paused": {
+    "description": "Pause menu title"
+  },
+  "u_pauseStats": "{sector} · 격추 {kills} · 승무원 {crew}\n정착 {colonies} · 정거장 {stations} · 임무 완료 {missions}",
+  "@u_pauseStats": {
+    "description": "Pause menu stats (2 lines)",
+    "placeholders": {
+      "sector": {
+        "type": "String",
+        "description": "sector name"
+      },
+      "kills": {
+        "type": "int",
+        "description": "kills"
+      },
+      "crew": {
+        "type": "int",
+        "description": "crew count"
+      },
+      "colonies": {
+        "type": "int",
+        "description": "colonies settled"
+      },
+      "stations": {
+        "type": "int",
+        "description": "station count"
+      },
+      "missions": {
+        "type": "int",
+        "description": "missions completed"
+      }
+    }
+  },
+  "u_resume": "▶ 계속하기",
+  "@u_resume": {
+    "description": "Pause menu button"
+  },
+  "u_shop": "⭐ 상점",
+  "@u_shop": {
+    "description": "Pause menu button"
+  },
+  "u_achievements": "🏆 업적",
+  "@u_achievements": {
+    "description": "Pause menu button"
+  },
+  "u_dailyQuests": "📅 일일 퀘스트",
+  "@u_dailyQuests": {
+    "description": "Pause menu button"
+  },
+  "u_myPlanet": "🌍 내 행성",
+  "@u_myPlanet": {
+    "description": "Pause menu button"
+  },
+  "u_ascendMenu": "🌌 은하 명예 (환생)",
+  "@u_ascendMenu": {
+    "description": "Pause menu button"
+  },
+  "u_settings": "⚙ 설정",
+  "@u_settings": {
+    "description": "Pause menu button"
+  },
+  "u_saveAndQuit": "💾 저장하고 타이틀로",
+  "@u_saveAndQuit": {
+    "description": "Pause menu button"
+  },
+  "u_keyboardHelp": "키보드: WASD 이동 · Space 사격 · Q 미사일 · F 실드 · Shift 부스트\nE 상호작용 · B 정거장 건설 · Esc 메뉴",
+  "@u_keyboardHelp": {
+    "description": "Pause menu keyboard help"
+  },
+  "u_recharging": "재충전 중",
+  "@u_recharging": {
+    "description": "Colony panel: shield recharging"
+  },
+  "u_tutDome": "방어막\n안에 있으면 안전",
+  "@u_tutDome": {
+    "description": "Colony tutorial tile"
+  },
+  "u_tutLevelUp": "레벨업\n수입·건물↑",
+  "@u_tutLevelUp": {
+    "description": "Colony tutorial tile"
+  },
+  "u_tutTurret": "포탑",
+  "@u_tutTurret": {
+    "description": "Colony tutorial tile"
+  },
+  "u_tutRepair": "수리",
+  "@u_tutRepair": {
+    "description": "Colony tutorial tile"
+  },
+  "u_tutRaid": "습격 막기",
+  "@u_tutRaid": {
+    "description": "Colony tutorial tile"
+  },
+  "u_gotIt": "알겠어요",
+  "@u_gotIt": {
+    "description": "Tutorial dismiss button"
+  },
+  "u_damage": "피해 {dmg}",
+  "@u_damage": {
+    "description": "Building effect: damage",
+    "placeholders": {
+      "dmg": {
+        "type": "int",
+        "description": "damage"
+      }
+    }
+  },
+  "u_oreRate": "광석 +{rate}/s",
+  "@u_oreRate": {
+    "description": "Building effect: ore per second",
+    "placeholders": {
+      "rate": {
+        "type": "String",
+        "description": "ore per second, formatted"
+      }
+    }
+  },
+  "u_incomePct": "수입 +{pct}%",
+  "@u_incomePct": {
+    "description": "Building effect: income bonus",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "percent"
+      }
+    }
+  },
+  "u_repairRate": "체력 +{hp}/s",
+  "@u_repairRate": {
+    "description": "Building effect: repair per second",
+    "placeholders": {
+      "hp": {
+        "type": "int",
+        "description": "HP per second"
+      }
+    }
+  },
+  "u_shieldPlus": "방어막 +{amount}",
+  "@u_shieldPlus": {
+    "description": "Building effect: shield capacity",
+    "placeholders": {
+      "amount": {
+        "type": "int",
+        "description": "shield points"
+      }
+    }
+  },
+  "u_systemTitle": "{sector} · 항성계 {n}",
+  "@u_systemTitle": {
+    "description": "Star system panel title",
+    "placeholders": {
+      "sector": {
+        "type": "String",
+        "description": "sector name"
+      },
+      "n": {
+        "type": "int",
+        "description": "system number"
+      }
+    }
+  },
+  "u_systemInfo": "위협 {threat} · 자원 배율 x{mul}",
+  "@u_systemInfo": {
+    "description": "Star system panel subtitle",
+    "placeholders": {
+      "threat": {
+        "type": "String",
+        "description": "threat level, formatted"
+      },
+      "mul": {
+        "type": "String",
+        "description": "resource multiplier, formatted"
+      }
+    }
+  },
+  "u_development": "발전도 {pct}%",
+  "@u_development": {
+    "description": "Star system development",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "percent"
+      }
+    }
+  },
+  "u_nextSystemOpen": "다음 항성계 열림",
+  "@u_nextSystemOpen": {
+    "description": "Gate status: open"
+  },
+  "u_opensAt100": "100%에서 열림",
+  "@u_opensAt100": {
+    "description": "Gate status: locked"
+  },
+  "u_devHint": "모든 행성을 Lv.3까지 키우면 100%",
+  "@u_devHint": {
+    "description": "Development hint"
+  },
+  "u_conqueredSystems": "점령한 항성계 (계속 생산 중)",
+  "@u_conqueredSystems": {
+    "description": "System panel section header"
+  },
+  "u_unsettled": "미정착",
+  "@u_unsettled": {
+    "description": "Planet status: not settled"
+  },
+  "u_underRaid": "습격 중",
+  "@u_underRaid": {
+    "description": "Planet status: being raided"
+  },
+  "u_unknownSector": "미지의 섹터 {n}",
+  "@u_unknownSector": {
+    "description": "Fallback sector name",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "sector number"
+      }
+    }
+  },
+  "u_sectorDev": "{name} · 발전 {pct}%",
+  "@u_sectorDev": {
+    "description": "Conquered system row",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "sector name"
+      },
+      "pct": {
+        "type": "int",
+        "description": "development percent"
+      }
+    }
+  },
+  "u_buildStationTitle": "정거장 건설 · 역할 고르기",
+  "@u_buildStationTitle": {
+    "description": "Build station panel title"
+  },
+  "u_cost": "비용",
+  "@u_cost": {
+    "description": "Cost label"
+  },
+  "u_build": "건설",
+  "@u_build": {
+    "description": "Build button"
+  },
+  "u_toNextSector": "🌀 다음 섹터로",
+  "@u_toNextSector": {
+    "description": "Gate label in world"
+  },
+  "u_bossLocked": "🔒 두목을 쓰러뜨리면 열림",
+  "@u_bossLocked": {
+    "description": "Locked gate label in world"
+  },
+  "u_toPrevSector": "🌀 이전 섹터로",
+  "@u_toPrevSector": {
+    "description": "Gate label in world"
+  },
+  "u_raidAlert": "⚠ 습격 중!",
+  "@u_raidAlert": {
+    "description": "World label over raided planet"
+  },
+  "u_rechargePct": "재충전 {pct}%",
+  "@u_rechargePct": {
+    "description": "World label: shield reboot progress",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "percent"
+      }
+    }
+  },
+  "u_merchantLabel": "🛒 떠돌이 상인 ({sec}초)",
+  "@u_merchantLabel": {
+    "description": "World label over the merchant",
+    "placeholders": {
+      "sec": {
+        "type": "int",
+        "description": "seconds left"
+      }
+    }
+  },
+  "u_supplyPod": "📦 보급 캡슐",
+  "@u_supplyPod": {
+    "description": "World label over supply pod"
+  },
+  "u_sectorBoss": "☠ {sector} 두목",
+  "@u_sectorBoss": {
+    "description": "World label over sector boss",
+    "placeholders": {
+      "sector": {
+        "type": "String",
+        "description": "sector name"
+      }
+    }
+  },
+  "u_pirateBoss": "☠ 해적 두목",
+  "@u_pirateBoss": {
+    "description": "World label over pirate boss"
+  },
+  "u_merchantName": "떠돌이 상인 냥냥",
+  "@u_merchantName": {
+    "description": "Merchant panel title"
+  },
+  "u_merchantLeaves": "{sec}초 뒤에 떠나요 · 💰{credits}",
+  "@u_merchantLeaves": {
+    "description": "Merchant panel subtitle",
+    "placeholders": {
+      "sec": {
+        "type": "int",
+        "description": "seconds left"
+      },
+      "credits": {
+        "type": "String",
+        "description": "player credits, compact formatted"
+      }
+    }
+  },
+  "u_rareCrewOffer": "희귀 동료 소개",
+  "@u_rareCrewOffer": {
+    "description": "Merchant section header"
+  },
+  "u_crewSoldOut": "오늘의 동료는 이미 팔렸다냥!",
+  "@u_crewSoldOut": {
+    "description": "Merchant crew sold out"
+  },
+  "u_gemTrade": "젬 환전 (3회 한정)",
+  "@u_gemTrade": {
+    "description": "Merchant section header"
+  },
+  "u_gemTradeRow": "💰{price} → ⭐5  ({left}회 남음)",
+  "@u_gemTradeRow": {
+    "description": "Merchant gem trade row",
+    "placeholders": {
+      "price": {
+        "type": "int",
+        "description": "credit price"
+      },
+      "left": {
+        "type": "int",
+        "description": "trades left"
+      }
+    }
+  },
+  "u_convert": "환전",
+  "@u_convert": {
+    "description": "Merchant gem trade button"
+  },
+  "u_potions": "강화 물약 (효과 시간 2배)",
+  "@u_potions": {
+    "description": "Merchant section header"
+  },
+  "u_notEnoughGems": "젬이 부족해요",
+  "@u_notEnoughGems": {
+    "description": "Toast"
+  },
+  "u_buyConfirmTitle": "구매 확인",
+  "@u_buyConfirmTitle": {
+    "description": "Purchase confirm title"
+  },
+  "u_buyShipConfirm": "{ship}에 {price} 사용할까요?",
+  "@u_buyShipConfirm": {
+    "description": "Ship purchase confirm body",
+    "placeholders": {
+      "ship": {
+        "type": "String",
+        "description": "ship name"
+      },
+      "price": {
+        "type": "String",
+        "description": "gem price like ⭐300 (Korean object particle attached in code)"
+      }
+    }
+  },
+  "u_shipBought": "{ship} 획득! 바로 탑승했어요",
+  "@u_shipBought": {
+    "description": "Toast after buying a ship",
+    "placeholders": {
+      "ship": {
+        "type": "String",
+        "description": "ship name"
+      }
+    }
+  },
+  "u_premiumShips": "프리미엄 함선",
+  "@u_premiumShips": {
+    "description": "Hangar title (premium only)"
+  },
+  "u_hangarTitle": "격납고",
+  "@u_hangarTitle": {
+    "description": "Hangar screen title"
+  },
+  "u_buyGems": "⭐{price} 구매",
+  "@u_buyGems": {
+    "description": "Hangar buy button",
+    "placeholders": {
+      "price": {
+        "type": "int",
+        "description": "gem price"
+      }
+    }
+  },
+  "u_premium": "프리미엄",
+  "@u_premium": {
+    "description": "Premium badge"
+  },
+  "u_ok": "확인",
+  "@u_ok": {
+    "description": "Default confirm button"
+  },
+  "u_cancel": "취소",
+  "@u_cancel": {
+    "description": "Default cancel button"
+  },
+  "m_ok": "확인",
+  "@m_ok": {
+    "description": "공통 확인 버튼 (결제 확인 대화상자, 이름 입력)"
+  },
+  "m_cancel": "취소",
+  "@m_cancel": {
+    "description": "공통 취소 버튼"
+  },
+  "m_close": "닫기",
+  "@m_close": {
+    "description": "공통 닫기 버튼"
+  },
+  "m_claim": "받기",
+  "@m_claim": {
+    "description": "출석 보상 대화상자의 받기 버튼"
+  },
+  "m_claimGems": "⭐{gems} 받기",
+  "@m_claimGems": {
+    "description": "업적/일일 퀘스트 보상 받기 버튼",
+    "placeholders": {
+      "gems": {
+        "type": "int",
+        "description": "보상 젬 수"
+      }
+    }
+  },
+  "m_done": "✅ 완료",
+  "@m_done": {
+    "description": "업적/일일 퀘스트 보상을 이미 받음 표시"
+  },
+  "m_notEnoughGems": "젬이 부족해요",
+  "@m_notEnoughGems": {
+    "description": "젬 부족 토스트 (상점, 행성 꾸미기)"
+  },
+  "m_restorePurchases": "구매 복원",
+  "@m_restorePurchases": {
+    "description": "구매 복원 버튼 (상점 패키지 탭, 설정)"
+  },
+  "m_restoreDone": "구매 내역을 확인했어요",
+  "@m_restoreDone": {
+    "description": "구매 복원 후 토스트"
+  },
+  "m_buyConfirmTitle": "구매 확인",
+  "@m_buyConfirmTitle": {
+    "description": "젬 사용 확인 대화상자 제목"
+  },
+  "m_spendGemsConfirm": "{price} 사용할까요?",
+  "@m_spendGemsConfirm": {
+    "description": "젬 사용 확인 본문. 한국어는 목적격 조사가 붙은 가격",
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "description": "젬 가격 (예: ⭐30을)"
+      }
+    }
+  },
+  "m_loginTitle": "📅 출석 보상",
+  "@m_loginTitle": {
+    "description": "출석 보상 대화상자 제목 / 상점 무료 젬 탭 섹션 제목"
+  },
+  "m_loginWelcome": "오늘도 와주셨네요, 선장님!",
+  "@m_loginWelcome": {
+    "description": "출석 보상 대화상자 인사"
+  },
+  "m_loginStreakHint": "7일 연속 출석하면 ⭐50!",
+  "@m_loginStreakHint": {
+    "description": "출석 보상 대화상자 안내"
+  },
+  "m_newGameTitle": "새 게임",
+  "@m_newGameTitle": {
+    "description": "새 게임 확인 대화상자 제목"
+  },
+  "m_newGameBody": "기존 진행 상황이 지워져요.\n(젬, 꾸미기, 업적, 구매 상품은 유지돼요) 계속할까요?",
+  "@m_newGameBody": {
+    "description": "새 게임 확인 대화상자 본문"
+  },
+  "m_start": "시작",
+  "@m_start": {
+    "description": "새 게임 확인 버튼"
+  },
+  "m_loadFailed": "저장 데이터를 불러오지 못했어요.",
+  "@m_loadFailed": {
+    "description": "이어하기 실패 토스트"
+  },
+  "m_honorLine": "🌌 은하 명예 {honor}점 · 수입 +{income}% · 공격 +{attack}%",
+  "@m_honorLine": {
+    "description": "타이틀 화면의 환생 명예 보너스 줄",
+    "placeholders": {
+      "honor": {
+        "type": "int",
+        "description": "명예 점수"
+      },
+      "income": {
+        "type": "int",
+        "description": "수입 보너스 %"
+      },
+      "attack": {
+        "type": "int",
+        "description": "공격 보너스 %"
+      }
+    }
+  },
+  "m_continue": "▶ 이어하기",
+  "@m_continue": {
+    "description": "타이틀 화면 이어하기 버튼"
+  },
+  "m_newGame": "✨ 새 게임",
+  "@m_newGame": {
+    "description": "타이틀 화면 새 게임 버튼"
+  },
+  "m_menuHome": "내 행성",
+  "@m_menuHome": {
+    "description": "타이틀 메뉴 아이콘 (내 행성)"
+  },
+  "m_menuShop": "상점",
+  "@m_menuShop": {
+    "description": "타이틀 메뉴 아이콘 (상점)"
+  },
+  "m_menuQuest": "퀘스트",
+  "@m_menuQuest": {
+    "description": "타이틀 메뉴 아이콘 (일일 퀘스트)"
+  },
+  "m_menuAchievements": "업적",
+  "@m_menuAchievements": {
+    "description": "타이틀 메뉴 아이콘 (업적)"
+  },
+  "m_menuSettings": "설정",
+  "@m_menuSettings": {
+    "description": "타이틀 메뉴 아이콘 (설정)"
+  },
+  "m_achievementsTitle": "🏆 업적 ({done}/{total})",
+  "@m_achievementsTitle": {
+    "description": "업적 화면 제목",
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "description": "받은 업적 수"
+      },
+      "total": {
+        "type": "int",
+        "description": "전체 업적 수"
+      }
+    }
+  },
+  "m_dailyTitle": "📅 일일 퀘스트",
+  "@m_dailyTitle": {
+    "description": "일일 퀘스트 화면 제목"
+  },
+  "m_dailyReset": "초기화까지 {hours}시간 {minutes}분",
+  "@m_dailyReset": {
+    "description": "일일 퀘스트 초기화까지 남은 시간",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "description": "시간"
+      },
+      "minutes": {
+        "type": "int",
+        "description": "분"
+      }
+    }
+  },
+  "m_dailyBonusTitle": "🎁 모두 완료 보너스",
+  "@m_dailyBonusTitle": {
+    "description": "일일 퀘스트 전체 완료 보너스 카드 제목"
+  },
+  "m_dailyBonusDesc": "오늘의 퀘스트 3개를 모두 받으면",
+  "@m_dailyBonusDesc": {
+    "description": "전체 완료 보너스 조건"
+  },
+  "m_settingsTitle": "⚙ 설정",
+  "@m_settingsTitle": {
+    "description": "설정 화면 제목"
+  },
+  "m_settingsSound": "효과음",
+  "@m_settingsSound": {
+    "description": "설정: 효과음 스위치"
+  },
+  "m_settingsMusic": "배경음악",
+  "@m_settingsMusic": {
+    "description": "설정: 배경음악 스위치"
+  },
+  "m_settingsNotify": "복귀 알림",
+  "@m_settingsNotify": {
+    "description": "설정: 복귀 알림 스위치"
+  },
+  "m_settingsNotifyDesc": "식민지 창고가 가득 차면 알려드려요",
+  "@m_settingsNotifyDesc": {
+    "description": "설정: 복귀 알림 설명"
+  },
+  "m_settingsHaptics": "진동",
+  "@m_settingsHaptics": {
+    "description": "설정: 진동 스위치"
+  },
+  "m_settingsLanguage": "언어",
+  "@m_settingsLanguage": {
+    "description": "설정: 언어 선택 항목 제목 (영어가 아니면 뒤에 \" / Language\"가 붙음)"
+  },
+  "m_languageSystem": "기기 언어 따라가기",
+  "@m_languageSystem": {
+    "description": "언어 선택 목록의 시스템 기본값 항목"
+  },
+  "m_privacyTitle": "개인정보처리방침",
+  "@m_privacyTitle": {
+    "description": "설정: 개인정보처리방침 항목/대화상자 제목"
+  },
+  "m_privacyBody": "우주 개척단은 게임 진행 데이터(진행 상황, 설정)를 기기 안에만 저장하며, 개인을 식별할 수 있는 정보를 수집하지 않습니다.\n\n인앱 결제는 Google Play / App Store가 처리하며, 결제 정보는 개발자에게 전달되지 않습니다.\n\n보상형 광고가 적용될 경우 광고 제공사(Google AdMob)가 광고 식별자 등을 수집할 수 있습니다.\n\n문의: {email} (설정 → 개발자에게 피드백 보내기)",
+  "@m_privacyBody": {
+    "description": "개인정보처리방침 요약 본문",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "문의 이메일 주소"
+      }
+    }
+  },
+  "m_wipeTitle": "모든 데이터 초기화",
+  "@m_wipeTitle": {
+    "description": "설정: 데이터 초기화 항목"
+  },
+  "m_wipeDesc": "진행 상황, 젬, 꾸미기가 모두 삭제돼요",
+  "@m_wipeDesc": {
+    "description": "설정: 데이터 초기화 설명"
+  },
+  "m_wipeConfirmTitle": "정말 초기화할까요?",
+  "@m_wipeConfirmTitle": {
+    "description": "데이터 초기화 확인 제목"
+  },
+  "m_wipeConfirmBody": "되돌릴 수 없어요. 구매한 상품은 \"구매 복원\"으로 되찾을 수 있어요.",
+  "@m_wipeConfirmBody": {
+    "description": "데이터 초기화 확인 본문"
+  },
+  "m_wipeOk": "초기화",
+  "@m_wipeOk": {
+    "description": "데이터 초기화 확인 버튼"
+  },
+  "m_feedbackTitle": "개발자에게 피드백 보내기",
+  "@m_feedbackTitle": {
+    "description": "설정: 피드백 메일 항목"
+  },
+  "m_feedbackDesc": "버그·건의 뭐든 좋아요. 기기와 앱 버전이 자동으로 적혀요.",
+  "@m_feedbackDesc": {
+    "description": "설정: 피드백 설명"
+  },
+  "m_noMailApp": "메일 앱이 없어요. {email} 으로 보내주세요.",
+  "@m_noMailApp": {
+    "description": "메일 앱이 없을 때 토스트",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "피드백 이메일 주소"
+      }
+    }
+  },
+  "m_aboutTitle": "STAR SETTLERS · 우주 개척단",
+  "@m_aboutTitle": {
+    "description": "설정 맨 아래 앱 이름"
+  },
+  "m_version": "버전 {version}",
+  "@m_version": {
+    "description": "설정 맨 아래 앱 버전",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "description": "버전 문자열 (예: 1.0.0)"
+      }
+    }
+  },
+  "m_shopTitle": "⭐ 상점",
+  "@m_shopTitle": {
+    "description": "상점 화면 제목"
+  },
+  "m_buyThanks": "구매 완료! 감사합니다 💜",
+  "@m_buyThanks": {
+    "description": "인앱 구매 성공 토스트"
+  },
+  "m_adLoading": "광고를 불러오는 중이에요. 잠시 후 다시 시도해 주세요.",
+  "@m_adLoading": {
+    "description": "광고 준비 안 됨 토스트"
+  },
+  "m_buyShipConfirm": "{ship}에 {price} 사용할까요?",
+  "@m_buyShipConfirm": {
+    "description": "프리미엄 함선 구매 확인 본문. price는 한국어 목적격 조사 포함",
+    "placeholders": {
+      "ship": {
+        "type": "String",
+        "description": "함선 이름"
+      },
+      "price": {
+        "type": "String",
+        "description": "젬 가격 (예: ⭐300을)"
+      }
+    }
+  },
+  "m_shipAcquired": "{ship} 획득! 바로 탑승했어요",
+  "@m_shipAcquired": {
+    "description": "프리미엄 함선 구매 성공 토스트",
+    "placeholders": {
+      "ship": {
+        "type": "String",
+        "description": "함선 이름"
+      }
+    }
+  },
+  "m_tabGems": "젬 충전",
+  "@m_tabGems": {
+    "description": "상점 탭"
+  },
+  "m_tabPacks": "패키지",
+  "@m_tabPacks": {
+    "description": "상점 탭"
+  },
+  "m_tabPremiumShips": "프리미엄 함선",
+  "@m_tabPremiumShips": {
+    "description": "상점 탭"
+  },
+  "m_tabSkins": "함선 스킨",
+  "@m_tabSkins": {
+    "description": "상점 탭"
+  },
+  "m_tabOutfits": "선장 의상",
+  "@m_tabOutfits": {
+    "description": "상점 탭"
+  },
+  "m_tabFree": "무료 젬",
+  "@m_tabFree": {
+    "description": "상점 탭"
+  },
+  "m_testMode": "🧪 테스트 모드: 실제 결제/광고가 일어나지 않아요",
+  "@m_testMode": {
+    "description": "상점 하단 테스트 모드 띠"
+  },
+  "m_owned": "보유 중",
+  "@m_owned": {
+    "description": "상점: 이미 가진 상품/함선"
+  },
+  "m_boarded": "탑승 중",
+  "@m_boarded": {
+    "description": "상점: 지금 탄 함선"
+  },
+  "m_gemsInfo": "젬은 꾸미기, 고급 영입, 즉시 부활, 크레딧 교환에 쓸 수 있어요.\n게임 플레이(업적·출석·두목·보급 캡슐)로도 모을 수 있어요.",
+  "@m_gemsInfo": {
+    "description": "상점 젬 충전 탭 하단 안내"
+  },
+  "m_crewSection": "👩‍🚀 승무원 (젬)",
+  "@m_crewSection": {
+    "description": "상점 패키지 탭 승무원 섹션 제목"
+  },
+  "m_premiumSection": "🛸 프리미엄 함선",
+  "@m_premiumSection": {
+    "description": "프리미엄 함선 탭 섹션 제목"
+  },
+  "m_premiumDesc": "젬으로만 얻을 수 있는 특별한 전투기예요. 고유 능력이 있어요.",
+  "@m_premiumDesc": {
+    "description": "프리미엄 함선 탭 설명"
+  },
+  "m_viewLarge": "한 장씩 크게 보기",
+  "@m_viewLarge": {
+    "description": "프리미엄 함선을 격납고 화면에서 크게 보기 버튼"
+  },
+  "m_premiumHangarHint": "격납고(정거장 → 함선 탭)에서도 구매·교체할 수 있어요.",
+  "@m_premiumHangarHint": {
+    "description": "프리미엄 함선 탭 하단 안내"
+  },
+  "m_legendTitle": "전설 승무원 확정 모집",
+  "@m_legendTitle": {
+    "description": "젬 아이템: 전설 승무원 모집"
+  },
+  "m_legendDescNoGame": "★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요",
+  "@m_legendDescNoGame": {
+    "description": "전설 모집 설명 (게임 시작 전)"
+  },
+  "m_legendDesc": "★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n승무원 {count}/{cap}",
+  "@m_legendDesc": {
+    "description": "전설 모집 설명 (게임 중)",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "현재 승무원 수"
+      },
+      "cap": {
+        "type": "int",
+        "description": "승무원 정원"
+      }
+    }
+  },
+  "m_crewJoined": "{stars} {name} 합류!",
+  "@m_crewJoined": {
+    "description": "승무원 합류 토스트",
+    "placeholders": {
+      "stars": {
+        "type": "String",
+        "description": "별 등급 표시 (★★★★)"
+      },
+      "name": {
+        "type": "String",
+        "description": "승무원 이름"
+      }
+    }
+  },
+  "m_slotTitle": "배치 슬롯 +1",
+  "@m_slotTitle": {
+    "description": "젬 아이템: 배치 슬롯"
+  },
+  "m_slotDesc": "함선에 동시에 배치할 수 있는 승무원 수 · 현재 {slots}",
+  "@m_slotDesc": {
+    "description": "배치 슬롯 설명",
+    "placeholders": {
+      "slots": {
+        "type": "int",
+        "description": "현재 슬롯 수"
+      }
+    }
+  },
+  "m_rosterTitle": "승무원 정원 +{n}",
+  "@m_rosterTitle": {
+    "description": "젬 아이템: 승무원 정원 확장",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "늘어나는 정원"
+      }
+    }
+  },
+  "m_rosterDesc": "보유할 수 있는 승무원 수 · 현재 {cap} (최대 {max})",
+  "@m_rosterDesc": {
+    "description": "정원 확장 설명",
+    "placeholders": {
+      "cap": {
+        "type": "int",
+        "description": "현재 정원"
+      },
+      "max": {
+        "type": "int",
+        "description": "최대 정원"
+      }
+    }
+  },
+  "m_crewOdds": "고급 영입 확률: {odds} · 전설 확정 모집: ★4 100%",
+  "@m_crewOdds": {
+    "description": "상점 승무원 섹션 확률 표시",
+    "placeholders": {
+      "odds": {
+        "type": "String",
+        "description": "등급별 확률 문자열 (예: ★★ 60% / ★★★ 30%)"
+      }
+    }
+  },
+  "m_equipped": "장착 중",
+  "@m_equipped": {
+    "description": "꾸미기 카드: 장착 중"
+  },
+  "m_equip": "장착",
+  "@m_equip": {
+    "description": "꾸미기 카드: 장착 버튼"
+  },
+  "m_passOnly": "사령관 패스 전용",
+  "@m_passOnly": {
+    "description": "꾸미기 카드: 사령관 패스 전용"
+  },
+  "m_starterOnly": "스타터 팩 전용",
+  "@m_starterOnly": {
+    "description": "꾸미기 카드: 스타터 팩 전용"
+  },
+  "m_adSection": "📺 광고 보고 무료 젬",
+  "@m_adSection": {
+    "description": "무료 젬 탭 광고 섹션 제목"
+  },
+  "m_adInfo": "하루 {perDay}회, 1회에 ⭐5 · 오늘 {left}회 남음",
+  "@m_adInfo": {
+    "description": "광고 보상 안내",
+    "placeholders": {
+      "perDay": {
+        "type": "int",
+        "description": "하루 횟수"
+      },
+      "left": {
+        "type": "int",
+        "description": "오늘 남은 횟수"
+      }
+    }
+  },
+  "m_adClaimPremium": "⭐5 받기 (사령관 패스: 광고 없음)",
+  "@m_adClaimPremium": {
+    "description": "사령관 패스 보유 시 광고 없이 받기 버튼"
+  },
+  "m_adWatch": "광고 보고 ⭐5 받기",
+  "@m_adWatch": {
+    "description": "광고 보고 젬 받기 버튼"
+  },
+  "m_loginStreak": "연속 출석 {days}일째",
+  "@m_loginStreak": {
+    "description": "무료 젬 탭 연속 출석 일수",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "description": "연속 출석 일수"
+      }
+    }
+  },
+  "m_dayN": "{day}일",
+  "@m_dayN": {
+    "description": "출석 보상 달력 칸의 날짜",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "description": "몇째 날"
+      }
+    }
+  },
+  "m_notEnoughResources": "자원이 부족해요",
+  "@m_notEnoughResources": {
+    "description": "내 행성: 건설/업그레이드 실패 토스트"
+  },
+  "m_emptyLot": "빈 땅 #{n} · 건물 짓기",
+  "@m_emptyLot": {
+    "description": "내 행성 빈 칸 시트 제목",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "칸 번호"
+      }
+    }
+  },
+  "m_buildInGameOnly": "건설은 게임 중(메뉴 → 내 행성)에 할 수 있어요. 크레딧과 광석은 현재 우주에서 써요.",
+  "@m_buildInGameOnly": {
+    "description": "게임 밖에서 내 행성을 열었을 때 안내"
+  },
+  "m_heldAll": "보유 💰{credits}  💎{ore}  ⭐{gems}",
+  "@m_heldAll": {
+    "description": "내 행성 시트: 보유 자원",
+    "placeholders": {
+      "credits": {
+        "type": "String",
+        "description": "크레딧 (축약 표기)"
+      },
+      "ore": {
+        "type": "String",
+        "description": "광석 (축약 표기)"
+      },
+      "gems": {
+        "type": "int",
+        "description": "젬"
+      }
+    }
+  },
+  "m_held": "보유 💰{credits}  💎{ore}",
+  "@m_held": {
+    "description": "내 행성 하단: 보유 자원",
+    "placeholders": {
+      "credits": {
+        "type": "String",
+        "description": "크레딧 (축약 표기)"
+      },
+      "ore": {
+        "type": "String",
+        "description": "광석 (축약 표기)"
+      }
+    }
+  },
+  "m_currentEffect": "현재 효과: {effect}",
+  "@m_currentEffect": {
+    "description": "건물 시트: 현재 레벨 효과",
+    "placeholders": {
+      "effect": {
+        "type": "String",
+        "description": "효과 설명"
+      }
+    }
+  },
+  "m_nextLevel": "다음 레벨: {effect}",
+  "@m_nextLevel": {
+    "description": "건물 시트: 다음 레벨 효과",
+    "placeholders": {
+      "effect": {
+        "type": "String",
+        "description": "효과 설명"
+      }
+    }
+  },
+  "m_upgrade": "업그레이드 {cost}",
+  "@m_upgrade": {
+    "description": "건물 업그레이드 버튼",
+    "placeholders": {
+      "cost": {
+        "type": "String",
+        "description": "비용 표기"
+      }
+    }
+  },
+  "m_maxLevel": "🌟 최대 레벨",
+  "@m_maxLevel": {
+    "description": "건물 최대 레벨 표시"
+  },
+  "m_planetName": "행성 이름",
+  "@m_planetName": {
+    "description": "행성 이름 변경 대화상자 제목"
+  },
+  "m_decorateTitle": "🎨 행성 꾸미기",
+  "@m_decorateTitle": {
+    "description": "행성 꾸미기 시트 제목"
+  },
+  "m_planetRing": "행성 고리",
+  "@m_planetRing": {
+    "description": "행성 꾸미기: 고리 스위치"
+  },
+  "m_giftInGameOnly": "선물은 게임 중에 받을 수 있어요",
+  "@m_giftInGameOnly": {
+    "description": "게임 밖에서 선물 받기 시도 토스트"
+  },
+  "m_giftTitle": "🎁 행성 선물",
+  "@m_giftTitle": {
+    "description": "행성 선물 대화상자 제목"
+  },
+  "m_giftBody": "주민 {count}명이 모은 선물이에요!",
+  "@m_giftBody": {
+    "description": "행성 선물 대화상자 본문",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "주민 수"
+      }
+    }
+  },
+  "m_giftThanks": "고마워!",
+  "@m_giftThanks": {
+    "description": "행성 선물 대화상자 닫기 버튼"
+  },
+  "m_planetStatus": "행성 Lv.{level} · 주민 {residents}명 · 건물 {built}/{slots}",
+  "@m_planetStatus": {
+    "description": "내 행성 상단 상태 줄",
+    "placeholders": {
+      "level": {
+        "type": "int",
+        "description": "행성 레벨"
+      },
+      "residents": {
+        "type": "int",
+        "description": "주민 수"
+      },
+      "built": {
+        "type": "int",
+        "description": "지은 건물 수"
+      },
+      "slots": {
+        "type": "int",
+        "description": "전체 칸 수"
+      }
+    }
+  },
+  "m_permBonus": "영구 보너스 · 수입 +{income}%  광석 +{ore}%  공격 +{attack}%  체력 +{hp}%  쿨타임 -{cooldown}%  오프라인 {offline}%",
+  "@m_permBonus": {
+    "description": "내 행성 영구 보너스 요약",
+    "placeholders": {
+      "income": {
+        "type": "int",
+        "description": "%"
+      },
+      "ore": {
+        "type": "int",
+        "description": "%"
+      },
+      "attack": {
+        "type": "int",
+        "description": "%"
+      },
+      "hp": {
+        "type": "int",
+        "description": "%"
+      },
+      "cooldown": {
+        "type": "int",
+        "description": "%"
+      },
+      "offline": {
+        "type": "int",
+        "description": "오프라인 효율 %"
+      }
+    }
+  },
+  "m_planetHint": "행성을 좌우로 밀어 돌리고, 칸을 눌러 건물을 지어요",
+  "@m_planetHint": {
+    "description": "내 행성 조작 안내"
+  },
+  "m_giftClaim": "🎁 행성 선물 받기",
+  "@m_giftClaim": {
+    "description": "행성 선물 받기 버튼"
+  },
+  "m_giftWait": "🎁 {hours}시간 {minutes}분 후 선물",
+  "@m_giftWait": {
+    "description": "선물까지 남은 시간 버튼",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "description": "시간"
+      },
+      "minutes": {
+        "type": "int",
+        "description": "분"
+      }
+    }
+  },
+  "m_planetLevelUp": "🌍 행성 Lv.{level} (칸 +2) {cost}",
+  "@m_planetLevelUp": {
+    "description": "행성 레벨업 버튼",
+    "placeholders": {
+      "level": {
+        "type": "int",
+        "description": "다음 레벨"
+      },
+      "cost": {
+        "type": "String",
+        "description": "비용 표기"
+      }
+    }
+  },
+  "g_shipScoutName": "스카우트",
+  "@g_shipScoutName": {
+    "description": "ship type name (hangar, shop)"
+  },
+  "g_shipInterceptorName": "인터셉터",
+  "@g_shipInterceptorName": {
+    "description": "ship type name (hangar, shop)"
+  },
+  "g_shipFortressName": "포트리스",
+  "@g_shipFortressName": {
+    "description": "ship type name (hangar, shop)"
+  },
+  "g_shipProspectorName": "프로스펙터",
+  "@g_shipProspectorName": {
+    "description": "ship type name (hangar, shop)"
+  },
+  "g_shipPhantomName": "팬텀",
+  "@g_shipPhantomName": {
+    "description": "ship type name (hangar, shop)"
+  },
+  "g_shipNovaName": "노바 드래곤",
+  "@g_shipNovaName": {
+    "description": "ship type name (hangar, shop)"
+  },
+  "g_shipAuroraName": "오로라",
+  "@g_shipAuroraName": {
+    "description": "ship type name (hangar, shop)"
+  },
+  "g_shipScoutDesc": "균형 잡힌 기본 함선",
+  "@g_shipScoutDesc": {
+    "description": "ship type short description (hangar, shop)"
+  },
+  "g_shipInterceptorDesc": "빠르고 연사가 빠르지만 장갑이 얇아요",
+  "@g_shipInterceptorDesc": {
+    "description": "ship type short description (hangar, shop)"
+  },
+  "g_shipFortressDesc": "느리지만 단단하고 한 방이 세요",
+  "@g_shipFortressDesc": {
+    "description": "ship type short description (hangar, shop)"
+  },
+  "g_shipProspectorDesc": "광석 +50%, 아이템을 멀리서 끌어당겨요",
+  "@g_shipProspectorDesc": {
+    "description": "ship type short description (hangar, shop)"
+  },
+  "g_shipPhantomDesc": "25% 확률로 2.5배 치명타",
+  "@g_shipPhantomDesc": {
+    "description": "ship type short description (hangar, shop)"
+  },
+  "g_shipNovaDesc": "탄환이 적을 꿰뚫는 프리미엄 전투기",
+  "@g_shipNovaDesc": {
+    "description": "ship type short description (hangar, shop)"
+  },
+  "g_shipAuroraDesc": "스스로 고치고 보호막을 두르는 프리미엄 수호선",
+  "@g_shipAuroraDesc": {
+    "description": "ship type short description (hangar, shop)"
+  },
+  "g_shipNovaAbility": "관통탄: 탄환 하나가 적 2기까지 꿰뚫어요",
+  "@g_shipNovaAbility": {
+    "description": "Nova Dragon unique ability (hangar, shop)"
+  },
+  "g_shipAuroraAbility": "자가 수리: 3초간 피격이 없으면 초당 체력 3% 회복\n수호막: 8초마다 피격 1회 방어",
+  "@g_shipAuroraAbility": {
+    "description": "Aurora unique ability, two lines (hangar, shop)"
+  },
+  "g_unlockSector": "섹터 {n} 도달",
+  "@g_unlockSector": {
+    "description": "ship unlock condition; n = sector number",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_unlockBosses": "해적 두목 {n}회 격파",
+  "@g_unlockBosses": {
+    "description": "ship unlock condition; n = boss kills",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_unlockOre": "광석 {n}개 수집",
+  "@g_unlockOre": {
+    "description": "ship unlock condition; n = ore count",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_skinDefault": "기본 스카우트",
+  "@g_skinDefault": {
+    "description": "ship skin name (shop)"
+  },
+  "g_skinCrimson": "레드 코멧",
+  "@g_skinCrimson": {
+    "description": "ship skin name (shop)"
+  },
+  "g_skinMint": "민트 초코",
+  "@g_skinMint": {
+    "description": "ship skin name (shop)"
+  },
+  "g_skinStealth": "스텔스 블랙",
+  "@g_skinStealth": {
+    "description": "ship skin name (shop)"
+  },
+  "g_skinNeon": "네온 핑크",
+  "@g_skinNeon": {
+    "description": "ship skin name (shop)"
+  },
+  "g_skinRainbow": "무지개 드림",
+  "@g_skinRainbow": {
+    "description": "ship skin name (shop)"
+  },
+  "g_skinGalaxy": "갤럭시",
+  "@g_skinGalaxy": {
+    "description": "ship skin name (shop)"
+  },
+  "g_skinGold": "골드 로열",
+  "@g_skinGold": {
+    "description": "ship skin name (shop)"
+  },
+  "g_outfitDefault": "기본 우주복",
+  "@g_outfitDefault": {
+    "description": "captain outfit name (shop)"
+  },
+  "g_outfitCat": "냥냥 헬멧",
+  "@g_outfitCat": {
+    "description": "captain outfit name (shop)"
+  },
+  "g_outfitBunny": "토끼 귀",
+  "@g_outfitBunny": {
+    "description": "captain outfit name (shop)"
+  },
+  "g_outfitAlien": "외계인 더듬이",
+  "@g_outfitAlien": {
+    "description": "captain outfit name (shop)"
+  },
+  "g_outfitFlower": "꽃 핀",
+  "@g_outfitFlower": {
+    "description": "captain outfit name (shop)"
+  },
+  "g_outfitHat": "함장 모자",
+  "@g_outfitHat": {
+    "description": "captain outfit name (shop)"
+  },
+  "g_outfitCrown": "은하 왕관",
+  "@g_outfitCrown": {
+    "description": "captain outfit name (shop)"
+  },
+  "g_crewRoleGunner": "포수",
+  "@g_crewRoleGunner": {
+    "description": "crew role name"
+  },
+  "g_crewEffectGunner": "공격력",
+  "@g_crewEffectGunner": {
+    "description": "what a crew role boosts (crew list)"
+  },
+  "g_crewRoleEngineer": "기관사",
+  "@g_crewRoleEngineer": {
+    "description": "crew role name"
+  },
+  "g_crewEffectEngineer": "최대 체력·수리",
+  "@g_crewEffectEngineer": {
+    "description": "what a crew role boosts (crew list)"
+  },
+  "g_crewRolePilot": "조종사",
+  "@g_crewRolePilot": {
+    "description": "crew role name"
+  },
+  "g_crewEffectPilot": "속도",
+  "@g_crewEffectPilot": {
+    "description": "what a crew role boosts (crew list)"
+  },
+  "g_crewRoleTrader": "상인",
+  "@g_crewRoleTrader": {
+    "description": "crew role name"
+  },
+  "g_crewEffectTrader": "크레딧 수입",
+  "@g_crewEffectTrader": {
+    "description": "what a crew role boosts (crew list)"
+  },
+  "g_crewRoleMiner": "광부",
+  "@g_crewRoleMiner": {
+    "description": "crew role name"
+  },
+  "g_crewEffectMiner": "광석 획득",
+  "@g_crewEffectMiner": {
+    "description": "what a crew role boosts (crew list)"
+  },
+  "g_crewRoleScientist": "과학자",
+  "@g_crewRoleScientist": {
+    "description": "crew role name"
+  },
+  "g_crewEffectScientist": "스킬 쿨타임 감소",
+  "@g_crewEffectScientist": {
+    "description": "what a crew role boosts (crew list)"
+  },
+  "g_crewName0": "뭉치",
+  "@g_crewName0": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName1": "코코",
+  "@g_crewName1": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName2": "별이",
+  "@g_crewName2": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName3": "두부",
+  "@g_crewName3": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName4": "콩이",
+  "@g_crewName4": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName5": "루루",
+  "@g_crewName5": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName6": "하루",
+  "@g_crewName6": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName7": "포포",
+  "@g_crewName7": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName8": "미미",
+  "@g_crewName8": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName9": "도리",
+  "@g_crewName9": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName10": "몽실",
+  "@g_crewName10": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName11": "나비",
+  "@g_crewName11": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName12": "초코",
+  "@g_crewName12": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName13": "보리",
+  "@g_crewName13": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName14": "구름",
+  "@g_crewName14": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName15": "단비",
+  "@g_crewName15": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName16": "토리",
+  "@g_crewName16": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName17": "해피",
+  "@g_crewName17": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName18": "찹쌀",
+  "@g_crewName18": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName19": "모찌",
+  "@g_crewName19": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName20": "라떼",
+  "@g_crewName20": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName21": "쿠키",
+  "@g_crewName21": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName22": "젤리",
+  "@g_crewName22": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName23": "솜이",
+  "@g_crewName23": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName24": "망고",
+  "@g_crewName24": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName25": "자두",
+  "@g_crewName25": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName26": "호두",
+  "@g_crewName26": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName27": "깜이",
+  "@g_crewName27": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName28": "밤비",
+  "@g_crewName28": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewName29": "치즈",
+  "@g_crewName29": {
+    "description": "crew member nickname (cute pet-like name), list order matters"
+  },
+  "g_crewLegend0": "은하수호자",
+  "@g_crewLegend0": {
+    "description": "title prefixed to a 4-star legendary crew name"
+  },
+  "g_crewLegend1": "별의 영웅",
+  "@g_crewLegend1": {
+    "description": "title prefixed to a 4-star legendary crew name"
+  },
+  "g_crewLegend2": "성운의 현자",
+  "@g_crewLegend2": {
+    "description": "title prefixed to a 4-star legendary crew name"
+  },
+  "g_crewLegend3": "혜성 기사",
+  "@g_crewLegend3": {
+    "description": "title prefixed to a 4-star legendary crew name"
+  },
+  "g_crewLegend4": "초신성",
+  "@g_crewLegend4": {
+    "description": "title prefixed to a 4-star legendary crew name"
+  },
+  "g_crewLegendName": "{title} {name}",
+  "@g_crewLegendName": {
+    "description": "legendary crew display name; title = legend title, name = crew name",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_bldHouse": "주택",
+  "@g_bldHouse": {
+    "description": "home planet building name"
+  },
+  "g_bldHouseEffect": "주민 +{n}명 (선물 증가)",
+  "@g_bldHouseEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_bldFarm": "우주 농장",
+  "@g_bldFarm": {
+    "description": "home planet building name"
+  },
+  "g_bldFarmEffect": "크레딧 수입 +{n}%",
+  "@g_bldFarmEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_bldMine": "광산",
+  "@g_bldMine": {
+    "description": "home planet building name"
+  },
+  "g_bldMineEffect": "광석 획득 +{n}%",
+  "@g_bldMineEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_bldLab": "연구소",
+  "@g_bldLab": {
+    "description": "home planet building name"
+  },
+  "g_bldLabEffect": "스킬 쿨타임 -{n}%",
+  "@g_bldLabEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_bldTower": "방어탑",
+  "@g_bldTower": {
+    "description": "home planet building name"
+  },
+  "g_bldTowerEffect": "최대 체력 +{n}%",
+  "@g_bldTowerEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_bldShipyard": "조선소",
+  "@g_bldShipyard": {
+    "description": "home planet building name"
+  },
+  "g_bldShipyardEffect": "공격력 +{n}%",
+  "@g_bldShipyardEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_bldPark": "놀이공원",
+  "@g_bldPark": {
+    "description": "home planet building name"
+  },
+  "g_bldParkEffect": "오프라인 수입 +{n}%p",
+  "@g_bldParkEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_bldStatue": "선장 동상",
+  "@g_bldStatue": {
+    "description": "home planet building name"
+  },
+  "g_bldStatueEffect": "행성 선물 젬 +{n}",
+  "@g_bldStatueEffect": {
+    "description": "home planet building effect at its level; n = bonus amount",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_homePalette0": "초록 정원",
+  "@g_homePalette0": {
+    "description": "home planet color palette name"
+  },
+  "g_homePalette1": "모래 사막",
+  "@g_homePalette1": {
+    "description": "home planet color palette name"
+  },
+  "g_homePalette2": "얼음 왕국",
+  "@g_homePalette2": {
+    "description": "home planet color palette name"
+  },
+  "g_homePalette3": "용암 섬",
+  "@g_homePalette3": {
+    "description": "home planet color palette name"
+  },
+  "g_homePalette4": "보라 가스",
+  "@g_homePalette4": {
+    "description": "home planet color palette name"
+  },
+  "g_homePalette5": "벚꽃",
+  "@g_homePalette5": {
+    "description": "home planet color palette name"
+  },
+  "g_homePalette6": "오로라",
+  "@g_homePalette6": {
+    "description": "home planet color palette name"
+  },
+  "g_homePalette7": "황금",
+  "@g_homePalette7": {
+    "description": "home planet color palette name"
+  },
+  "g_homeDefaultName": "나의 작은 별",
+  "@g_homeDefaultName": {
+    "description": "default name of the player home planet (player can rename)"
+  },
+  "g_achFirstBloodTitle": "첫 격추",
+  "@g_achFirstBloodTitle": {
+    "description": "achievement title"
+  },
+  "g_achFirstBloodDesc": "해적 1척 격추",
+  "@g_achFirstBloodDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achHunterTitle": "해적 사냥꾼",
+  "@g_achHunterTitle": {
+    "description": "achievement title"
+  },
+  "g_achHunterDesc": "해적 100척 격추",
+  "@g_achHunterDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achLegendTitle": "전설의 선장",
+  "@g_achLegendTitle": {
+    "description": "achievement title"
+  },
+  "g_achLegendDesc": "해적 1000척 격추",
+  "@g_achLegendDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achMinerTitle": "광산왕",
+  "@g_achMinerTitle": {
+    "description": "achievement title"
+  },
+  "g_achMinerDesc": "광석 1000개 수집",
+  "@g_achMinerDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achMiner2Title": "광석 부자",
+  "@g_achMiner2Title": {
+    "description": "achievement title"
+  },
+  "g_achMiner2Desc": "광석 10000개 수집",
+  "@g_achMiner2Desc": {
+    "description": "achievement goal description"
+  },
+  "g_achColonistTitle": "개척자",
+  "@g_achColonistTitle": {
+    "description": "achievement title"
+  },
+  "g_achColonistDesc": "행성 5곳 정착",
+  "@g_achColonistDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achMetropolisTitle": "메트로폴리스",
+  "@g_achMetropolisTitle": {
+    "description": "achievement title"
+  },
+  "g_achMetropolisDesc": "식민지 Lv.5 달성",
+  "@g_achMetropolisDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achBuilderTitle": "건축가",
+  "@g_achBuilderTitle": {
+    "description": "achievement title"
+  },
+  "g_achBuilderDesc": "정거장 3개 건설",
+  "@g_achBuilderDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achBoss1Title": "두목 사냥",
+  "@g_achBoss1Title": {
+    "description": "achievement title"
+  },
+  "g_achBoss1Desc": "해적 두목 격파",
+  "@g_achBoss1Desc": {
+    "description": "achievement goal description"
+  },
+  "g_achBoss10Title": "두목 킬러",
+  "@g_achBoss10Title": {
+    "description": "achievement title"
+  },
+  "g_achBoss10Desc": "해적 두목 10회 격파",
+  "@g_achBoss10Desc": {
+    "description": "achievement goal description"
+  },
+  "g_achExplorerTitle": "탐험가",
+  "@g_achExplorerTitle": {
+    "description": "achievement title"
+  },
+  "g_achExplorerDesc": "섹터 3 도달",
+  "@g_achExplorerDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achVoyagerTitle": "항해자",
+  "@g_achVoyagerTitle": {
+    "description": "achievement title"
+  },
+  "g_achVoyagerDesc": "섹터 6 도달",
+  "@g_achVoyagerDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achRichTitle": "부자 선장",
+  "@g_achRichTitle": {
+    "description": "achievement title"
+  },
+  "g_achRichDesc": "크레딧 10000 보유",
+  "@g_achRichDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achCrew6Title": "든든한 동료",
+  "@g_achCrew6Title": {
+    "description": "achievement title"
+  },
+  "g_achCrew6Desc": "승무원 6명 영입",
+  "@g_achCrew6Desc": {
+    "description": "achievement goal description"
+  },
+  "g_achCrew3starTitle": "전설의 동료",
+  "@g_achCrew3starTitle": {
+    "description": "achievement title"
+  },
+  "g_achCrew3starDesc": "★3 승무원 영입",
+  "@g_achCrew3starDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achMissionsTitle": "해결사",
+  "@g_achMissionsTitle": {
+    "description": "achievement title"
+  },
+  "g_achMissionsDesc": "임무 20개 완료",
+  "@g_achMissionsDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achJellyTitle": "해파리 박사",
+  "@g_achJellyTitle": {
+    "description": "achievement title"
+  },
+  "g_achJellyDesc": "우주 해파리 10마리 처치",
+  "@g_achJellyDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achFashionTitle": "패셔니스타",
+  "@g_achFashionTitle": {
+    "description": "achievement title"
+  },
+  "g_achFashionDesc": "꾸미기 아이템 구매",
+  "@g_achFashionDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achAscendTitle": "새로운 시작",
+  "@g_achAscendTitle": {
+    "description": "achievement title"
+  },
+  "g_achAscendDesc": "은하 명예로 환생",
+  "@g_achAscendDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achDroneTitle": "든든한 드론",
+  "@g_achDroneTitle": {
+    "description": "achievement title"
+  },
+  "g_achDroneDesc": "전투 드론 장착",
+  "@g_achDroneDesc": {
+    "description": "achievement goal description"
+  },
+  "g_achHome5Title": "행성 건축가",
+  "@g_achHome5Title": {
+    "description": "achievement title"
+  },
+  "g_achHome5Desc": "내 행성에 건물 5개",
+  "@g_achHome5Desc": {
+    "description": "achievement goal description"
+  },
+  "g_achHomeMaxTitle": "꿈의 행성",
+  "@g_achHomeMaxTitle": {
+    "description": "achievement title"
+  },
+  "g_achHomeMaxDesc": "내 행성 최대 레벨",
+  "@g_achHomeMaxDesc": {
+    "description": "achievement goal description"
+  },
+  "g_dailyKill": "해적 30척 격추",
+  "@g_dailyKill": {
+    "description": "daily quest title"
+  },
+  "g_dailyOre": "광석 300개 수집",
+  "@g_dailyOre": {
+    "description": "daily quest title"
+  },
+  "g_dailyMission": "임무 2개 완료",
+  "@g_dailyMission": {
+    "description": "daily quest title"
+  },
+  "g_dailyColony": "식민지 2번 성장",
+  "@g_dailyColony": {
+    "description": "daily quest title"
+  },
+  "g_dailyBoss": "해적 두목 격파",
+  "@g_dailyBoss": {
+    "description": "daily quest title"
+  },
+  "g_dailyPower": "파워업 3개 획득",
+  "@g_dailyPower": {
+    "description": "daily quest title"
+  },
+  "g_dailyPlay": "10분 플레이",
+  "@g_dailyPlay": {
+    "description": "daily quest title"
+  },
+  "g_dailyJelly": "우주 해파리 3마리 처치",
+  "@g_dailyJelly": {
+    "description": "daily quest title"
+  },
+  "g_missionKill": "해적 {n}척 소탕",
+  "@g_missionKill": {
+    "description": "mission board title; n = pirates to destroy",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_missionMine": "광석 {n}개 수집",
+  "@g_missionMine": {
+    "description": "mission board title; n = ore to collect",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_missionDeliver": "{planet} 화물 운송",
+  "@g_missionDeliver": {
+    "description": "mission board title; planet = destination planet name (Korean: already has 으로/로 particle attached)",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "g_missionBounty": "현상수배: {name}",
+  "@g_missionBounty": {
+    "description": "bounty mission title; name = wanted pirate name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_bounty0": "외눈 잭",
+  "@g_bounty0": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty1": "번개 몰리",
+  "@g_bounty1": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty2": "고철왕 바르크",
+  "@g_bounty2": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty3": "붉은 수염 토토",
+  "@g_bounty3": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty4": "그림자 레나",
+  "@g_bounty4": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty5": "뚱보 포크",
+  "@g_bounty5": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty6": "쌍칼 지지",
+  "@g_bounty6": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty7": "미친 망치 버드",
+  "@g_bounty7": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty8": "은하 여우 루시",
+  "@g_bounty8": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_bounty9": "해골 선장 본즈",
+  "@g_bounty9": {
+    "description": "wanted pirate name (bounty missions); proper noun nickname"
+  },
+  "g_storyAsteroidsTitle": "소행성 3개 부수기",
+  "@g_storyAsteroidsTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyAsteroidsLine0": "선장님! 먼저 소행성을 부숴서 광석을 모아봐요.",
+  "@g_storyAsteroidsLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyAsteroidsLine1": "조이스틱으로 이동하고, 발사 버튼으로 쏘면 돼요!",
+  "@g_storyAsteroidsLine1": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyKillsTitle": "해적 3척 격추",
+  "@g_storyKillsTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyKillsLine0": "레이더에 해적이 잡혀요! 빨간 화살표 방향이에요.",
+  "@g_storyKillsLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyKillsLine1": "해적 따위, 내 함선 앞에선 고철이지!",
+  "@g_storyKillsLine1": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyColoniesTitle": "테라노바에 정착하기",
+  "@g_storyColoniesTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyColoniesLine0": "근처 초록 행성 테라노바에 정착해봐요. 가까이 가면 정착 버튼이 떠요.",
+  "@g_storyColoniesLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyColoniesLine1": "식민지는 가만히 있어도 크레딧을 벌어줘요!",
+  "@g_storyColoniesLine1": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyShipLevelsTitle": "정거장에서 함선 개조",
+  "@g_storyShipLevelsTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyShipLevelsLine0": "헤이븐 기지로 돌아가서 함선을 개조해봐요. 정거장 근처에선 수리도 돼요.",
+  "@g_storyShipLevelsLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyCrewTitle": "승무원 1명 영입",
+  "@g_storyCrewTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyCrewLine0": "혼자는 외롭잖아요? 정거장 메뉴의 승무원 탭에서 동료를 영입해봐요!",
+  "@g_storyCrewLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyMissionsTitle": "임무 1개 완료",
+  "@g_storyMissionsTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyMissionsLine0": "정거장 임무 게시판에서 의뢰를 받아보세요. 보상이 짭짤해요.",
+  "@g_storyMissionsLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyStationsTitle": "새 정거장 건설",
+  "@g_storyStationsTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyStationsLine0": "이제 영역을 넓힐 때예요! 행성에서 떨어진 빈 우주에 정거장을 지어봐요.",
+  "@g_storyStationsLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyDevPercentTitle": "항성계 발전도 100%",
+  "@g_storyDevPercentTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storyDevPercentLine0": "모든 행성을 Lv.3까지 키우면 다음 항성계가 열려요. 오른쪽 위 항성계 버튼에서 확인해요!",
+  "@g_storyDevPercentLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storySectorTitle": "워프 게이트로 다음 항성계 이동",
+  "@g_storySectorTitle": {
+    "description": "story/tutorial objective title (top of HUD)"
+  },
+  "g_storySectorLine0": "워프 게이트가 열렸어요! 미니맵의 보라색 게이트로 가봐요.",
+  "@g_storySectorLine0": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storySectorLine1": "새로운 우주가 기다리고 있어!",
+  "@g_storySectorLine1": {
+    "description": "story dialogue line spoken by advisor Mina or the captain"
+  },
+  "g_storyDevNTitle": "항성계 {n} 발전도 100%",
+  "@g_storyDevNTitle": {
+    "description": "endless story objective; n = star system number",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_storyDevNLine": "새 항성계의 행성들을 모두 Lv.3까지 키워요!",
+  "@g_storyDevNLine": {
+    "description": "advisor dialogue for endless development objective"
+  },
+  "g_systemN": "항성계 {n}",
+  "@g_systemN": {
+    "description": "star system with its number",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_storyWarpNTitle": "{system} 워프",
+  "@g_storyWarpNTitle": {
+    "description": "endless story objective; system = \"System N\" (Korean: with 으로/로 particle attached)",
+    "placeholders": {
+      "system": {
+        "type": "String"
+      }
+    }
+  },
+  "g_storyWarpNLine": "게이트가 열렸어요. 더 깊은 우주로 가볼까요?",
+  "@g_storyWarpNLine": {
+    "description": "advisor dialogue for endless warp objective"
+  },
+  "g_powerUpRapid": "연사",
+  "@g_powerUpRapid": {
+    "description": "power-up name (HUD)"
+  },
+  "g_powerUpShield": "실드",
+  "@g_powerUpShield": {
+    "description": "power-up name (HUD)"
+  },
+  "g_powerUpMagnet": "자석",
+  "@g_powerUpMagnet": {
+    "description": "power-up name (HUD)"
+  },
+  "g_powerUpDoubleCredits": "크레딧 2배",
+  "@g_powerUpDoubleCredits": {
+    "description": "power-up name (HUD)"
+  },
+  "g_planetKindGarden": "정원 행성",
+  "@g_planetKindGarden": {
+    "description": "planet type label"
+  },
+  "g_planetKindDesert": "사막 행성",
+  "@g_planetKindDesert": {
+    "description": "planet type label"
+  },
+  "g_planetKindIce": "얼음 행성",
+  "@g_planetKindIce": {
+    "description": "planet type label"
+  },
+  "g_planetKindLava": "용암 행성",
+  "@g_planetKindLava": {
+    "description": "planet type label"
+  },
+  "g_planetKindGas": "가스 행성",
+  "@g_planetKindGas": {
+    "description": "planet type label"
+  },
+  "g_colonyBldTurret": "방어포탑",
+  "@g_colonyBldTurret": {
+    "description": "colony building name"
+  },
+  "g_colonyBldMine": "채굴 시설",
+  "@g_colonyBldMine": {
+    "description": "colony building name"
+  },
+  "g_colonyBldTrade": "교역소",
+  "@g_colonyBldTrade": {
+    "description": "colony building name"
+  },
+  "g_colonyBldDock": "수리 도크",
+  "@g_colonyBldDock": {
+    "description": "colony building name"
+  },
+  "g_colonyBldShieldGen": "방어막 발생기",
+  "@g_colonyBldShieldGen": {
+    "description": "colony building name"
+  },
+  "g_colonyBldBlurbTurret": "식민지 근처 해적을 자동으로 요격해요. 습격 방어에 필수!",
+  "@g_colonyBldBlurbTurret": {
+    "description": "colony building description"
+  },
+  "g_colonyBldBlurbMine": "광석을 캐서 매초 💎를 보내줘요.",
+  "@g_colonyBldBlurbMine": {
+    "description": "colony building description"
+  },
+  "g_colonyBldBlurbTrade": "이 식민지의 크레딧 수입을 25%씩 늘려요.",
+  "@g_colonyBldBlurbTrade": {
+    "description": "colony building description"
+  },
+  "g_colonyBldBlurbDock": "근처에 있으면 함선 체력을 회복해요.",
+  "@g_colonyBldBlurbDock": {
+    "description": "colony building description"
+  },
+  "g_colonyBldBlurbShieldGen": "방어막 용량과 충전 속도를 늘려요.",
+  "@g_colonyBldBlurbShieldGen": {
+    "description": "colony building description"
+  },
+  "g_stationRoleHome": "본거지",
+  "@g_stationRoleHome": {
+    "description": "station role name"
+  },
+  "g_stationRoleDefense": "방어 기지",
+  "@g_stationRoleDefense": {
+    "description": "station role name"
+  },
+  "g_stationRoleRepair": "수리 기지",
+  "@g_stationRoleRepair": {
+    "description": "station role name"
+  },
+  "g_stationRoleSupport": "보급 기지",
+  "@g_stationRoleSupport": {
+    "description": "station role name"
+  },
+  "g_stationRoleBlurbHome": "레이저 포대와 안전 구역",
+  "@g_stationRoleBlurbHome": {
+    "description": "station role description"
+  },
+  "g_stationRoleBlurbDefense": "강한 포탑 · 내구도 2배 · 주변 적 탄환 차단",
+  "@g_stationRoleBlurbDefense": {
+    "description": "station role description"
+  },
+  "g_stationRoleBlurbRepair": "넓은 범위 빠른 수리 · 재출격 비용 10% · 근처 식민지 방어막 충전 2배",
+  "@g_stationRoleBlurbRepair": {
+    "description": "station role description"
+  },
+  "g_stationRoleBlurbSupport": "근처 식민지 생산 +25% (거주구역 레벨마다 +5%)",
+  "@g_stationRoleBlurbSupport": {
+    "description": "station role description"
+  },
+  "g_eventRaid": "{planet} 습격",
+  "@g_eventRaid": {
+    "description": "event title; planet = attacked colony name",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "g_eventMeteor": "유성우",
+  "@g_eventMeteor": {
+    "description": "event title"
+  },
+  "g_eventMerchant": "떠돌이 상인",
+  "@g_eventMerchant": {
+    "description": "event title"
+  },
+  "g_eventSupply": "보급 캡슐",
+  "@g_eventSupply": {
+    "description": "event title"
+  },
+  "g_productGems100Title": "젬 한 줌",
+  "@g_productGems100Title": {
+    "description": "in-app product title"
+  },
+  "g_productGems550Title": "젬 주머니",
+  "@g_productGems550Title": {
+    "description": "in-app product title"
+  },
+  "g_productGems1200Title": "젬 상자",
+  "@g_productGems1200Title": {
+    "description": "in-app product title"
+  },
+  "g_productStarterTitle": "스타터 팩",
+  "@g_productStarterTitle": {
+    "description": "in-app product title"
+  },
+  "g_productPassTitle": "함대 사령관 패스",
+  "@g_productPassTitle": {
+    "description": "in-app product title"
+  },
+  "g_productGems550Desc": "⭐550 (+10% 보너스)",
+  "@g_productGems550Desc": {
+    "description": "in-app product description"
+  },
+  "g_productGems1200Desc": "⭐1200 (+20% 보너스)",
+  "@g_productGems1200Desc": {
+    "description": "in-app product description"
+  },
+  "g_productStarterDesc": "⭐300 + 전용 스킨 \"갤럭시\" + ★3 승무원 (1회 한정)",
+  "@g_productStarterDesc": {
+    "description": "in-app product description"
+  },
+  "g_productPassDesc": "크레딧 수입 +25%, 오프라인 수입 8시간, 광고 없이 보상, 전용 스킨 \"골드 로열\"",
+  "@g_productPassDesc": {
+    "description": "in-app product description"
+  },
+  "g_testPurchaseTitle": "[테스트 결제] {product}",
+  "@g_testPurchaseTitle": {
+    "description": "dev-build purchase confirm dialog title; product = product title",
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "g_testPurchaseBody": "실제 결제는 일어나지 않아요.\n{desc}\n가격: {price}",
+  "@g_testPurchaseBody": {
+    "description": "dev-build purchase confirm dialog body; desc = product description, price = formatted price",
+    "placeholders": {
+      "desc": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "g_testAdTitle": "[테스트 광고]",
+  "@g_testAdTitle": {
+    "description": "dev-build rewarded ad confirm dialog title"
+  },
+  "g_testAdBody": "광고를 끝까지 본 것으로 처리할까요?",
+  "@g_testAdBody": {
+    "description": "dev-build rewarded ad confirm dialog body"
+  },
+  "g_webDemoTitle": "웹 데모",
+  "@g_webDemoTitle": {
+    "description": "web demo notice dialog title"
+  },
+  "g_webDemoBody": "구매와 광고 보상은 모바일 앱에서 이용할 수 있어요.",
+  "@g_webDemoBody": {
+    "description": "web demo notice dialog body"
+  },
+  "g_notifChannelName": "복귀 알림",
+  "@g_notifChannelName": {
+    "description": "Android notification channel name"
+  },
+  "g_notifChannelDesc": "식민지 수입, 출석 보상 알림",
+  "@g_notifChannelDesc": {
+    "description": "Android notification channel description"
+  },
+  "g_notifStorageTitle": "식민지 창고가 가득 찼어요!",
+  "@g_notifStorageTitle": {
+    "description": "push notification title when offline income storage is full"
+  },
+  "g_notifStorageBody": "선장님, 쌓인 크레딧을 받으러 오세요. 더 늦으면 수입이 멈춰요.",
+  "@g_notifStorageBody": {
+    "description": "push notification body (storage full)"
+  },
+  "g_notifPiratesTitle": "해적들이 다시 날뛰고 있어요!",
+  "@g_notifPiratesTitle": {
+    "description": "next-day push notification title"
+  },
+  "g_notifPiratesBody": "오늘의 출석 보상과 일일 퀘스트가 기다리고 있어요.",
+  "@g_notifPiratesBody": {
+    "description": "next-day push notification body"
+  },
+  "g_upgradeWeapon": "무기",
+  "@g_upgradeWeapon": {
+    "description": "ship upgrade name (station upgrade list)"
+  },
+  "g_upgradeHull": "장갑",
+  "@g_upgradeHull": {
+    "description": "ship upgrade name (station upgrade list)"
+  },
+  "g_upgradeEngine": "엔진",
+  "@g_upgradeEngine": {
+    "description": "ship upgrade name (station upgrade list)"
+  },
+  "g_upgradeMissile": "유도 미사일",
+  "@g_upgradeMissile": {
+    "description": "ship upgrade name (station upgrade list)"
+  },
+  "g_upgradeShield": "에너지 실드",
+  "@g_upgradeShield": {
+    "description": "ship upgrade name (station upgrade list)"
+  },
+  "g_upgradeDrone": "전투 드론",
+  "@g_upgradeDrone": {
+    "description": "ship upgrade name (station upgrade list)"
+  },
+  "g_upgradeMagnet": "자석",
+  "@g_upgradeMagnet": {
+    "description": "ship upgrade name (station upgrade list)"
+  },
+  "g_sector0": "알파 성역",
+  "@g_sector0": {
+    "description": "name of star system/sector 1 (proper noun)"
+  },
+  "g_sector1": "베타 성운",
+  "@g_sector1": {
+    "description": "name of star system/sector 2 (proper noun)"
+  },
+  "g_sector2": "감마 협곡",
+  "@g_sector2": {
+    "description": "name of star system/sector 3 (proper noun)"
+  },
+  "g_sector3": "델타 해적지대",
+  "@g_sector3": {
+    "description": "name of star system/sector 4 (proper noun)"
+  },
+  "g_sector4": "엡실론 심연",
+  "@g_sector4": {
+    "description": "name of star system/sector 5 (proper noun)"
+  },
+  "g_sector5": "제타 얼음벨트",
+  "@g_sector5": {
+    "description": "name of star system/sector 6 (proper noun)"
+  },
+  "g_sector6": "에타 불꽃성단",
+  "@g_sector6": {
+    "description": "name of star system/sector 7 (proper noun)"
+  },
+  "g_sector7": "세타 유령항로",
+  "@g_sector7": {
+    "description": "name of star system/sector 8 (proper noun)"
+  },
+  "g_sector8": "이오타 왕관성운",
+  "@g_sector8": {
+    "description": "name of star system/sector 9 (proper noun)"
+  },
+  "g_sector9": "카파 블랙홀",
+  "@g_sector9": {
+    "description": "name of star system/sector 10 (proper noun)"
+  },
+  "g_planet0": "아쿠아리스",
+  "@g_planet0": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet1": "루비아",
+  "@g_planet1": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet2": "프로스타",
+  "@g_planet2": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet3": "볼카노",
+  "@g_planet3": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet4": "젤리오",
+  "@g_planet4": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet5": "솔라리스",
+  "@g_planet5": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet6": "모모별",
+  "@g_planet6": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet7": "네뷸라",
+  "@g_planet7": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet8": "카시오페",
+  "@g_planet8": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet9": "오로라",
+  "@g_planet9": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet10": "두리안",
+  "@g_planet10": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet11": "시나몬",
+  "@g_planet11": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet12": "마시멜로",
+  "@g_planet12": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet13": "팝콘별",
+  "@g_planet13": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet14": "라벤더",
+  "@g_planet14": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet15": "에메랄디아",
+  "@g_planet15": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet16": "크림슨",
+  "@g_planet16": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet17": "폴라리스",
+  "@g_planet17": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet18": "베가",
+  "@g_planet18": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet19": "리겔",
+  "@g_planet19": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet20": "미라",
+  "@g_planet20": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet21": "토파즈",
+  "@g_planet21": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet22": "코발트",
+  "@g_planet22": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet23": "사파이어",
+  "@g_planet23": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet24": "오닉스",
+  "@g_planet24": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet25": "페리도트",
+  "@g_planet25": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet26": "민트별",
+  "@g_planet26": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet27": "바닐라",
+  "@g_planet27": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet28": "캐러멜",
+  "@g_planet28": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet29": "피스타치오",
+  "@g_planet29": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet30": "블루베리",
+  "@g_planet30": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet31": "레몬별",
+  "@g_planet31": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet32": "체리",
+  "@g_planet32": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet33": "멜론",
+  "@g_planet33": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet34": "키위",
+  "@g_planet34": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet35": "망고별",
+  "@g_planet35": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet36": "유자",
+  "@g_planet36": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet37": "자몽",
+  "@g_planet37": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planet38": "호박별",
+  "@g_planet38": {
+    "description": "random planet name (proper noun); list order matters for world generation"
+  },
+  "g_planetTerraNova": "테라노바",
+  "@g_planetTerraNova": {
+    "description": "name of the first (home) planet; proper noun"
+  },
+  "g_unknownSector": "미지의 섹터 {n}",
+  "@g_unknownSector": {
+    "description": "name for sectors beyond the named list; n = sector number",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_stationHaven": "헤이븐 기지",
+  "@g_stationHaven": {
+    "description": "name of the home station in the first sector (proper noun)"
+  },
+  "g_stationOutpost": "{sector} 전진기지",
+  "@g_stationOutpost": {
+    "description": "home station name in later sectors; sector = sector name",
+    "placeholders": {
+      "sector": {
+        "type": "String"
+      }
+    }
+  },
+  "g_stationNumbered": "{role} {n}호",
+  "@g_stationNumbered": {
+    "description": "name of a newly built station; role = station role, n = station number",
+    "placeholders": {
+      "role": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgWelcome": "선장님, 환영합니다! 저는 부관 미나예요.",
+  "@g_dlgWelcome": {
+    "description": "advisor greeting at new game"
+  },
+  "g_dlgMissionsCancelled": "이전 섹터의 운송·현상수배 임무는 취소됐어요.",
+  "@g_dlgMissionsCancelled": {
+    "description": "advisor line after warping"
+  },
+  "g_floatDisabled": "기능 정지!",
+  "@g_floatDisabled": {
+    "description": "floating text when home base is disabled"
+  },
+  "g_floatRebooted": "재가동!",
+  "@g_floatRebooted": {
+    "description": "floating text when home base reboots"
+  },
+  "g_dlgBaseRebooted": "본거지 재가동! 내구도 30%로 복구됐어요.",
+  "@g_dlgBaseRebooted": {
+    "description": "advisor line"
+  },
+  "g_dlgUpWeapon": "무기 강화! 해적들 각오해라!",
+  "@g_dlgUpWeapon": {
+    "description": "captain line after upgrade"
+  },
+  "g_dlgUpHull": "장갑 강화! 이제 좀 든든하군.",
+  "@g_dlgUpHull": {
+    "description": "captain line after upgrade"
+  },
+  "g_dlgUpEngine": "엔진 강화! 더 빠르게!",
+  "@g_dlgUpEngine": {
+    "description": "captain line after upgrade"
+  },
+  "g_dlgMissileNew": "유도 미사일 장착! (Q)",
+  "@g_dlgMissileNew": {
+    "description": "captain line after first missile upgrade"
+  },
+  "g_dlgMissileUp": "미사일 강화!",
+  "@g_dlgMissileUp": {
+    "description": "captain line after upgrade"
+  },
+  "g_dlgShieldNew": "에너지 실드 장착! (F)",
+  "@g_dlgShieldNew": {
+    "description": "captain line after first shield upgrade"
+  },
+  "g_dlgShieldUp": "실드 강화!",
+  "@g_dlgShieldUp": {
+    "description": "captain line after upgrade"
+  },
+  "g_dlgDroneNew": "전투 드론 출격! 든든한 친구가 생겼다.",
+  "@g_dlgDroneNew": {
+    "description": "captain line after first drone upgrade"
+  },
+  "g_dlgDroneUp": "드론 강화!",
+  "@g_dlgDroneUp": {
+    "description": "captain line after upgrade"
+  },
+  "g_dlgUpMagnet": "자석 강화! 크레딧이 알아서 붙는다!",
+  "@g_dlgUpMagnet": {
+    "description": "captain line after upgrade"
+  },
+  "g_dlgNotOver": "아직 끝나지 않았다!",
+  "@g_dlgNotOver": {
+    "description": "captain line after respawn"
+  },
+  "g_floatBlocked": "막음!",
+  "@g_floatBlocked": {
+    "description": "floating text when shield blocks a hit"
+  },
+  "g_floatGuard": "수호막!",
+  "@g_floatGuard": {
+    "description": "floating text when Aurora guard blocks a hit"
+  },
+  "g_pirateBossLose": "으아악! 이 섹터는… 네 것이다…",
+  "@g_pirateBossLose": {
+    "description": "sector boss defeat line"
+  },
+  "g_pirateBossFlee": "으아악! 기억해 두겠다, 선장!",
+  "@g_pirateBossFlee": {
+    "description": "boss defeat line"
+  },
+  "g_dlgSupplyCollected": "보급 캡슐 회수 완료!",
+  "@g_dlgSupplyCollected": {
+    "description": "advisor line"
+  },
+  "g_merchantBye": "그럼 다음에 또 봐요~ 냥!",
+  "@g_merchantBye": {
+    "description": "cat merchant farewell (cat-like speech)"
+  },
+  "g_pirateRaidTaunt": "이 식민지는 이제 우리 거다! 크하하!",
+  "@g_pirateRaidTaunt": {
+    "description": "pirate line during a raid"
+  },
+  "g_dlgMeteor": "유성우 발견! 크리스탈이 잔뜩 섞여 있어요. 광석 대박 기회!",
+  "@g_dlgMeteor": {
+    "description": "advisor line for meteor event"
+  },
+  "g_merchantHello": "떠돌이 상인 냥냥이 왔어요~ 좋은 물건 많다냥!",
+  "@g_merchantHello": {
+    "description": "cat merchant greeting (cat-like speech)"
+  },
+  "g_dlgSupplySignal": "젬이 든 보급 캡슐 신호가 잡혔어요! 해적이 지키고 있으니 조심하세요.",
+  "@g_dlgSupplySignal": {
+    "description": "advisor line for supply event"
+  },
+  "g_dlgBossWarning": "경고! 섹터 두목 함선이 접근 중입니다!",
+  "@g_dlgBossWarning": {
+    "description": "advisor warning"
+  },
+  "g_pirateRevenge": "복수하러 왔다! 각오해라!",
+  "@g_pirateRevenge": {
+    "description": "returning boss line"
+  },
+  "g_floatShieldBroken": "파괴!",
+  "@g_floatShieldBroken": {
+    "description": "floating text when a colony shield breaks (after 🛡)"
+  },
+  "g_floatShieldBack": "재가동",
+  "@g_floatShieldBack": {
+    "description": "floating text when a colony shield recovers (after 🛡)"
+  },
+  "g_floatGoalDone": "목표 달성!",
+  "@g_floatGoalDone": {
+    "description": "floating text when a story objective is done (followed by rewards)"
+  },
+  "g_dlgArrived": "{sector}에 도착했어요!",
+  "@g_dlgArrived": {
+    "description": "advisor line on entering a sector; sector = sector name",
+    "placeholders": {
+      "sector": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgNewFrontier": "새로운 개척지예요.",
+  "@g_dlgNewFrontier": {
+    "description": "appended after arrival line for a new sector"
+  },
+  "g_dlgBaseUpgraded": "{station} 강화 Lv.{level}! 레이저가 더 세졌어요.",
+  "@g_dlgBaseUpgraded": {
+    "description": "advisor line; station = station name, level = new level",
+    "placeholders": {
+      "station": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgBaseDisabled": "본거지 기능 정지! {sec}초간 보호가 꺼져요!",
+  "@g_dlgBaseDisabled": {
+    "description": "advisor alert; sec = seconds",
+    "placeholders": {
+      "sec": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgSettled": "{planet}에 깃발을 꽂았다! 정착 완료!",
+  "@g_dlgSettled": {
+    "description": "captain line on colonizing; planet = planet name",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgStationBuilt": "{station} 건설 완료! {blurb}",
+  "@g_dlgStationBuilt": {
+    "description": "advisor line; station = station name, blurb = role description",
+    "placeholders": {
+      "station": {
+        "type": "String"
+      },
+      "blurb": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgHabitatUp": "{station} 거주구역 Lv.{level}!",
+  "@g_dlgHabitatUp": {
+    "description": "advisor line; station name and new habitat level",
+    "placeholders": {
+      "station": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgTurretUp": "{station} 방어포탑 Lv.{level}!",
+  "@g_dlgTurretUp": {
+    "description": "advisor line; station name and new turret level",
+    "placeholders": {
+      "station": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgShipSwitched": "{ship} 갈아탔다! 느낌 좋은데?",
+  "@g_dlgShipSwitched": {
+    "description": "captain line on changing ship; ship = ship name (Korean: 으로/로 particle attached)",
+    "placeholders": {
+      "ship": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgOreSold": "광석 {n}개를 💰{credits}에 팔았어요.",
+  "@g_dlgOreSold": {
+    "description": "advisor line; n = ore count, credits = earned",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgCrewJoined": "{stars} {role} {name} 합류했어요!",
+  "@g_dlgCrewJoined": {
+    "description": "advisor line; stars = ★ rating, role = crew role, name = crew name (Korean: 이/가 particle attached)",
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      },
+      "role": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgCrewLevel": "{name} Lv.{level}! 실력이 늘었어요.",
+  "@g_dlgCrewLevel": {
+    "description": "advisor line; crew name and new level",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgCargoLoaded": "화물을 실었어요! {mission}",
+  "@g_dlgCargoLoaded": {
+    "description": "advisor line; mission = mission title",
+    "placeholders": {
+      "mission": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgBountyTaunt": "{name} 잡겠다고? 어디 한번 와봐라!",
+  "@g_dlgBountyTaunt": {
+    "description": "wanted pirate taunt; name = pirate name (Korean: 을/를 particle attached)",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_floatMissionDone": "임무 완료!",
+  "@g_floatMissionDone": {
+    "description": "floating text on mission complete (followed by reward)"
+  },
+  "g_dlgMissionDone": "임무 완료: {mission}!",
+  "@g_dlgMissionDone": {
+    "description": "advisor line (followed by rewards); mission = mission title",
+    "placeholders": {
+      "mission": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgRepairCost": "선장님 무사하시군요! 수리비로 💰{credits} 썼어요.",
+  "@g_dlgRepairCost": {
+    "description": "advisor line after respawn; credits = repair cost",
+    "placeholders": {
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgSectorDeveloped": "{sector} 발전 완료! 다음 항성계로 가는 워프 게이트가 열렸어요.",
+  "@g_dlgSectorDeveloped": {
+    "description": "advisor line; sector = sector name",
+    "placeholders": {
+      "sector": {
+        "type": "String"
+      }
+    }
+  },
+  "g_floatCrit": "치명타! {dmg}",
+  "@g_floatCrit": {
+    "description": "floating damage text on a critical hit; dmg = damage",
+    "placeholders": {
+      "dmg": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgStationDestroyed": "{station} 파괴됐어요! 방어포탑이 필요해요!",
+  "@g_dlgStationDestroyed": {
+    "description": "advisor alert; station name (Korean: 이/가 particle attached)",
+    "placeholders": {
+      "station": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgBossDefeated": "섹터 두목 격파! 보상 💰{credits}",
+  "@g_dlgBossDefeated": {
+    "description": "advisor line; credits = reward",
+    "placeholders": {
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgBountyCaught": "현상수배범 {name} 체포 완료!",
+  "@g_dlgBountyCaught": {
+    "description": "captain line; name = wanted pirate name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgRaidDefended": "{planet} 방어 성공! 주민들이 감사의 뜻으로 💰{credits} ⭐2를 보냈어요.",
+  "@g_dlgRaidDefended": {
+    "description": "advisor line after a raid; planet name, credits reward",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgRaidLooted": "{planet} 약탈당해 {level} 떨어졌어요… 😢",
+  "@g_dlgRaidLooted": {
+    "description": "advisor line; planet name (Korean: 이/가 attached), level = \"Lv.N\" (Korean: 으로/로 attached)",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgRaidLeft": "해적들이 {planet} 약탈하고 떠났어요.",
+  "@g_dlgRaidLeft": {
+    "description": "advisor line; planet name (Korean: 을/를 attached)",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgRaidAlert": "긴급! 해적이 {planet} 습격하고 있어요! 생산이 멈췄어요!",
+  "@g_dlgRaidAlert": {
+    "description": "advisor alert; planet name (Korean: 을/를 attached)",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "g_pirateBossArrive": "{sector}의 주인은 나다! 덤벼라, 꼬마 선장!",
+  "@g_pirateBossArrive": {
+    "description": "sector boss arrival line; sector = sector name",
+    "placeholders": {
+      "sector": {
+        "type": "String"
+      }
+    }
+  },
+  "g_dlgWelcomeBack": "다시 오신 걸 환영해요, 선장님! 현재 목표: {goal}",
+  "@g_dlgWelcomeBack": {
+    "description": "advisor line on loading a save; goal = current objective",
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "g_pirateWin0": "크하하! 별것 아니군!",
+  "@g_pirateWin0": {
+    "description": "pirate line when the player is defeated"
+  },
+  "g_pirateWin1": "다음엔 더 강해져서 와라, 꼬마!",
+  "@g_pirateWin1": {
+    "description": "pirate line when the player is defeated"
+  },
+  "g_pirateWin2": "네 함선은 고철이 됐다!",
+  "@g_pirateWin2": {
+    "description": "pirate line when the player is defeated"
+  },
+  "g_pirateRage0": "얘들아, 나와라! 본때를 보여줘!",
+  "@g_pirateRage0": {
+    "description": "boss enraged line (calls reinforcements)"
+  },
+  "g_pirateRage1": "이제부터 진짜다!",
+  "@g_pirateRage1": {
+    "description": "boss enraged line (calls reinforcements)"
+  },
+  "g_pirateRage2": "화나게 했겠다?!",
+  "@g_pirateRage2": {
+    "description": "boss enraged line (calls reinforcements)"
+  },
+  "g_captainKill0": "한 놈 처리!",
+  "@g_captainKill0": {
+    "description": "captain line after shooting a pirate"
+  },
+  "g_captainKill1": "어딜 도망가!",
+  "@g_captainKill1": {
+    "description": "captain line after shooting a pirate"
+  },
+  "g_captainKill2": "이 구역은 내 거야!",
+  "@g_captainKill2": {
+    "description": "captain line after shooting a pirate"
+  },
+  "g_captainKill3": "다음!",
+  "@g_captainKill3": {
+    "description": "captain line after shooting a pirate"
+  },
+  "g_pirateAmbush0": "크하하! 짐 내려놔!",
+  "@g_pirateAmbush0": {
+    "description": "pirate line when a pirate wave appears"
+  },
+  "g_pirateAmbush1": "여긴 우리 해적단 구역이다!",
+  "@g_pirateAmbush1": {
+    "description": "pirate line when a pirate wave appears"
+  },
+  "g_pirateAmbush2": "그 반짝이는 크레딧 내놔!",
+  "@g_pirateAmbush2": {
+    "description": "pirate line when a pirate wave appears"
+  },
+  "g_pirateAmbush3": "오늘 운이 나쁘구나, 꼬마!",
+  "@g_pirateAmbush3": {
+    "description": "pirate line when a pirate wave appears"
+  }
+}

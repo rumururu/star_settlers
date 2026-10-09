@@ -1,4 +1,4 @@
-import 'josa.dart';
+import '../l10n/l.dart';
 import 'models.dart';
 
 enum MissionType { kill, mine, deliver, bounty }
@@ -27,11 +27,11 @@ class Mission {
   bool get done => progress >= target;
 
   String title(List<Planet> planets) => switch (type) {
-        MissionType.kill => '해적 $target척 소탕',
-        MissionType.mine => '광석 $target개 수집',
-        MissionType.deliver =>
-          '${euro(planetIndex != null && planetIndex! < planets.length ? planets[planetIndex!].name : '?')} 화물 운송',
-        MissionType.bounty => '현상수배: $bountyName',
+        MissionType.kill => tr.g_missionKill(target),
+        MissionType.mine => tr.g_missionMine(target),
+        MissionType.deliver => tr.g_missionDeliver(
+            euro(planetIndex != null && planetIndex! < planets.length ? planets[planetIndex!].name : '?')),
+        MissionType.bounty => tr.g_missionBounty(bountyName ?? ''),
       };
 
   String get icon => switch (type) {
@@ -63,10 +63,18 @@ class Mission {
       )..progress = j['progress'] as int;
 }
 
-const bountyNames = [
-  '외눈 잭', '번개 몰리', '고철왕 바르크', '붉은 수염 토토', '그림자 레나',
-  '뚱보 포크', '쌍칼 지지', '미친 망치 버드', '은하 여우 루시', '해골 선장 본즈',
-];
+List<String> get bountyNames => [
+      tr.g_bounty0,
+      tr.g_bounty1,
+      tr.g_bounty2,
+      tr.g_bounty3,
+      tr.g_bounty4,
+      tr.g_bounty5,
+      tr.g_bounty6,
+      tr.g_bounty7,
+      tr.g_bounty8,
+      tr.g_bounty9,
+    ];
 
 /// 스토리 진행 단계 (튜토리얼 겸용)
 class StoryStep {
@@ -83,37 +91,37 @@ class StoryStep {
   final int gems;
 }
 
-const storySteps = [
-  StoryStep('소행성 3개 부수기', 'asteroids', 3, [
-    (Speaker.advisor, '선장님! 먼저 소행성을 부숴서 광석을 모아봐요.'),
-    (Speaker.advisor, '조이스틱으로 이동하고, 발사 버튼으로 쏘면 돼요!'),
+List<StoryStep> get storySteps => [
+  StoryStep(tr.g_storyAsteroidsTitle, 'asteroids', 3, [
+    (Speaker.advisor, tr.g_storyAsteroidsLine0),
+    (Speaker.advisor, tr.g_storyAsteroidsLine1),
   ], relative: true, credits: 60),
-  StoryStep('해적 3척 격추', 'kills', 3, [
-    (Speaker.advisor, '레이더에 해적이 잡혀요! 빨간 화살표 방향이에요.'),
-    (Speaker.captain, '해적 따위, 내 함선 앞에선 고철이지!'),
+  StoryStep(tr.g_storyKillsTitle, 'kills', 3, [
+    (Speaker.advisor, tr.g_storyKillsLine0),
+    (Speaker.captain, tr.g_storyKillsLine1),
   ], relative: true, credits: 120),
-  StoryStep('테라노바에 정착하기', 'colonies', 1, [
-    (Speaker.advisor, '근처 초록 행성 테라노바에 정착해봐요. 가까이 가면 정착 버튼이 떠요.'),
-    (Speaker.advisor, '식민지는 가만히 있어도 크레딧을 벌어줘요!'),
+  StoryStep(tr.g_storyColoniesTitle, 'colonies', 1, [
+    (Speaker.advisor, tr.g_storyColoniesLine0),
+    (Speaker.advisor, tr.g_storyColoniesLine1),
   ], credits: 150),
-  StoryStep('정거장에서 함선 개조', 'shipLevels', 1, [
-    (Speaker.advisor, '헤이븐 기지로 돌아가서 함선을 개조해봐요. 정거장 근처에선 수리도 돼요.'),
+  StoryStep(tr.g_storyShipLevelsTitle, 'shipLevels', 1, [
+    (Speaker.advisor, tr.g_storyShipLevelsLine0),
   ], credits: 100),
-  StoryStep('승무원 1명 영입', 'crew', 1, [
-    (Speaker.advisor, '혼자는 외롭잖아요? 정거장 메뉴의 승무원 탭에서 동료를 영입해봐요!'),
+  StoryStep(tr.g_storyCrewTitle, 'crew', 1, [
+    (Speaker.advisor, tr.g_storyCrewLine0),
   ], credits: 200),
-  StoryStep('임무 1개 완료', 'missions', 1, [
-    (Speaker.advisor, '정거장 임무 게시판에서 의뢰를 받아보세요. 보상이 짭짤해요.'),
+  StoryStep(tr.g_storyMissionsTitle, 'missions', 1, [
+    (Speaker.advisor, tr.g_storyMissionsLine0),
   ], relative: true, credits: 150),
-  StoryStep('새 정거장 건설', 'stations', 2, [
-    (Speaker.advisor, '이제 영역을 넓힐 때예요! 행성에서 떨어진 빈 우주에 정거장을 지어봐요.'),
+  StoryStep(tr.g_storyStationsTitle, 'stations', 2, [
+    (Speaker.advisor, tr.g_storyStationsLine0),
   ], credits: 300, gems: 10),
-  StoryStep('항성계 발전도 100%', 'devPercent', 100, [
-    (Speaker.advisor, '모든 행성을 Lv.3까지 키우면 다음 항성계가 열려요. 오른쪽 위 항성계 버튼에서 확인해요!'),
+  StoryStep(tr.g_storyDevPercentTitle, 'devPercent', 100, [
+    (Speaker.advisor, tr.g_storyDevPercentLine0),
   ], credits: 500, gems: 15),
-  StoryStep('워프 게이트로 다음 항성계 이동', 'sector', 1, [
-    (Speaker.advisor, '워프 게이트가 열렸어요! 미니맵의 보라색 게이트로 가봐요.'),
-    (Speaker.captain, '새로운 우주가 기다리고 있어!'),
+  StoryStep(tr.g_storySectorTitle, 'sector', 1, [
+    (Speaker.advisor, tr.g_storySectorLine0),
+    (Speaker.captain, tr.g_storySectorLine1),
   ], credits: 300, gems: 10),
 ];
 
@@ -127,11 +135,11 @@ StoryStep storyStepAt(int index) {
   final k = index - storySteps.length;
   final sector = k ~/ 2 + 1;
   if (k.isEven) {
-    return StoryStep('항성계 ${sector + 1} 발전도 100%', 'devPercent', 100, [
-      (Speaker.advisor, '새 항성계의 행성들을 모두 Lv.3까지 키워요!'),
+    return StoryStep(tr.g_storyDevNTitle(sector + 1), 'devPercent', 100, [
+      (Speaker.advisor, tr.g_storyDevNLine),
     ], credits: 500 * (sector + 1), gems: 15);
   }
-  return StoryStep('${euro('항성계 ${sector + 2}')} 워프', 'sector', sector + 1, [
-    (Speaker.advisor, '게이트가 열렸어요. 더 깊은 우주로 가볼까요?'),
+  return StoryStep(tr.g_storyWarpNTitle(euro(tr.g_systemN(sector + 2))), 'sector', sector + 1, [
+    (Speaker.advisor, tr.g_storyWarpNLine),
   ], credits: 300 * (sector + 1), gems: 10);
 }

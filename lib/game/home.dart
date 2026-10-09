@@ -1,19 +1,21 @@
 import 'dart:math';
 
+import '../l10n/l.dart';
+
 /// 내 행성: 환생해도 유지되는 나만의 행성.
 /// 둘레의 칸에 건물을 지으면 모든 게임에 영구 보너스를 준다.
 enum BuildingType { house, farm, mine, lab, tower, shipyard, park, statue }
 
 extension BuildingInfo on BuildingType {
   String get label => switch (this) {
-        BuildingType.house => '주택',
-        BuildingType.farm => '우주 농장',
-        BuildingType.mine => '광산',
-        BuildingType.lab => '연구소',
-        BuildingType.tower => '방어탑',
-        BuildingType.shipyard => '조선소',
-        BuildingType.park => '놀이공원',
-        BuildingType.statue => '선장 동상',
+        BuildingType.house => tr.g_bldHouse,
+        BuildingType.farm => tr.g_bldFarm,
+        BuildingType.mine => tr.g_bldMine,
+        BuildingType.lab => tr.g_bldLab,
+        BuildingType.tower => tr.g_bldTower,
+        BuildingType.shipyard => tr.g_bldShipyard,
+        BuildingType.park => tr.g_bldPark,
+        BuildingType.statue => tr.g_bldStatue,
       };
 
   String get icon => switch (this) {
@@ -29,14 +31,14 @@ extension BuildingInfo on BuildingType {
 
   /// 레벨당 효과 설명
   String effect(int level) => switch (this) {
-        BuildingType.house => '주민 +${level * 2}명 (선물 증가)',
-        BuildingType.farm => '크레딧 수입 +${level * 3}%',
-        BuildingType.mine => '광석 획득 +${level * 4}%',
-        BuildingType.lab => '스킬 쿨타임 -${level * 3}%',
-        BuildingType.tower => '최대 체력 +${level * 4}%',
-        BuildingType.shipyard => '공격력 +${level * 3}%',
-        BuildingType.park => '오프라인 수입 +${level * 5}%p',
-        BuildingType.statue => '행성 선물 젬 +$level',
+        BuildingType.house => tr.g_bldHouseEffect(level * 2),
+        BuildingType.farm => tr.g_bldFarmEffect(level * 3),
+        BuildingType.mine => tr.g_bldMineEffect(level * 4),
+        BuildingType.lab => tr.g_bldLabEffect(level * 3),
+        BuildingType.tower => tr.g_bldTowerEffect(level * 4),
+        BuildingType.shipyard => tr.g_bldShipyardEffect(level * 3),
+        BuildingType.park => tr.g_bldParkEffect(level * 5),
+        BuildingType.statue => tr.g_bldStatueEffect(level),
       };
 
   /// 젬으로만 짓는 건물
@@ -51,19 +53,19 @@ class HomeSlot {
 }
 
 /// 행성 색상 팔레트 (밝은색, 어두운색). 마지막 3개는 젬 구매
-const homePalettes = [
-  ('초록 정원', 0xFF66BB6A, 0xFF1565C0, 0),
-  ('모래 사막', 0xFFFFCC80, 0xFFBF6F2C, 0),
-  ('얼음 왕국', 0xFFE1F5FE, 0xFF4FC3F7, 0),
-  ('용암 섬', 0xFFFF7043, 0xFF3E2723, 0),
-  ('보라 가스', 0xFFCE93D8, 0xFF5E35B1, 0),
-  ('벚꽃', 0xFFF8BBD0, 0xFFC2185B, 50),
-  ('오로라', 0xFF69F0AE, 0xFF304FFE, 50),
-  ('황금', 0xFFFFE082, 0xFFFF8F00, 80),
+List<(String, int, int, int)> get homePalettes => [
+  (tr.g_homePalette0, 0xFF66BB6A, 0xFF1565C0, 0),
+  (tr.g_homePalette1, 0xFFFFCC80, 0xFFBF6F2C, 0),
+  (tr.g_homePalette2, 0xFFE1F5FE, 0xFF4FC3F7, 0),
+  (tr.g_homePalette3, 0xFFFF7043, 0xFF3E2723, 0),
+  (tr.g_homePalette4, 0xFFCE93D8, 0xFF5E35B1, 0),
+  (tr.g_homePalette5, 0xFFF8BBD0, 0xFFC2185B, 50),
+  (tr.g_homePalette6, 0xFF69F0AE, 0xFF304FFE, 50),
+  (tr.g_homePalette7, 0xFFFFE082, 0xFFFF8F00, 80),
 ];
 
 class HomePlanet {
-  String name = '나의 작은 별';
+  String name = tr.g_homeDefaultName;
   int palette = 0;
   final ownedPalettes = <int>{0, 1, 2, 3, 4};
   bool ring = false;
@@ -146,7 +148,7 @@ class HomePlanet {
 
   static HomePlanet fromJson(Map<String, dynamic> j) {
     final h = HomePlanet()
-      ..name = j['name'] as String? ?? '나의 작은 별'
+      ..name = j['name'] as String? ?? tr.g_homeDefaultName
       ..palette = j['palette'] as int? ?? 0
       ..ring = j['ring'] as bool? ?? false
       ..level = j['level'] as int? ?? 1

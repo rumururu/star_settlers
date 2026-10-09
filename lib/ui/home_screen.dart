@@ -8,6 +8,7 @@ import '../game/models.dart';
 import '../game/save.dart';
 import '../game/world.dart';
 import '../services/app_state.dart';
+import '../l10n/l.dart';
 import 'chibi.dart';
 import 'common.dart';
 
@@ -39,7 +40,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
     super.dispose();
   }
 
-  void _act(bool Function() f, {String fail = '자원이 부족해요'}) {
+  void _act(bool Function() f, {String? fail}) {
     if (f()) {
       AppState.haptic();
       for (final s in _w?.sfx ?? <Sfx>[]) {
@@ -48,7 +49,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
       _w?.sfx.clear();
       SaveService.saveProfile(AppState.profile);
     } else {
-      toast(context, fail);
+      toast(context, fail ?? tr.m_notEnoughResources);
     }
     setState(() {});
   }
@@ -95,30 +96,29 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
               shrinkWrap: true,
               padding: const EdgeInsets.all(16),
               children: [
-                Text(s == null ? '빈 땅 #${i + 1} · 건물 짓기' : '${s.type.icon} ${s.type.label}  Lv.${s.level}',
+                Text(s == null ? tr.m_emptyLot(i + 1) : '${s.type.icon} ${s.type.label}  Lv.${s.level}',
                     style: titleStyle),
                 if (w == null)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 6),
-                    child: Text('건설은 게임 중(메뉴 → 내 행성)에 할 수 있어요. 크레딧과 광석은 현재 우주에서 써요.',
-                        style: dimStyle),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(tr.m_buildInGameOnly, style: dimStyle),
                   ),
                 if (w != null)
-                  Text('보유 💰${compact(w.credits)}  💎${compact(w.ore)}  ⭐${AppState.profile.gems}',
+                  Text(tr.m_heldAll(compact(w.credits), compact(w.ore), AppState.profile.gems),
                       style: dimStyle),
                 const SizedBox(height: 8),
                 if (s == null)
                   for (final t in BuildingType.values)
                     _buildRow(t, w, () => doAct(() => w!.buildHome(i, t)))
                 else ...[
-                  Text('현재 효과: ${s.type.effect(s.level)}', style: bodyStyle),
+                  Text(tr.m_currentEffect(s.type.effect(s.level)), style: bodyStyle),
                   if (s.level < HomeSlot.maxLevel) ...[
-                    Text('다음 레벨: ${s.type.effect(s.level + 1)}', style: dimStyle),
+                    Text(tr.m_nextLevel(s.type.effect(s.level + 1)), style: dimStyle),
                     const SizedBox(height: 10),
                     actionBtn(
                       s.type.gemOnly
-                          ? '업그레이드 ⭐${_home.statueGemCost(s.level)}'
-                          : '업그레이드 ${costText(_home.upgradeCost(s))}',
+                          ? tr.m_upgrade('⭐${_home.statueGemCost(s.level)}')
+                          : tr.m_upgrade(costText(_home.upgradeCost(s))),
                       w != null &&
                           (s.type.gemOnly
                               ? AppState.profile.gems >= _home.statueGemCost(s.level)
@@ -127,7 +127,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                       color: s.type.gemOnly ? const Color(0xFFAD1457) : const Color(0xFF5E35B1),
                     ),
                   ] else
-                    const Text('🌟 최대 레벨', style: TextStyle(color: Color(0xFFFFD54F))),
+                    Text(tr.m_maxLevel, style: const TextStyle(color: Color(0xFFFFD54F))),
                 ],
               ],
             ),
@@ -169,11 +169,11 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
       context: context,
       builder: (c) => AlertDialog(
         backgroundColor: kPanelColor,
-        title: const Text('행성 이름'),
+        title: Text(tr.m_planetName),
         content: TextField(controller: ctrl, maxLength: 12, autofocus: true),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c), child: const Text('취소')),
-          FilledButton(onPressed: () => Navigator.pop(c, ctrl.text.trim()), child: const Text('확인')),
+          TextButton(onPressed: () => Navigator.pop(c), child: Text(tr.m_cancel)),
+          FilledButton(onPressed: () => Navigator.pop(c, ctrl.text.trim()), child: Text(tr.m_ok)),
         ],
       ),
     );
@@ -196,7 +196,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('🎨 행성 꾸미기', style: titleStyle),
+                Text(tr.m_decorateTitle, style: titleStyle),
                 const SizedBox(height: 10),
                 Wrap(
                   spacing: 10,
@@ -208,7 +208,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                           final (_, _, _, price) = homePalettes[i];
                           if (!_home.ownedPalettes.contains(i)) {
                             if (!p.spendGems(price)) {
-                              toast(context, '젬이 부족해요');
+                              toast(context, tr.m_notEnoughGems);
                               return;
                             }
                             _home.ownedPalettes.add(i);
@@ -247,7 +247,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                 ),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('행성 고리'),
+                  title: Text(tr.m_planetRing),
                   value: _home.ring,
                   onChanged: (v) {
                     _home.ring = v;
@@ -267,7 +267,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
   Future<void> _harvest() async {
     final w = _w;
     if (w == null) {
-      toast(context, '선물은 게임 중에 받을 수 있어요');
+      toast(context, tr.m_giftInGameOnly);
       return;
     }
     final r = w.harvestHome(DateTime.now());
@@ -282,17 +282,17 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
       context: context,
       builder: (c) => AlertDialog(
         backgroundColor: kPanelColor,
-        title: const Text('🎁 행성 선물', textAlign: TextAlign.center),
+        title: Text(tr.m_giftTitle, textAlign: TextAlign.center),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const ChibiPortrait(style: ChibiStyle.advisor, size: 90),
-            Text('주민 ${_home.residents}명이 모은 선물이에요!', style: bodyStyle),
+            Text(tr.m_giftBody(_home.residents), style: bodyStyle),
             const SizedBox(height: 8),
             Text('💰${r.$1}  ⭐${r.$2}', style: Ts.title.copyWith(color: Color(0xFFFFD54F))),
           ],
         ),
-        actions: [FilledButton(onPressed: () => Navigator.pop(c), child: const Text('고마워!'))],
+        actions: [FilledButton(onPressed: () => Navigator.pop(c), child: Text(tr.m_giftThanks))],
       ),
     );
   }
@@ -338,7 +338,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                             child: Column(
                               children: [
                                 Text('🌍 ${_home.name} ✏', style: titleStyle),
-                                Text('행성 Lv.${_home.level} · 주민 ${_home.residents}명 · 건물 ${_home.buildingCount}/${_home.slots.length}',
+                                Text(tr.m_planetStatus(_home.level, _home.residents, _home.buildingCount, _home.slots.length),
                                     style: dimStyle),
                               ],
                             ),
@@ -353,29 +353,31 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: glass(Text(
-                        '영구 보너스 · 수입 +${((_home.incomeMul - 1) * 100).round()}%  '
-                        '광석 +${((_home.oreMul - 1) * 100).round()}%  '
-                        '공격 +${((_home.damageMul - 1) * 100).round()}%  '
-                        '체력 +${((_home.hpMul - 1) * 100).round()}%  '
-                        '쿨타임 -${((1 - _home.cooldownMul) * 100).round()}%  '
-                        '오프라인 ${(_home.offlineEfficiency * 100).round()}%',
+                        tr.m_permBonus(
+                          ((_home.incomeMul - 1) * 100).round(),
+                          ((_home.oreMul - 1) * 100).round(),
+                          ((_home.damageMul - 1) * 100).round(),
+                          ((_home.hpMul - 1) * 100).round(),
+                          ((1 - _home.cooldownMul) * 100).round(),
+                          (_home.offlineEfficiency * 100).round(),
+                        ),
                         style: Ts.body.copyWith(color: Color(0xFF7CFFB2)),
                         textAlign: TextAlign.center,
                       )),
                     ),
                     const Spacer(),
-                    const Text('행성을 좌우로 밀어 돌리고, 칸을 눌러 건물을 지어요', style: dimStyle),
+                    Text(tr.m_planetHint, style: dimStyle),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       alignment: WrapAlignment.center,
                       children: [
-                        actionBtn(ready ? '🎁 행성 선물 받기' : '🎁 ${wait.inHours}시간 ${wait.inMinutes % 60}분 후 선물',
+                        actionBtn(ready ? tr.m_giftClaim : tr.m_giftWait(wait.inHours, wait.inMinutes % 60),
                             ready && w != null, _harvest,
                             color: const Color(0xFF00897B)),
                         if (_home.level < HomePlanet.maxLevel)
-                          actionBtn('🌍 행성 Lv.${_home.level + 1} (칸 +2) ${costText(_home.levelUpCost)}',
+                          actionBtn(tr.m_planetLevelUp(_home.level + 1, costText(_home.levelUpCost)),
                               w != null && w.canAfford(_home.levelUpCost),
                               () => _act(() => w!.levelUpHome())),
                       ],
@@ -383,7 +385,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                     if (w != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 6),
-                        child: Text('보유 💰${compact(w.credits)}  💎${compact(w.ore)}', style: dimStyle),
+                        child: Text(tr.m_held(compact(w.credits), compact(w.ore)), style: dimStyle),
                       ),
                     const SizedBox(height: 12),
                   ],

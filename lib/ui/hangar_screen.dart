@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../game/josa.dart';
 import '../game/models.dart';
 import '../game/save.dart';
 import '../game/ships.dart';
+import '../l10n/l.dart';
 import '../services/app_state.dart';
 import 'common.dart';
 import 'game_icons.dart';
@@ -42,10 +42,10 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
   Future<void> _buy(ShipType t) async {
     final p = AppState.profile;
     if (p.gems < t.gemPrice) {
-      toast(context, '젬이 부족해요');
+      toast(context, tr.u_notEnoughGems);
       return;
     }
-    if (!await confirmDialog(context, '구매 확인', '${t.name}에 ${eul("⭐${t.gemPrice}")} 사용할까요?')) return;
+    if (!await confirmDialog(context, tr.u_buyConfirmTitle, tr.u_buyShipConfirm(t.name, eul('⭐${t.gemPrice}')))) return;
     final w = AppState.world;
     final ok = w != null ? w.buyShip(t) : p.buyShip(t);
     if (!ok) return;
@@ -53,7 +53,7 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
     AppState.play(Sfx.gem);
     await SaveService.saveProfile(p);
     if (mounted) {
-      toast(context, '${t.name} 획득! 바로 탑승했어요');
+      toast(context, tr.u_shipBought(t.name));
       setState(() {});
     }
   }
@@ -80,7 +80,7 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
       backgroundColor: const Color(0xFF0D0B26),
       appBar: AppBar(
         backgroundColor: const Color(0xFF151236),
-        title: Text(widget.premiumOnly ? '프리미엄 함선' : '격납고'),
+        title: Text(widget.premiumOnly ? tr.u_premiumShips : tr.u_hangarTitle),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: Space.l),
@@ -218,17 +218,17 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
                       textAlign: TextAlign.center, style: Ts.body.copyWith(color: const Color(0xFFFFE082))),
                 ],
                 const SizedBox(height: Space.m),
-                _stat('체력', t.hpMul),
-                _stat('속도', t.speedMul),
-                _stat('공격', t.dmgMul),
-                _stat('연사', 1 / t.fireMul),
-                if (t.oreMul != 1) _stat('광석', t.oreMul),
-                if (t.crit > 0) _stat('치명타', 1 + t.crit * 2, label: '${(t.crit * 100).round()}%'),
+                _stat(tr.u_hp, t.hpMul),
+                _stat(tr.u_speed, t.speedMul),
+                _stat(tr.u_attack, t.dmgMul),
+                _stat(tr.u_fireRate, 1 / t.fireMul),
+                if (t.oreMul != 1) _stat(tr.u_ore, t.oreMul),
+                if (t.crit > 0) _stat(tr.u_crit, 1 + t.crit * 2, label: '${(t.crit * 100).round()}%'),
                 const SizedBox(height: Space.l),
                 Center(child: _action(t, unlocked, current)),
                 if (!unlocked && !t.premium) ...[
                   const SizedBox(height: Space.xs),
-                  Text('해금: ${t.unlockDesc}', textAlign: TextAlign.center, style: dimStyle),
+                  Text(tr.u_unlock(t.unlockDesc), textAlign: TextAlign.center, style: dimStyle),
                 ],
               ],
             );
@@ -265,9 +265,9 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
 
   Widget _action(ShipType t, bool unlocked, bool current) {
     final p = AppState.profile;
-    if (current) return Text('탑승 중', style: Ts.title.copyWith(color: const Color(0xFF7CFFB2)));
-    if (unlocked) return actionBtn('탑승하기', true, () => _board(t), primary: true);
-    return actionBtn('⭐${t.gemPrice} 구매', p.gems >= t.gemPrice, () => _buy(t),
+    if (current) return Text(tr.u_boarded, style: Ts.title.copyWith(color: const Color(0xFF7CFFB2)));
+    if (unlocked) return actionBtn(tr.u_boardNow, true, () => _board(t), primary: true);
+    return actionBtn(tr.u_buyGems(t.gemPrice), p.gems >= t.gemPrice, () => _buy(t),
         primary: true, color: const Color(0xFFAD1457));
   }
 }

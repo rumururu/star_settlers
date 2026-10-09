@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../game/models.dart';
 import '../game/world.dart';
+import '../l10n/l.dart';
 import 'common.dart';
 import 'game_icons.dart';
 import 'station_panel.dart' show ActFn;
@@ -76,7 +77,7 @@ class ColonyPanel extends StatelessWidget {
                         'dome',
                         p.domeUp
                             ? '${p.shieldHp.round()}/${p.shieldMax(w.sectorMul).round()}'
-                            : '재충전 중',
+                            : tr.u_recharging,
                         style: dim),
                   ],
                 ),
@@ -118,17 +119,17 @@ class ColonyPanel extends StatelessWidget {
             spacing: 4,
             runSpacing: 6,
             children: [
-              tile('dome', '방어막\n안에 있으면 안전'),
-              tile('colony_levelup', '레벨업\n수입·건물↑'),
-              tile('b_turret', '포탑'),
-              tile('b_mine', '광석'),
-              tile('b_trade', '수입 +25%'),
-              tile('b_dock', '수리'),
-              tile('raid', '습격 막기'),
+              tile('dome', tr.u_tutDome),
+              tile('colony_levelup', tr.u_tutLevelUp),
+              tile('b_turret', tr.u_tutTurret),
+              tile('b_mine', tr.u_ore),
+              tile('b_trade', tr.u_incomePct(25)),
+              tile('b_dock', tr.u_tutRepair),
+              tile('raid', tr.u_tutRaid),
             ],
           ),
           const SizedBox(height: 6),
-          actionBtn('알겠어요', true, onTutorialDone, color: const Color(0xFF1E88E5)),
+          actionBtn(tr.u_gotIt, true, onTutorialDone, color: const Color(0xFF1E88E5)),
         ],
       ),
     );
@@ -172,11 +173,11 @@ class ColonyPanel extends StatelessWidget {
 
   /// 효과 한 줄 (Lv.0이면 Lv.1 미리보기)
   String _effect(ColonyBuilding b, int lv) => switch (b) {
-        ColonyBuilding.turret => '피해 ${((5 + lv * 4) * world.sectorMul).toInt()}',
-        ColonyBuilding.mine => '광석 +${(0.8 * lv * world.sectorMul).toStringAsFixed(1)}/s',
-        ColonyBuilding.trade => '수입 +${lv * 25}%',
-        ColonyBuilding.dock => '체력 +${6 + lv * 6}/s',
-        ColonyBuilding.shieldGen => '방어막 +${(250 * lv * world.sectorMul).round()}',
+        ColonyBuilding.turret => tr.u_damage(((5 + lv * 4) * world.sectorMul).toInt()),
+        ColonyBuilding.mine => tr.u_oreRate((0.8 * lv * world.sectorMul).toStringAsFixed(1)),
+        ColonyBuilding.trade => tr.u_incomePct(lv * 25),
+        ColonyBuilding.dock => tr.u_repairRate(6 + lv * 6),
+        ColonyBuilding.shieldGen => tr.u_shieldPlus((250 * lv * world.sectorMul).round()),
       };
 }
 
@@ -196,7 +197,11 @@ Widget _row(String icon, String title, Widget sub, Widget trailing) => Padding(
             ),
           ),
           const SizedBox(width: 8),
-          trailing,
+          // 버튼이 길면(번역에 따라) 글자 대신 버튼이 줄어든다
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 150),
+            child: FittedBox(fit: BoxFit.scaleDown, child: trailing),
+          ),
         ],
       ),
     );

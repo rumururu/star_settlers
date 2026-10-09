@@ -9,6 +9,8 @@ import 'package:star_settlers/game/models.dart';
 import 'package:star_settlers/game/profile.dart';
 import 'package:star_settlers/game/ships.dart';
 import 'package:star_settlers/game/world.dart';
+import 'package:star_settlers/l10n/l.dart' show Lang, L10n;
+import 'dart:ui' show Locale;
 
 GameWorld rich({int seed = 1}) => GameWorld(seed: seed)
   ..credits = 1e6
@@ -1260,5 +1262,28 @@ void main() {
     expect(w2.homeBase.disabled, isTrue);
     expect(w2.homeBase.disabledTime, closeTo(12, 0.01));
     expect(w2.inHaven(w2.homeBase.pos), isFalse);
+  });
+
+  test('10개 언어 모두 게임을 돌려도 문자열 오류가 없다', () {
+    for (final loc in L10n.supportedLocales) {
+      Lang.set(loc);
+      final w = rich(seed: 101);
+      for (var i = 0; i < 25; i++) {
+        storyStepAt(i).title;
+      }
+      for (final t in shipTypes) {
+        t.name;
+        t.desc;
+        t.ability;
+        t.unlockDesc;
+      }
+      w.upgradePlanet(w.planets.first);
+      w.startEvent(EventKind.raid);
+      w.startEvent(EventKind.merchant);
+      runFor(w, 20, InputState()..fire = true);
+      expect(w.dialogs.every((d) => d.text.isNotEmpty), isTrue, reason: '$loc');
+      expect(w.sectorName, isNotEmpty);
+    }
+    Lang.set(const Locale('ko'));
   });
 }

@@ -1,6 +1,7 @@
-import 'josa.dart';
 import 'dart:math';
 import 'dart:ui';
+
+import '../l10n/l.dart';
 
 import 'crew.dart';
 import 'home.dart';
@@ -21,13 +22,13 @@ enum UpgradeKind { weapon, hull, engine, missile, shield, drone, magnet }
 
 extension UpgradeInfo on UpgradeKind {
   String get label => switch (this) {
-        UpgradeKind.weapon => '무기',
-        UpgradeKind.hull => '장갑',
-        UpgradeKind.engine => '엔진',
-        UpgradeKind.missile => '유도 미사일',
-        UpgradeKind.shield => '에너지 실드',
-        UpgradeKind.drone => '전투 드론',
-        UpgradeKind.magnet => '자석',
+        UpgradeKind.weapon => tr.g_upgradeWeapon,
+        UpgradeKind.hull => tr.g_upgradeHull,
+        UpgradeKind.engine => tr.g_upgradeEngine,
+        UpgradeKind.missile => tr.g_upgradeMissile,
+        UpgradeKind.shield => tr.g_upgradeShield,
+        UpgradeKind.drone => tr.g_upgradeDrone,
+        UpgradeKind.magnet => tr.g_upgradeMagnet,
       };
   int get maxLevel => switch (this) {
         UpgradeKind.missile || UpgradeKind.shield || UpgradeKind.drone || UpgradeKind.magnet => 5,
@@ -83,19 +84,61 @@ class SectorSave {
       );
 }
 
-const sectorNames = [
-  '알파 성역', '베타 성운', '감마 협곡', '델타 해적지대', '엡실론 심연',
-  '제타 얼음벨트', '에타 불꽃성단', '세타 유령항로', '이오타 왕관성운', '카파 블랙홀',
-];
+List<String> get sectorNames => [
+      tr.g_sector0,
+      tr.g_sector1,
+      tr.g_sector2,
+      tr.g_sector3,
+      tr.g_sector4,
+      tr.g_sector5,
+      tr.g_sector6,
+      tr.g_sector7,
+      tr.g_sector8,
+      tr.g_sector9,
+    ];
 
-const _planetPool = [
-  '아쿠아리스', '루비아', '프로스타', '볼카노', '젤리오', '솔라리스', '모모별',
-  '네뷸라', '카시오페', '오로라', '두리안', '시나몬', '마시멜로', '팝콘별',
-  '라벤더', '에메랄디아', '크림슨', '폴라리스', '베가', '리겔', '미라', '토파즈',
-  '코발트', '사파이어', '오닉스', '페리도트', '민트별', '바닐라', '캐러멜',
-  '피스타치오', '블루베리', '레몬별', '체리', '멜론', '키위', '망고별', '유자',
-  '자몽', '호박별',
-];
+/// 행성 이름 풀. 순서와 개수가 월드 생성 난수에 묶여 있으니 바꾸지 않는다.
+List<String> get _planetPool => [
+      tr.g_planet0,
+      tr.g_planet1,
+      tr.g_planet2,
+      tr.g_planet3,
+      tr.g_planet4,
+      tr.g_planet5,
+      tr.g_planet6,
+      tr.g_planet7,
+      tr.g_planet8,
+      tr.g_planet9,
+      tr.g_planet10,
+      tr.g_planet11,
+      tr.g_planet12,
+      tr.g_planet13,
+      tr.g_planet14,
+      tr.g_planet15,
+      tr.g_planet16,
+      tr.g_planet17,
+      tr.g_planet18,
+      tr.g_planet19,
+      tr.g_planet20,
+      tr.g_planet21,
+      tr.g_planet22,
+      tr.g_planet23,
+      tr.g_planet24,
+      tr.g_planet25,
+      tr.g_planet26,
+      tr.g_planet27,
+      tr.g_planet28,
+      tr.g_planet29,
+      tr.g_planet30,
+      tr.g_planet31,
+      tr.g_planet32,
+      tr.g_planet33,
+      tr.g_planet34,
+      tr.g_planet35,
+      tr.g_planet36,
+      tr.g_planet37,
+      tr.g_planet38,
+    ];
 
 /// 게임 전체 상태와 규칙. 렌더링/위젯과 분리되어 있어 테스트 가능.
 class GameWorld {
@@ -106,7 +149,7 @@ class GameWorld {
     _loadSector(0, null);
     player.pos = homePos + const Offset(0, 160);
     player.hp = playerMaxHp;
-    say(Speaker.advisor, '선장님, 환영합니다! 저는 부관 미나예요.');
+    say(Speaker.advisor, tr.g_dlgWelcome);
     _startStoryStep();
   }
 
@@ -252,7 +295,7 @@ class GameWorld {
   double get sectorMul => 1 + sector * 0.5;
   double get costMul => 1 + sector * 0.3;
   String get sectorName =>
-      sector < sectorNames.length ? sectorNames[sector] : '미지의 섹터 ${sector + 1}';
+      sector < sectorNames.length ? sectorNames[sector] : tr.g_unknownSector(sector + 1);
 
   int get colonyCount => planets.where((p) => p.colonyLevel > 0).length;
 
@@ -393,7 +436,7 @@ class GameWorld {
     // 이름·종류·크기는 예전과 같은 난수 순서로 뽑는다 (저장된 식민지가 행성 번호로 묶여 있음).
     // 예전 배치 좌표는 간격 검사에만 쓰고 버린다.
     final drafts = <(String, double, PlanetKind)>[
-      (index == 0 ? '테라노바' : names.removeLast(), 110,
+      (index == 0 ? tr.g_planetTerraNova : names.removeLast(), 110,
           index == 0 ? PlanetKind.garden : kinds[r.nextInt(kinds.length)]),
     ];
     final legacyPos = <Offset>[const Offset(900, -350)];
@@ -455,7 +498,7 @@ class GameWorld {
       bossDefeated = save.bossDefeated;
       bossesSpawned = save.bossesSpawned;
     } else {
-      final home = Station(index == 0 ? '헤이븐 기지' : '$sectorName 전진기지', homePos,
+      final home = Station(index == 0 ? tr.g_stationHaven : tr.g_stationOutpost(sectorName), homePos,
           role: StationRole.home)
         ..turretLevel = 1;
       stations.add(home..hp = home.maxHp);
@@ -464,7 +507,7 @@ class GameWorld {
       bossesSpawned = 0;
     }
     if (stations.isEmpty) {
-      final home = Station('$sectorName 전진기지', homePos, role: StationRole.home);
+      final home = Station(tr.g_stationOutpost(sectorName), homePos, role: StationRole.home);
       stations.add(home..hp = home.maxHp);
     }
     sectorBossSpawned = false;
@@ -543,9 +586,9 @@ class GameWorld {
     sfx.add(Sfx.warp);
     shake = 12;
     _burst(player.pos, const Color(0xFFB388FF), 80);
-    say(Speaker.advisor, '$sectorName에 도착했어요!${save == null ? ' 새로운 개척지예요.' : ''}');
+    say(Speaker.advisor, '${tr.g_dlgArrived(sectorName)}${save == null ? ' ${tr.g_dlgNewFrontier}' : ''}');
     if (cancelled.isNotEmpty) {
-      say(Speaker.advisor, '이전 섹터의 운송·현상수배 임무는 취소됐어요.');
+      say(Speaker.advisor, tr.g_dlgMissionsCancelled);
     }
     return true;
   }
@@ -658,7 +701,7 @@ class GameWorld {
     s.baseLevel++;
     if (!s.disabled) s.hp = s.maxHp;
     sfx.add(Sfx.upgrade);
-    say(Speaker.advisor, '${s.name} 강화 Lv.${s.baseLevel}! 레이저가 더 세졌어요.');
+    say(Speaker.advisor, tr.g_dlgBaseUpgraded(s.name, s.baseLevel));
     _burst(s.pos, const Color(0xFFFFD54F), 40);
     return true;
   }
@@ -670,8 +713,8 @@ class GameWorld {
     _burst(s.pos, const Color(0xFFFF5252), 80);
     sfx.add(Sfx.alarm);
     shake = min(20, shake + 10);
-    _float(s.pos, '기능 정지!', const Color(0xFFFF5252), big: true);
-    say(Speaker.advisor, '본거지 기능 정지! ${baseDisableTime.toInt()}초간 보호가 꺼져요!');
+    _float(s.pos, tr.g_floatDisabled, const Color(0xFFFF5252), big: true);
+    say(Speaker.advisor, tr.g_dlgBaseDisabled(baseDisableTime.toInt()));
   }
 
   void _updateHaven(double dt) {
@@ -690,8 +733,8 @@ class GameWorld {
           ..disabledTime = 0
           ..hp = hb.maxHp * baseRebootRatio;
         sfx.add(Sfx.upgrade);
-        _float(base, '재가동!', const Color(0xFF69F0AE), big: true);
-        say(Speaker.advisor, '본거지 재가동! 내구도 30%로 복구됐어요.');
+        _float(base, tr.g_floatRebooted, const Color(0xFF69F0AE), big: true);
+        say(Speaker.advisor, tr.g_dlgBaseRebooted);
       }
     } else if (hb.hp <= 0) {
       _disableBase(hb);
@@ -775,7 +818,7 @@ class GameWorld {
     if (p.colonyLevel == 1) {
       _count('colonies');
       profile.addStat('colonies');
-      say(Speaker.captain, '${p.name}에 깃발을 꽂았다! 정착 완료!');
+      say(Speaker.captain, tr.g_dlgSettled(p.name));
       _raiseDome(p);
       if (!profile.colonyTutorialSeen) colonyTutorialPending = true;
     } else {
@@ -832,7 +875,7 @@ class GameWorld {
     if (p.shieldHp == 0) {
       p.shieldBroken = true;
       _burst(p.pos + Offset(0, -p.domeRadius), const Color(0xFF80D8FF), 40);
-      _float(p.pos + Offset(0, -p.radius - 60), '🛡 파괴!', const Color(0xFFFF5252), big: true);
+      _float(p.pos + Offset(0, -p.radius - 60), '🛡 ${tr.g_floatShieldBroken}', const Color(0xFFFF5252), big: true);
       sfx.add(Sfx.bigExplode);
       shake = min(16, shake + 8);
     }
@@ -876,7 +919,7 @@ class GameWorld {
       if (p.shieldBroken && p.shieldHp >= cap * Planet.shieldRebootRatio) {
         p.shieldBroken = false;
         sfx.add(Sfx.shield);
-        _float(p.pos + Offset(0, -p.radius - 60), '🛡 재가동', const Color(0xFF80D8FF), big: true);
+        _float(p.pos + Offset(0, -p.radius - 60), '🛡 ${tr.g_floatShieldBack}', const Color(0xFF80D8FF), big: true);
       }
     }
   }
@@ -884,14 +927,14 @@ class GameWorld {
   bool buildStation(StationRole role) {
     if (role == StationRole.home || !canBuildStationHere) return false;
     if (!_pay(stationBuildCost)) return false;
-    final st = Station('${role.label} ${stations.length + 1}호', player.pos + const Offset(0, -140),
+    final st = Station(tr.g_stationNumbered(role.label, stations.length + 1), player.pos + const Offset(0, -140),
         role: role);
     if (role == StationRole.defense) st.turretLevel = 1;
     st.hp = st.maxHp;
     stations.add(st);
     profile.addStat('stations');
     sfx.add(Sfx.upgrade);
-    say(Speaker.advisor, '${st.name} 건설 완료! ${role.blurb}');
+    say(Speaker.advisor, tr.g_dlgStationBuilt(st.name, role.blurb));
     _burst(st.pos, const Color(0xFF8AD8FF), 40);
     return true;
   }
@@ -902,7 +945,7 @@ class GameWorld {
     s.habitatLevel++;
     s.hp = s.maxHp;
     sfx.add(Sfx.upgrade);
-    say(Speaker.advisor, '${s.name} 거주구역 Lv.${s.habitatLevel}!');
+    say(Speaker.advisor, tr.g_dlgHabitatUp(s.name, s.habitatLevel));
     return true;
   }
 
@@ -911,7 +954,7 @@ class GameWorld {
     if (!_pay(turretCost(s))) return false;
     s.turretLevel++;
     sfx.add(Sfx.upgrade);
-    say(Speaker.advisor, '${s.name} 방어포탑 Lv.${s.turretLevel}!');
+    say(Speaker.advisor, tr.g_dlgTurretUp(s.name, s.turretLevel));
     return true;
   }
 
@@ -922,21 +965,21 @@ class GameWorld {
     sfx.add(Sfx.upgrade);
     switch (k) {
       case UpgradeKind.weapon:
-        say(Speaker.captain, '무기 강화! 해적들 각오해라!');
+        say(Speaker.captain, tr.g_dlgUpWeapon);
       case UpgradeKind.hull:
         player.hp = playerMaxHp;
-        say(Speaker.captain, '장갑 강화! 이제 좀 든든하군.');
+        say(Speaker.captain, tr.g_dlgUpHull);
       case UpgradeKind.engine:
-        say(Speaker.captain, '엔진 강화! 더 빠르게!');
+        say(Speaker.captain, tr.g_dlgUpEngine);
       case UpgradeKind.missile:
-        say(Speaker.captain, level(k) == 1 ? '유도 미사일 장착! (Q)' : '미사일 강화!');
+        say(Speaker.captain, level(k) == 1 ? tr.g_dlgMissileNew : tr.g_dlgMissileUp);
       case UpgradeKind.shield:
-        say(Speaker.captain, level(k) == 1 ? '에너지 실드 장착! (F)' : '실드 강화!');
+        say(Speaker.captain, level(k) == 1 ? tr.g_dlgShieldNew : tr.g_dlgShieldUp);
       case UpgradeKind.drone:
         profile.maxStat('drone', 1);
-        say(Speaker.captain, level(k) == 1 ? '전투 드론 출격! 든든한 친구가 생겼다.' : '드론 강화!');
+        say(Speaker.captain, level(k) == 1 ? tr.g_dlgDroneNew : tr.g_dlgDroneUp);
       case UpgradeKind.magnet:
-        say(Speaker.captain, '자석 강화! 크레딧이 알아서 붙는다!');
+        say(Speaker.captain, tr.g_dlgUpMagnet);
     }
     return true;
   }
@@ -949,7 +992,7 @@ class GameWorld {
     profile.dirty = true;
     player.hp = playerMaxHp * ratio;
     sfx.add(Sfx.upgrade);
-    say(Speaker.captain, '${euro(t.name)} 갈아탔다! 느낌 좋은데?');
+    say(Speaker.captain, tr.g_dlgShipSwitched(euro(t.name)));
     return true;
   }
 
@@ -1020,7 +1063,7 @@ class GameWorld {
     final gain = n * orePrice;
     credits += gain;
     sfx.add(Sfx.coin);
-    say(Speaker.advisor, '광석 $n개를 💰${gain.round()}에 팔았어요.');
+    say(Speaker.advisor, tr.g_dlgOreSold(n, gain.round()));
     return true;
   }
 
@@ -1061,7 +1104,7 @@ class GameWorld {
     profile.addStat('crew');
     if (c.rarity >= 3) profile.addStat('crew3');
     sfx.add(Sfx.gem);
-    say(Speaker.advisor, '${c.stars} ${c.role.label} ${iGa(c.displayName)} 합류했어요!');
+    say(Speaker.advisor, tr.g_dlgCrewJoined(c.stars, c.role.label, iGa(c.displayName)));
     if (c.role == CrewRole.engineer) player.hp = min(player.hp, playerMaxHp);
     return c;
   }
@@ -1086,7 +1129,7 @@ class GameWorld {
     if (!_pay((c.levelUpCost, 0))) return false;
     c.level++;
     sfx.add(Sfx.upgrade);
-    say(Speaker.advisor, '${c.name} Lv.${c.level}! 실력이 늘었어요.');
+    say(Speaker.advisor, tr.g_dlgCrewLevel(c.name, c.level));
     return true;
   }
 
@@ -1141,7 +1184,7 @@ class GameWorld {
     activeMissions.add(m);
     if (m.type == MissionType.bounty) _spawnBounty(m);
     if (m.type == MissionType.deliver) {
-      say(Speaker.advisor, '화물을 실었어요! ${m.title(planets)}');
+      say(Speaker.advisor, tr.g_dlgCargoLoaded(m.title(planets)));
     }
     return true;
   }
@@ -1160,7 +1203,7 @@ class GameWorld {
       ..wanderAngle = a;
     pirates.add(e);
     m.bountySpawned = true;
-    say(Speaker.pirate, '${eul(m.bountyName!)} 잡겠다고? 어디 한번 와봐라!');
+    say(Speaker.pirate, tr.g_dlgBountyTaunt(eul(m.bountyName!)));
   }
 
   void _completeMission(Mission m) {
@@ -1171,9 +1214,9 @@ class GameWorld {
     _count('missions');
     profile.addStat('missions');
     sfx.add(Sfx.coin);
-    _float(player.pos + const Offset(0, -40), '임무 완료! +💰$c', const Color(0xFFFFD54F), big: true);
+    _float(player.pos + const Offset(0, -40), '${tr.g_floatMissionDone} +💰$c', const Color(0xFFFFD54F), big: true);
     say(Speaker.advisor,
-        '임무 완료: ${m.title(planets)}! 💰$c${m.rewardGems > 0 ? ' ⭐${m.rewardGems}' : ''}');
+        '${tr.g_dlgMissionDone(m.title(planets))} 💰$c${m.rewardGems > 0 ? ' ⭐${m.rewardGems}' : ''}');
   }
 
   // ---------- 스토리 ----------
@@ -1211,7 +1254,7 @@ class GameWorld {
     credits += s.credits;
     profile.gems += s.gems;
     sfx.add(Sfx.upgrade);
-    _float(player.pos + const Offset(0, -50), '목표 달성! +💰${s.credits} ⭐${s.gems}',
+    _float(player.pos + const Offset(0, -50), '${tr.g_floatGoalDone} +💰${s.credits} ⭐${s.gems}',
         const Color(0xFF7CFFB2), big: true);
     storyIndex++;
     if (storyIndex == storySteps.length) profile.tutorialDone = true;
@@ -1281,7 +1324,7 @@ class GameWorld {
       }
     }
     sfx.add(Sfx.shield);
-    say(Speaker.captain, '아직 끝나지 않았다!');
+    say(Speaker.captain, tr.g_dlgNotOver);
   }
 
   void respawnAtBase() {
@@ -1298,7 +1341,7 @@ class GameWorld {
       ..vel = Offset.zero
       ..hp = playerMaxHp
       ..invulnerable = 3;
-    say(Speaker.advisor, '선장님 무사하시군요! 수리비로 💰$lost 썼어요.');
+    say(Speaker.advisor, tr.g_dlgRepairCost(lost));
   }
 
   // ---------- 오프라인 수입 ----------
@@ -1370,7 +1413,7 @@ class GameWorld {
       if (!_devAnnounced && development >= 1) {
         _devAnnounced = true;
         sfx.add(Sfx.warp);
-        say(Speaker.advisor, '$sectorName 발전 완료! 다음 항성계로 가는 워프 게이트가 열렸어요.');
+        say(Speaker.advisor, tr.g_dlgSectorDeveloped(sectorName));
       }
       _checkStory();
       profile.maxStat('credits', credits.floor());
@@ -1521,12 +1564,12 @@ class GameWorld {
     if (!p.alive || p.invulnerable > 0) return;
     if (inHaven(p.pos)) return; // 본거지 안전 구역
     if (shielded) {
-      _float(p.pos, '막음!', const Color(0xFF80D8FF));
+      _float(p.pos, tr.g_floatBlocked, const Color(0xFF80D8FF));
       return;
     }
     if (guardReady) {
       p.guardCooldown = ship.guardInterval;
-      _float(p.pos, '수호막!', const Color(0xFF80D8FF));
+      _float(p.pos, tr.g_floatGuard, const Color(0xFF80D8FF));
       sfx.add(Sfx.shield);
       return;
     }
@@ -1544,7 +1587,7 @@ class GameWorld {
       shake = 20;
       sfx.add(Sfx.bigExplode);
       _burst(p.pos, const Color(0xFFFF7043), 70);
-      say(Speaker.pirate, ['크하하! 별것 아니군!', '다음엔 더 강해져서 와라, 꼬마!', '네 함선은 고철이 됐다!'][_rng.nextInt(3)]);
+      say(Speaker.pirate, [tr.g_pirateWin0, tr.g_pirateWin1, tr.g_pirateWin2][_rng.nextInt(3)]);
     }
   }
 
@@ -1674,7 +1717,7 @@ class GameWorld {
       }
       shake = min(20, shake + 10);
       sfx.add(Sfx.alarm);
-      say(Speaker.pirate, ['얘들아, 나와라! 본때를 보여줘!', '이제부터 진짜다!', '화나게 했겠다?!'][_rng.nextInt(3)]);
+      say(Speaker.pirate, [tr.g_pirateRage0, tr.g_pirateRage1, tr.g_pirateRage2][_rng.nextInt(3)]);
     }
     // 특수 공격: 원형 탄막
     e.specialTimer -= dt;
@@ -1821,7 +1864,7 @@ class GameWorld {
     e.hp -= dmg;
     e.hitFlash = 0.1;
     if (crit) {
-      _float(at, '치명타! ${dmg.round()}', const Color(0xFFFF9100), big: true);
+      _float(at, tr.g_floatCrit(dmg.round()), const Color(0xFFFF9100), big: true);
     } else if (_rng.nextDouble() < 0.6) {
       _float(at, dmg.round().toString(), const Color(0xFFFFF59D));
     }
@@ -1906,7 +1949,7 @@ class GameWorld {
       stations.remove(s);
       _burst(s.pos, const Color(0xFFFF5252), 100);
       sfx.add(Sfx.bigExplode);
-      say(Speaker.advisor, '${iGa(s.name)} 파괴됐어요! 방어포탑이 필요해요!');
+      say(Speaker.advisor, tr.g_dlgStationDestroyed(iGa(s.name)));
     }
   }
 
@@ -1953,17 +1996,17 @@ class GameWorld {
           // 게이트는 발전도로 열린다. 두목은 큰 보상을 주는 도전 과제.
           final reward = (1000 * sectorMul).round();
           credits += reward;
-          say(Speaker.advisor, '섹터 두목 격파! 보상 💰$reward');
+          say(Speaker.advisor, tr.g_dlgBossDefeated(reward));
         }
         bossDefeated = true;
-        say(Speaker.pirate, '으아악! 이 섹터는… 네 것이다…');
+        say(Speaker.pirate, tr.g_pirateBossLose);
       } else {
-        say(Speaker.pirate, '으아악! 기억해 두겠다, 선장!');
+        say(Speaker.pirate, tr.g_pirateBossFlee);
       }
     } else if (e.name != null) {
-      say(Speaker.captain, '현상수배범 ${e.name} 체포 완료!');
+      say(Speaker.captain, tr.g_dlgBountyCaught(e.name ?? ''));
     } else if (_rng.nextDouble() < 0.12) {
-      say(Speaker.captain, ['한 놈 처리!', '어딜 도망가!', '이 구역은 내 거야!', '다음!'][_rng.nextInt(4)]);
+      say(Speaker.captain, [tr.g_captainKill0, tr.g_captainKill1, tr.g_captainKill2, tr.g_captainKill3][_rng.nextInt(4)]);
     }
   }
 
@@ -2084,7 +2127,7 @@ class GameWorld {
             credits += reward;
             profile.gems += 2;
             sfx.add(Sfx.coin);
-            say(Speaker.advisor, '${planet.name} 방어 성공! 주민들이 감사의 뜻으로 💰$reward ⭐2를 보냈어요.');
+            say(Speaker.advisor, tr.g_dlgRaidDefended(planet.name, reward));
           } else if (ev.timeLeft <= 0) {
             ev.finished = true;
             planet.raided = false;
@@ -2093,16 +2136,16 @@ class GameWorld {
               // 방어막이 끝까지 버텼다
             } else if (planet.colonyLevel > 1) {
               planet.colonyLevel--;
-              say(Speaker.advisor, '${iGa(planet.name)} 약탈당해 Lv.${planet.colonyLevel}로 떨어졌어요… 😢');
+              say(Speaker.advisor, tr.g_dlgRaidLooted(iGa(planet.name), euro('Lv.${planet.colonyLevel}')));
             } else {
-              say(Speaker.advisor, '해적들이 ${eul(planet.name)} 약탈하고 떠났어요.');
+              say(Speaker.advisor, tr.g_dlgRaidLeft(eul(planet.name)));
             }
           }
         case EventKind.supply:
           if (_supplyCapsule == null || !pickups.contains(_supplyCapsule)) {
             ev.finished = true;
             if (_supplyCapsule != null && _supplyCapsule!.life <= 0 && ev.timeLeft > 0) {
-              say(Speaker.advisor, '보급 캡슐 회수 완료!');
+              say(Speaker.advisor, tr.g_dlgSupplyCollected);
             }
             _supplyCapsule = null;
           } else if (ev.timeLeft <= 0) {
@@ -2116,7 +2159,7 @@ class GameWorld {
             ev.finished = true;
             if (ev.kind == EventKind.merchant) {
               merchantCrew = null;
-              say(Speaker.merchant, '그럼 다음에 또 봐요~ 냥!');
+              say(Speaker.merchant, tr.g_merchantBye);
             }
           }
       }
@@ -2161,8 +2204,8 @@ class GameWorld {
           e.eventId = id;
           pirates.add(e);
         }
-        say(Speaker.advisor, '긴급! 해적이 ${eul(planet.name)} 습격하고 있어요! 생산이 멈췄어요!');
-        say(Speaker.pirate, '이 식민지는 이제 우리 거다! 크하하!');
+        say(Speaker.advisor, tr.g_dlgRaidAlert(eul(planet.name)));
+        say(Speaker.pirate, tr.g_pirateRaidTaunt);
         return ev;
       case EventKind.meteor:
         final ev = WorldEvent(id, kind, pos, 60);
@@ -2174,14 +2217,14 @@ class GameWorld {
             ..drift = drift;
           asteroids.add(a);
         }
-        say(Speaker.advisor, '유성우 발견! 크리스탈이 잔뜩 섞여 있어요. 광석 대박 기회!');
+        say(Speaker.advisor, tr.g_dlgMeteor);
         return ev;
       case EventKind.merchant:
         final ev = WorldEvent(id, kind, pos, 120);
         events.add(ev);
         merchantCrew = CrewMember.random(_rng, _nextId++, odds: const {2: 70, 3: 30});
         merchantGemTrades = 0;
-        say(Speaker.merchant, '떠돌이 상인 냥냥이 왔어요~ 좋은 물건 많다냥!');
+        say(Speaker.merchant, tr.g_merchantHello);
         return ev;
       case EventKind.supply:
         final ev = WorldEvent(id, kind, pos, 120);
@@ -2192,7 +2235,7 @@ class GameWorld {
           pirates.add(_makePirate(PirateKind.raider,
               pos + OffsetX.fromAngle(_rng.nextDouble() * 2 * pi, 200)));
         }
-        say(Speaker.advisor, '젬이 든 보급 캡슐 신호가 잡혔어요! 해적이 지키고 있으니 조심하세요.');
+        say(Speaker.advisor, tr.g_dlgSupplySignal);
         return ev;
     }
   }
@@ -2246,8 +2289,8 @@ class GameWorld {
       final e = _makePirate(PirateKind.boss, _spawnPos(), hpMul: 1.6)..sectorBoss = true;
       pirates.add(e);
       sfx.add(Sfx.alarm);
-      say(Speaker.pirate, '$sectorName의 주인은 나다! 덤벼라, 꼬마 선장!');
-      say(Speaker.advisor, '경고! 섹터 두목 함선이 접근 중입니다!');
+      say(Speaker.pirate, tr.g_pirateBossArrive(sectorName));
+      say(Speaker.advisor, tr.g_dlgBossWarning);
     }
     // 두목이 사라졌으면(예: 다른 곳으로 이동) 다시 등장할 수 있게
     if (sectorBossSpawned && !bossDefeated && !pirates.any((e) => e.sectorBoss)) {
@@ -2259,7 +2302,7 @@ class GameWorld {
       bossesSpawned++;
       pirates.add(_makePirate(PirateKind.boss, _spawnPos()));
       sfx.add(Sfx.alarm);
-      say(Speaker.pirate, '복수하러 왔다! 각오해라!');
+      say(Speaker.pirate, tr.g_pirateRevenge);
     }
 
     if (spawnTimer <= 0 && normal < maxPirates && player.alive) {
@@ -2269,8 +2312,7 @@ class GameWorld {
         pirates.add(_makePirate(_randomKind(t), _spawnPos()));
       }
       if (_rng.nextDouble() < 0.3) {
-        say(Speaker.pirate, ['크하하! 짐 내려놔!', '여긴 우리 해적단 구역이다!',
-            '그 반짝이는 크레딧 내놔!', '오늘 운이 나쁘구나, 꼬마!'][_rng.nextInt(4)]);
+        say(Speaker.pirate, [tr.g_pirateAmbush0, tr.g_pirateAmbush1, tr.g_pirateAmbush2, tr.g_pirateAmbush3][_rng.nextInt(4)]);
       }
     }
 
@@ -2434,7 +2476,7 @@ class GameWorld {
     final defeated = (w.bossDefeated ? 1 : 0) + w.sectors.values.where((e) => e.bossDefeated).length;
     if (w.counter('sectorBosses') < defeated) w.counters['sectorBosses'] = defeated;
     w.savedAt = DateTime.fromMillisecondsSinceEpoch(j['savedAt'] as int);
-    w.say(Speaker.advisor, '다시 오신 걸 환영해요, 선장님! 현재 목표: ${w.story.title}');
+    w.say(Speaker.advisor, tr.g_dlgWelcomeBack(w.story.title));
     return w;
   }
 }

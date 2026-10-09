@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../game/models.dart';
 import '../game/world.dart';
+import '../l10n/l.dart';
 import 'common.dart';
 import 'game_icons.dart';
 import 'station_panel.dart' show ActFn;
@@ -38,8 +39,8 @@ class SystemPanel extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${w.sectorName} · 항성계 ${w.sector + 1}', style: titleStyle),
-                    Text('위협 ${w.threat.toStringAsFixed(1)} · 자원 배율 x${w.sectorMul.toStringAsFixed(1)}',
+                    Text(tr.u_systemTitle(w.sectorName, w.sector + 1), style: titleStyle),
+                    Text(tr.u_systemInfo(w.threat.toStringAsFixed(1), w.sectorMul.toStringAsFixed(1)),
                         style: dimStyle),
                   ],
                 ),
@@ -55,9 +56,9 @@ class SystemPanel extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text('발전도 ${(dev * 100).floor()}%', style: sectionStyle),
+                  Text(tr.u_development((dev * 100).floor()), style: sectionStyle),
                   const Spacer(),
-                  iconValue('act_warp', open ? '다음 항성계 열림' : '100%에서 열림',
+                  iconValue('act_warp', open ? tr.u_nextSystemOpen : tr.u_opensAt100,
                       size: IconSz.inline,
                       style: Ts.body.copyWith(color: open ? const Color(0xFFB388FF) : Colors.white60)),
                 ],
@@ -73,7 +74,7 @@ class SystemPanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: Space.xs),
-              const Text('모든 행성을 Lv.3까지 키우면 100%', style: dimStyle),
+              Text(tr.u_devHint, style: dimStyle),
             ],
           ),
         ),
@@ -85,7 +86,7 @@ class SystemPanel extends StatelessWidget {
               for (final p in planets) _planetRow(p),
               if (w.sectors.isNotEmpty) ...[
                 const Divider(color: Colors.white24, height: Space.xl),
-                const Text('점령한 항성계 (계속 생산 중)', style: sectionStyle),
+                Text(tr.u_conqueredSystems, style: sectionStyle),
                 for (final e in (w.sectors.entries.toList()..sort((a, b) => a.key - b.key)))
                   _otherSystemRow(e.key, e.value),
               ],
@@ -106,9 +107,9 @@ class SystemPanel extends StatelessWidget {
     ];
     final Widget status;
     if (lv == 0) {
-      status = const Text('미정착', style: dimStyle);
+      status = Text(tr.u_unsettled, style: dimStyle);
     } else if (p.raided) {
-      status = iconValue('raid', '습격 중', size: IconSz.inline, style: Ts.body.copyWith(color: const Color(0xFFFF8A80)));
+      status = iconValue('raid', tr.u_underRaid, size: IconSz.inline, style: Ts.body.copyWith(color: const Color(0xFFFF8A80)));
     } else {
       status = iconValue('credits', '+${w.planetCreditRate(p).toStringAsFixed(1)}/s',
           size: IconSz.inline, style: dimStyle);
@@ -159,13 +160,13 @@ class SystemPanel extends StatelessWidget {
   }
 
   Widget _otherSystemRow(int index, SectorSave s) {
-    final name = index < sectorNames.length ? sectorNames[index] : '미지의 섹터 ${index + 1}';
+    final name = index < sectorNames.length ? sectorNames[index] : tr.u_unknownSector(index + 1);
     final dev = GameWorld.developmentOf(s.colonyLevels);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: Space.xs),
       child: Row(
         children: [
-          Expanded(child: Text('$name · 발전 ${(dev * 100).floor()}%', style: bodyStyle)),
+          Expanded(child: Text(tr.u_sectorDev(name, (dev * 100).floor()), style: bodyStyle)),
           iconValue('credits', '+${(s.idleCredits * world.incomeMul).toStringAsFixed(1)}/s',
               size: IconSz.inline, style: dimStyle),
           if (s.idleOre > 0) ...[
@@ -198,11 +199,11 @@ class StationBuildPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(child: Text('정거장 건설 · 역할 고르기', style: titleStyle)),
+              Expanded(child: Text(tr.u_buildStationTitle, style: titleStyle)),
               IconButton(icon: const Icon(Icons.close, color: Colors.white), onPressed: onClose),
             ],
           ),
-          Row(children: [const Text('비용 ', style: dimStyle), costView(c, style: dimStyle)]),
+          Row(children: [Text('${tr.u_cost} ', style: dimStyle), costView(c, style: dimStyle)]),
           const SizedBox(height: Space.s),
           for (final r in [StationRole.defense, StationRole.repair, StationRole.support])
             Padding(
@@ -221,7 +222,7 @@ class StationBuildPanel extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: Space.s),
-                  actionBtn('건설', world.canAfford(c), () {
+                  actionBtn(tr.u_build, world.canAfford(c), () {
                     onClose();
                     act(() => world.buildStation(r));
                   }),

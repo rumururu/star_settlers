@@ -9,6 +9,7 @@ import '../game/missions.dart';
 import '../game/models.dart';
 import '../game/save.dart';
 import '../game/world.dart';
+import '../l10n/l.dart';
 import '../services/app_state.dart';
 import '../services/audio.dart';
 import '../services/notifications.dart';
@@ -160,7 +161,7 @@ class _GameScreenState extends State<GameScreen>
       _profileSaveCount++;
       for (final a in w.profile.claimable) {
         if (_notified.add(a.id)) {
-          w.say(Speaker.advisor, '🏆 업적 달성: ${a.title}! 메뉴의 업적에서 ⭐${a.gems}를 받으세요.');
+          w.say(Speaker.advisor, tr.u_achievementDone(a.title, a.gems));
           w.sfx.add(Sfx.gem);
         }
       }
@@ -244,7 +245,7 @@ class _GameScreenState extends State<GameScreen>
       AppState.haptic();
       SaveService.save(w);
     } else {
-      w.say(Speaker.advisor, '자원이 부족하거나 지금은 할 수 없어요.');
+      w.say(Speaker.advisor, tr.u_cannotDo);
     }
     setState(() {});
   }
@@ -274,22 +275,22 @@ class _GameScreenState extends State<GameScreen>
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
         backgroundColor: kPanelColor,
-        title: const Text('어서 오세요, 선장님!', textAlign: TextAlign.center),
+        title: Text(tr.u_welcomeBack, textAlign: TextAlign.center),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const ChibiPortrait(style: ChibiStyle.advisor, size: 90),
-            Text('자리를 비운 ${h > 0 ? '$h시간 ' : ''}$m분 동안\n식민지가 열심히 일했어요!',
+            Text(h > 0 ? tr.u_offlineHm(h, m) : tr.u_offlineM(m),
                 textAlign: TextAlign.center, style: bodyStyle),
             const SizedBox(height: 8),
             Text('💰${compact(c)}  💎${compact(o)}',
                 style: Ts.title.copyWith(color: Color(0xFFFFD54F))),
             if (!premium)
-              const Text('사령관 패스: 최대 8시간 + 자동 2배', style: dimStyle),
+              Text(tr.u_passOfflineHint, style: dimStyle),
           ],
         ),
         actions: [
-          if (!premium) TextButton(onPressed: () => Navigator.pop(ctx, 1), child: const Text('받기')),
+          if (!premium) TextButton(onPressed: () => Navigator.pop(ctx, 1), child: Text(tr.u_collect)),
           FilledButton(
             onPressed: () async {
               final ok = await AppState.watchAd();
@@ -297,10 +298,10 @@ class _GameScreenState extends State<GameScreen>
               if (ok) {
                 Navigator.pop(ctx, 2);
               } else {
-                toast(ctx, '광고를 불러오는 중이에요. 잠시 후 다시 시도해 주세요.');
+                toast(ctx, tr.u_adLoading);
               }
             },
-            child: Text(premium ? '2배로 받기 👑' : '📺 광고 보고 2배'),
+            child: Text(premium ? tr.u_collectDouble : tr.u_adDouble),
           ),
         ],
       ),
@@ -320,39 +321,38 @@ class _GameScreenState extends State<GameScreen>
       context: context,
       builder: (c) => AlertDialog(
         backgroundColor: kPanelColor,
-        title: const Text('🌌 은하 명예', textAlign: TextAlign.center),
+        title: Text(tr.u_galaxyHonor, textAlign: TextAlign.center),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('현재 명예 ${p.honor}점 (환생 ${p.ascensions}회)', style: bodyStyle),
-            Text('수입 +${(p.honor * 5)}% · 공격력 +${(p.honor * 3)}%', style: dimStyle),
+            Text(tr.u_honorStatus(p.honor, p.ascensions), style: bodyStyle),
+            Text(tr.u_honorBonus(p.honor * 5, p.honor * 3), style: dimStyle),
             const Divider(color: Colors.white24),
-            const Text(
-              '환생하면 지금 우주(섹터, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n'
-              '대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.',
+            Text(
+              tr.u_ascendExplain,
               style: bodyStyle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
             if (can)
-              Text('지금 환생하면 명예 +$gain점!\n(제국 가치가 클수록 많이 받아요)',
+              Text(tr.u_ascendGain(gain),
                   style: Ts.body.copyWith(color: Color(0xFFFFD54F)),
                   textAlign: TextAlign.center)
             else
-              const Text('섹터 4에 도달하면 환생할 수 있어요.',
-                  style: TextStyle(color: Colors.white54), textAlign: TextAlign.center),
+              Text(tr.u_ascendLocked,
+                  style: const TextStyle(color: Colors.white54), textAlign: TextAlign.center),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('닫기')),
+          TextButton(onPressed: () => Navigator.pop(c, false), child: Text(tr.u_close)),
           if (can)
-            FilledButton(onPressed: () => Navigator.pop(c, true), child: Text('환생 (+$gain)')),
+            FilledButton(onPressed: () => Navigator.pop(c, true), child: Text(tr.u_ascendBtn(gain))),
         ],
       ),
     );
     _endModal();
     if (ok != true || !mounted) return;
-    if (!await confirmDialog(context, '정말 환생할까요?', '현재 우주가 초기화돼요. 되돌릴 수 없어요.', ok: '환생')) {
+    if (!await confirmDialog(context, tr.u_ascendConfirmTitle, tr.u_ascendConfirmBody, ok: tr.u_ascend)) {
       return;
     }
     _discarded = true;
@@ -380,7 +380,7 @@ class _GameScreenState extends State<GameScreen>
     if (ok) {
       w.reviveHere();
     } else {
-      w.say(Speaker.advisor, '광고를 불러오는 중이에요. 잠시 후 다시 눌러주세요.');
+      w.say(Speaker.advisor, tr.u_adLoadingRetry);
     }
   }
 
@@ -540,7 +540,7 @@ class _GameScreenState extends State<GameScreen>
                     'dome',
                     pl.domeUp
                         ? '${pl.name} ${(100 * pl.shieldHp / pl.shieldMax(w.sectorMul)).floor()}%'
-                        : '${pl.name} 깨짐',
+                        : tr.u_shieldBroken(pl.name),
                     size: 20,
                     style: Ts.caption.copyWith(color: WorldPainter.shieldColor(
                             pl.domeUp ? pl.shieldHp / pl.shieldMax(w.sectorMul) : 0), fontWeight: FontWeight.bold)),
@@ -569,19 +569,27 @@ class _GameScreenState extends State<GameScreen>
               // 누르면 항성계 현황
               GestureDetector(
                 onTap: () => _setOverlay(_Overlay.system),
-                child: glass(Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const GameIcon('menu_home', size: 30),
-                    const SizedBox(width: Space.xs),
-                    Text(
-                      '${w.sectorName} · 발전 ${(w.development * 100).floor()}%\n'
-                      '⚠ 위협 ${w.threat.toStringAsFixed(1)}  🏛 ${compact(w.empireValue)}',
-                      textAlign: TextAlign.right,
-                      style: Ts.caption.copyWith(color: Colors.white),
+                // 언어마다 길이가 달라서, 왼쪽 선장 카드를 덮지 않게 화면 절반 안으로 줄인다
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width / 2 - 64),
+                  child: glass(FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const GameIcon('menu_home', size: 30),
+                        const SizedBox(width: Space.xs),
+                        Text(
+                          tr.u_hudSector(w.sectorName, (w.development * 100).floor(),
+                              w.threat.toStringAsFixed(1), compact(w.empireValue)),
+                          textAlign: TextAlign.right,
+                          style: Ts.caption.copyWith(color: Colors.white),
+                        ),
+                      ],
                     ),
-                  ],
-                )),
+                  )),
+                ),
               ),
               const SizedBox(width: 6),
               Badge(
@@ -605,8 +613,8 @@ class _GameScreenState extends State<GameScreen>
                 iconValue(
                     'raid',
                     w.homeBase.disabled
-                        ? '본거지 정지 ${w.homeBase.disabledTime.ceil()}s'
-                        : '본거지 ${(w.homeBase.hp / w.homeBase.maxHp * 100).floor()}%',
+                        ? tr.u_baseDisabled(w.homeBase.disabledTime.ceil())
+                        : tr.u_baseHp((w.homeBase.hp / w.homeBase.maxHp * 100).floor()),
                     size: 20,
                     style: Ts.caption.copyWith(color: Color(0xFFFF5252))),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -634,7 +642,7 @@ class _GameScreenState extends State<GameScreen>
     final gate = w.nearbyGate;
     final pl = w.nearbyPlanet;
     if (merchant != null) {
-      out.add(actionBtn('상인 (E)', true, () => _setOverlay(_Overlay.merchant),
+      out.add(actionBtn(tr.u_merchantE, true, () => _setOverlay(_Overlay.merchant),
           icon: 'act_merchant', color: const Color(0xFF00897B)));
     }
     if (st != null) {
@@ -643,19 +651,19 @@ class _GameScreenState extends State<GameScreen>
     }
     if (gate != null) {
       out.add(w.gateOpen(gate)
-          ? actionBtn(gate.forward ? '다음 섹터 (E)' : '이전 섹터 (E)', true,
+          ? actionBtn(gate.forward ? tr.u_nextSectorE : tr.u_prevSectorE, true,
               () => _act(() => w.warp(gate)),
               icon: 'act_warp', color: const Color(0xFF6A1B9A))
-          : actionBtn('🔒 발전도 100%에서 열려요 (${(w.development * 100).floor()}%)', false, null,
+          : actionBtn(tr.u_gateLocked((w.development * 100).floor()), false, null,
               icon: 'act_warp'));
     }
     if (pl != null) {
       if (pl.colonyLevel == 0) {
         final c = w.planetCost(pl);
-        out.add(actionBtn('${pl.name} 정착', w.canAfford(c), () => _act(() => w.upgradePlanet(pl)),
+        out.add(actionBtn(tr.u_settle(pl.name), w.canAfford(c), () => _act(() => w.upgradePlanet(pl)),
             icon: 'act_settle', cost: c));
       } else {
-        out.add(actionBtn('${pl.name} 관리 (E)', true, () => _setOverlay(_Overlay.colony),
+        out.add(actionBtn(tr.u_manageE(pl.name), true, () => _setOverlay(_Overlay.colony),
             icon: pl.raided ? 'raid' : 'colony_levelup', color: const Color(0xFF2E7D32)));
       }
       final (cr, orr) = pl.ratePerLevel;
@@ -674,7 +682,7 @@ class _GameScreenState extends State<GameScreen>
     }
     if (w.canBuildStationHere && (w.counter('colonies') > 0 || w.credits >= w.stationBuildCost.$1)) {
       final c = w.stationBuildCost;
-      out.add(actionBtn('정거장 건설', w.canAfford(c), () => _setOverlay(_Overlay.buildStation),
+      out.add(actionBtn(tr.u_buildStation, w.canAfford(c), () => _setOverlay(_Overlay.buildStation),
           icon: 'tab_station', cost: c));
     }
     return out;
@@ -739,7 +747,7 @@ class _GameScreenState extends State<GameScreen>
                       .withValues(alpha: 0.55),
                   border: Border.all(color: Colors.white38, width: 2),
                 ),
-                child: const Center(child: Text('발사', style: Ts.heading)),
+                child: Center(child: Text(tr.u_fire, style: Ts.heading)),
               ),
             ),
           ),
@@ -783,7 +791,7 @@ class _GameScreenState extends State<GameScreen>
     return Listener(
       onPointerDown: (_) {
         if (!unlocked) {
-          w.say(Speaker.advisor, '정거장 함선 개조에서 장착할 수 있어요!');
+          w.say(Speaker.advisor, tr.u_equipAtStation);
           return;
         }
         if (use()) AppState.haptic();
@@ -821,15 +829,15 @@ class _GameScreenState extends State<GameScreen>
           mainAxisSize: MainAxisSize.min,
           children: [
             const ChibiPortrait(style: ChibiStyle.pirate, size: 80),
-            const Text('💥 격추당했습니다!', style: Ts.title),
-            Text('${max(0, 20 - p.deadTime).ceil()}초 뒤 기지에서 자동 재출격', style: dimStyle),
+            Text(tr.u_shotDown, style: Ts.title),
+            Text(tr.u_autoRespawn(max(0, 20 - p.deadTime).ceil()), style: dimStyle),
             const SizedBox(height: 12),
-            actionBtn(premium ? '👑 이 자리에서 부활 (무료)' : '📺 광고 보고 이 자리에서 부활', true, _reviveWithAd,
+            actionBtn(premium ? tr.u_reviveFree : tr.u_reviveAd, true, _reviveWithAd,
                 color: const Color(0xFF00897B)),
             const SizedBox(height: 8),
-            actionBtn('⭐10 으로 이 자리에서 부활', true, _reviveWithGems, color: const Color(0xFFAD1457)),
+            actionBtn(tr.u_reviveGems, true, _reviveWithGems, color: const Color(0xFFAD1457)),
             const SizedBox(height: 8),
-            actionBtn('🏠 기지에서 재출격 (크레딧 ${(100 * GameWorld.respawnCostRatio(w.stations.reduce((a, b) => (a.pos - p.deathPos).distance < (b.pos - p.deathPos).distance ? a : b))).round()}% 손실)',
+            actionBtn(tr.u_respawnBase((100 * GameWorld.respawnCostRatio(w.stations.reduce((a, b) => (a.pos - p.deathPos).distance < (b.pos - p.deathPos).distance ? a : b))).round()),
                 true, w.respawnAtBase,
                 color: const Color(0xFF455A64)),
           ],
@@ -841,10 +849,10 @@ class _GameScreenState extends State<GameScreen>
 
   Widget _dialog(DialogLine d) {
     final name = switch (d.speaker) {
-      Speaker.captain => '선장',
-      Speaker.pirate => '해적',
-      Speaker.advisor => '부관 미나',
-      Speaker.merchant => '상인 냥냥',
+      Speaker.captain => tr.u_spkCaptain,
+      Speaker.pirate => tr.u_spkPirate,
+      Speaker.advisor => tr.u_spkAdvisor,
+      Speaker.merchant => tr.u_spkMerchant,
     };
     return Opacity(
       opacity: d.time.clamp(0.0, 0.5) * 2,
@@ -912,25 +920,25 @@ class _GameScreenState extends State<GameScreen>
           shrinkWrap: true,
           padding: const EdgeInsets.all(20),
           children: [
-            const Text('일시정지', style: titleStyle, textAlign: TextAlign.center),
+            Text(tr.u_paused, style: titleStyle, textAlign: TextAlign.center),
             const SizedBox(height: 6),
             Text(
-              '${w.sectorName} · 격추 ${w.counter('kills')} · 승무원 ${w.roster.length}\n'
-              '정착 ${w.counter('colonies')} · 정거장 ${w.stations.length} · 임무 완료 ${w.counter('missions')}',
+              tr.u_pauseStats(w.sectorName, w.counter('kills'), w.roster.length, w.counter('colonies'),
+                  w.stations.length, w.counter('missions')),
               style: dimStyle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            actionBtn('▶ 계속하기', true, () => _setOverlay(_Overlay.none)),
+            actionBtn(tr.u_resume, true, () => _setOverlay(_Overlay.none)),
             const SizedBox(height: 8),
-            actionBtn('⭐ 상점', true, () => _openShop(), color: const Color(0xFFAD1457)),
+            actionBtn(tr.u_shop, true, () => _openShop(), color: const Color(0xFFAD1457)),
             const SizedBox(height: 8),
             Badge(
               isLabelVisible: w.profile.claimable.isNotEmpty,
               label: Text('${w.profile.claimable.length}'),
               child: SizedBox(
                 width: double.infinity,
-                child: actionBtn('🏆 업적', true, () => _modalRoute(const AchievementsScreen())),
+                child: actionBtn(tr.u_achievements, true, () => _modalRoute(const AchievementsScreen())),
               ),
             ),
             const SizedBox(height: 8),
@@ -939,25 +947,25 @@ class _GameScreenState extends State<GameScreen>
               label: Text('${w.profile.dailyClaimable}'),
               child: SizedBox(
                 width: double.infinity,
-                child: actionBtn('📅 일일 퀘스트', true, () => _modalRoute(const DailyQuestScreen())),
+                child: actionBtn(tr.u_dailyQuests, true, () => _modalRoute(const DailyQuestScreen())),
               ),
             ),
             const SizedBox(height: 8),
-            actionBtn('🌍 내 행성', true, () => _modalRoute(const HomePlanetScreen()),
+            actionBtn(tr.u_myPlanet, true, () => _modalRoute(const HomePlanetScreen()),
                 color: const Color(0xFF00897B)),
             const SizedBox(height: 8),
-            actionBtn('🌌 은하 명예 (환생)', true, _showAscend, color: const Color(0xFF4527A0)),
+            actionBtn(tr.u_ascendMenu, true, _showAscend, color: const Color(0xFF4527A0)),
             const SizedBox(height: 8),
-            actionBtn('⚙ 설정', true, () => _modalRoute(const SettingsScreen()),
+            actionBtn(tr.u_settings, true, () => _modalRoute(const SettingsScreen()),
                 color: const Color(0xFF455A64)),
             const SizedBox(height: 8),
-            actionBtn('💾 저장하고 타이틀로', true, () async {
+            actionBtn(tr.u_saveAndQuit, true, () async {
               await SaveService.save(w);
               if (mounted) Navigator.of(context).pop();
             }, color: const Color(0xFF455A64)),
             const SizedBox(height: 16),
-            const Text(
-              '키보드: WASD 이동 · Space 사격 · Q 미사일 · F 실드 · Shift 부스트\nE 상호작용 · B 정거장 건설 · Esc 메뉴',
+            Text(
+              tr.u_keyboardHelp,
               style: dimStyle,
               textAlign: TextAlign.center,
             ),

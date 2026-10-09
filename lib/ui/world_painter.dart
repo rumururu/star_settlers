@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../game/cosmetics.dart';
 import '../game/models.dart';
 import '../game/world.dart';
+import '../l10n/l.dart';
 import 'chibi.dart';
 import 'sprites.dart';
 
@@ -236,8 +237,8 @@ class WorldPainter extends CustomPainter {
           ..color = const Color(0xFF78909C));
     canvas.restore();
     final label = g.forward
-        ? (open ? '🌀 다음 섹터로' : '🔒 두목을 쓰러뜨리면 열림')
-        : '🌀 이전 섹터로';
+        ? (open ? tr.u_toNextSector : tr.u_bossLocked)
+        : tr.u_toPrevSector;
     _label(canvas, g.pos + const Offset(0, 110), label, open ? const Color(0xFFD1C4E9) : Colors.white54);
   }
 
@@ -356,7 +357,7 @@ class WorldPainter extends CustomPainter {
             ..style = PaintingStyle.stroke
             ..strokeWidth = 5
             ..color = const Color(0xFFFF1744).withValues(alpha: 0.4 + 0.5 * pulse));
-      _label(canvas, p.pos + Offset(0, -p.radius - 70), '⚠ 습격 중!', const Color(0xFFFF5252));
+      _label(canvas, p.pos + Offset(0, -p.radius - 70), tr.u_raidAlert, const Color(0xFFFF5252));
     }
 
     _label(canvas, p.pos + Offset(0, p.radius + 22),
@@ -400,7 +401,7 @@ class WorldPainter extends CustomPainter {
       }
       final reboot = (ratio / Planet.shieldRebootRatio).clamp(0.0, 1.0);
       _shieldBar(canvas, barTop, reboot, const Color(0xFF90A4AE));
-      _label(canvas, barTop + const Offset(0, -16), '재충전 ${(reboot * 100).floor()}%',
+      _label(canvas, barTop + const Offset(0, -16), tr.u_rechargePct((reboot * 100).floor()),
           const Color(0xFFFF8A80));
       return;
     }
@@ -456,7 +457,7 @@ class WorldPainter extends CustomPainter {
         final a = i * pi / 24;
         canvas.drawArc(Rect.fromCircle(center: c, radius: r), a, pi / 48, false, dash);
       }
-      _label(canvas, c + const Offset(0, -130), '⚠ 기능 정지 ${hb.disabledTime.ceil()}초',
+      _label(canvas, c + const Offset(0, -130), '⚠ ${tr.u_disabledSec(hb.disabledTime.ceil())}',
           const Color(0xFFFF8A80));
       return;
     }
@@ -587,7 +588,7 @@ class WorldPainter extends CustomPainter {
     }
     canvas.drawCircle(c + const Offset(0, -22), 24, Paint()..color = const Color(0x88B2EBF2));
     paintChibi(canvas, c + const Offset(0, -22), 14, ChibiStyle.merchant, withBody: false);
-    _label(canvas, c + const Offset(0, 54), '🛒 떠돌이 상인 (${ev.timeLeft.ceil()}초)', const Color(0xFFA7FFEB));
+    _label(canvas, c + const Offset(0, 54), tr.u_merchantLabel(ev.timeLeft.ceil()), const Color(0xFFA7FFEB));
   }
 
   void _paintAsteroid(Canvas canvas, Asteroid a) {
@@ -646,7 +647,7 @@ class WorldPainter extends CustomPainter {
               RRect.fromRectAndRadius(Rect.fromCenter(center: c, width: 44, height: 34),
                   const Radius.circular(8)),
               Paint()..color = const Color(0xFF8D6E63));
-          _label(canvas, c + const Offset(0, 36), '📦 보급 캡슐', const Color(0xFFFF80AB));
+          _label(canvas, c + const Offset(0, 36), tr.u_supplyPod, const Color(0xFFFF80AB));
         }
         _star(canvas, c, s, const Color(0xFFFF80AB));
       case PickupKind.power:
@@ -964,9 +965,9 @@ class WorldPainter extends CustomPainter {
           const Color(0xFFFF5252));
     }
     if (e.sectorBoss) {
-      _label(canvas, e.pos + Offset(0, e.radius + 18), '☠ ${world.sectorName} 두목', const Color(0xFFFF8A80));
+      _label(canvas, e.pos + Offset(0, e.radius + 18), tr.u_sectorBoss(world.sectorName), const Color(0xFFFF8A80));
     } else if (e.kind == PirateKind.boss) {
-      _label(canvas, e.pos + Offset(0, e.radius + 18), '☠ 해적 두목', const Color(0xFFFF8A80));
+      _label(canvas, e.pos + Offset(0, e.radius + 18), tr.u_pirateBoss, const Color(0xFFFF8A80));
     } else if (e.name != null) {
       _label(canvas, e.pos + Offset(0, e.radius + 16), '🎯 ${e.name}', const Color(0xFFFFD54F));
     }

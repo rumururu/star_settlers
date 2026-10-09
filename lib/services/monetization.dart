@@ -3,27 +3,40 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../l10n/l.dart';
 import 'ads.dart';
 
 /// 인앱 상품 정의 (스토어 콘솔에 같은 ID로 등록해야 함)
 class ProductDef {
-  const ProductDef(this.id, this.title, this.desc, this.fallbackPrice,
-      {this.consumable = true});
+  const ProductDef(this.id, this.fallbackPrice, {this.consumable = true});
   final String id;
-  final String title;
-  final String desc;
+  String get title => switch (id) {
+        'gems_100' => tr.g_productGems100Title,
+        'gems_550' => tr.g_productGems550Title,
+        'gems_1200' => tr.g_productGems1200Title,
+        'starter_pack' => tr.g_productStarterTitle,
+        'premium_pass' => tr.g_productPassTitle,
+        _ => id,
+      };
+  String get desc => switch (id) {
+        'gems_100' => '⭐100',
+        'gems_550' => tr.g_productGems550Desc,
+        'gems_1200' => tr.g_productGems1200Desc,
+        'starter_pack' => tr.g_productStarterDesc,
+        'premium_pass' => tr.g_productPassDesc,
+        _ => '',
+      };
   final String fallbackPrice;
   final bool consumable;
 }
 
 const productDefs = [
-  ProductDef('gems_100', '젬 한 줌', '⭐100', '₩1,200'),
-  ProductDef('gems_550', '젬 주머니', '⭐550 (+10% 보너스)', '₩5,900'),
-  ProductDef('gems_1200', '젬 상자', '⭐1200 (+20% 보너스)', '₩12,000'),
-  ProductDef('starter_pack', '스타터 팩', '⭐300 + 전용 스킨 "갤럭시" + ★3 승무원 (1회 한정)', '₩3,900',
+  ProductDef('gems_100', '₩1,200'),
+  ProductDef('gems_550', '₩5,900'),
+  ProductDef('gems_1200', '₩12,000'),
+  ProductDef('starter_pack', '₩3,900',
       consumable: false),
-  ProductDef('premium_pass', '함대 사령관 패스', '크레딧 수입 +25%, 오프라인 수입 8시간, 광고 없이 보상, 전용 스킨 "골드 로열"',
-      '₩6,500', consumable: false),
+  ProductDef('premium_pass', '₩6,500', consumable: false),
 ];
 
 /// 결제/광고 추상화.
@@ -68,8 +81,8 @@ class DevMonetization extends MonetizationService {
   @override
   Future<bool> buy(String productId) async {
     final def = productDefs.firstWhere((p) => p.id == productId);
-    final ok = await (confirm?.call('[테스트 결제] ${def.title}',
-            '실제 결제는 일어나지 않아요.\n${def.desc}\n가격: ${def.fallbackPrice}') ??
+    final ok = await (confirm?.call(tr.g_testPurchaseTitle(def.title),
+            tr.g_testPurchaseBody(def.desc, def.fallbackPrice)) ??
         Future.value(false));
     if (ok) onGrant?.call(productId);
     return ok;
@@ -82,7 +95,7 @@ class DevMonetization extends MonetizationService {
   Future<bool> showRewardedAd() async {
     // 모바일에서는 구글 테스트 광고를 실제로 띄운다
     if (AdService.supported) return AdService.instance.showRewarded();
-    return await (confirm?.call('[테스트 광고]', '광고를 끝까지 본 것으로 처리할까요?') ??
+    return await (confirm?.call(tr.g_testAdTitle, tr.g_testAdBody) ??
         Future.value(false));
   }
 }
@@ -100,7 +113,7 @@ class WebDemoMonetization extends MonetizationService {
       productDefs.firstWhere((p) => p.id == productId).fallbackPrice;
 
   Future<bool> _notice() async {
-    await confirm?.call('웹 데모', '구매와 광고 보상은 모바일 앱에서 이용할 수 있어요.');
+    await confirm?.call(tr.g_webDemoTitle, tr.g_webDemoBody);
     return false;
   }
 

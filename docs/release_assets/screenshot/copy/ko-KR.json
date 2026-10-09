@@ -1,0 +1,75 @@
+{
+  "brand": "우주 개척단",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "귀여운 치비 선장의<br><em>우주 개척 모험</em>",
+      "sub": "해적을 물리치고 행성을 개척해 나만의 은하를 키워요",
+      "detail": "선장 · 부관 미나 · 해적 두목",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "해적이 쳐들어와도<br><em>기지 레이저로 반격!</em>",
+      "sub": "조이스틱 하나로 조종하고, 미사일과 실드로 맞서요",
+      "detail": "유도 미사일 · 에너지 실드 · 부스트",
+      "mascot": "pirate_boss.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "깃발을 꽂고<br><em>식민지를 키워요</em>",
+      "sub": "방어막 돔이 지켜 주는 나만의 행성 마을",
+      "detail": "정원 · 사막 · 얼음 · 용암 · 가스 행성",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "포탑부터 방어막까지<br><em>건물로 튼튼하게</em>",
+      "sub": "건물을 올릴수록 수입도, 방어력도 쑥쑥",
+      "detail": "방어포탑 · 채굴 시설 · 교역소 · 수리 도크 · 방어막 발생기",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "항성계를 발전시켜<br><em>더 먼 우주로</em>",
+      "sub": "모든 행성을 키우면 다음 항성계의 워프 게이트가 열려요",
+      "detail": "발전도 100% → 워프 게이트 개방",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "격납고에서 고르는<br><em>나만의 우주선</em>",
+      "sub": "빠른 인터셉터부터 노바 드래곤까지 7종 함선",
+      "detail": "스카우트 · 포트리스 · 팬텀 · 노바 드래곤 · 오로라 외",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "정거장에서<br><em>함선을 업그레이드</em>",
+      "sub": "무기 · 장갑 · 엔진 · 미사일 · 실드 · 드론 · 자석",
+      "detail": "쉬는 동안에도 식민지 수입이 쌓여요",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    }
+  ]
+}

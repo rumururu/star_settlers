@@ -1,17 +1,18 @@
 import 'dart:math';
 
+import '../l10n/l.dart';
 import 'cosmetics.dart';
 
 enum CrewRole { gunner, engineer, pilot, trader, miner, scientist }
 
 extension CrewRoleInfo on CrewRole {
   String get label => switch (this) {
-        CrewRole.gunner => '포수',
-        CrewRole.engineer => '기관사',
-        CrewRole.pilot => '조종사',
-        CrewRole.trader => '상인',
-        CrewRole.miner => '광부',
-        CrewRole.scientist => '과학자',
+        CrewRole.gunner => tr.g_crewRoleGunner,
+        CrewRole.engineer => tr.g_crewRoleEngineer,
+        CrewRole.pilot => tr.g_crewRolePilot,
+        CrewRole.trader => tr.g_crewRoleTrader,
+        CrewRole.miner => tr.g_crewRoleMiner,
+        CrewRole.scientist => tr.g_crewRoleScientist,
       };
   String get icon => switch (this) {
         CrewRole.gunner => '🔫',
@@ -22,12 +23,12 @@ extension CrewRoleInfo on CrewRole {
         CrewRole.scientist => '🧪',
       };
   String get effect => switch (this) {
-        CrewRole.gunner => '공격력',
-        CrewRole.engineer => '최대 체력·수리',
-        CrewRole.pilot => '속도',
-        CrewRole.trader => '크레딧 수입',
-        CrewRole.miner => '광석 획득',
-        CrewRole.scientist => '스킬 쿨타임 감소',
+        CrewRole.gunner => tr.g_crewEffectGunner,
+        CrewRole.engineer => tr.g_crewEffectEngineer,
+        CrewRole.pilot => tr.g_crewEffectPilot,
+        CrewRole.trader => tr.g_crewEffectTrader,
+        CrewRole.miner => tr.g_crewEffectMiner,
+        CrewRole.scientist => tr.g_crewEffectScientist,
       };
   int get suitColor => switch (this) {
         CrewRole.gunner => 0xFFE53935,
@@ -39,6 +40,7 @@ extension CrewRoleInfo on CrewRole {
       };
 }
 
+/// 저장용 원본 이름 (세이브 호환). 화면 표시는 [_localNames]로 번역한다.
 const _names = [
   '뭉치', '코코', '별이', '두부', '콩이', '루루', '하루', '포포', '미미', '도리',
   '몽실', '나비', '초코', '보리', '구름', '단비', '토리', '해피', '찹쌀', '모찌',
@@ -51,22 +53,65 @@ const _hairColors = [
 ];
 const _skinColors = [0xFFFFE0C7, 0xFFFFD3B0, 0xFFF1C27D, 0xFFE0AC69, 0xFFFFE6D5];
 
+/// 현재 언어의 승무원 이름 ([_names]와 같은 순서). 저장은 한국어 원본으로 한다.
+List<String> get _localNames => [
+      tr.g_crewName0,
+      tr.g_crewName1,
+      tr.g_crewName2,
+      tr.g_crewName3,
+      tr.g_crewName4,
+      tr.g_crewName5,
+      tr.g_crewName6,
+      tr.g_crewName7,
+      tr.g_crewName8,
+      tr.g_crewName9,
+      tr.g_crewName10,
+      tr.g_crewName11,
+      tr.g_crewName12,
+      tr.g_crewName13,
+      tr.g_crewName14,
+      tr.g_crewName15,
+      tr.g_crewName16,
+      tr.g_crewName17,
+      tr.g_crewName18,
+      tr.g_crewName19,
+      tr.g_crewName20,
+      tr.g_crewName21,
+      tr.g_crewName22,
+      tr.g_crewName23,
+      tr.g_crewName24,
+      tr.g_crewName25,
+      tr.g_crewName26,
+      tr.g_crewName27,
+      tr.g_crewName28,
+      tr.g_crewName29,
+    ];
+
 /// ★4 전설 승무원 칭호
-const _legendTitles = ['은하수호자', '별의 영웅', '성운의 현자', '혜성 기사', '초신성'];
+List<String> get _legendTitles =>
+    [tr.g_crewLegend0, tr.g_crewLegend1, tr.g_crewLegend2, tr.g_crewLegend3, tr.g_crewLegend4];
 
 class CrewMember {
   CrewMember({
     required this.id,
-    required this.name,
+    required String name,
     required this.role,
     required this.rarity,
     required this.lookSeed,
     this.level = 1,
     this.assigned = false,
-  });
+  }) : rawName = name;
 
   final int id;
-  final String name;
+
+  /// 저장되는 원래 이름 (기본 이름표의 한국어 원본)
+  final String rawName;
+
+  /// 화면에 보이는 이름 (기본 이름표면 현재 언어로)
+  String get name {
+    final i = _names.indexOf(rawName);
+    return i < 0 ? rawName : _localNames[i];
+  }
   final CrewRole role;
   final int rarity; // 1..4 (★4 = 전설, 젬 전용)
   final int lookSeed;
@@ -85,7 +130,7 @@ class CrewMember {
 
   /// ★4는 칭호가 붙는다 (예: '은하수호자 뭉치')
   String get displayName =>
-      legendary ? '${_legendTitles[lookSeed % _legendTitles.length]} $name' : name;
+      legendary ? tr.g_crewLegendName(_legendTitles[lookSeed % _legendTitles.length], name) : name;
 
   int get hairColor => _hairColors[lookSeed % _hairColors.length];
   int get skinColor => _skinColors[(lookSeed ~/ 7) % _skinColors.length];
@@ -104,7 +149,7 @@ class CrewMember {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'name': name,
+        'name': rawName,
         'role': role.index,
         'rarity': rarity,
         'look': lookSeed,
