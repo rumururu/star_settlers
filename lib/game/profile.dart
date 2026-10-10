@@ -255,6 +255,32 @@ class Profile {
     return true;
   }
 
+  // ---------- 광고 부활 ----------
+  /// 광고 보고 제자리 부활은 하루 [adRevivesPerDay]번 (사령관 패스는 무제한).
+  /// 무제한이면 격추가 아무 손해가 없어 ⭐10 부활·함선 강화의 의미가 사라진다.
+  static const adRevivesPerDay = 3;
+  int adReviveDay = 0;
+  int adRevivesToday = 0;
+
+  int adRevivesLeft(DateTime now) {
+    if (premium) return adRevivesPerDay;
+    final key = dayKey(now);
+    if (key < adReviveDay) return 0; // 시계 되돌리기 방지
+    return key == adReviveDay ? max(0, adRevivesPerDay - adRevivesToday) : adRevivesPerDay;
+  }
+
+  bool useAdRevive(DateTime now) {
+    if (adRevivesLeft(now) <= 0) return false;
+    if (premium) return true;
+    if (dayKey(now) != adReviveDay) {
+      adReviveDay = dayKey(now);
+      adRevivesToday = 0;
+    }
+    adRevivesToday++;
+    dirty = true;
+    return true;
+  }
+
   // ---------- 격납고 ----------
   bool shipUnlocked(ShipType t) =>
       ownedShips.contains(t.id) ||
@@ -343,6 +369,8 @@ class Profile {
         'streak': loginStreak,
         'adDay': adGemDay,
         'adCount': adGemsToday,
+        'revDay': adReviveDay,
+        'revCount': adRevivesToday,
         'sound': sound,
         'music': music,
         'haptics': haptics,
@@ -377,6 +405,8 @@ class Profile {
       ..loginStreak = j['streak'] as int? ?? 0
       ..adGemDay = j['adDay'] as int? ?? 0
       ..adGemsToday = j['adCount'] as int? ?? 0
+      ..adReviveDay = j['revDay'] as int? ?? 0
+      ..adRevivesToday = j['revCount'] as int? ?? 0
       ..sound = j['sound'] as bool? ?? true
       ..music = j['music'] as bool? ?? true
       ..haptics = j['haptics'] as bool? ?? true

@@ -1733,11 +1733,11 @@ class L10nId extends L10n {
       'Bajak laut? Di depan kapalku mereka cuma rongsokan!';
 
   @override
-  String get g_storyColoniesTitle => 'Huni Terra Nova';
+  String get g_storyColoniesTitle => 'Huni Mars';
 
   @override
   String get g_storyColoniesLine0 =>
-      'Coba huni planet hijau terdekat, Terra Nova. Dekati dan tombol Huni akan muncul.';
+      'Bangun koloni pertama di Mars, planet merah di sebelah Bumi. Dekati planetnya dan tombol huni akan muncul.';
 
   @override
   String get g_storyColoniesLine1 =>
@@ -2006,156 +2006,6 @@ class L10nId extends L10n {
 
   @override
   String get g_upgradeMagnet => 'Magnet';
-
-  @override
-  String get g_sector0 => 'Suaka Alfa';
-
-  @override
-  String get g_sector1 => 'Nebula Beta';
-
-  @override
-  String get g_sector2 => 'Ngarai Gamma';
-
-  @override
-  String get g_sector3 => 'Zona Bajak Laut Delta';
-
-  @override
-  String get g_sector4 => 'Jurang Epsilon';
-
-  @override
-  String get g_sector5 => 'Sabuk Es Zeta';
-
-  @override
-  String get g_sector6 => 'Gugus Api Eta';
-
-  @override
-  String get g_sector7 => 'Jalur Hantu Theta';
-
-  @override
-  String get g_sector8 => 'Nebula Mahkota Iota';
-
-  @override
-  String get g_sector9 => 'Lubang Hitam Kappa';
-
-  @override
-  String get g_planet0 => 'Aquaris';
-
-  @override
-  String get g_planet1 => 'Rubia';
-
-  @override
-  String get g_planet2 => 'Frosta';
-
-  @override
-  String get g_planet3 => 'Volcano';
-
-  @override
-  String get g_planet4 => 'Jellio';
-
-  @override
-  String get g_planet5 => 'Solaris';
-
-  @override
-  String get g_planet6 => 'Bintang Momo';
-
-  @override
-  String get g_planet7 => 'Nebula';
-
-  @override
-  String get g_planet8 => 'Cassiope';
-
-  @override
-  String get g_planet9 => 'Aurora';
-
-  @override
-  String get g_planet10 => 'Durian';
-
-  @override
-  String get g_planet11 => 'Kayu Manis';
-
-  @override
-  String get g_planet12 => 'Marshmallow';
-
-  @override
-  String get g_planet13 => 'Bintang Popcorn';
-
-  @override
-  String get g_planet14 => 'Lavender';
-
-  @override
-  String get g_planet15 => 'Emeraldia';
-
-  @override
-  String get g_planet16 => 'Crimson';
-
-  @override
-  String get g_planet17 => 'Polaris';
-
-  @override
-  String get g_planet18 => 'Vega';
-
-  @override
-  String get g_planet19 => 'Rigel';
-
-  @override
-  String get g_planet20 => 'Mira';
-
-  @override
-  String get g_planet21 => 'Topaz';
-
-  @override
-  String get g_planet22 => 'Kobalt';
-
-  @override
-  String get g_planet23 => 'Safir';
-
-  @override
-  String get g_planet24 => 'Onyx';
-
-  @override
-  String get g_planet25 => 'Peridot';
-
-  @override
-  String get g_planet26 => 'Bintang Mint';
-
-  @override
-  String get g_planet27 => 'Vanila';
-
-  @override
-  String get g_planet28 => 'Karamel';
-
-  @override
-  String get g_planet29 => 'Pistachio';
-
-  @override
-  String get g_planet30 => 'Blueberry';
-
-  @override
-  String get g_planet31 => 'Bintang Lemon';
-
-  @override
-  String get g_planet32 => 'Ceri';
-
-  @override
-  String get g_planet33 => 'Melon';
-
-  @override
-  String get g_planet34 => 'Kiwi';
-
-  @override
-  String get g_planet35 => 'Bintang Mangga';
-
-  @override
-  String get g_planet36 => 'Yuzu';
-
-  @override
-  String get g_planet37 => 'Jeruk Bali';
-
-  @override
-  String get g_planet38 => 'Bintang Labu';
-
-  @override
-  String get g_planetTerraNova => 'Terra Nova';
 
   @override
   String g_unknownSector(int n) {
@@ -2453,4 +2303,168 @@ class L10nId extends L10n {
 
   @override
   String get g_pirateAmbush3 => 'Hari sialmu, bocah!';
+
+  @override
+  String get cat_sysSol => 'Tata Surya';
+
+  @override
+  String get cat_sysAlphaCen => 'Alpha Centauri';
+
+  @override
+  String get cat_sysBarnard => 'Bintang Barnard';
+
+  @override
+  String get cat_sysWolf359 => 'Wolf 359';
+
+  @override
+  String get cat_sysLalande => 'Lalande 21185';
+
+  @override
+  String get cat_sysSirius => 'Sirius';
+
+  @override
+  String get cat_sysEpsEri => 'Epsilon Eridani';
+
+  @override
+  String get cat_sysRoss128 => 'Ross 128';
+
+  @override
+  String get cat_sysTauCeti => 'Tau Ceti';
+
+  @override
+  String get cat_sysTeegarden => 'Bintang Teegarden';
+
+  @override
+  String get cat_sysGliese581 => 'Gliese 581';
+
+  @override
+  String get cat_sysGliese667C => 'Gliese 667 C';
+
+  @override
+  String get cat_sysTrappist1 => 'TRAPPIST-1';
+
+  @override
+  String get cat_sys55Cnc => '55 Cancri';
+
+  @override
+  String get cat_sys51Peg => '51 Pegasi';
+
+  @override
+  String cat_sysKepler(int n) {
+    return 'Kepler-$n';
+  }
+
+  @override
+  String get cat_sysOmegaCen => 'Gugus Omega Centauri';
+
+  @override
+  String get cat_sysSgrA => 'Pusat Galaksi (Sgr A*)';
+
+  @override
+  String get cat_sysLMC => 'Awan Magellan Besar';
+
+  @override
+  String get cat_sysSMC => 'Awan Magellan Kecil';
+
+  @override
+  String get cat_sysAndromeda => 'Galaksi Andromeda';
+
+  @override
+  String get cat_sysTriangulum => 'Galaksi Triangulum';
+
+  @override
+  String get cat_pfxProxima => 'Proxima';
+
+  @override
+  String get cat_pfxBarnard => 'Barnard';
+
+  @override
+  String get cat_pfxSirius => 'Sirius A';
+
+  @override
+  String get cat_pfxEpsEri => 'Epsilon Eridani';
+
+  @override
+  String get cat_pfxTauCeti => 'Tau Ceti';
+
+  @override
+  String get cat_pfxTeegarden => 'Teegarden';
+
+  @override
+  String get cat_mars => 'Mars';
+
+  @override
+  String get cat_moon => 'Bulan';
+
+  @override
+  String get cat_venus => 'Venus';
+
+  @override
+  String get cat_mercury => 'Merkurius';
+
+  @override
+  String get cat_ceres => 'Ceres';
+
+  @override
+  String get cat_vesta => 'Vesta';
+
+  @override
+  String get cat_jupiter => 'Yupiter';
+
+  @override
+  String get cat_io => 'Io';
+
+  @override
+  String get cat_europa => 'Europa';
+
+  @override
+  String get cat_ganymede => 'Ganimede';
+
+  @override
+  String get cat_callisto => 'Kalisto';
+
+  @override
+  String get cat_saturn => 'Saturnus';
+
+  @override
+  String get cat_enceladus => 'Enseladus';
+
+  @override
+  String get cat_titan => 'Titan';
+
+  @override
+  String get cat_uranus => 'Uranus';
+
+  @override
+  String get cat_miranda => 'Miranda';
+
+  @override
+  String get cat_titania => 'Titania';
+
+  @override
+  String get cat_neptune => 'Neptunus';
+
+  @override
+  String get cat_triton => 'Triton';
+
+  @override
+  String get cat_pluto => 'Pluto';
+
+  @override
+  String get cat_charon => 'Charon';
+
+  @override
+  String get cat_haumea => 'Haumea';
+
+  @override
+  String get cat_makemake => 'Makemake';
+
+  @override
+  String get cat_eris => 'Eris';
+
+  @override
+  String get cat_sedna => 'Sedna';
+
+  @override
+  String get cat_planetNine => 'Planet Kesembilan';
 }

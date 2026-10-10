@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../game/models.dart';
+import '../game/star_catalog.dart';
 import '../game/world.dart';
 import '../l10n/l.dart';
 import 'common.dart';
@@ -160,7 +161,7 @@ class SystemPanel extends StatelessWidget {
   }
 
   Widget _otherSystemRow(int index, SectorSave s) {
-    final name = index < sectorNames.length ? sectorNames[index] : tr.u_unknownSector(index + 1);
+    final name = systemName(index);
     final dev = GameWorld.developmentOf(s.colonyLevels);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: Space.xs),

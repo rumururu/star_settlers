@@ -1712,10 +1712,10 @@ class L10nZh extends L10n {
   String get g_storyKillsLine1 => '区区海盗，在我的飞船面前就是废铁！';
 
   @override
-  String get g_storyColoniesTitle => '定居新地星';
+  String get g_storyColoniesTitle => '在火星定居';
 
   @override
-  String get g_storyColoniesLine0 => '试着定居附近的绿色行星新地星吧。靠近后会出现定居按钮。';
+  String get g_storyColoniesLine0 => '在地球旁边的红色星球——火星上建立第一个殖民地吧。靠近后会出现定居按钮。';
 
   @override
   String get g_storyColoniesLine1 => '殖民地就算放着不管也会赚信用点哦！';
@@ -1962,156 +1962,6 @@ class L10nZh extends L10n {
 
   @override
   String get g_upgradeMagnet => '磁铁';
-
-  @override
-  String get g_sector0 => '阿尔法圣域';
-
-  @override
-  String get g_sector1 => '贝塔星云';
-
-  @override
-  String get g_sector2 => '伽马峡谷';
-
-  @override
-  String get g_sector3 => '德尔塔海盗地带';
-
-  @override
-  String get g_sector4 => '艾普西隆深渊';
-
-  @override
-  String get g_sector5 => '泽塔冰带';
-
-  @override
-  String get g_sector6 => '伊塔烈焰星团';
-
-  @override
-  String get g_sector7 => '西塔幽灵航道';
-
-  @override
-  String get g_sector8 => '约塔王冠星云';
-
-  @override
-  String get g_sector9 => '卡帕黑洞';
-
-  @override
-  String get g_planet0 => '阿夸里斯';
-
-  @override
-  String get g_planet1 => '鲁比亚';
-
-  @override
-  String get g_planet2 => '弗罗斯塔';
-
-  @override
-  String get g_planet3 => '火山星';
-
-  @override
-  String get g_planet4 => '果冻星';
-
-  @override
-  String get g_planet5 => '索拉里斯';
-
-  @override
-  String get g_planet6 => '桃桃星';
-
-  @override
-  String get g_planet7 => '星云星';
-
-  @override
-  String get g_planet8 => '卡西欧佩';
-
-  @override
-  String get g_planet9 => '极光星';
-
-  @override
-  String get g_planet10 => '榴莲星';
-
-  @override
-  String get g_planet11 => '肉桂星';
-
-  @override
-  String get g_planet12 => '棉花糖星';
-
-  @override
-  String get g_planet13 => '爆米花星';
-
-  @override
-  String get g_planet14 => '薰衣草星';
-
-  @override
-  String get g_planet15 => '翡翠星';
-
-  @override
-  String get g_planet16 => '绯红星';
-
-  @override
-  String get g_planet17 => '北极星';
-
-  @override
-  String get g_planet18 => '织女星';
-
-  @override
-  String get g_planet19 => '参宿七';
-
-  @override
-  String get g_planet20 => '米拉';
-
-  @override
-  String get g_planet21 => '黄玉星';
-
-  @override
-  String get g_planet22 => '钴蓝星';
-
-  @override
-  String get g_planet23 => '蓝宝石星';
-
-  @override
-  String get g_planet24 => '缟玛瑙星';
-
-  @override
-  String get g_planet25 => '橄榄石星';
-
-  @override
-  String get g_planet26 => '薄荷星';
-
-  @override
-  String get g_planet27 => '香草星';
-
-  @override
-  String get g_planet28 => '焦糖星';
-
-  @override
-  String get g_planet29 => '开心果星';
-
-  @override
-  String get g_planet30 => '蓝莓星';
-
-  @override
-  String get g_planet31 => '柠檬星';
-
-  @override
-  String get g_planet32 => '樱桃星';
-
-  @override
-  String get g_planet33 => '蜜瓜星';
-
-  @override
-  String get g_planet34 => '奇异果星';
-
-  @override
-  String get g_planet35 => '芒果星';
-
-  @override
-  String get g_planet36 => '柚子星';
-
-  @override
-  String get g_planet37 => '西柚星';
-
-  @override
-  String get g_planet38 => '南瓜星';
-
-  @override
-  String get g_planetTerraNova => '新地星';
 
   @override
   String g_unknownSector(int n) {
@@ -2401,4 +2251,168 @@ class L10nZh extends L10n {
 
   @override
   String get g_pirateAmbush3 => '今天你运气不好啊，小不点！';
+
+  @override
+  String get cat_sysSol => '太阳系';
+
+  @override
+  String get cat_sysAlphaCen => '半人马座α';
+
+  @override
+  String get cat_sysBarnard => '巴纳德星';
+
+  @override
+  String get cat_sysWolf359 => '沃夫359';
+
+  @override
+  String get cat_sysLalande => '莱兰21185';
+
+  @override
+  String get cat_sysSirius => '天狼星';
+
+  @override
+  String get cat_sysEpsEri => '天苑四';
+
+  @override
+  String get cat_sysRoss128 => '罗斯128';
+
+  @override
+  String get cat_sysTauCeti => '天仓五';
+
+  @override
+  String get cat_sysTeegarden => '蒂加登星';
+
+  @override
+  String get cat_sysGliese581 => '格利泽581';
+
+  @override
+  String get cat_sysGliese667C => '格利泽667C';
+
+  @override
+  String get cat_sysTrappist1 => 'TRAPPIST-1';
+
+  @override
+  String get cat_sys55Cnc => '巨蟹座55';
+
+  @override
+  String get cat_sys51Peg => '飞马座51';
+
+  @override
+  String cat_sysKepler(int n) {
+    return '开普勒-$n';
+  }
+
+  @override
+  String get cat_sysOmegaCen => '半人马座ω星团';
+
+  @override
+  String get cat_sysSgrA => '银河系中心 (人马座A*)';
+
+  @override
+  String get cat_sysLMC => '大麦哲伦云';
+
+  @override
+  String get cat_sysSMC => '小麦哲伦云';
+
+  @override
+  String get cat_sysAndromeda => '仙女座星系';
+
+  @override
+  String get cat_sysTriangulum => '三角座星系';
+
+  @override
+  String get cat_pfxProxima => '比邻星';
+
+  @override
+  String get cat_pfxBarnard => '巴纳德星';
+
+  @override
+  String get cat_pfxSirius => '天狼星A';
+
+  @override
+  String get cat_pfxEpsEri => '天苑四';
+
+  @override
+  String get cat_pfxTauCeti => '天仓五';
+
+  @override
+  String get cat_pfxTeegarden => '蒂加登星';
+
+  @override
+  String get cat_mars => '火星';
+
+  @override
+  String get cat_moon => '月球';
+
+  @override
+  String get cat_venus => '金星';
+
+  @override
+  String get cat_mercury => '水星';
+
+  @override
+  String get cat_ceres => '谷神星';
+
+  @override
+  String get cat_vesta => '灶神星';
+
+  @override
+  String get cat_jupiter => '木星';
+
+  @override
+  String get cat_io => '木卫一';
+
+  @override
+  String get cat_europa => '木卫二';
+
+  @override
+  String get cat_ganymede => '木卫三';
+
+  @override
+  String get cat_callisto => '木卫四';
+
+  @override
+  String get cat_saturn => '土星';
+
+  @override
+  String get cat_enceladus => '土卫二';
+
+  @override
+  String get cat_titan => '土卫六';
+
+  @override
+  String get cat_uranus => '天王星';
+
+  @override
+  String get cat_miranda => '天卫五';
+
+  @override
+  String get cat_titania => '天卫三';
+
+  @override
+  String get cat_neptune => '海王星';
+
+  @override
+  String get cat_triton => '海卫一';
+
+  @override
+  String get cat_pluto => '冥王星';
+
+  @override
+  String get cat_charon => '冥卫一';
+
+  @override
+  String get cat_haumea => '妊神星';
+
+  @override
+  String get cat_makemake => '鸟神星';
+
+  @override
+  String get cat_eris => '阋神星';
+
+  @override
+  String get cat_sedna => '赛德娜';
+
+  @override
+  String get cat_planetNine => '第九行星';
 }

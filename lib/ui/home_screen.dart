@@ -118,11 +118,11 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                     actionBtn(
                       s.type.gemOnly
                           ? tr.m_upgrade('⭐${_home.statueGemCost(s.level)}')
-                          : tr.m_upgrade(costText(_home.upgradeCost(s))),
+                          : tr.m_upgrade(costText(_home.upgradeCost(s, w?.homeCostMul ?? 1))),
                       w != null &&
                           (s.type.gemOnly
                               ? AppState.profile.gems >= _home.statueGemCost(s.level)
-                              : w.canAfford(_home.upgradeCost(s))),
+                              : w.canAfford(_home.upgradeCost(s, w.homeCostMul))),
                       () => doAct(() => w!.upgradeHome(i)),
                       color: s.type.gemOnly ? const Color(0xFFAD1457) : const Color(0xFF5E35B1),
                     ),
@@ -139,7 +139,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
   }
 
   Widget _buildRow(BuildingType t, GameWorld? w, VoidCallback onBuild) {
-    final cost = _home.buildCost(t);
+    final cost = _home.buildCost(t, w?.homeCostMul ?? 1);
     final gem = _home.statueGemCost(0);
     final can = w != null && (t.gemOnly ? AppState.profile.gems >= gem : w.canAfford(cost));
     return Padding(
@@ -377,8 +377,8 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                             ready && w != null, _harvest,
                             color: const Color(0xFF00897B)),
                         if (_home.level < HomePlanet.maxLevel)
-                          actionBtn(tr.m_planetLevelUp(_home.level + 1, costText(_home.levelUpCost)),
-                              w != null && w.canAfford(_home.levelUpCost),
+                          actionBtn(tr.m_planetLevelUp(_home.level + 1, costText(_home.levelUpCostAt(w?.homeCostMul ?? 1))),
+                              w != null && w.canAfford(_home.levelUpCostAt(w.homeCostMul)),
                               () => _act(() => w!.levelUpHome())),
                       ],
                     ),

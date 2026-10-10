@@ -1716,10 +1716,11 @@ class L10nJa extends L10n {
   String get g_storyKillsLine1 => '海賊なんか、この艦の前じゃただの鉄くずさ！';
 
   @override
-  String get g_storyColoniesTitle => 'テラノヴァに入植する';
+  String get g_storyColoniesTitle => '火星に入植しよう';
 
   @override
-  String get g_storyColoniesLine0 => '近くの緑の惑星テラノヴァに入植してみましょう。近づくと入植ボタンが出ますよ。';
+  String get g_storyColoniesLine0 =>
+      '地球のすぐ隣の赤い惑星、火星に最初の植民地を作りましょう。近づくと入植ボタンが出ます。';
 
   @override
   String get g_storyColoniesLine1 => '植民地は放っておいてもクレジットを稼いでくれますよ！';
@@ -1970,156 +1971,6 @@ class L10nJa extends L10n {
 
   @override
   String get g_upgradeMagnet => 'マグネット';
-
-  @override
-  String get g_sector0 => 'アルファ聖域';
-
-  @override
-  String get g_sector1 => 'ベータ星雲';
-
-  @override
-  String get g_sector2 => 'ガンマ渓谷';
-
-  @override
-  String get g_sector3 => 'デルタ海賊領域';
-
-  @override
-  String get g_sector4 => 'イプシロン深淵';
-
-  @override
-  String get g_sector5 => 'ゼータ氷帯';
-
-  @override
-  String get g_sector6 => 'イータ炎の星団';
-
-  @override
-  String get g_sector7 => 'シータ幽霊航路';
-
-  @override
-  String get g_sector8 => 'イオタ王冠星雲';
-
-  @override
-  String get g_sector9 => 'カッパ・ブラックホール';
-
-  @override
-  String get g_planet0 => 'アクアリス';
-
-  @override
-  String get g_planet1 => 'ルビア';
-
-  @override
-  String get g_planet2 => 'フロスタ';
-
-  @override
-  String get g_planet3 => 'ボルケーノ';
-
-  @override
-  String get g_planet4 => 'ゼリオ';
-
-  @override
-  String get g_planet5 => 'ソラリス';
-
-  @override
-  String get g_planet6 => 'モモ星';
-
-  @override
-  String get g_planet7 => 'ネビュラ';
-
-  @override
-  String get g_planet8 => 'カシオペ';
-
-  @override
-  String get g_planet9 => 'オーロラ';
-
-  @override
-  String get g_planet10 => 'ドリアン';
-
-  @override
-  String get g_planet11 => 'シナモン';
-
-  @override
-  String get g_planet12 => 'マシュマロ';
-
-  @override
-  String get g_planet13 => 'ポップコーン星';
-
-  @override
-  String get g_planet14 => 'ラベンダー';
-
-  @override
-  String get g_planet15 => 'エメラルディア';
-
-  @override
-  String get g_planet16 => 'クリムゾン';
-
-  @override
-  String get g_planet17 => 'ポラリス';
-
-  @override
-  String get g_planet18 => 'ベガ';
-
-  @override
-  String get g_planet19 => 'リゲル';
-
-  @override
-  String get g_planet20 => 'ミラ';
-
-  @override
-  String get g_planet21 => 'トパーズ';
-
-  @override
-  String get g_planet22 => 'コバルト';
-
-  @override
-  String get g_planet23 => 'サファイア';
-
-  @override
-  String get g_planet24 => 'オニキス';
-
-  @override
-  String get g_planet25 => 'ペリドット';
-
-  @override
-  String get g_planet26 => 'ミント星';
-
-  @override
-  String get g_planet27 => 'バニラ';
-
-  @override
-  String get g_planet28 => 'キャラメル';
-
-  @override
-  String get g_planet29 => 'ピスタチオ';
-
-  @override
-  String get g_planet30 => 'ブルーベリー';
-
-  @override
-  String get g_planet31 => 'レモン星';
-
-  @override
-  String get g_planet32 => 'チェリー';
-
-  @override
-  String get g_planet33 => 'メロン';
-
-  @override
-  String get g_planet34 => 'キウイ';
-
-  @override
-  String get g_planet35 => 'マンゴー星';
-
-  @override
-  String get g_planet36 => 'ユズ';
-
-  @override
-  String get g_planet37 => 'グレープフルーツ';
-
-  @override
-  String get g_planet38 => 'カボチャ星';
-
-  @override
-  String get g_planetTerraNova => 'テラノヴァ';
 
   @override
   String g_unknownSector(int n) {
@@ -2410,4 +2261,168 @@ class L10nJa extends L10n {
 
   @override
   String get g_pirateAmbush3 => '今日はツイてないな、ちびっこ！';
+
+  @override
+  String get cat_sysSol => '太陽系';
+
+  @override
+  String get cat_sysAlphaCen => 'ケンタウルス座α星';
+
+  @override
+  String get cat_sysBarnard => 'バーナード星';
+
+  @override
+  String get cat_sysWolf359 => 'ウォルフ359';
+
+  @override
+  String get cat_sysLalande => 'ラランド21185';
+
+  @override
+  String get cat_sysSirius => 'シリウス';
+
+  @override
+  String get cat_sysEpsEri => 'エリダヌス座ε星';
+
+  @override
+  String get cat_sysRoss128 => 'ロス128';
+
+  @override
+  String get cat_sysTauCeti => 'くじら座τ星';
+
+  @override
+  String get cat_sysTeegarden => 'ティーガーデン星';
+
+  @override
+  String get cat_sysGliese581 => 'グリーゼ581';
+
+  @override
+  String get cat_sysGliese667C => 'グリーゼ667C';
+
+  @override
+  String get cat_sysTrappist1 => 'トラピスト1';
+
+  @override
+  String get cat_sys55Cnc => 'かに座55番星';
+
+  @override
+  String get cat_sys51Peg => 'ペガスス座51番星';
+
+  @override
+  String cat_sysKepler(int n) {
+    return 'ケプラー$n';
+  }
+
+  @override
+  String get cat_sysOmegaCen => 'ケンタウルス座ω星団';
+
+  @override
+  String get cat_sysSgrA => '銀河中心 (いて座A*)';
+
+  @override
+  String get cat_sysLMC => '大マゼラン雲';
+
+  @override
+  String get cat_sysSMC => '小マゼラン雲';
+
+  @override
+  String get cat_sysAndromeda => 'アンドロメダ銀河';
+
+  @override
+  String get cat_sysTriangulum => 'さんかく座銀河';
+
+  @override
+  String get cat_pfxProxima => 'プロキシマ';
+
+  @override
+  String get cat_pfxBarnard => 'バーナード';
+
+  @override
+  String get cat_pfxSirius => 'シリウスA';
+
+  @override
+  String get cat_pfxEpsEri => 'エリダヌス座ε星';
+
+  @override
+  String get cat_pfxTauCeti => 'くじら座τ星';
+
+  @override
+  String get cat_pfxTeegarden => 'ティーガーデン星';
+
+  @override
+  String get cat_mars => '火星';
+
+  @override
+  String get cat_moon => '月';
+
+  @override
+  String get cat_venus => '金星';
+
+  @override
+  String get cat_mercury => '水星';
+
+  @override
+  String get cat_ceres => 'ケレス';
+
+  @override
+  String get cat_vesta => 'ベスタ';
+
+  @override
+  String get cat_jupiter => '木星';
+
+  @override
+  String get cat_io => 'イオ';
+
+  @override
+  String get cat_europa => 'エウロパ';
+
+  @override
+  String get cat_ganymede => 'ガニメデ';
+
+  @override
+  String get cat_callisto => 'カリスト';
+
+  @override
+  String get cat_saturn => '土星';
+
+  @override
+  String get cat_enceladus => 'エンケラドゥス';
+
+  @override
+  String get cat_titan => 'タイタン';
+
+  @override
+  String get cat_uranus => '天王星';
+
+  @override
+  String get cat_miranda => 'ミランダ';
+
+  @override
+  String get cat_titania => 'チタニア';
+
+  @override
+  String get cat_neptune => '海王星';
+
+  @override
+  String get cat_triton => 'トリトン';
+
+  @override
+  String get cat_pluto => '冥王星';
+
+  @override
+  String get cat_charon => 'カロン';
+
+  @override
+  String get cat_haumea => 'ハウメア';
+
+  @override
+  String get cat_makemake => 'マケマケ';
+
+  @override
+  String get cat_eris => 'エリス';
+
+  @override
+  String get cat_sedna => 'セドナ';
+
+  @override
+  String get cat_planetNine => 'プラネット・ナイン';
 }

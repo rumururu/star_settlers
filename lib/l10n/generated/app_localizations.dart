@@ -3028,13 +3028,13 @@ abstract class L10n {
   /// story/tutorial objective title (top of HUD)
   ///
   /// In ko, this message translates to:
-  /// **'테라노바에 정착하기'**
+  /// **'화성에 정착하기'**
   String get g_storyColoniesTitle;
 
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'근처 초록 행성 테라노바에 정착해봐요. 가까이 가면 정착 버튼이 떠요.'**
+  /// **'지구 바로 옆 붉은 행성, 화성에 첫 식민지를 세워봐요. 가까이 가면 정착 버튼이 떠요.'**
   String get g_storyColoniesLine0;
 
   /// story dialogue line spoken by advisor Mina or the captain
@@ -3505,306 +3505,6 @@ abstract class L10n {
   /// **'자석'**
   String get g_upgradeMagnet;
 
-  /// name of star system/sector 1 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'알파 성역'**
-  String get g_sector0;
-
-  /// name of star system/sector 2 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'베타 성운'**
-  String get g_sector1;
-
-  /// name of star system/sector 3 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'감마 협곡'**
-  String get g_sector2;
-
-  /// name of star system/sector 4 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'델타 해적지대'**
-  String get g_sector3;
-
-  /// name of star system/sector 5 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'엡실론 심연'**
-  String get g_sector4;
-
-  /// name of star system/sector 6 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'제타 얼음벨트'**
-  String get g_sector5;
-
-  /// name of star system/sector 7 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'에타 불꽃성단'**
-  String get g_sector6;
-
-  /// name of star system/sector 8 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'세타 유령항로'**
-  String get g_sector7;
-
-  /// name of star system/sector 9 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'이오타 왕관성운'**
-  String get g_sector8;
-
-  /// name of star system/sector 10 (proper noun)
-  ///
-  /// In ko, this message translates to:
-  /// **'카파 블랙홀'**
-  String get g_sector9;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'아쿠아리스'**
-  String get g_planet0;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'루비아'**
-  String get g_planet1;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'프로스타'**
-  String get g_planet2;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'볼카노'**
-  String get g_planet3;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'젤리오'**
-  String get g_planet4;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'솔라리스'**
-  String get g_planet5;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'모모별'**
-  String get g_planet6;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'네뷸라'**
-  String get g_planet7;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'카시오페'**
-  String get g_planet8;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'오로라'**
-  String get g_planet9;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'두리안'**
-  String get g_planet10;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'시나몬'**
-  String get g_planet11;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'마시멜로'**
-  String get g_planet12;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'팝콘별'**
-  String get g_planet13;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'라벤더'**
-  String get g_planet14;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'에메랄디아'**
-  String get g_planet15;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'크림슨'**
-  String get g_planet16;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'폴라리스'**
-  String get g_planet17;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'베가'**
-  String get g_planet18;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'리겔'**
-  String get g_planet19;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'미라'**
-  String get g_planet20;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'토파즈'**
-  String get g_planet21;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'코발트'**
-  String get g_planet22;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'사파이어'**
-  String get g_planet23;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'오닉스'**
-  String get g_planet24;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'페리도트'**
-  String get g_planet25;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'민트별'**
-  String get g_planet26;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'바닐라'**
-  String get g_planet27;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'캐러멜'**
-  String get g_planet28;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'피스타치오'**
-  String get g_planet29;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'블루베리'**
-  String get g_planet30;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'레몬별'**
-  String get g_planet31;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'체리'**
-  String get g_planet32;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'멜론'**
-  String get g_planet33;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'키위'**
-  String get g_planet34;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'망고별'**
-  String get g_planet35;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'유자'**
-  String get g_planet36;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'자몽'**
-  String get g_planet37;
-
-  /// random planet name (proper noun); list order matters for world generation
-  ///
-  /// In ko, this message translates to:
-  /// **'호박별'**
-  String get g_planet38;
-
-  /// name of the first (home) planet; proper noun
-  ///
-  /// In ko, this message translates to:
-  /// **'테라노바'**
-  String get g_planetTerraNova;
-
   /// name for sectors beyond the named list; n = sector number
   ///
   /// In ko, this message translates to:
@@ -4266,6 +3966,330 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'오늘 운이 나쁘구나, 꼬마!'**
   String get g_pirateAmbush3;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'태양계'**
+  String get cat_sysSol;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'알파 센타우리'**
+  String get cat_sysAlphaCen;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'버나드 별'**
+  String get cat_sysBarnard;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'울프 359'**
+  String get cat_sysWolf359;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'랄랑드 21185'**
+  String get cat_sysLalande;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'시리우스'**
+  String get cat_sysSirius;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'에리다누스자리 엡실론'**
+  String get cat_sysEpsEri;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'로스 128'**
+  String get cat_sysRoss128;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'고래자리 타우'**
+  String get cat_sysTauCeti;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'티가든 별'**
+  String get cat_sysTeegarden;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'글리제 581'**
+  String get cat_sysGliese581;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'글리제 667 C'**
+  String get cat_sysGliese667C;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'트라피스트-1'**
+  String get cat_sysTrappist1;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'게자리 55'**
+  String get cat_sys55Cnc;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'페가수스자리 51'**
+  String get cat_sys51Peg;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'케플러-{n}'**
+  String cat_sysKepler(int n);
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'오메가 센타우리 성단'**
+  String get cat_sysOmegaCen;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'은하 중심 (궁수자리 A*)'**
+  String get cat_sysSgrA;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'대마젤란 은하'**
+  String get cat_sysLMC;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'소마젤란 은하'**
+  String get cat_sysSMC;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'안드로메다 은하'**
+  String get cat_sysAndromeda;
+
+  /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'삼각형자리 은하'**
+  String get cat_sysTriangulum;
+
+  /// star name used as prefix of exoplanet designations, e.g. "<prefix> b"; keep short, letters stay Latin
+  ///
+  /// In ko, this message translates to:
+  /// **'프록시마'**
+  String get cat_pfxProxima;
+
+  /// star name used as prefix of exoplanet designations, e.g. "<prefix> b"; keep short, letters stay Latin
+  ///
+  /// In ko, this message translates to:
+  /// **'버나드'**
+  String get cat_pfxBarnard;
+
+  /// star name used as prefix of exoplanet designations, e.g. "<prefix> b"; keep short, letters stay Latin
+  ///
+  /// In ko, this message translates to:
+  /// **'시리우스 A'**
+  String get cat_pfxSirius;
+
+  /// star name used as prefix of exoplanet designations, e.g. "<prefix> b"; keep short, letters stay Latin
+  ///
+  /// In ko, this message translates to:
+  /// **'엡실론 에리다니'**
+  String get cat_pfxEpsEri;
+
+  /// star name used as prefix of exoplanet designations, e.g. "<prefix> b"; keep short, letters stay Latin
+  ///
+  /// In ko, this message translates to:
+  /// **'타우 세티'**
+  String get cat_pfxTauCeti;
+
+  /// star name used as prefix of exoplanet designations, e.g. "<prefix> b"; keep short, letters stay Latin
+  ///
+  /// In ko, this message translates to:
+  /// **'티가든'**
+  String get cat_pfxTeegarden;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'화성'**
+  String get cat_mars;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'달'**
+  String get cat_moon;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'금성'**
+  String get cat_venus;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'수성'**
+  String get cat_mercury;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'세레스'**
+  String get cat_ceres;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'베스타'**
+  String get cat_vesta;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'목성'**
+  String get cat_jupiter;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'이오'**
+  String get cat_io;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'유로파'**
+  String get cat_europa;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'가니메데'**
+  String get cat_ganymede;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'칼리스토'**
+  String get cat_callisto;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'토성'**
+  String get cat_saturn;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'엔셀라두스'**
+  String get cat_enceladus;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'타이탄'**
+  String get cat_titan;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'천왕성'**
+  String get cat_uranus;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'미란다'**
+  String get cat_miranda;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'티타니아'**
+  String get cat_titania;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'해왕성'**
+  String get cat_neptune;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'트리톤'**
+  String get cat_triton;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'명왕성'**
+  String get cat_pluto;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'카론'**
+  String get cat_charon;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'하우메아'**
+  String get cat_haumea;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'마케마케'**
+  String get cat_makemake;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'에리스'**
+  String get cat_eris;
+
+  /// real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language
+  ///
+  /// In ko, this message translates to:
+  /// **'세드나'**
+  String get cat_sedna;
+
+  /// hypothetical undiscovered 9th planet of the Solar System (real hypothesis "Planet Nine")
+  ///
+  /// In ko, this message translates to:
+  /// **'제9행성'**
+  String get cat_planetNine;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -8,6 +8,7 @@ import 'package:star_settlers/game/missions.dart';
 import 'package:star_settlers/game/models.dart';
 import 'package:star_settlers/game/profile.dart';
 import 'package:star_settlers/game/ships.dart';
+import 'package:star_settlers/game/star_catalog.dart';
 import 'package:star_settlers/game/world.dart';
 import 'package:star_settlers/l10n/l.dart' show Lang, L10n;
 import 'dart:ui' show Locale;
@@ -28,7 +29,7 @@ void main() {
     test('생성: 행성/기지/게이트/소행성', () {
       final w = GameWorld(seed: 42);
       expect(w.planets.length, greaterThanOrEqualTo(5));
-      expect(w.planets.first.name, '테라노바');
+      expect(w.planets.first.name, '화성'); // 태양계 첫 식민지
       expect(w.stations.length, 1);
       expect(w.gates.where((g) => g.forward).length, 1);
       expect(w.asteroids.length, GameWorld.maxAsteroids);
@@ -59,7 +60,7 @@ void main() {
       final before = w.creditIncome;
       expect(w.upgradePlanet(p), isTrue);
       expect(p.colonyLevel, 1);
-      expect(w.credits, 1000 - 150);
+      expect(w.credits, 1000 - Planet.settleCost); // 첫 항성계(비용 배율 1)의 정원 행성
       expect(w.creditIncome, greaterThan(before));
     });
 
@@ -90,6 +91,8 @@ void main() {
   group('전투/스킬', () {
     test('해적 격추 시 보상 드롭과 카운트', () {
       final w = GameWorld(seed: 5);
+      // 본거지 레이저가 대신 잡으면 현상금이 줄어드니 레이저를 끈다 (직접 격추 보상만 확인)
+      w.homeBase.disabledTime = 999;
       final c = w.credits;
       w.pirates.add(Pirate(PirateKind.scout, w.player.pos + const Offset(0, -60), 1));
       w.player.angle = -1.5707963;
@@ -549,7 +552,9 @@ void main() {
       w.savedAt = now.subtract(const Duration(hours: 1));
       final base = w.offlineEarnings(now).$2;
       w.buildHome(0, BuildingType.park);
-      expect(w.offlineEarnings(now).$2, closeTo(base * 1.1, base * 0.01));
+      const ratio = (HomePlanet.offlineBaseEfficiency + HomePlanet.offlineParkStep) /
+          HomePlanet.offlineBaseEfficiency;
+      expect(w.offlineEarnings(now).$2, closeTo(base * ratio, base * 0.01));
     });
 
     test('내 행성은 프로필에 저장되고 환생해도 유지', () {
@@ -658,7 +663,8 @@ void main() {
 
     test('채굴 시설은 광석, 교역소는 크레딧 수입을 늘린다', () {
       final w = rich(seed: 24);
-      final p = w.planets.first; // 정원 행성: 원래 광석 0
+      // 원래 광석이 없는 행성(정원·가스)으로 시험
+      final p = w.planets.firstWhere((p) => p.ratePerLevel.$2 == 0);
       w.upgradePlanet(p);
       expect(w.planetOreRate(p), 0);
       final cr = w.planetCreditRate(p);
@@ -1285,5 +1291,67 @@ void main() {
       expect(w.sectorName, isNotEmpty);
     }
     Lang.set(const Locale('ko'));
+  });
+  group('실제 항성계 카탈로그', () {
+    const langs = ['ko', 'en', 'ja', 'zh', 'es', 'fr', 'de', 'pt', 'ru', 'id'];
+
+    test('15개 섹터 이름이 10개 언어 모두에서 비어 있지 않다', () {
+      for (final l in langs) {
+        Lang.set(Locale(l));
+        for (var s = 0; s < 15; s++) {
+          expect(systemName(s).trim(), isNotEmpty, reason: '$l sector $s');
+          final p = planetIdentity(s, 0, 9);
+          expect(p.name.trim(), isNotEmpty, reason: '$l sector $s planet 0');
+        }
+        // 카탈로그 끝 너머도 이름이 나온다
+        expect(systemName(catalogSystemCount + 3), isNotEmpty);
+      }
+      Lang.set(const Locale('ko'));
+    });
+
+    test('항성계 안 행성 이름은 25개까지 겹치지 않고 종류도 유효하다', () {
+      for (final l in ['ko', 'en', 'ja', 'ru']) {
+        Lang.set(Locale(l));
+        for (var s = 0; s < catalogSystemCount + 3; s++) {
+          for (var count = 1; count <= 25; count++) {
+            final ids = [for (var i = 0; i < count; i++) planetIdentity(s, i, count)];
+            final names = ids.map((e) => e.name).toSet();
+            expect(names.length, count, reason: '$l sector $s count $count: ${ids.map((e) => e.name)}');
+            for (final e in ids) {
+              expect(PlanetKind.values, contains(e.kind));
+              expect(e.name.trim(), isNotEmpty);
+            }
+          }
+        }
+      }
+      Lang.set(const Locale('ko'));
+    });
+
+    test('태양계 0번(첫 식민지)은 화성, 같은 입력은 같은 결과', () {
+      Lang.set(const Locale('ko'));
+      for (var count = 1; count <= 25; count++) {
+        expect(planetIdentity(0, 0, count).name, '화성');
+        expect(planetIdentity(0, 0, count).kind, PlanetKind.desert);
+      }
+      expect(systemName(0), '태양계');
+      final nine = [for (var i = 0; i < 9; i++) planetIdentity(0, i, 9).name];
+      expect(nine, containsAll(['화성', '목성', '토성', '해왕성']));
+      expect(nine, isNot(contains('지구')));
+      Lang.set(const Locale('en'));
+      expect(planetIdentity(0, 0, 9).name, 'Mars');
+      expect(systemName(1), 'Alpha Centauri');
+      expect(planetIdentity(1, 1, 11).name, 'Proxima b');
+      expect(planetIdentity(1, 3, 11).name, 'Proxima e');
+      expect(planetIdentity(5, 0, 11).name, 'Sirius Ab');
+      expect(planetIdentity(7, 5, 15), planetIdentity(7, 5, 15));
+      Lang.set(const Locale('ko'));
+    });
+
+    test('거리는 지구에서 멀어지는 순서', () {
+      expect(systemDistanceLy(0), 0);
+      for (var s = 1; s < catalogSystemCount + 5; s++) {
+        expect(systemDistanceLy(s), greaterThan(systemDistanceLy(s - 1)), reason: 'sector $s');
+      }
+    });
   });
 }

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import '../game/cosmetics.dart';
 import '../game/missions.dart';
 import '../game/models.dart';
+import '../game/profile.dart';
 import '../game/save.dart';
 import '../game/world.dart';
 import '../l10n/l.dart';
@@ -377,7 +378,7 @@ class _GameScreenState extends State<GameScreen>
     final ok = await AppState.watchAd();
     _reviving = false;
     _endModal();
-    if (ok) {
+    if (ok && w.profile.useAdRevive(DateTime.now())) {
       w.reviveHere();
     } else {
       w.say(Speaker.advisor, tr.u_adLoadingRetry);
@@ -821,6 +822,7 @@ class _GameScreenState extends State<GameScreen>
     final p = w.player;
     if (!p.awaitingRevive) return const SizedBox();
     final premium = w.profile.premium;
+    final adLeft = w.profile.adRevivesLeft(DateTime.now());
     return Container(
       color: Colors.black45,
       alignment: Alignment.center,
@@ -832,9 +834,17 @@ class _GameScreenState extends State<GameScreen>
             Text(tr.u_shotDown, style: Ts.title),
             Text(tr.u_autoRespawn(max(0, 20 - p.deadTime).ceil()), style: dimStyle),
             const SizedBox(height: 12),
-            actionBtn(premium ? tr.u_reviveFree : tr.u_reviveAd, true, _reviveWithAd,
-                color: const Color(0xFF00897B)),
-            const SizedBox(height: 8),
+            // 광고 부활은 하루 횟수 제한 (패스는 무제한)
+            if (adLeft > 0) ...[
+              actionBtn(
+                  premium
+                      ? tr.u_reviveFree
+                      : '${tr.u_reviveAd} ($adLeft/${Profile.adRevivesPerDay})',
+                  true,
+                  _reviveWithAd,
+                  color: const Color(0xFF00897B)),
+              const SizedBox(height: 8),
+            ],
             actionBtn(tr.u_reviveGems, true, _reviveWithGems, color: const Color(0xFFAD1457)),
             const SizedBox(height: 8),
             actionBtn(tr.u_respawnBase((100 * GameWorld.respawnCostRatio(w.stations.reduce((a, b) => (a.pos - p.deathPos).distance < (b.pos - p.deathPos).distance ? a : b))).round()),

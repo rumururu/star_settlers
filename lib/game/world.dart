@@ -9,6 +9,7 @@ import 'missions.dart';
 import 'models.dart';
 import 'profile.dart';
 import 'ships.dart';
+import 'star_catalog.dart';
 
 class InputState {
   Offset move = Offset.zero; // 길이 0..1
@@ -84,61 +85,6 @@ class SectorSave {
       );
 }
 
-List<String> get sectorNames => [
-      tr.g_sector0,
-      tr.g_sector1,
-      tr.g_sector2,
-      tr.g_sector3,
-      tr.g_sector4,
-      tr.g_sector5,
-      tr.g_sector6,
-      tr.g_sector7,
-      tr.g_sector8,
-      tr.g_sector9,
-    ];
-
-/// 행성 이름 풀. 순서와 개수가 월드 생성 난수에 묶여 있으니 바꾸지 않는다.
-List<String> get _planetPool => [
-      tr.g_planet0,
-      tr.g_planet1,
-      tr.g_planet2,
-      tr.g_planet3,
-      tr.g_planet4,
-      tr.g_planet5,
-      tr.g_planet6,
-      tr.g_planet7,
-      tr.g_planet8,
-      tr.g_planet9,
-      tr.g_planet10,
-      tr.g_planet11,
-      tr.g_planet12,
-      tr.g_planet13,
-      tr.g_planet14,
-      tr.g_planet15,
-      tr.g_planet16,
-      tr.g_planet17,
-      tr.g_planet18,
-      tr.g_planet19,
-      tr.g_planet20,
-      tr.g_planet21,
-      tr.g_planet22,
-      tr.g_planet23,
-      tr.g_planet24,
-      tr.g_planet25,
-      tr.g_planet26,
-      tr.g_planet27,
-      tr.g_planet28,
-      tr.g_planet29,
-      tr.g_planet30,
-      tr.g_planet31,
-      tr.g_planet32,
-      tr.g_planet33,
-      tr.g_planet34,
-      tr.g_planet35,
-      tr.g_planet36,
-      tr.g_planet37,
-      tr.g_planet38,
-    ];
 
 /// 게임 전체 상태와 규칙. 렌더링/위젯과 분리되어 있어 테스트 가능.
 class GameWorld {
@@ -292,10 +238,40 @@ class GameWorld {
   /// 함선 고유 수호막(오로라)이 충전되어 있는가
   bool get guardReady => ship.guardInterval > 0 && player.guardCooldown <= 0;
 
-  double get sectorMul => 1 + sector * 0.5;
-  double get costMul => 1 + sector * 0.3;
-  String get sectorName =>
-      sector < sectorNames.length ? sectorNames[sector] : tr.g_unknownSector(sector + 1);
+  // ---------- 항성계 밸런스 ----------
+  /// 생산·현상금·보상(그리고 해적 체력) 배율: 항성계마다 +[sectorIncomeStep]
+  static const sectorIncomeStep = 0.5;
+  double get sectorMul => 1 + sector * sectorIncomeStep;
+
+  /// 비용 배율: 첫 항성계 1, 두 번째 ×[sectorCostJump], 그 뒤로 항성계마다 ×[sectorCostGrowth].
+  /// 생산(+50%씩)보다 훨씬 빨리 올라서 첫 항성계는 한 번에(20~40분), 두 번째는 하루쯤,
+  /// 그 뒤로는 며칠씩 걸린다. 무료로도 끝까지 갈 수는 있다.
+  /// (예전 1 + 0.3×섹터는 생산이 비용보다 빨리 늘어 뒤로 갈수록 오히려 쉬워졌다)
+  static const sectorCostJump = 34.0;
+  static const sectorCostGrowth = 1.8;
+  static double costMulAt(int sector) =>
+      sector <= 0 ? 1 : sectorCostJump * pow(sectorCostGrowth, sector - 1);
+  double get costMul => costMulAt(sector);
+
+  /// 전투·임무 보상 배율: 생산 배율 × 비용 배율^[rewardCostExponent].
+  /// 생산 배율만 따르면 뒤 항성계에서 사냥·임무가 의미 없어지고(비용만 수백 배),
+  /// 비용 배율을 그대로 따르면 사냥만으로 진행된다. 직접 플레이가 수입의 한 축이 되게 중간.
+  static const rewardCostExponent = 0.4;
+  double get rewardMul => sectorMul * pow(costMul, rewardCostExponent);
+
+  /// 해적 공격력 배율: 항성계마다 +[enemyDamageStep] (체력은 [sectorMul]을 따른다)
+  static const enemyDamageStep = 0.3;
+  double get enemyDamageMul => 1 + sector * enemyDamageStep;
+
+  /// 본거지 레이저가 잡은 해적은 현상금을 이 비율만 떨군다
+  /// (안전 구역에 숨어 레이저로 무한 사냥하는 파밍 방지)
+  static const laserBountyRatio = 0.25;
+
+  /// 다른 항성계에 두고 온 식민지·정거장의 원격 수입 비율.
+  /// 100%면 옛 항성계 수입이 쌓여 새 항성계가 금방 끝난다.
+  static const remoteIncomeRatio = 0.5;
+  /// 실제 항성계 이름 (태양계 → 알파 센타우리 → … → 우리 은하 중심 → 이웃 은하)
+  String get sectorName => systemName(sector);
 
   int get colonyCount => planets.where((p) => p.colonyLevel > 0).length;
 
@@ -345,8 +321,9 @@ class GameWorld {
   double stationCreditRate(Station s) => s.baseCreditRate * sectorMul * _incomeMul;
 
   double get otherSectorCredits =>
-      sectors.values.fold(0.0, (s, e) => s + e.idleCredits) * _incomeMul;
-  double get otherSectorOre => sectors.values.fold(0.0, (s, e) => s + e.idleOre);
+      sectors.values.fold(0.0, (s, e) => s + e.idleCredits) * _incomeMul * remoteIncomeRatio;
+  double get otherSectorOre =>
+      sectors.values.fold(0.0, (s, e) => s + e.idleOre) * remoteIncomeRatio;
 
   double get creditIncome =>
       planets.fold(0.0, (s, p) => s + planetCreditRate(p)) +
@@ -430,43 +407,38 @@ class GameWorld {
     merchantCrew = null;
     _supplyCapsule = null;
 
+    // 행성: 첫 행성은 본거지 근처 안쪽 궤도, 나머지는 바깥 궤도들에 돌아가며 고르게 나눠 놓는다.
+    // 같은 궤도의 행성은 같은 속도로 돌아서 처음 간격이 유지되고, 궤도 사이는 400 이상이라
+    // 가장 큰 가스 행성 둘(반지름 200 미만)도 겹치지 않는다.
     final r = Random(seed + index * 7919);
-    final kinds = PlanetKind.values;
-    final names = [..._planetPool]..shuffle(r);
-    // 이름·종류·크기는 예전과 같은 난수 순서로 뽑는다 (저장된 식민지가 행성 번호로 묶여 있음).
-    // 예전 배치 좌표는 간격 검사에만 쓰고 버린다.
-    final drafts = <(String, double, PlanetKind)>[
-      (index == 0 ? tr.g_planetTerraNova : names.removeLast(), 110,
-          index == 0 ? PlanetKind.garden : kinds[r.nextInt(kinds.length)]),
-    ];
-    final legacyPos = <Offset>[const Offset(900, -350)];
-    var tries = 0;
-    while (drafts.length < 1 + outerOrbits.length * 2 && tries < 2000) {
-      tries++;
-      final pos = Offset(randRange(r, -worldHalf + 400, worldHalf - 400),
-          randRange(r, -worldHalf + 400, worldHalf - 400));
-      if (pos.distance < 700) continue;
-      if (legacyPos.any((p) => (p - pos).distance < 1100)) continue;
-      final kind = kinds[r.nextInt(kinds.length)];
-      final radius =
-          kind == PlanetKind.gas ? randRange(r, 150, 200) : randRange(r, 90, 140);
-      legacyPos.add(pos);
-      drafts.add((names.removeLast(), radius, kind));
-    }
-    // 궤도 배치: 첫 행성은 본거지 근처에서 출발, 나머지는 한 궤도에 두 개씩 마주 보게
     final orbitRng = Random(seed + index * 31 + 7);
-    for (var i = 0; i < drafts.length; i++) {
-      final (name, radius, kind) = drafts[i];
+    final count = planetCountFor(index);
+    final others = count - 1;
+    final perOrbit = [
+      for (var o = 0; o < outerOrbits.length; o++)
+        others ~/ outerOrbits.length + (o < others % outerOrbits.length ? 1 : 0),
+    ];
+    final orbitStart = [for (final _ in outerOrbits) orbitRng.nextDouble() * 2 * pi];
+    final placed = List.filled(outerOrbits.length, 0);
+    for (var i = 0; i < count; i++) {
+      final (name, kind) = _planetIdentity(index, i, count, r);
+      final radius = i == 0
+          ? 110.0
+          : kind == PlanetKind.gas
+              ? randRange(r, 150, 200)
+              : randRange(r, 90, 140);
       final double orbit;
       final double phase;
       if (i == 0) {
         orbit = innerOrbit;
         phase = pi / 2 - 0.55;
       } else {
-        orbit = outerOrbits[(i - 1) ~/ 2];
-        phase = (i - 1).isEven
-            ? orbitRng.nextDouble() * 2 * pi
-            : planets.last.orbitPhase + pi + randRange(orbitRng, -0.4, 0.4);
+        final o = (i - 1) % outerOrbits.length;
+        final n = perOrbit[o];
+        final k = placed[o]++;
+        orbit = outerOrbits[o];
+        // 같은 궤도에 n개를 고르게, 조금씩 흔들어서
+        phase = orbitStart[o] + k * 2 * pi / n + randRange(orbitRng, -0.25, 0.25) / n;
       }
       planets.add(Planet(name, radius, kind, orbitRadius: orbit, orbitPhase: phase));
     }
@@ -539,6 +511,24 @@ class GameWorld {
       if ((g.pos - player.pos).distance < 160) return g;
     }
     return null;
+  }
+
+  // ---------- 항성계 구성 ----------
+  /// 항성계의 행성 수: 첫 항성계 [firstSystemPlanets]개, 항성계마다 +[planetsPerSystem], 최대 [maxPlanets].
+  /// 발전도는 모든 행성 Lv.3이라 뒤 항성계일수록 개발할 곳이 많다.
+  static const firstSystemPlanets = 9;
+  static const planetsPerSystem = 2;
+  static const maxPlanets = 21;
+  static int planetCountFor(int sector) =>
+      min(maxPlanets, firstSystemPlanets + planetsPerSystem * max(0, sector));
+
+  /// 행성 이름·종류: 실제 항성계 카탈로그(star_catalog.dart). 실제 행성이 먼저, 모자라면
+  /// 실제 명명 규칙을 이은 가상 행성. 태양계 첫 행성(튜토리얼 식민지)은 화성.
+  /// 배치 난수 순서를 예전과 같게 두려고 [r]을 한 번 소비한다.
+  (String, PlanetKind) _planetIdentity(int sector, int i, int count, Random r) {
+    r.nextInt(PlanetKind.values.length);
+    final id = planetIdentity(sector, i, count);
+    return (id.name, id.kind);
   }
 
   // ---------- 항성계 발전도 ----------
@@ -774,7 +764,7 @@ class GameWorld {
     final dmg = best.kind == PirateKind.boss
         ? min(hb.laserDamage, best.maxHp * havenBossDamageRatio)
         : hb.laserDamage;
-    _hitPirate(best, dmg, best.pos);
+    _hitPirate(best, dmg, best.pos, byBase: true);
     _burst(best.pos, const Color(0xFFFFE082), 10);
     sfx.add(Sfx.shoot);
   }
@@ -1006,11 +996,15 @@ class GameWorld {
   // ---------- 내 행성 ----------
   HomePlanet get home => profile.home;
 
+  /// 내 행성 비용 배율: 이번 게임에서 가장 멀리 간 항성계의 비용 배율.
+  /// (지금 있는 항성계 기준이면 첫 항성계로 돌아가 싸게 짓는다)
+  double get homeCostMul => costMulAt(max(sector, counter('maxSector')));
+
   bool buildHome(int slot, BuildingType t) {
     if (slot < 0 || slot >= home.slots.length || home.slots[slot] != null) return false;
     if (t.gemOnly) {
       if (!profile.spendGems(home.statueGemCost(0))) return false;
-    } else if (!_pay(home.buildCost(t))) {
+    } else if (!_pay(home.buildCost(t, homeCostMul))) {
       return false;
     }
     home.slots[slot] = HomeSlot(t);
@@ -1025,7 +1019,7 @@ class GameWorld {
     if (s == null || s.level >= HomeSlot.maxLevel) return false;
     if (s.type.gemOnly) {
       if (!profile.spendGems(home.statueGemCost(s.level))) return false;
-    } else if (!_pay(home.upgradeCost(s))) {
+    } else if (!_pay(home.upgradeCost(s, homeCostMul))) {
       return false;
     }
     s.level++;
@@ -1036,7 +1030,7 @@ class GameWorld {
 
   bool levelUpHome() {
     if (home.level >= HomePlanet.maxLevel) return false;
-    if (!_pay(home.levelUpCost)) return false;
+    if (!_pay(home.levelUpCostAt(homeCostMul))) return false;
     home.levelUp();
     profile.maxStat('homeLevel', home.level);
     profile.dirty = true;
@@ -1047,7 +1041,7 @@ class GameWorld {
   /// 8시간마다 받는 행성 선물. 받은 (크레딧, 젬) 반환
   (int, int)? harvestHome(DateTime now) {
     if (!home.harvestReady(now)) return null;
-    final r = home.harvestReward(sectorMul);
+    final r = home.harvestReward(rewardMul);
     home.lastHarvestMs = now.millisecondsSinceEpoch;
     credits += r.$1;
     profile.gems += r.$2;
@@ -1068,7 +1062,17 @@ class GameWorld {
   }
 
   static const creditPackGems = 20;
-  int get creditPackAmount => (1500 * sectorMul).round();
+
+  /// 크레딧 팩: 보상 배율([rewardMul])을 따라간다 = 직접 플레이로 버는 돈과 같은 속도로 커진다.
+  /// 비용 배율을 따르면 뒤 항성계에서 무료 젬 환전이 진행의 70%를 넘고,
+  /// 생산 배율만 따르면 뒤로 갈수록 쓸모가 없어진다.
+  static const creditPackBase = 10000;
+
+  /// 첫 항성계는 발전 비용 자체가 작아서(4만대) 팩 하나가 20%나 된다 → 이 비율만.
+  /// 튜토리얼 젬으로 첫 항성계를 건너뛰지 않게.
+  static const firstSystemPackRatio = 0.25;
+  int get creditPackAmount =>
+      (creditPackBase * rewardMul * (sector == 0 ? firstSystemPackRatio : 1)).round();
 
   bool buyCreditsWithGems() {
     if (!profile.spendGems(creditPackGems)) return false;
@@ -1154,18 +1158,18 @@ class GameWorld {
         final n = 5 + (t * 2).round();
         return Mission(
             id: _nextId++, type: MissionType.kill, target: n,
-            rewardCredits: (35 * n * sectorMul).round(), rewardGems: gemBonus);
+            rewardCredits: (35 * n * rewardMul).round(), rewardGems: gemBonus);
       case 1:
         final n = 40 + _rng.nextInt(9) * 10;
         return Mission(
             id: _nextId++, type: MissionType.mine, target: n,
-            rewardCredits: (3 * n * sectorMul).round(), rewardGems: gemBonus);
+            rewardCredits: (3 * n * rewardMul).round(), rewardGems: gemBonus);
       case 2:
         final idx = _rng.nextInt(planets.length);
         final d = (planets[idx].pos - player.pos).distance;
         return Mission(
             id: _nextId++, type: MissionType.deliver, target: 1, planetIndex: idx,
-            rewardCredits: ((150 + d / 8) * sectorMul).round(), rewardGems: gemBonus);
+            rewardCredits: ((150 + d / 8) * rewardMul).round(), rewardGems: gemBonus);
       default:
         return Mission(
             id: _nextId++, type: MissionType.bounty, target: 1,
@@ -1174,7 +1178,7 @@ class GameWorld {
                     .toList()
                   ..shuffle(_rng))
                 .first,
-            rewardCredits: (450 * sectorMul).round(), rewardGems: 5);
+            rewardCredits: (450 * rewardMul).round(), rewardGems: 5);
     }
   }
 
@@ -1198,7 +1202,7 @@ class GameWorld {
     final a = _rng.nextDouble() * 2 * pi;
     final pos = _clampWorld(player.pos + OffsetX.fromAngle(a, randRange(_rng, 1500, 2400)), (_) {});
     final e = Pirate(PirateKind.raider, pos, Pirate.baseHp(PirateKind.raider) * 5 * sectorMul,
-        name: m.bountyName, dmgScale: 1.5 * (1 + sector * 0.3))
+        name: m.bountyName, dmgScale: 1.5 * enemyDamageMul)
       ..missionId = m.id
       ..wanderAngle = a;
     pirates.add(e);
@@ -1347,14 +1351,24 @@ class GameWorld {
   // ---------- 오프라인 수입 ----------
   DateTime? savedAt;
 
+  /// 오프라인 수입 상한: 기본 2시간, 사령관 패스 8시간
+  static const offlineCapHours = 2;
+  static const premiumOfflineCapHours = 8;
+
+  /// 처음 [offlineCapHours]시간은 그대로 쌓이고, 그 뒤(패스의 나머지 6시간)는 이 비율로 쌓인다.
+  /// 그대로 쌓이면 패스가 오프라인 수입만 4배라 진행이 3배 넘게 빨라진다.
+  static const offlineLateRatio = 0.25;
+
   /// 오프라인 시간(초)과 그동안의 수입
   (int seconds, double credits, double ore) offlineEarnings(DateTime now) {
     if (savedAt == null) return (0, 0, 0);
-    final cap = profile.premium ? 8 * 3600 : 2 * 3600;
+    final cap = (profile.premium ? premiumOfflineCapHours : offlineCapHours) * 3600;
     final sec = now.difference(savedAt!).inSeconds.clamp(0, cap);
     if (sec < 60) return (0, 0, 0);
+    const full = offlineCapHours * 3600;
+    final paid = min(sec, full) + max(0, sec - full) * offlineLateRatio;
     final eff = profile.home.offlineEfficiency;
-    return (sec, creditIncome * sec * eff, oreIncome * sec * eff);
+    return (sec, creditIncome * paid * eff, oreIncome * paid * eff);
   }
 
   void applyOffline(double c, double o) {
@@ -1752,7 +1766,7 @@ class GameWorld {
     e.angle += dt;
     if (d < e.radius + 16 && e.contactCooldown <= 0 && domeAt(player.pos) == null) {
       e.contactCooldown = 0.8;
-      _damagePlayer(e.damage * (1 + sector * 0.3));
+      _damagePlayer(e.damage * enemyDamageMul);
     }
   }
 
@@ -1860,8 +1874,9 @@ class GameWorld {
     missiles.removeWhere(dead.contains);
   }
 
-  void _hitPirate(Pirate e, double dmg, Offset at, {bool crit = false}) {
+  void _hitPirate(Pirate e, double dmg, Offset at, {bool crit = false, bool byBase = false}) {
     e.hp -= dmg;
+    e.lastHitByBase = byBase;
     e.hitFlash = 0.1;
     if (crit) {
       _float(at, tr.g_floatCrit(dmg.round()), const Color(0xFFFF9100), big: true);
@@ -1959,8 +1974,9 @@ class GameWorld {
         boss ? 100 : 35);
     sfx.add(boss ? Sfx.bigExplode : Sfx.explode);
     shake = min(20, shake + (boss ? 16 : 3));
-    final bounty = (e.bounty * sectorMul * (1 + crewBonus(CrewRole.trader)) *
-            (e.name != null ? 4 : 1))
+    final bounty = (e.bounty * rewardMul * (1 + crewBonus(CrewRole.trader)) *
+            (e.name != null ? 4 : 1) *
+            (e.lastHitByBase ? laserBountyRatio : 1))
         .round();
     _dropPickups(e.pos, PickupKind.credits, bounty, boss ? 10 : 3);
 
@@ -1994,7 +2010,7 @@ class GameWorld {
         if (!bossDefeated) {
           _count('sectorBosses');
           // 게이트는 발전도로 열린다. 두목은 큰 보상을 주는 도전 과제.
-          final reward = (1000 * sectorMul).round();
+          final reward = (1000 * rewardMul).round();
           credits += reward;
           say(Speaker.advisor, tr.g_dlgBossDefeated(reward));
         }
@@ -2028,7 +2044,7 @@ class GameWorld {
       _burst(a.pos, a.crystal ? const Color(0xFF4DD0E1) : const Color(0xFFA1887F), 20);
       _dropPickups(a.pos, PickupKind.ore, (a.radius / 3 * (a.crystal ? 3 : 1) * sectorMul).round(), 3);
       if (_rng.nextDouble() < 0.3) {
-        _dropPickups(a.pos, PickupKind.credits, (10 * sectorMul).round(), 1);
+        _dropPickups(a.pos, PickupKind.credits, (10 * rewardMul).round(), 1);
       }
     }
     while (asteroids.length < maxAsteroids) {
@@ -2123,7 +2139,7 @@ class GameWorld {
           if (attackers.isEmpty) {
             ev.finished = true;
             planet.raided = false;
-            final reward = (200 * sectorMul).round();
+            final reward = (200 * rewardMul).round();
             credits += reward;
             profile.gems += 2;
             sfx.add(Sfx.coin);
@@ -2242,7 +2258,11 @@ class GameWorld {
 
   // 상인 거래
   int get merchantCrewPrice => (1500 * sectorMul).round();
-  int get merchantGemPrice => (1000 * sectorMul).round();
+  /// 상인 젬 환전 (⭐5). 크레딧 팩(⭐20)보다 젬당 [merchantGemMarkup]배 비싸서
+  /// 크레딧→젬→크레딧 무한 순환이 안 된다
+  static const merchantGemMarkup = 2.0;
+  int get merchantGemPrice =>
+      (creditPackAmount * 5 / creditPackGems * merchantGemMarkup).round();
   static const merchantPowerPrice = 150;
 
   bool buyMerchantCrew() {
@@ -2339,7 +2359,7 @@ class GameWorld {
 
   Pirate _makePirate(PirateKind kind, Offset pos, {double hpMul = 1}) {
     final scale = (1 + (threat - 1 - sector) * 0.15) * sectorMul * hpMul;
-    return Pirate(kind, pos, Pirate.baseHp(kind) * scale, dmgScale: 1 + sector * 0.3)
+    return Pirate(kind, pos, Pirate.baseHp(kind) * scale, dmgScale: enemyDamageMul)
       ..wanderAngle = _rng.nextDouble() * 2 * pi;
   }
 

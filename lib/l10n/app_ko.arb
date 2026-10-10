@@ -2807,11 +2807,11 @@
   "@g_storyKillsLine1": {
     "description": "story dialogue line spoken by advisor Mina or the captain"
   },
-  "g_storyColoniesTitle": "테라노바에 정착하기",
+  "g_storyColoniesTitle": "화성에 정착하기",
   "@g_storyColoniesTitle": {
     "description": "story/tutorial objective title (top of HUD)"
   },
-  "g_storyColoniesLine0": "근처 초록 행성 테라노바에 정착해봐요. 가까이 가면 정착 버튼이 떠요.",
+  "g_storyColoniesLine0": "지구 바로 옆 붉은 행성, 화성에 첫 식민지를 세워봐요. 가까이 가면 정착 버튼이 떠요.",
   "@g_storyColoniesLine0": {
     "description": "story dialogue line spoken by advisor Mina or the captain"
   },
@@ -3159,206 +3159,6 @@
   "g_upgradeMagnet": "자석",
   "@g_upgradeMagnet": {
     "description": "ship upgrade name (station upgrade list)"
-  },
-  "g_sector0": "알파 성역",
-  "@g_sector0": {
-    "description": "name of star system/sector 1 (proper noun)"
-  },
-  "g_sector1": "베타 성운",
-  "@g_sector1": {
-    "description": "name of star system/sector 2 (proper noun)"
-  },
-  "g_sector2": "감마 협곡",
-  "@g_sector2": {
-    "description": "name of star system/sector 3 (proper noun)"
-  },
-  "g_sector3": "델타 해적지대",
-  "@g_sector3": {
-    "description": "name of star system/sector 4 (proper noun)"
-  },
-  "g_sector4": "엡실론 심연",
-  "@g_sector4": {
-    "description": "name of star system/sector 5 (proper noun)"
-  },
-  "g_sector5": "제타 얼음벨트",
-  "@g_sector5": {
-    "description": "name of star system/sector 6 (proper noun)"
-  },
-  "g_sector6": "에타 불꽃성단",
-  "@g_sector6": {
-    "description": "name of star system/sector 7 (proper noun)"
-  },
-  "g_sector7": "세타 유령항로",
-  "@g_sector7": {
-    "description": "name of star system/sector 8 (proper noun)"
-  },
-  "g_sector8": "이오타 왕관성운",
-  "@g_sector8": {
-    "description": "name of star system/sector 9 (proper noun)"
-  },
-  "g_sector9": "카파 블랙홀",
-  "@g_sector9": {
-    "description": "name of star system/sector 10 (proper noun)"
-  },
-  "g_planet0": "아쿠아리스",
-  "@g_planet0": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet1": "루비아",
-  "@g_planet1": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet2": "프로스타",
-  "@g_planet2": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet3": "볼카노",
-  "@g_planet3": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet4": "젤리오",
-  "@g_planet4": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet5": "솔라리스",
-  "@g_planet5": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet6": "모모별",
-  "@g_planet6": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet7": "네뷸라",
-  "@g_planet7": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet8": "카시오페",
-  "@g_planet8": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet9": "오로라",
-  "@g_planet9": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet10": "두리안",
-  "@g_planet10": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet11": "시나몬",
-  "@g_planet11": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet12": "마시멜로",
-  "@g_planet12": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet13": "팝콘별",
-  "@g_planet13": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet14": "라벤더",
-  "@g_planet14": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet15": "에메랄디아",
-  "@g_planet15": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet16": "크림슨",
-  "@g_planet16": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet17": "폴라리스",
-  "@g_planet17": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet18": "베가",
-  "@g_planet18": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet19": "리겔",
-  "@g_planet19": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet20": "미라",
-  "@g_planet20": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet21": "토파즈",
-  "@g_planet21": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet22": "코발트",
-  "@g_planet22": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet23": "사파이어",
-  "@g_planet23": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet24": "오닉스",
-  "@g_planet24": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet25": "페리도트",
-  "@g_planet25": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet26": "민트별",
-  "@g_planet26": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet27": "바닐라",
-  "@g_planet27": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet28": "캐러멜",
-  "@g_planet28": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet29": "피스타치오",
-  "@g_planet29": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet30": "블루베리",
-  "@g_planet30": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet31": "레몬별",
-  "@g_planet31": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet32": "체리",
-  "@g_planet32": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet33": "멜론",
-  "@g_planet33": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet34": "키위",
-  "@g_planet34": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet35": "망고별",
-  "@g_planet35": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet36": "유자",
-  "@g_planet36": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet37": "자몽",
-  "@g_planet37": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planet38": "호박별",
-  "@g_planet38": {
-    "description": "random planet name (proper noun); list order matters for world generation"
-  },
-  "g_planetTerraNova": "테라노바",
-  "@g_planetTerraNova": {
-    "description": "name of the first (home) planet; proper noun"
   },
   "g_unknownSector": "미지의 섹터 {n}",
   "@g_unknownSector": {
@@ -3845,5 +3645,226 @@
   "g_pirateAmbush3": "오늘 운이 나쁘구나, 꼬마!",
   "@g_pirateAmbush3": {
     "description": "pirate line when a pirate wave appears"
+  },
+  "cat_sysSol": "태양계",
+  "@cat_sysSol": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysAlphaCen": "알파 센타우리",
+  "@cat_sysAlphaCen": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysBarnard": "버나드 별",
+  "@cat_sysBarnard": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysWolf359": "울프 359",
+  "@cat_sysWolf359": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysLalande": "랄랑드 21185",
+  "@cat_sysLalande": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysSirius": "시리우스",
+  "@cat_sysSirius": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysEpsEri": "에리다누스자리 엡실론",
+  "@cat_sysEpsEri": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysRoss128": "로스 128",
+  "@cat_sysRoss128": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysTauCeti": "고래자리 타우",
+  "@cat_sysTauCeti": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysTeegarden": "티가든 별",
+  "@cat_sysTeegarden": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysGliese581": "글리제 581",
+  "@cat_sysGliese581": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysGliese667C": "글리제 667 C",
+  "@cat_sysGliese667C": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysTrappist1": "트라피스트-1",
+  "@cat_sysTrappist1": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sys55Cnc": "게자리 55",
+  "@cat_sys55Cnc": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sys51Peg": "페가수스자리 51",
+  "@cat_sys51Peg": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysKepler": "케플러-{n}",
+  "@cat_sysKepler": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "cat_sysOmegaCen": "오메가 센타우리 성단",
+  "@cat_sysOmegaCen": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysSgrA": "은하 중심 (궁수자리 A*)",
+  "@cat_sysSgrA": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysLMC": "대마젤란 은하",
+  "@cat_sysLMC": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysSMC": "소마젤란 은하",
+  "@cat_sysSMC": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysAndromeda": "안드로메다 은하",
+  "@cat_sysAndromeda": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_sysTriangulum": "삼각형자리 은하",
+  "@cat_sysTriangulum": {
+    "description": "real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language"
+  },
+  "cat_pfxProxima": "프록시마",
+  "@cat_pfxProxima": {
+    "description": "star name used as prefix of exoplanet designations, e.g. \"<prefix> b\"; keep short, letters stay Latin"
+  },
+  "cat_pfxBarnard": "버나드",
+  "@cat_pfxBarnard": {
+    "description": "star name used as prefix of exoplanet designations, e.g. \"<prefix> b\"; keep short, letters stay Latin"
+  },
+  "cat_pfxSirius": "시리우스 A",
+  "@cat_pfxSirius": {
+    "description": "star name used as prefix of exoplanet designations, e.g. \"<prefix> b\"; keep short, letters stay Latin"
+  },
+  "cat_pfxEpsEri": "엡실론 에리다니",
+  "@cat_pfxEpsEri": {
+    "description": "star name used as prefix of exoplanet designations, e.g. \"<prefix> b\"; keep short, letters stay Latin"
+  },
+  "cat_pfxTauCeti": "타우 세티",
+  "@cat_pfxTauCeti": {
+    "description": "star name used as prefix of exoplanet designations, e.g. \"<prefix> b\"; keep short, letters stay Latin"
+  },
+  "cat_pfxTeegarden": "티가든",
+  "@cat_pfxTeegarden": {
+    "description": "star name used as prefix of exoplanet designations, e.g. \"<prefix> b\"; keep short, letters stay Latin"
+  },
+  "cat_mars": "화성",
+  "@cat_mars": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_moon": "달",
+  "@cat_moon": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_venus": "금성",
+  "@cat_venus": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_mercury": "수성",
+  "@cat_mercury": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_ceres": "세레스",
+  "@cat_ceres": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_vesta": "베스타",
+  "@cat_vesta": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_jupiter": "목성",
+  "@cat_jupiter": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_io": "이오",
+  "@cat_io": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_europa": "유로파",
+  "@cat_europa": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_ganymede": "가니메데",
+  "@cat_ganymede": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_callisto": "칼리스토",
+  "@cat_callisto": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_saturn": "토성",
+  "@cat_saturn": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_enceladus": "엔셀라두스",
+  "@cat_enceladus": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_titan": "타이탄",
+  "@cat_titan": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_uranus": "천왕성",
+  "@cat_uranus": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_miranda": "미란다",
+  "@cat_miranda": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_titania": "티타니아",
+  "@cat_titania": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_neptune": "해왕성",
+  "@cat_neptune": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_triton": "트리톤",
+  "@cat_triton": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_pluto": "명왕성",
+  "@cat_pluto": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_charon": "카론",
+  "@cat_charon": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_haumea": "하우메아",
+  "@cat_haumea": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_makemake": "마케마케",
+  "@cat_makemake": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_eris": "에리스",
+  "@cat_eris": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_sedna": "세드나",
+  "@cat_sedna": {
+    "description": "real Solar System body name (planet, dwarf planet or moon); standard astronomical name in this language"
+  },
+  "cat_planetNine": "제9행성",
+  "@cat_planetNine": {
+    "description": "hypothetical undiscovered 9th planet of the Solar System (real hypothesis \"Planet Nine\")"
   }
 }

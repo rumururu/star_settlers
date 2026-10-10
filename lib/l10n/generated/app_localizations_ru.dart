@@ -1746,11 +1746,11 @@ class L10nRu extends L10n {
       'Пираты? Перед моим кораблём они просто металлолом!';
 
   @override
-  String get g_storyColoniesTitle => 'Заселите Терра Нову';
+  String get g_storyColoniesTitle => 'Освойте Марс';
 
   @override
   String get g_storyColoniesLine0 =>
-      'Попробуйте заселить ближайшую зелёную планету Терра Нова. Подлетите ближе — появится кнопка заселения.';
+      'Основайте первую колонию на Марсе — красной планете рядом с Землёй. Подлетите ближе, и появится кнопка заселения.';
 
   @override
   String get g_storyColoniesLine1 =>
@@ -2016,156 +2016,6 @@ class L10nRu extends L10n {
 
   @override
   String get g_upgradeMagnet => 'Магнит';
-
-  @override
-  String get g_sector0 => 'Святилище Альфа';
-
-  @override
-  String get g_sector1 => 'Туманность Бета';
-
-  @override
-  String get g_sector2 => 'Каньон Гамма';
-
-  @override
-  String get g_sector3 => 'Пиратская зона Дельта';
-
-  @override
-  String get g_sector4 => 'Бездна Эпсилон';
-
-  @override
-  String get g_sector5 => 'Ледяной пояс Зета';
-
-  @override
-  String get g_sector6 => 'Огненное скопление Эта';
-
-  @override
-  String get g_sector7 => 'Призрачный путь Тета';
-
-  @override
-  String get g_sector8 => 'Туманность Короны Йота';
-
-  @override
-  String get g_sector9 => 'Чёрная дыра Каппа';
-
-  @override
-  String get g_planet0 => 'Акварис';
-
-  @override
-  String get g_planet1 => 'Рубия';
-
-  @override
-  String get g_planet2 => 'Фроста';
-
-  @override
-  String get g_planet3 => 'Вулкано';
-
-  @override
-  String get g_planet4 => 'Желио';
-
-  @override
-  String get g_planet5 => 'Солярис';
-
-  @override
-  String get g_planet6 => 'Звезда Момо';
-
-  @override
-  String get g_planet7 => 'Небула';
-
-  @override
-  String get g_planet8 => 'Кассиопа';
-
-  @override
-  String get g_planet9 => 'Аврора';
-
-  @override
-  String get g_planet10 => 'Дуриан';
-
-  @override
-  String get g_planet11 => 'Корица';
-
-  @override
-  String get g_planet12 => 'Маршмеллоу';
-
-  @override
-  String get g_planet13 => 'Попкорн';
-
-  @override
-  String get g_planet14 => 'Лаванда';
-
-  @override
-  String get g_planet15 => 'Изумрудия';
-
-  @override
-  String get g_planet16 => 'Кримсон';
-
-  @override
-  String get g_planet17 => 'Полярис';
-
-  @override
-  String get g_planet18 => 'Вега';
-
-  @override
-  String get g_planet19 => 'Ригель';
-
-  @override
-  String get g_planet20 => 'Мира';
-
-  @override
-  String get g_planet21 => 'Топаз';
-
-  @override
-  String get g_planet22 => 'Кобальт';
-
-  @override
-  String get g_planet23 => 'Сапфир';
-
-  @override
-  String get g_planet24 => 'Оникс';
-
-  @override
-  String get g_planet25 => 'Перидот';
-
-  @override
-  String get g_planet26 => 'Мятная звезда';
-
-  @override
-  String get g_planet27 => 'Ваниль';
-
-  @override
-  String get g_planet28 => 'Карамель';
-
-  @override
-  String get g_planet29 => 'Фисташка';
-
-  @override
-  String get g_planet30 => 'Черника';
-
-  @override
-  String get g_planet31 => 'Лимонная звезда';
-
-  @override
-  String get g_planet32 => 'Вишня';
-
-  @override
-  String get g_planet33 => 'Дыня';
-
-  @override
-  String get g_planet34 => 'Киви';
-
-  @override
-  String get g_planet35 => 'Манговая звезда';
-
-  @override
-  String get g_planet36 => 'Юдзу';
-
-  @override
-  String get g_planet37 => 'Грейпфрут';
-
-  @override
-  String get g_planet38 => 'Тыквенная звезда';
-
-  @override
-  String get g_planetTerraNova => 'Терра Нова';
 
   @override
   String g_unknownSector(int n) {
@@ -2461,4 +2311,168 @@ class L10nRu extends L10n {
 
   @override
   String get g_pirateAmbush3 => 'Не твой сегодня день, малыш!';
+
+  @override
+  String get cat_sysSol => 'Солнечная система';
+
+  @override
+  String get cat_sysAlphaCen => 'Альфа Центавра';
+
+  @override
+  String get cat_sysBarnard => 'Звезда Барнарда';
+
+  @override
+  String get cat_sysWolf359 => 'Вольф 359';
+
+  @override
+  String get cat_sysLalande => 'Лаланд 21185';
+
+  @override
+  String get cat_sysSirius => 'Сириус';
+
+  @override
+  String get cat_sysEpsEri => 'Эпсилон Эридана';
+
+  @override
+  String get cat_sysRoss128 => 'Росс 128';
+
+  @override
+  String get cat_sysTauCeti => 'Тау Кита';
+
+  @override
+  String get cat_sysTeegarden => 'Звезда Тигардена';
+
+  @override
+  String get cat_sysGliese581 => 'Глизе 581';
+
+  @override
+  String get cat_sysGliese667C => 'Глизе 667 C';
+
+  @override
+  String get cat_sysTrappist1 => 'TRAPPIST-1';
+
+  @override
+  String get cat_sys55Cnc => '55 Рака';
+
+  @override
+  String get cat_sys51Peg => '51 Пегаса';
+
+  @override
+  String cat_sysKepler(int n) {
+    return 'Kepler-$n';
+  }
+
+  @override
+  String get cat_sysOmegaCen => 'Скопление Омега Центавра';
+
+  @override
+  String get cat_sysSgrA => 'Центр Галактики (Sgr A*)';
+
+  @override
+  String get cat_sysLMC => 'Большое Магелланово Облако';
+
+  @override
+  String get cat_sysSMC => 'Малое Магелланово Облако';
+
+  @override
+  String get cat_sysAndromeda => 'Галактика Андромеды';
+
+  @override
+  String get cat_sysTriangulum => 'Галактика Треугольника';
+
+  @override
+  String get cat_pfxProxima => 'Проксима';
+
+  @override
+  String get cat_pfxBarnard => 'Барнард';
+
+  @override
+  String get cat_pfxSirius => 'Сириус A';
+
+  @override
+  String get cat_pfxEpsEri => 'Эпсилон Эридана';
+
+  @override
+  String get cat_pfxTauCeti => 'Тау Кита';
+
+  @override
+  String get cat_pfxTeegarden => 'Тигарден';
+
+  @override
+  String get cat_mars => 'Марс';
+
+  @override
+  String get cat_moon => 'Луна';
+
+  @override
+  String get cat_venus => 'Венера';
+
+  @override
+  String get cat_mercury => 'Меркурий';
+
+  @override
+  String get cat_ceres => 'Церера';
+
+  @override
+  String get cat_vesta => 'Веста';
+
+  @override
+  String get cat_jupiter => 'Юпитер';
+
+  @override
+  String get cat_io => 'Ио';
+
+  @override
+  String get cat_europa => 'Европа';
+
+  @override
+  String get cat_ganymede => 'Ганимед';
+
+  @override
+  String get cat_callisto => 'Каллисто';
+
+  @override
+  String get cat_saturn => 'Сатурн';
+
+  @override
+  String get cat_enceladus => 'Энцелад';
+
+  @override
+  String get cat_titan => 'Титан';
+
+  @override
+  String get cat_uranus => 'Уран';
+
+  @override
+  String get cat_miranda => 'Миранда';
+
+  @override
+  String get cat_titania => 'Титания';
+
+  @override
+  String get cat_neptune => 'Нептун';
+
+  @override
+  String get cat_triton => 'Тритон';
+
+  @override
+  String get cat_pluto => 'Плутон';
+
+  @override
+  String get cat_charon => 'Харон';
+
+  @override
+  String get cat_haumea => 'Хаумеа';
+
+  @override
+  String get cat_makemake => 'Макемаке';
+
+  @override
+  String get cat_eris => 'Эрида';
+
+  @override
+  String get cat_sedna => 'Седна';
+
+  @override
+  String get cat_planetNine => 'Девятая планета';
 }

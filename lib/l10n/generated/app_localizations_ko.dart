@@ -1702,10 +1702,11 @@ class L10nKo extends L10n {
   String get g_storyKillsLine1 => '해적 따위, 내 함선 앞에선 고철이지!';
 
   @override
-  String get g_storyColoniesTitle => '테라노바에 정착하기';
+  String get g_storyColoniesTitle => '화성에 정착하기';
 
   @override
-  String get g_storyColoniesLine0 => '근처 초록 행성 테라노바에 정착해봐요. 가까이 가면 정착 버튼이 떠요.';
+  String get g_storyColoniesLine0 =>
+      '지구 바로 옆 붉은 행성, 화성에 첫 식민지를 세워봐요. 가까이 가면 정착 버튼이 떠요.';
 
   @override
   String get g_storyColoniesLine1 => '식민지는 가만히 있어도 크레딧을 벌어줘요!';
@@ -1956,156 +1957,6 @@ class L10nKo extends L10n {
 
   @override
   String get g_upgradeMagnet => '자석';
-
-  @override
-  String get g_sector0 => '알파 성역';
-
-  @override
-  String get g_sector1 => '베타 성운';
-
-  @override
-  String get g_sector2 => '감마 협곡';
-
-  @override
-  String get g_sector3 => '델타 해적지대';
-
-  @override
-  String get g_sector4 => '엡실론 심연';
-
-  @override
-  String get g_sector5 => '제타 얼음벨트';
-
-  @override
-  String get g_sector6 => '에타 불꽃성단';
-
-  @override
-  String get g_sector7 => '세타 유령항로';
-
-  @override
-  String get g_sector8 => '이오타 왕관성운';
-
-  @override
-  String get g_sector9 => '카파 블랙홀';
-
-  @override
-  String get g_planet0 => '아쿠아리스';
-
-  @override
-  String get g_planet1 => '루비아';
-
-  @override
-  String get g_planet2 => '프로스타';
-
-  @override
-  String get g_planet3 => '볼카노';
-
-  @override
-  String get g_planet4 => '젤리오';
-
-  @override
-  String get g_planet5 => '솔라리스';
-
-  @override
-  String get g_planet6 => '모모별';
-
-  @override
-  String get g_planet7 => '네뷸라';
-
-  @override
-  String get g_planet8 => '카시오페';
-
-  @override
-  String get g_planet9 => '오로라';
-
-  @override
-  String get g_planet10 => '두리안';
-
-  @override
-  String get g_planet11 => '시나몬';
-
-  @override
-  String get g_planet12 => '마시멜로';
-
-  @override
-  String get g_planet13 => '팝콘별';
-
-  @override
-  String get g_planet14 => '라벤더';
-
-  @override
-  String get g_planet15 => '에메랄디아';
-
-  @override
-  String get g_planet16 => '크림슨';
-
-  @override
-  String get g_planet17 => '폴라리스';
-
-  @override
-  String get g_planet18 => '베가';
-
-  @override
-  String get g_planet19 => '리겔';
-
-  @override
-  String get g_planet20 => '미라';
-
-  @override
-  String get g_planet21 => '토파즈';
-
-  @override
-  String get g_planet22 => '코발트';
-
-  @override
-  String get g_planet23 => '사파이어';
-
-  @override
-  String get g_planet24 => '오닉스';
-
-  @override
-  String get g_planet25 => '페리도트';
-
-  @override
-  String get g_planet26 => '민트별';
-
-  @override
-  String get g_planet27 => '바닐라';
-
-  @override
-  String get g_planet28 => '캐러멜';
-
-  @override
-  String get g_planet29 => '피스타치오';
-
-  @override
-  String get g_planet30 => '블루베리';
-
-  @override
-  String get g_planet31 => '레몬별';
-
-  @override
-  String get g_planet32 => '체리';
-
-  @override
-  String get g_planet33 => '멜론';
-
-  @override
-  String get g_planet34 => '키위';
-
-  @override
-  String get g_planet35 => '망고별';
-
-  @override
-  String get g_planet36 => '유자';
-
-  @override
-  String get g_planet37 => '자몽';
-
-  @override
-  String get g_planet38 => '호박별';
-
-  @override
-  String get g_planetTerraNova => '테라노바';
 
   @override
   String g_unknownSector(int n) {
@@ -2395,4 +2246,168 @@ class L10nKo extends L10n {
 
   @override
   String get g_pirateAmbush3 => '오늘 운이 나쁘구나, 꼬마!';
+
+  @override
+  String get cat_sysSol => '태양계';
+
+  @override
+  String get cat_sysAlphaCen => '알파 센타우리';
+
+  @override
+  String get cat_sysBarnard => '버나드 별';
+
+  @override
+  String get cat_sysWolf359 => '울프 359';
+
+  @override
+  String get cat_sysLalande => '랄랑드 21185';
+
+  @override
+  String get cat_sysSirius => '시리우스';
+
+  @override
+  String get cat_sysEpsEri => '에리다누스자리 엡실론';
+
+  @override
+  String get cat_sysRoss128 => '로스 128';
+
+  @override
+  String get cat_sysTauCeti => '고래자리 타우';
+
+  @override
+  String get cat_sysTeegarden => '티가든 별';
+
+  @override
+  String get cat_sysGliese581 => '글리제 581';
+
+  @override
+  String get cat_sysGliese667C => '글리제 667 C';
+
+  @override
+  String get cat_sysTrappist1 => '트라피스트-1';
+
+  @override
+  String get cat_sys55Cnc => '게자리 55';
+
+  @override
+  String get cat_sys51Peg => '페가수스자리 51';
+
+  @override
+  String cat_sysKepler(int n) {
+    return '케플러-$n';
+  }
+
+  @override
+  String get cat_sysOmegaCen => '오메가 센타우리 성단';
+
+  @override
+  String get cat_sysSgrA => '은하 중심 (궁수자리 A*)';
+
+  @override
+  String get cat_sysLMC => '대마젤란 은하';
+
+  @override
+  String get cat_sysSMC => '소마젤란 은하';
+
+  @override
+  String get cat_sysAndromeda => '안드로메다 은하';
+
+  @override
+  String get cat_sysTriangulum => '삼각형자리 은하';
+
+  @override
+  String get cat_pfxProxima => '프록시마';
+
+  @override
+  String get cat_pfxBarnard => '버나드';
+
+  @override
+  String get cat_pfxSirius => '시리우스 A';
+
+  @override
+  String get cat_pfxEpsEri => '엡실론 에리다니';
+
+  @override
+  String get cat_pfxTauCeti => '타우 세티';
+
+  @override
+  String get cat_pfxTeegarden => '티가든';
+
+  @override
+  String get cat_mars => '화성';
+
+  @override
+  String get cat_moon => '달';
+
+  @override
+  String get cat_venus => '금성';
+
+  @override
+  String get cat_mercury => '수성';
+
+  @override
+  String get cat_ceres => '세레스';
+
+  @override
+  String get cat_vesta => '베스타';
+
+  @override
+  String get cat_jupiter => '목성';
+
+  @override
+  String get cat_io => '이오';
+
+  @override
+  String get cat_europa => '유로파';
+
+  @override
+  String get cat_ganymede => '가니메데';
+
+  @override
+  String get cat_callisto => '칼리스토';
+
+  @override
+  String get cat_saturn => '토성';
+
+  @override
+  String get cat_enceladus => '엔셀라두스';
+
+  @override
+  String get cat_titan => '타이탄';
+
+  @override
+  String get cat_uranus => '천왕성';
+
+  @override
+  String get cat_miranda => '미란다';
+
+  @override
+  String get cat_titania => '티타니아';
+
+  @override
+  String get cat_neptune => '해왕성';
+
+  @override
+  String get cat_triton => '트리톤';
+
+  @override
+  String get cat_pluto => '명왕성';
+
+  @override
+  String get cat_charon => '카론';
+
+  @override
+  String get cat_haumea => '하우메아';
+
+  @override
+  String get cat_makemake => '마케마케';
+
+  @override
+  String get cat_eris => '에리스';
+
+  @override
+  String get cat_sedna => '세드나';
+
+  @override
+  String get cat_planetNine => '제9행성';
 }

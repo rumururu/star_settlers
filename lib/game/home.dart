@@ -37,7 +37,7 @@ extension BuildingInfo on BuildingType {
         BuildingType.lab => tr.g_bldLabEffect(level * 3),
         BuildingType.tower => tr.g_bldTowerEffect(level * 4),
         BuildingType.shipyard => tr.g_bldShipyardEffect(level * 3),
-        BuildingType.park => tr.g_bldParkEffect(level * 5),
+        BuildingType.park => tr.g_bldParkEffect((level * HomePlanet.offlineParkStep * 100).round()),
         BuildingType.statue => tr.g_bldStatueEffect(level),
       };
 
@@ -100,19 +100,30 @@ class HomePlanet {
   double get cooldownMul => max(0.5, 1 - levelOf(BuildingType.lab) * 0.03);
   double get hpMul => 1 + levelOf(BuildingType.tower) * 0.04;
   double get damageMul => 1 + levelOf(BuildingType.shipyard) * 0.03;
-  double get offlineEfficiency => min(1.0, 0.5 + levelOf(BuildingType.park) * 0.05);
+  /// 오프라인 수입 효율: 기본 [offlineBaseEfficiency], 놀이공원 레벨마다 +[offlineParkStep]%p.
+  /// 세션 사이 2시간(광고 2배)이 한 세션 플레이 수입의 2~3배쯤 되게 맞춘다.
+  /// (예전 50%는 2시간 오프라인이 한 세션의 10배라 접속만 하면 다음 항성계가 끝났다)
+  static const offlineBaseEfficiency = 0.15;
+  static const offlineParkStep = 0.02;
+  static const offlineMaxEfficiency = 0.5;
+  double get offlineEfficiency => min(offlineMaxEfficiency,
+      offlineBaseEfficiency + levelOf(BuildingType.park) * offlineParkStep);
 
   // ---------- 비용 ----------
   /// 새 건물 비용 (크레딧, 광석). 동상은 젬 (아래 [statueGemCost])
-  (int, int) buildCost(BuildingType t) =>
-      ((600 * pow(1.35, buildingCount)).round(), 100 + buildingCount * 40);
+  /// [mul]은 비용 배율 (GameWorld.homeCostMul: 가장 멀리 간 항성계 기준).
+  /// 고정 가격이면 뒤 항성계에서 몇 분 수입으로 영구 보너스를 다 채운다.
+  (int, int) buildCost(BuildingType t, [double mul = 1]) =>
+      ((600 * pow(1.35, buildingCount) * mul).round(), ((100 + buildingCount * 40) * mul).round());
 
-  (int, int) upgradeCost(HomeSlot s) =>
-      ((800 * pow(1.8, s.level)).round(), 150 * s.level);
+  (int, int) upgradeCost(HomeSlot s, [double mul = 1]) =>
+      ((800 * pow(1.8, s.level) * mul).round(), (150 * s.level * mul).round());
 
   int statueGemCost(int level) => 40 + level * 30;
 
-  (int, int) get levelUpCost => ((3000 * pow(3, level - 1)).round(), 500 * level);
+  (int, int) levelUpCostAt(double mul) =>
+      ((3000 * pow(3, level - 1) * mul).round(), (500 * level * mul).round());
+  (int, int) get levelUpCost => levelUpCostAt(1);
 
   void levelUp() {
     level++;

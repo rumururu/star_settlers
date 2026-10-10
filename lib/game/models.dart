@@ -85,6 +85,9 @@ class Pirate {
   int? missionId;
   int? eventId;
 
+  /// 마지막 피해를 본거지 레이저가 줬는가 (현상금 감소)
+  bool lastHitByBase = false;
+
   bool get isPirate => kind != PirateKind.jelly;
   bool get isBossLike => kind == PirateKind.boss;
 
@@ -317,10 +320,15 @@ class Planet {
         PlanetKind.gas => (4.0, 0.0),
       };
 
+  /// 정착(Lv.0→1) 기본 비용. 레벨마다 ×[levelCostGrowth]. 항성계 배율은 GameWorld.costMul
+  static const settleCost = 850;
+  static const gasSettleCost = 1200;
+  static const levelCostGrowth = 1.8;
+
   Cost baseCost() {
-    final base = kind == PlanetKind.gas ? 220 : 150;
+    final base = kind == PlanetKind.gas ? gasSettleCost : settleCost;
     return (
-      (base * pow(1.8, colonyLevel)).round(),
+      (base * pow(levelCostGrowth, colonyLevel)).round(),
       colonyLevel == 0 ? 0 : 40 * colonyLevel,
     );
   }
