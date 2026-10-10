@@ -89,6 +89,7 @@ class ProgressionBot {
     this.payGems = 1200,
     this.payWithPacks = false,
     this.buyPass = false,
+    this.passAndGear = false,
     this.sessionMinutes = 12.5,
     this.sessionsPerDay = 3,
     this.dt = 1 / 20,
@@ -106,6 +107,9 @@ class ProgressionBot {
 
   /// true면 젬 대신 사령관 패스(₩6,500)를 산다
   final bool buyPass;
+
+  /// true면 사령관 패스도 사고 ⭐[payGems]도 사서 장비(함선·전설·슬롯)에 쓴다
+  final bool passAndGear;
   final double sessionMinutes;
   final int sessionsPerDay;
   final double dt;
@@ -485,9 +489,9 @@ class ProgressionBot {
   void _pay() {
     _paid = true;
     final prof = w.profile;
-    if (buyPass) {
+    if (buyPass || passAndGear) {
       prof.premium = true;
-      return;
+      if (!passAndGear) return;
     }
     prof.gems += payGems;
     if (payWithPacks) return; // 크레딧 팩은 _think에서 모자랄 때마다
@@ -562,4 +566,54 @@ Map<String, double> baseFarm(GameWorld w, double minutes, {double dt = 1 / 20, b
   }
   return {'bountyPerMin': bounty / minutes, 'colonyLevelsLost': (lv0 - w.planets.fold<int>(0, (a, p) => a + p.colonyLevel)).toDouble(), 'deaths': deaths.toDouble(), 'disables': disables.toDouble(),
     'incomePerMin': w.creditIncome * 60};
+}
+
+/// 전투만 재는 봇: 가까운 해적을 쫓아 자동 사격하고 체력 35% 아래면 본거지로 물러나 수리한다.
+/// 반환: 사망, 받은 피해(최대 체력 대비 배수), 처치 수, 직접 번 크레딧/분
+Map<String, double> huntFight(GameWorld w, double minutes, {double dt = 1 / 20}) {
+  final input = InputState()
+    ..fire = true
+    ..autoAim = true;
+  var deaths = 0;
+  var taken = 0.0;
+  var earned = 0.0;
+  var retreat = false;
+  final kills0 = w.counter('kills');
+  for (var t = 0.0; t < minutes * 60; t += dt) {
+    final p = w.player;
+    if (!p.alive) {
+      deaths++;
+      w.respawnAtBase();
+    }
+    if (p.hp < w.playerMaxHp * 0.35) retreat = true;
+    if (retreat && p.hp >= w.playerMaxHp * 0.9) retreat = false;
+    var goal = w.homeBase.pos;
+    if (!retreat) {
+      final foes = w.pirates.where((e) => e.isPirate).toList();
+      if (foes.isNotEmpty) {
+        final e = foes.reduce((a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b);
+        final d = (e.pos - p.pos).distance;
+        goal = d > 300 ? e.pos : p.pos + (p.pos - e.pos);
+      }
+    }
+    final to = goal - p.pos;
+    input.move = to.distance > 30 ? to.normalized() : Offset.zero;
+    if (w.pirates.any((e) => e.isPirate && (e.pos - p.pos).distance < 500)) {
+      w.fireMissiles();
+      if (p.hp < w.playerMaxHp * 0.5) w.activateShield();
+    }
+    final hp0 = p.alive ? p.hp : 0.0;
+    final c0 = w.credits;
+    w.update(dt, input);
+    if (p.alive && p.hp < hp0) taken += hp0 - p.hp;
+    if (!p.alive) taken += hp0;
+    final gain = w.credits - c0 - w.creditIncome * dt;
+    if (gain > 0) earned += gain;
+  }
+  return {
+    'deaths': deaths.toDouble(),
+    'damageTaken': taken / w.playerMaxHp,
+    'kills': (w.counter('kills') - kills0).toDouble(),
+    'creditsPerMin': earned / minutes,
+  };
 }

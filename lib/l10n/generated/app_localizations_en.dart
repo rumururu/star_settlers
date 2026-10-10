@@ -179,7 +179,7 @@ class L10nEn extends L10n {
     String mul,
     String other,
   ) {
-    return 'Settled planets $colonies / $planets\nStations: $stations\nSector bonus: output x$mul\nOther sectors: 💰$other/s';
+    return 'Settled planets $colonies / $planets\nStations: $stations\nSystem bonus: output x$mul\nOther systems: 💰$other/s';
   }
 
   @override
@@ -380,7 +380,7 @@ class L10nEn extends L10n {
 
   @override
   String get u_ascendExplain =>
-      'Ascending resets this universe (sectors, colonies, stations, ship upgrades, crew, credits)\nand grants honor, a permanent bonus.\nGems, cosmetics, ships and achievements are kept.';
+      'Ascending resets this universe (star systems, colonies, stations, ship upgrades, crew, credits)\nand grants honor, a permanent bonus.\nGems, cosmetics, ships and achievements are kept.';
 
   @override
   String u_ascendGain(int gain) {
@@ -388,7 +388,7 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get u_ascendLocked => 'Reach sector 4 to ascend.';
+  String get u_ascendLocked => 'Reach star system 4 to ascend.';
 
   @override
   String get u_close => 'Close';
@@ -432,10 +432,10 @@ class L10nEn extends L10n {
   String get u_merchantE => 'Merchant (E)';
 
   @override
-  String get u_nextSectorE => 'Next Sector (E)';
+  String get u_nextSectorE => 'Next System (E)';
 
   @override
-  String get u_prevSectorE => 'Prev Sector (E)';
+  String get u_prevSectorE => 'Prev System (E)';
 
   @override
   String u_gateLocked(int pct) {
@@ -619,7 +619,7 @@ class L10nEn extends L10n {
 
   @override
   String u_unknownSector(int n) {
-    return 'Unknown Sector $n';
+    return 'Unknown System $n';
   }
 
   @override
@@ -637,13 +637,13 @@ class L10nEn extends L10n {
   String get u_build => 'Build';
 
   @override
-  String get u_toNextSector => '🌀 To next sector';
+  String get u_toNextSector => '🌀 To next star system';
 
   @override
   String get u_bossLocked => '🔒 Defeat the boss to open';
 
   @override
-  String get u_toPrevSector => '🌀 To previous sector';
+  String get u_toPrevSector => '🌀 To previous star system';
 
   @override
   String get u_raidAlert => '⚠ Under raid!';
@@ -978,11 +978,11 @@ class L10nEn extends L10n {
 
   @override
   String get m_legendDescNoGame =>
-      '1 ★4 legendary crew member (20%+ bonus, title, golden aura)\nAvailable after you start a game';
+      '1 ★4 legendary crew member (20%+ bonus + all production +40%, title, golden aura)\nAvailable after you start a game';
 
   @override
   String m_legendDesc(int count, int cap) {
-    return '1 ★4 legendary crew member (20%+ bonus, title, golden aura)\nCrew $count/$cap';
+    return '1 ★4 legendary crew member (20%+ bonus + all production +40%, title, golden aura)\nCrew $count/$cap';
   }
 
   @override
@@ -1203,8 +1203,18 @@ class L10nEn extends L10n {
       'Self-repair: heal 3% HP/sec after 3s without damage\nGuard: blocks 1 hit every 8s';
 
   @override
+  String g_crewLegendPerk(int pct) {
+    return '👑 Legendary command: all production (credits & ore) +$pct% (doesn\'t stack)';
+  }
+
+  @override
+  String g_shipCreditBonus(int pct) {
+    return '💰 Hunter bonus: +$pct% credits you earn yourself (bounties, asteroids, missions, raid defense)';
+  }
+
+  @override
   String g_unlockSector(int n) {
-    return 'Reach sector $n';
+    return 'Reach star system $n';
   }
 
   @override
@@ -1563,13 +1573,13 @@ class L10nEn extends L10n {
   String get g_achExplorerTitle => 'Explorer';
 
   @override
-  String get g_achExplorerDesc => 'Reach sector 3';
+  String get g_achExplorerDesc => 'Reach star system 3';
 
   @override
   String get g_achVoyagerTitle => 'Voyager';
 
   @override
-  String get g_achVoyagerDesc => 'Reach sector 6';
+  String get g_achVoyagerDesc => 'Reach star system 6';
 
   @override
   String get g_achRichTitle => 'Rich Captain';
@@ -2006,7 +2016,7 @@ class L10nEn extends L10n {
 
   @override
   String g_unknownSector(int n) {
-    return 'Unknown Sector $n';
+    return 'Unknown System $n';
   }
 
   @override
@@ -2027,7 +2037,7 @@ class L10nEn extends L10n {
 
   @override
   String get g_dlgMissionsCancelled =>
-      'Delivery and bounty missions from the last sector were canceled.';
+      'Delivery and bounty missions from the last system were canceled.';
 
   @override
   String get g_floatDisabled => 'Disabled!';
@@ -2079,7 +2089,7 @@ class L10nEn extends L10n {
   String get g_floatGuard => 'Guarded!';
 
   @override
-  String get g_pirateBossLose => 'Argh! This sector… is yours…';
+  String get g_pirateBossLose => 'Argh! This system… is yours…';
 
   @override
   String get g_pirateBossFlee => 'Argh! I\'ll remember this, Captain!';
@@ -2107,7 +2117,7 @@ class L10nEn extends L10n {
 
   @override
   String get g_dlgBossWarning =>
-      'Warning! The sector boss ship is approaching!';
+      'Warning! The system boss ship is approaching!';
 
   @override
   String get g_pirateRevenge => 'I\'m back for revenge! Prepare yourself!';
@@ -2219,7 +2229,7 @@ class L10nEn extends L10n {
 
   @override
   String g_dlgBossDefeated(int credits) {
-    return 'Sector boss defeated! Reward 💰$credits';
+    return 'System boss defeated! Reward 💰$credits';
   }
 
   @override

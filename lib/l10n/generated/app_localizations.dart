@@ -368,7 +368,7 @@ abstract class L10n {
   /// Station tab sector summary (4 lines)
   ///
   /// In ko, this message translates to:
-  /// **'정착한 행성 {colonies} / {planets}\n정거장 {stations}개\n섹터 보너스: 생산량 x{mul}\n다른 섹터 수입: 💰{other}/s'**
+  /// **'정착한 행성 {colonies} / {planets}\n정거장 {stations}개\n항성계 보너스: 생산량 x{mul}\n다른 항성계 수입: 💰{other}/s'**
   String u_sectorStats(
     int colonies,
     int planets,
@@ -698,7 +698,7 @@ abstract class L10n {
   /// Ascension dialog explanation
   ///
   /// In ko, this message translates to:
-  /// **'환생하면 지금 우주(섹터, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.'**
+  /// **'환생하면 지금 우주(항성계, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.'**
   String get u_ascendExplain;
 
   /// Ascension dialog gain preview
@@ -710,7 +710,7 @@ abstract class L10n {
   /// Ascension dialog when not yet allowed
   ///
   /// In ko, this message translates to:
-  /// **'섹터 4에 도달하면 환생할 수 있어요.'**
+  /// **'항성계 4에 도달하면 환생할 수 있어요.'**
   String get u_ascendLocked;
 
   /// Close button
@@ -776,13 +776,13 @@ abstract class L10n {
   /// Interact button: warp forward
   ///
   /// In ko, this message translates to:
-  /// **'다음 섹터 (E)'**
+  /// **'다음 항성계 (E)'**
   String get u_nextSectorE;
 
   /// Interact button: warp back
   ///
   /// In ko, this message translates to:
-  /// **'이전 섹터 (E)'**
+  /// **'이전 항성계 (E)'**
   String get u_prevSectorE;
 
   /// Locked gate button
@@ -1083,7 +1083,7 @@ abstract class L10n {
   /// Fallback sector name
   ///
   /// In ko, this message translates to:
-  /// **'미지의 섹터 {n}'**
+  /// **'미지의 항성계 {n}'**
   String u_unknownSector(int n);
 
   /// Conquered system row
@@ -1113,7 +1113,7 @@ abstract class L10n {
   /// Gate label in world
   ///
   /// In ko, this message translates to:
-  /// **'🌀 다음 섹터로'**
+  /// **'🌀 다음 항성계로'**
   String get u_toNextSector;
 
   /// Locked gate label in world
@@ -1125,7 +1125,7 @@ abstract class L10n {
   /// Gate label in world
   ///
   /// In ko, this message translates to:
-  /// **'🌀 이전 섹터로'**
+  /// **'🌀 이전 항성계로'**
   String get u_toPrevSector;
 
   /// World label over raided planet
@@ -1707,13 +1707,13 @@ abstract class L10n {
   /// 전설 모집 설명 (게임 시작 전)
   ///
   /// In ko, this message translates to:
-  /// **'★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요'**
+  /// **'★4 전설 승무원 1명 (보너스 20%~ + 모든 생산 +40%, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요'**
   String get m_legendDescNoGame;
 
   /// 전설 모집 설명 (게임 중)
   ///
   /// In ko, this message translates to:
-  /// **'★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n승무원 {count}/{cap}'**
+  /// **'★4 전설 승무원 1명 (보너스 20%~ + 모든 생산 +40%, 칭호·금빛 오라)\n승무원 {count}/{cap}'**
   String m_legendDesc(int count, int cap);
 
   /// 승무원 합류 토스트
@@ -2047,10 +2047,22 @@ abstract class L10n {
   /// **'자가 수리: 3초간 피격이 없으면 초당 체력 3% 회복\n수호막: 8초마다 피격 1회 방어'**
   String get g_shipAuroraAbility;
 
+  /// ★4 전설 승무원 지휘 보너스 줄 (승무원 카드)
+  ///
+  /// In ko, this message translates to:
+  /// **'👑 전설 지휘: 모든 생산(크레딧·광석) +{pct}% (여러 명이어도 한 번만)'**
+  String g_crewLegendPerk(int pct);
+
+  /// 프리미엄 함선 능력 줄: 직접 버는 크레딧 보너스 (격납고·상점)
+  ///
+  /// In ko, this message translates to:
+  /// **'💰 사냥꾼 보너스: 직접 버는 크레딧 +{pct}% (현상금·소행성·임무·습격 방어)'**
+  String g_shipCreditBonus(int pct);
+
   /// ship unlock condition; n = sector number
   ///
   /// In ko, this message translates to:
-  /// **'섹터 {n} 도달'**
+  /// **'항성계 {n} 도달'**
   String g_unlockSector(int n);
 
   /// ship unlock condition; n = boss kills
@@ -2722,7 +2734,7 @@ abstract class L10n {
   /// achievement goal description
   ///
   /// In ko, this message translates to:
-  /// **'섹터 3 도달'**
+  /// **'항성계 3 도달'**
   String get g_achExplorerDesc;
 
   /// achievement title
@@ -2734,7 +2746,7 @@ abstract class L10n {
   /// achievement goal description
   ///
   /// In ko, this message translates to:
-  /// **'섹터 6 도달'**
+  /// **'항성계 6 도달'**
   String get g_achVoyagerDesc;
 
   /// achievement title
@@ -3508,7 +3520,7 @@ abstract class L10n {
   /// name for sectors beyond the named list; n = sector number
   ///
   /// In ko, this message translates to:
-  /// **'미지의 섹터 {n}'**
+  /// **'미지의 항성계 {n}'**
   String g_unknownSector(int n);
 
   /// name of the home station in the first sector (proper noun)
@@ -3538,7 +3550,7 @@ abstract class L10n {
   /// advisor line after warping
   ///
   /// In ko, this message translates to:
-  /// **'이전 섹터의 운송·현상수배 임무는 취소됐어요.'**
+  /// **'이전 항성계의 운송·현상수배 임무는 취소됐어요.'**
   String get g_dlgMissionsCancelled;
 
   /// floating text when home base is disabled
@@ -3640,7 +3652,7 @@ abstract class L10n {
   /// sector boss defeat line
   ///
   /// In ko, this message translates to:
-  /// **'으아악! 이 섹터는… 네 것이다…'**
+  /// **'으아악! 이 항성계는… 네 것이다…'**
   String get g_pirateBossLose;
 
   /// boss defeat line
@@ -3688,7 +3700,7 @@ abstract class L10n {
   /// advisor warning
   ///
   /// In ko, this message translates to:
-  /// **'경고! 섹터 두목 함선이 접근 중입니다!'**
+  /// **'경고! 항성계 두목 함선이 접근 중입니다!'**
   String get g_dlgBossWarning;
 
   /// returning boss line
@@ -3838,7 +3850,7 @@ abstract class L10n {
   /// advisor line; credits = reward
   ///
   /// In ko, this message translates to:
-  /// **'섹터 두목 격파! 보상 💰{credits}'**
+  /// **'항성계 두목 격파! 보상 💰{credits}'**
   String g_dlgBossDefeated(int credits);
 
   /// captain line; name = wanted pirate name

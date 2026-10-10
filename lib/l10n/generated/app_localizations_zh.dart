@@ -177,7 +177,7 @@ class L10nZh extends L10n {
     String mul,
     String other,
   ) {
-    return '已定居行星 $colonies / $planets\n空间站 $stations座\n星区加成：产量 x$mul\n其他星区收入：💰$other/s';
+    return '已定居行星 $colonies / $planets\n空间站 $stations座\n星系加成：产量 x$mul\n其他星系收入：💰$other/s';
   }
 
   @override
@@ -377,7 +377,7 @@ class L10nZh extends L10n {
 
   @override
   String get u_ascendExplain =>
-      '转生会重置当前宇宙（星区、殖民地、空间站、飞船强化、船员、信用点），\n并获得永久加成——荣誉点数。\n宝石、装扮、飞船和成就会保留。';
+      '转生会重置当前宇宙（星系、殖民地、空间站、飞船强化、船员、信用点），\n并获得永久加成——荣誉点数。\n宝石、装扮、飞船和成就会保留。';
 
   @override
   String u_ascendGain(int gain) {
@@ -385,7 +385,7 @@ class L10nZh extends L10n {
   }
 
   @override
-  String get u_ascendLocked => '到达星区4后即可转生。';
+  String get u_ascendLocked => '到达星系4后即可转生。';
 
   @override
   String get u_close => '关闭';
@@ -428,10 +428,10 @@ class L10nZh extends L10n {
   String get u_merchantE => '商人 (E)';
 
   @override
-  String get u_nextSectorE => '下一星区 (E)';
+  String get u_nextSectorE => '下一星系 (E)';
 
   @override
-  String get u_prevSectorE => '上一星区 (E)';
+  String get u_prevSectorE => '上一星系 (E)';
 
   @override
   String u_gateLocked(int pct) {
@@ -615,7 +615,7 @@ class L10nZh extends L10n {
 
   @override
   String u_unknownSector(int n) {
-    return '未知星区 $n';
+    return '未知星系 $n';
   }
 
   @override
@@ -633,13 +633,13 @@ class L10nZh extends L10n {
   String get u_build => '建造';
 
   @override
-  String get u_toNextSector => '🌀 前往下一星区';
+  String get u_toNextSector => '🌀 前往下一星系';
 
   @override
   String get u_bossLocked => '🔒 击败首领后开启';
 
   @override
-  String get u_toPrevSector => '🌀 返回上一星区';
+  String get u_toPrevSector => '🌀 返回上一星系';
 
   @override
   String get u_raidAlert => '⚠ 遭袭中！';
@@ -966,11 +966,12 @@ class L10nZh extends L10n {
   String get m_legendTitle => '传说船员必得招募';
 
   @override
-  String get m_legendDescNoGame => '1名★4传说船员（加成20%起，称号·金色光环）\n开始游戏后可购买';
+  String get m_legendDescNoGame =>
+      '1名★4传说船员（加成20%起＋全部产出+40%，称号·金色光环）\n开始游戏后可购买';
 
   @override
   String m_legendDesc(int count, int cap) {
-    return '1名★4传说船员（加成20%起，称号·金色光环）\n船员 $count/$cap';
+    return '1名★4传说船员（加成20%起＋全部产出+40%，称号·金色光环）\n船员 $count/$cap';
   }
 
   @override
@@ -1186,8 +1187,18 @@ class L10nZh extends L10n {
   String get g_shipAuroraAbility => '自我修复：3秒未受伤后每秒恢复3%生命\n守护膜：每8秒抵挡1次攻击';
 
   @override
+  String g_crewLegendPerk(int pct) {
+    return '👑 传说指挥：全部产出（信用点·矿石）+$pct%（不叠加）';
+  }
+
+  @override
+  String g_shipCreditBonus(int pct) {
+    return '💰 猎手加成：亲自赚取的信用点+$pct%（赏金·小行星·任务·防御袭击）';
+  }
+
+  @override
   String g_unlockSector(int n) {
-    return '到达星区$n';
+    return '到达星系$n';
   }
 
   @override
@@ -1546,13 +1557,13 @@ class L10nZh extends L10n {
   String get g_achExplorerTitle => '探险家';
 
   @override
-  String get g_achExplorerDesc => '到达星区3';
+  String get g_achExplorerDesc => '到达星系3';
 
   @override
   String get g_achVoyagerTitle => '航行者';
 
   @override
-  String get g_achVoyagerDesc => '到达星区6';
+  String get g_achVoyagerDesc => '到达星系6';
 
   @override
   String get g_achRichTitle => '富豪舰长';
@@ -1965,7 +1976,7 @@ class L10nZh extends L10n {
 
   @override
   String g_unknownSector(int n) {
-    return '未知星区$n';
+    return '未知星系$n';
   }
 
   @override
@@ -1985,7 +1996,7 @@ class L10nZh extends L10n {
   String get g_dlgWelcome => '欢迎你，舰长！我是副官米娜。';
 
   @override
-  String get g_dlgMissionsCancelled => '上一星区的运输和通缉任务已取消。';
+  String get g_dlgMissionsCancelled => '上一星系的运输和通缉任务已取消。';
 
   @override
   String get g_floatDisabled => '停机！';
@@ -2036,7 +2047,7 @@ class L10nZh extends L10n {
   String get g_floatGuard => '守护膜！';
 
   @override
-  String get g_pirateBossLose => '呜哇啊！这片星区……归你了……';
+  String get g_pirateBossLose => '呜哇啊！这个星系……归你了……';
 
   @override
   String get g_pirateBossFlee => '呜哇啊！给我记住，舰长！';
@@ -2060,7 +2071,7 @@ class L10nZh extends L10n {
   String get g_dlgSupplySignal => '收到装有宝石的补给舱信号！有海盗在守着，请小心。';
 
   @override
-  String get g_dlgBossWarning => '警告！星区首领的战舰正在接近！';
+  String get g_dlgBossWarning => '警告！星系首领的战舰正在接近！';
 
   @override
   String get g_pirateRevenge => '我来复仇了！做好觉悟吧！';
@@ -2172,7 +2183,7 @@ class L10nZh extends L10n {
 
   @override
   String g_dlgBossDefeated(int credits) {
-    return '击败星区首领！奖励 💰$credits';
+    return '击败星系首领！奖励 💰$credits';
   }
 
   @override

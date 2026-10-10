@@ -1,10 +1,12 @@
+import 'dart:isolate';
 import 'dart:math';
 
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:star_settlers/game/crew.dart';
 import 'package:star_settlers/game/home.dart';
 import 'package:star_settlers/game/models.dart';
 import 'package:star_settlers/game/profile.dart';
+import 'package:star_settlers/game/ships.dart';
 import 'package:star_settlers/game/world.dart';
 
 import 'support/progression_bot.dart';
@@ -124,6 +126,111 @@ void main() {
       expect(window(packs), lessThan(window(free) * 0.7));
     }, timeout: const Timeout(Duration(minutes: 5)));
 
+    test('뒤 항성계(3~6): 장비 ⭐1200이 무료보다 30%↑, 패스·크레딧 팩 20%↑ 빠르고 패스+장비가 가장 빠르다. '
+        '무료도 6개 항성계를 정체 없이 끝내고, 첫 항성계 사망은 2회 이하', () async {
+      // 결제 방식: 0 무료, 1 장비(오로라+전설+슬롯), 2 크레딧 팩, 3 사령관 패스, 4 패스+장비
+      // 항성계마다 [누적 일수, 사망, 완료(1/0), 정체 세션]
+      Future<List<List<double>>> play(int seed, int pay) => Isolate.run(() {
+            final r = ProgressionBot(seed,
+                    paying: pay > 0, payWithPacks: pay == 2, buyPass: pay == 3, passAndGear: pay == 4)
+                .run(lastSector: 5, maxDays: 40);
+            return [
+              for (final l in r.logs)
+                [l.days, l.deaths.toDouble(), l.done ? 1.0 : 0.0, l.stallSessions.toDouble()],
+            ];
+          });
+      const seeds = [1, 2];
+      final runs = await Future.wait([
+        for (final seed in seeds)
+          for (var pay = 0; pay < 5; pay++) play(seed, pay),
+      ]);
+      List<List<double>> run(int seed, int pay) => runs[seeds.indexOf(seed) * 5 + pay];
+      // 3~6번째 항성계에 걸린 날 (2번째 항성계를 끝낸 시점부터)
+      double window(int pay) =>
+          seeds.map((s) => run(s, pay)[5][0] - run(s, pay)[1][0]).reduce((a, b) => a + b) / seeds.length;
+      double deathsIn(int pay, int sector) =>
+          seeds.map((s) => run(s, pay)[sector][1]).reduce((a, b) => a + b) / seeds.length;
+      final free = window(0), gear = window(1), packs = window(2), pass = window(3), both = window(4);
+      // ignore: avoid_print
+      print('S3~S6 일수: 무료 ${free.toStringAsFixed(2)} 장비 ${gear.toStringAsFixed(2)} '
+          '팩 ${packs.toStringAsFixed(2)} 패스 ${pass.toStringAsFixed(2)} 패스+장비 ${both.toStringAsFixed(2)}');
+      for (final seed in seeds) {
+        final f = run(seed, 0);
+        expect(f.length, 6);
+        expect(f.every((l) => l[2] == 1), isTrue, reason: '무료로도 6번째 항성계까지 끝나야 함 (seed $seed)');
+        expect(f.every((l) => l[3] == 0), isTrue, reason: '살 게 없어 멈추는 세션 없음 (seed $seed)');
+        expect(f[0][1], lessThanOrEqualTo(2), reason: '첫 항성계는 편하게 (seed $seed)');
+      }
+      expect(gear, lessThan(free * 0.7), reason: '⭐1200 장비가 30% 이상 빨라야 함');
+      expect(pass, lessThan(free * 0.8), reason: '사령관 패스 20% 이상');
+      expect(packs, lessThan(free * 0.8), reason: '크레딧 팩 20% 이상');
+      expect(both, lessThan(min(gear, pass)), reason: '패스+장비가 가장 빠름');
+      // 뒤 항성계 해적은 기본 함선을 더 괴롭히고, 장비가 있으면 덜 죽는다
+      expect(deathsIn(0, 5), greaterThan(deathsIn(0, 0)));
+      expect(deathsIn(1, 4) + deathsIn(1, 5), lessThan((deathsIn(0, 4) + deathsIn(0, 5)) * 0.5));
+    }, timeout: const Timeout(Duration(minutes: 10)));
+
+    test('뒤 항성계 해적은 기본 함선을 첫 항성계보다 훨씬 더 괴롭히고, 프리미엄 함선은 잘 버틴다', () {
+      Map<String, double> fight(int sector, int lv, String ship) {
+        final w = worldAtSector(7, sector, weapon: lv, hull: lv);
+        w.profile.ownedShips.add(ship);
+        w.switchShip(shipTypeById(ship));
+        w.player.hp = w.playerMaxHp;
+        return huntFight(w, 5);
+      }
+
+      // 강화 안 한 기본 함선(정찰선 Lv.1): 4번째 항성계에서 첫 항성계보다 훨씬 많이 맞고 죽는다
+      final s1 = fight(0, 1, 'scout');
+      final s4 = fight(3, 1, 'scout');
+      // 만렙(Lv.8) 정찰선도 6번째 항성계는 버겁고, 오로라는 버틴다
+      final scout6 = fight(5, 8, 'scout');
+      final aurora6 = fight(5, 8, 'aurora');
+      // ignore: avoid_print
+      print('정찰선Lv1 S1 $s1\n정찰선Lv1 S4 $s4\n정찰선Lv8 S6 $scout6\n오로라Lv8 S6 $aurora6');
+      expect(s4['deaths']!, greaterThan(s1['deaths']! + 3));
+      expect(s4['damageTaken']!, greaterThan(s1['damageTaken']! * 2));
+      expect(scout6['deaths']!, greaterThan(aurora6['deaths']!));
+      expect(aurora6['deaths']!, lessThanOrEqualTo(1));
+      expect(aurora6['damageTaken']!, lessThan(scout6['damageTaken']! * 0.6));
+    });
+
+    test('프리미엄 함선·전설 승무원 보너스: 함선이 잡은 현상금·생산이 실제로 오르고, 전설은 겹치지 않는다', () {
+      final w = worldAtSector(3, 3);
+      // 상인 승무원(무역가) 보너스를 걷어낸 생산
+      double norm() => w.creditIncome / (1 + w.crewBonus(CrewRole.trader));
+      final income0 = norm();
+      // 전설 지휘: 생산 +legendPerkPct%, 두 명이어도 한 번만
+      w.profile.extraCrewSlots = 3;
+      expect(w.grantCrew(4).assigned, isTrue);
+      expect(norm(), closeTo(income0 * (1 + CrewMember.legendPerkPct / 100), income0 * 0.001));
+      final one = norm();
+      expect(w.grantCrew(4).assigned, isTrue);
+      expect(norm(), closeTo(one, one * 0.001));
+      // 함선 보너스: 오로라·노바는 직접 버는 크레딧 배율이 1보다 크고 설명에 표시된다
+      for (final id in ['nova', 'aurora']) {
+        final t = shipTypeById(id);
+        expect(t.creditMul, greaterThan(1));
+        expect(t.creditBonusPct, greaterThan(0));
+      }
+      expect(shipTypeById('scout').creditMul, 1);
+      // 같은 해적을 함선이 잡으면 오로라가 더 많이 떨군다
+      double bountyWith(String ship) {
+        final w2 = worldAtSector(3, 3);
+        w2.profile.ownedShips.add(ship);
+        w2.switchShip(shipTypeById(ship));
+        w2.pirates.clear();
+        w2.pickups.clear();
+        w2.pirates.add(Pirate(PirateKind.raider, w2.player.pos + const Offset(2000, 0), 1)..hp = -1);
+        w2.update(1 / 60, InputState());
+        return w2.pickups
+            .where((k) => k.kind == PickupKind.credits)
+            .fold(0.0, (a, k) => a + k.amount);
+      }
+
+      final scout = bountyWith('scout'), aurora = bountyWith('aurora');
+      expect(aurora, closeTo(scout * shipTypeById('aurora').creditMul, scout * 0.05));
+    });
+
     test('본거지 안전 구역에 숨어 레이저로 무한 사냥해도 생산 수입의 15%도 안 된다', () {
       for (final s in [0, 1, 2, 3]) {
         final w = worldAtSector(7, s);
@@ -131,6 +238,16 @@ void main() {
         // ignore: avoid_print
         print('S${s + 1} $r');
         // 레이저 격추 현상금은 25%만, 본거지는 버티다 정지된다 (식민지 포탑·습격 방어 보상 포함 측정)
+        expect(r['bountyPerMin']!, lessThan(r['incomePerMin']! * 0.15));
+      }
+      // 프리미엄 함선(현상금 보너스)으로 숨어도 레이저 격추에는 보너스가 붙지 않는다
+      for (final s in [1, 3]) {
+        final w = worldAtSector(7, s);
+        w.profile.ownedShips.add('aurora');
+        w.switchShip(shipTypeById('aurora'));
+        final r = baseFarm(w, 20, shoot: false);
+        // ignore: avoid_print
+        print('오로라 S${s + 1} $r');
         expect(r['bountyPerMin']!, lessThan(r['incomePerMin']! * 0.15));
       }
     });

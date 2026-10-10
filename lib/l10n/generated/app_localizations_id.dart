@@ -179,7 +179,7 @@ class L10nId extends L10n {
     String mul,
     String other,
   ) {
-    return 'Planet dihuni $colonies / $planets\nStasiun: $stations\nBonus sektor: produksi x$mul\nSektor lain: 💰$other/d';
+    return 'Planet dihuni $colonies / $planets\nStasiun: $stations\nBonus sistem: produksi x$mul\nSistem lain: 💰$other/d';
   }
 
   @override
@@ -381,7 +381,7 @@ class L10nId extends L10n {
 
   @override
   String get u_ascendExplain =>
-      'Reinkarnasi mereset alam semesta ini (sektor, koloni, stasiun, upgrade kapal, kru, kredit)\ndan memberimu kehormatan, bonus permanen.\nPermata, kosmetik, kapal, dan pencapaian tetap tersimpan.';
+      'Reinkarnasi mereset alam semesta ini (sistem, koloni, stasiun, upgrade kapal, kru, kredit)\ndan memberimu kehormatan, bonus permanen.\nPermata, kosmetik, kapal, dan pencapaian tetap tersimpan.';
 
   @override
   String u_ascendGain(int gain) {
@@ -389,7 +389,7 @@ class L10nId extends L10n {
   }
 
   @override
-  String get u_ascendLocked => 'Capai sektor 4 untuk bereinkarnasi.';
+  String get u_ascendLocked => 'Capai sistem 4 untuk bereinkarnasi.';
 
   @override
   String get u_close => 'Tutup';
@@ -433,10 +433,10 @@ class L10nId extends L10n {
   String get u_merchantE => 'Pedagang (E)';
 
   @override
-  String get u_nextSectorE => 'Sektor Berikut (E)';
+  String get u_nextSectorE => 'Sistem Berikut (E)';
 
   @override
-  String get u_prevSectorE => 'Sektor Sebelum (E)';
+  String get u_prevSectorE => 'Sistem Sebelum (E)';
 
   @override
   String u_gateLocked(int pct) {
@@ -620,7 +620,7 @@ class L10nId extends L10n {
 
   @override
   String u_unknownSector(int n) {
-    return 'Sektor Tak Dikenal $n';
+    return 'Sistem Tak Dikenal $n';
   }
 
   @override
@@ -638,13 +638,13 @@ class L10nId extends L10n {
   String get u_build => 'Bangun';
 
   @override
-  String get u_toNextSector => '🌀 Ke sektor berikutnya';
+  String get u_toNextSector => '🌀 Ke sistem berikutnya';
 
   @override
   String get u_bossLocked => '🔒 Kalahkan bos untuk membuka';
 
   @override
-  String get u_toPrevSector => '🌀 Ke sektor sebelumnya';
+  String get u_toPrevSector => '🌀 Ke sistem sebelumnya';
 
   @override
   String get u_raidAlert => '⚠ Diserbu!';
@@ -978,11 +978,11 @@ class L10nId extends L10n {
 
   @override
   String get m_legendDescNoGame =>
-      '1 kru legendaris ★4 (bonus 20%+, gelar, aura emas)\nTersedia setelah kamu memulai game';
+      '1 kru legendaris ★4 (bonus 20%+ + semua produksi +40%, gelar, aura emas)\nTersedia setelah kamu memulai game';
 
   @override
   String m_legendDesc(int count, int cap) {
-    return '1 kru legendaris ★4 (bonus 20%+, gelar, aura emas)\nKru $count/$cap';
+    return '1 kru legendaris ★4 (bonus 20%+ + semua produksi +40%, gelar, aura emas)\nKru $count/$cap';
   }
 
   @override
@@ -1204,8 +1204,18 @@ class L10nId extends L10n {
       'Perbaikan diri: pulih 3% HP/detik setelah 3 detik tanpa terkena serangan\nPerisai Penjaga: menahan 1 serangan tiap 8 detik';
 
   @override
+  String g_crewLegendPerk(int pct) {
+    return '👑 Komando legendaris: semua produksi (kredit & bijih) +$pct% (tidak bertumpuk)';
+  }
+
+  @override
+  String g_shipCreditBonus(int pct) {
+    return '💰 Bonus pemburu: +$pct% kredit yang kamu dapat sendiri (hadiah buronan, asteroid, misi, pertahanan serangan)';
+  }
+
+  @override
   String g_unlockSector(int n) {
-    return 'Capai sektor $n';
+    return 'Capai sistem $n';
   }
 
   @override
@@ -1564,13 +1574,13 @@ class L10nId extends L10n {
   String get g_achExplorerTitle => 'Penjelajah';
 
   @override
-  String get g_achExplorerDesc => 'Capai sektor 3';
+  String get g_achExplorerDesc => 'Capai sistem 3';
 
   @override
   String get g_achVoyagerTitle => 'Pengelana';
 
   @override
-  String get g_achVoyagerDesc => 'Capai sektor 6';
+  String get g_achVoyagerDesc => 'Capai sistem 6';
 
   @override
   String get g_achRichTitle => 'Kapten Kaya';
@@ -2009,7 +2019,7 @@ class L10nId extends L10n {
 
   @override
   String g_unknownSector(int n) {
-    return 'Sektor Tak Dikenal $n';
+    return 'Sistem Tak Dikenal $n';
   }
 
   @override
@@ -2031,7 +2041,7 @@ class L10nId extends L10n {
 
   @override
   String get g_dlgMissionsCancelled =>
-      'Misi antar kargo dan buronan dari sektor sebelumnya dibatalkan.';
+      'Misi antar kargo dan buronan dari sistem sebelumnya dibatalkan.';
 
   @override
   String get g_floatDisabled => 'Lumpuh!';
@@ -2085,7 +2095,7 @@ class L10nId extends L10n {
   String get g_floatGuard => 'Terlindungi!';
 
   @override
-  String get g_pirateBossLose => 'Argh! Sektor ini… milikmu…';
+  String get g_pirateBossLose => 'Argh! Sistem ini… milikmu…';
 
   @override
   String get g_pirateBossFlee => 'Argh! Akan kuingat ini, Kapten!';
@@ -2112,7 +2122,7 @@ class L10nId extends L10n {
       'Ada sinyal kapsul suplai berisi permata! Dijaga bajak laut, jadi hati-hati ya.';
 
   @override
-  String get g_dlgBossWarning => 'Peringatan! Kapal bos sektor mendekat!';
+  String get g_dlgBossWarning => 'Peringatan! Kapal bos sistem mendekat!';
 
   @override
   String get g_pirateRevenge => 'Aku kembali untuk balas dendam! Bersiaplah!';
@@ -2224,7 +2234,7 @@ class L10nId extends L10n {
 
   @override
   String g_dlgBossDefeated(int credits) {
-    return 'Bos sektor kalah! Hadiah 💰$credits';
+    return 'Bos sistem kalah! Hadiah 💰$credits';
   }
 
   @override

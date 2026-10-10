@@ -172,7 +172,7 @@ class L10nKo extends L10n {
     String mul,
     String other,
   ) {
-    return '정착한 행성 $colonies / $planets\n정거장 $stations개\n섹터 보너스: 생산량 x$mul\n다른 섹터 수입: 💰$other/s';
+    return '정착한 행성 $colonies / $planets\n정거장 $stations개\n항성계 보너스: 생산량 x$mul\n다른 항성계 수입: 💰$other/s';
   }
 
   @override
@@ -372,7 +372,7 @@ class L10nKo extends L10n {
 
   @override
   String get u_ascendExplain =>
-      '환생하면 지금 우주(섹터, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.';
+      '환생하면 지금 우주(항성계, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.';
 
   @override
   String u_ascendGain(int gain) {
@@ -380,7 +380,7 @@ class L10nKo extends L10n {
   }
 
   @override
-  String get u_ascendLocked => '섹터 4에 도달하면 환생할 수 있어요.';
+  String get u_ascendLocked => '항성계 4에 도달하면 환생할 수 있어요.';
 
   @override
   String get u_close => '닫기';
@@ -423,10 +423,10 @@ class L10nKo extends L10n {
   String get u_merchantE => '상인 (E)';
 
   @override
-  String get u_nextSectorE => '다음 섹터 (E)';
+  String get u_nextSectorE => '다음 항성계 (E)';
 
   @override
-  String get u_prevSectorE => '이전 섹터 (E)';
+  String get u_prevSectorE => '이전 항성계 (E)';
 
   @override
   String u_gateLocked(int pct) {
@@ -610,7 +610,7 @@ class L10nKo extends L10n {
 
   @override
   String u_unknownSector(int n) {
-    return '미지의 섹터 $n';
+    return '미지의 항성계 $n';
   }
 
   @override
@@ -628,13 +628,13 @@ class L10nKo extends L10n {
   String get u_build => '건설';
 
   @override
-  String get u_toNextSector => '🌀 다음 섹터로';
+  String get u_toNextSector => '🌀 다음 항성계로';
 
   @override
   String get u_bossLocked => '🔒 두목을 쓰러뜨리면 열림';
 
   @override
-  String get u_toPrevSector => '🌀 이전 섹터로';
+  String get u_toPrevSector => '🌀 이전 항성계로';
 
   @override
   String get u_raidAlert => '⚠ 습격 중!';
@@ -964,11 +964,11 @@ class L10nKo extends L10n {
 
   @override
   String get m_legendDescNoGame =>
-      '★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요';
+      '★4 전설 승무원 1명 (보너스 20%~ + 모든 생산 +40%, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요';
 
   @override
   String m_legendDesc(int count, int cap) {
-    return '★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n승무원 $count/$cap';
+    return '★4 전설 승무원 1명 (보너스 20%~ + 모든 생산 +40%, 칭호·금빛 오라)\n승무원 $count/$cap';
   }
 
   @override
@@ -1181,8 +1181,18 @@ class L10nKo extends L10n {
       '자가 수리: 3초간 피격이 없으면 초당 체력 3% 회복\n수호막: 8초마다 피격 1회 방어';
 
   @override
+  String g_crewLegendPerk(int pct) {
+    return '👑 전설 지휘: 모든 생산(크레딧·광석) +$pct% (여러 명이어도 한 번만)';
+  }
+
+  @override
+  String g_shipCreditBonus(int pct) {
+    return '💰 사냥꾼 보너스: 직접 버는 크레딧 +$pct% (현상금·소행성·임무·습격 방어)';
+  }
+
+  @override
   String g_unlockSector(int n) {
-    return '섹터 $n 도달';
+    return '항성계 $n 도달';
   }
 
   @override
@@ -1541,13 +1551,13 @@ class L10nKo extends L10n {
   String get g_achExplorerTitle => '탐험가';
 
   @override
-  String get g_achExplorerDesc => '섹터 3 도달';
+  String get g_achExplorerDesc => '항성계 3 도달';
 
   @override
   String get g_achVoyagerTitle => '항해자';
 
   @override
-  String get g_achVoyagerDesc => '섹터 6 도달';
+  String get g_achVoyagerDesc => '항성계 6 도달';
 
   @override
   String get g_achRichTitle => '부자 선장';
@@ -1960,7 +1970,7 @@ class L10nKo extends L10n {
 
   @override
   String g_unknownSector(int n) {
-    return '미지의 섹터 $n';
+    return '미지의 항성계 $n';
   }
 
   @override
@@ -1980,7 +1990,7 @@ class L10nKo extends L10n {
   String get g_dlgWelcome => '선장님, 환영합니다! 저는 부관 미나예요.';
 
   @override
-  String get g_dlgMissionsCancelled => '이전 섹터의 운송·현상수배 임무는 취소됐어요.';
+  String get g_dlgMissionsCancelled => '이전 항성계의 운송·현상수배 임무는 취소됐어요.';
 
   @override
   String get g_floatDisabled => '기능 정지!';
@@ -2031,7 +2041,7 @@ class L10nKo extends L10n {
   String get g_floatGuard => '수호막!';
 
   @override
-  String get g_pirateBossLose => '으아악! 이 섹터는… 네 것이다…';
+  String get g_pirateBossLose => '으아악! 이 항성계는… 네 것이다…';
 
   @override
   String get g_pirateBossFlee => '으아악! 기억해 두겠다, 선장!';
@@ -2055,7 +2065,7 @@ class L10nKo extends L10n {
   String get g_dlgSupplySignal => '젬이 든 보급 캡슐 신호가 잡혔어요! 해적이 지키고 있으니 조심하세요.';
 
   @override
-  String get g_dlgBossWarning => '경고! 섹터 두목 함선이 접근 중입니다!';
+  String get g_dlgBossWarning => '경고! 항성계 두목 함선이 접근 중입니다!';
 
   @override
   String get g_pirateRevenge => '복수하러 왔다! 각오해라!';
@@ -2167,7 +2177,7 @@ class L10nKo extends L10n {
 
   @override
   String g_dlgBossDefeated(int credits) {
-    return '섹터 두목 격파! 보상 💰$credits';
+    return '항성계 두목 격파! 보상 💰$credits';
   }
 
   @override

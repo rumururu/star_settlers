@@ -18,6 +18,7 @@ class ShipType {
     this.pierce = 0,
     this.regenRate = 0,
     this.guardInterval = 0,
+    this.creditMul = 1,
     this.wing = 26,
     this.length = 46,
   });
@@ -67,12 +68,22 @@ class ShipType {
   /// 프리미엄 함선: 통계로는 해금되지 않고 젬으로만 살 수 있다
   final bool premium;
 
-  /// 고유 능력 설명 (격납고·상점 표시용)
-  String get ability => switch (id) {
-        'nova' => tr.g_shipNovaAbility,
-        'aurora' => tr.g_shipAuroraAbility,
-        _ => '',
-      };
+  /// 고유 능력 설명 (격납고·상점 표시용). 직접 버는 크레딧 보너스가 있으면 한 줄 덧붙인다.
+  String get ability {
+    final base = switch (id) {
+      'nova' => tr.g_shipNovaAbility,
+      'aurora' => tr.g_shipAuroraAbility,
+      _ => '',
+    };
+    if (creditMul <= 1) return base;
+    final bonus = tr.g_shipCreditBonus(creditBonusPct);
+    return base.isEmpty ? bonus : '$base\n$bonus';
+  }
+
+  /// 직접 버는 크레딧 배율: 함선이 잡은 해적 현상금·소행성 크레딧·임무·습격 방어·두목 보상.
+  /// 본거지 레이저가 잡은 해적에는 붙지 않는다 (안전 구역 파밍 방지).
+  final double creditMul;
+  int get creditBonusPct => ((creditMul - 1) * 100).round();
 
   /// 관통: 탄환이 적을 맞히고도 이만큼 더 날아가 추가로 맞힌다
   final int pierce;
@@ -109,12 +120,12 @@ const shipTypes = [
       wing: 30, length: 50),
   ShipType('nova',
       speedMul: 1.1, fireMul: 0.85,
-      premium: true, pierce: 1, gemPrice: 400,
+      premium: true, pierce: 1, gemPrice: 400, creditMul: 1.5,
       wing: 36, length: 54),
   ShipType('aurora',
       hpMul: 1.3, fireMul: 0.95,
       premium: true,
-      regenRate: 0.03, guardInterval: 8, gemPrice: 600,
+      regenRate: 0.03, guardInterval: 8, gemPrice: 600, creditMul: 1.75,
       wing: 34, length: 48),
 ];
 

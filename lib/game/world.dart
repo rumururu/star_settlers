@@ -259,9 +259,22 @@ class GameWorld {
   static const rewardCostExponent = 0.4;
   double get rewardMul => sectorMul * pow(costMul, rewardCostExponent);
 
-  /// 해적 공격력 배율: 항성계마다 +[enemyDamageStep] (체력은 [sectorMul]을 따른다)
+  /// 해적 공격력 배율: 항성계마다 +[enemyDamageStep], 세 번째 항성계부터 [lateEnemyDamageStep]씩 더.
+  /// 체력은 [enemyHpMul]. 뒤 항성계는 함선 강화가 만렙(Lv.8)에 닿은 뒤라 해적만 계속 세지고,
+  /// 기본 함선은 버티기 힘들어진다 → 프리미엄 함선(체력·수리·수호막·관통)이 차이를 만든다.
   static const enemyDamageStep = 0.3;
-  double get enemyDamageMul => 1 + sector * enemyDamageStep;
+  static const lateEnemyDamageStep = 0.25;
+  static const lateEnemyHpStep = 0.2;
+
+  /// 세 번째 항성계(인덱스 2)부터 1, 2, 3…
+  int get lateSystems => max(0, sector - 1);
+  double get enemyDamageMul => 1 + sector * enemyDamageStep + lateSystems * lateEnemyDamageStep;
+
+  /// 해적 체력 배율: [sectorMul] × (1 + [lateEnemyHpStep] × [lateSystems])
+  double get enemyHpMul => sectorMul * (1 + lateSystems * lateEnemyHpStep);
+
+  /// 함선이 직접 번 크레딧 배율 (프리미엄 함선 보너스)
+  double get shipCreditMul => ship.creditMul;
 
   /// 본거지 레이저가 잡은 해적은 현상금을 이 비율만 떨군다
   /// (안전 구역에 숨어 레이저로 무한 사냥하는 파밍 방지)
@@ -288,8 +301,13 @@ class GameWorld {
   /// 전체 수입 배율 (승무원·프리미엄·명예·내 행성)
   double get incomeMul => _incomeMul;
 
+  /// ★4 전설 승무원 지휘 보너스 (생산 배율, 크레딧·광석 공통).
+  /// 한 명이라도 배치되어 있으면 적용되고, 여러 명이어도 겹치지 않는다 (전설 여럿을 사서 무한히 쌓지 않게).
+  double get legendIncomeMul =>
+      roster.any((c) => c.assigned && c.legendary) ? 1 + CrewMember.legendPerkPct / 100 : 1.0;
+
   double get _incomeMul =>
-      (1 + crewBonus(CrewRole.trader)) * (profile.premium ? 1.25 : 1) *
+      (1 + crewBonus(CrewRole.trader)) * (profile.premium ? 1.25 : 1) * legendIncomeMul *
       profile.honorIncomeMul *
       profile.home.incomeMul;
 
@@ -317,13 +335,14 @@ class GameWorld {
           (1 + supportBonusAt(p)) *
           sectorMul *
           (1 + crewBonus(CrewRole.miner)) *
+          legendIncomeMul *
           profile.home.oreMul;
   double stationCreditRate(Station s) => s.baseCreditRate * sectorMul * _incomeMul;
 
   double get otherSectorCredits =>
       sectors.values.fold(0.0, (s, e) => s + e.idleCredits) * _incomeMul * remoteIncomeRatio;
   double get otherSectorOre =>
-      sectors.values.fold(0.0, (s, e) => s + e.idleOre) * remoteIncomeRatio;
+      sectors.values.fold(0.0, (s, e) => s + e.idleOre) * legendIncomeMul * remoteIncomeRatio;
 
   double get creditIncome =>
       planets.fold(0.0, (s, p) => s + planetCreditRate(p)) +
@@ -1066,7 +1085,7 @@ class GameWorld {
   /// 크레딧 팩: 보상 배율([rewardMul])을 따라간다 = 직접 플레이로 버는 돈과 같은 속도로 커진다.
   /// 비용 배율을 따르면 뒤 항성계에서 무료 젬 환전이 진행의 70%를 넘고,
   /// 생산 배율만 따르면 뒤로 갈수록 쓸모가 없어진다.
-  static const creditPackBase = 10000;
+  static const creditPackBase = 12000;
 
   /// 첫 항성계는 발전 비용 자체가 작아서(4만대) 팩 하나가 20%나 된다 → 이 비율만.
   /// 튜토리얼 젬으로 첫 항성계를 건너뛰지 않게.
@@ -1226,7 +1245,7 @@ class GameWorld {
   void _spawnBounty(Mission m) {
     final a = _rng.nextDouble() * 2 * pi;
     final pos = _clampWorld(player.pos + OffsetX.fromAngle(a, randRange(_rng, 1500, 2400)), (_) {});
-    final e = Pirate(PirateKind.raider, pos, Pirate.baseHp(PirateKind.raider) * 5 * sectorMul,
+    final e = Pirate(PirateKind.raider, pos, Pirate.baseHp(PirateKind.raider) * 5 * enemyHpMul,
         name: m.bountyName, dmgScale: 1.5 * enemyDamageMul)
       ..missionId = m.id
       ..wanderAngle = a;
@@ -1237,7 +1256,7 @@ class GameWorld {
 
   void _completeMission(Mission m) {
     activeMissions.remove(m);
-    final c = (m.rewardCredits * (1 + crewBonus(CrewRole.trader))).round();
+    final c = (m.rewardCredits * (1 + crewBonus(CrewRole.trader)) * shipCreditMul).round();
     credits += c;
     if (m.rewardGems > 0) profile.gems += m.rewardGems;
     _count('missions');
@@ -2001,7 +2020,7 @@ class GameWorld {
     shake = min(20, shake + (boss ? 16 : 3));
     final bounty = (e.bounty * rewardMul * (1 + crewBonus(CrewRole.trader)) *
             (e.name != null ? 4 : 1) *
-            (e.lastHitByBase ? laserBountyRatio : 1))
+            (e.lastHitByBase ? laserBountyRatio : shipCreditMul))
         .round();
     _dropPickups(e.pos, PickupKind.credits, bounty, boss ? 10 : 3);
 
@@ -2035,7 +2054,7 @@ class GameWorld {
         if (!bossDefeated) {
           _count('sectorBosses');
           // 게이트는 발전도로 열린다. 두목은 큰 보상을 주는 도전 과제.
-          final reward = (1000 * rewardMul).round();
+          final reward = (1000 * rewardMul * shipCreditMul).round();
           credits += reward;
           say(Speaker.advisor, tr.g_dlgBossDefeated(reward));
         }
@@ -2069,7 +2088,7 @@ class GameWorld {
       _burst(a.pos, a.crystal ? const Color(0xFF4DD0E1) : const Color(0xFFA1887F), 20);
       _dropPickups(a.pos, PickupKind.ore, (a.radius / 3 * (a.crystal ? 3 : 1) * sectorMul).round(), 3);
       if (_rng.nextDouble() < 0.3) {
-        _dropPickups(a.pos, PickupKind.credits, (10 * rewardMul).round(), 1);
+        _dropPickups(a.pos, PickupKind.credits, (10 * rewardMul * shipCreditMul).round(), 1);
       }
     }
     while (asteroids.length < maxAsteroids) {
@@ -2164,7 +2183,7 @@ class GameWorld {
           if (attackers.isEmpty) {
             ev.finished = true;
             planet.raided = false;
-            final reward = (200 * rewardMul).round();
+            final reward = (200 * rewardMul * shipCreditMul).round();
             credits += reward;
             profile.gems += 2;
             sfx.add(Sfx.coin);
@@ -2383,7 +2402,7 @@ class GameWorld {
       (_) {});
 
   Pirate _makePirate(PirateKind kind, Offset pos, {double hpMul = 1}) {
-    final scale = (1 + (threat - 1 - sector) * 0.15) * sectorMul * hpMul;
+    final scale = (1 + (threat - 1 - sector) * 0.15) * enemyHpMul * hpMul;
     return Pirate(kind, pos, Pirate.baseHp(kind) * scale, dmgScale: enemyDamageMul)
       ..wanderAngle = _rng.nextDouble() * 2 * pi;
   }

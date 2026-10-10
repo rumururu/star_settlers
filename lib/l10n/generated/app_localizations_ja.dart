@@ -177,7 +177,7 @@ class L10nJa extends L10n {
     String mul,
     String other,
   ) {
-    return '入植した惑星 $colonies / $planets\nステーション $stations基\nセクターボーナス: 生産量 x$mul\n他セクター収入: 💰$other/s';
+    return '入植した惑星 $colonies / $planets\nステーション $stations基\n星系ボーナス: 生産量 x$mul\n他星系収入: 💰$other/s';
   }
 
   @override
@@ -377,7 +377,7 @@ class L10nJa extends L10n {
 
   @override
   String get u_ascendExplain =>
-      '転生すると今の宇宙（セクター、植民地、ステーション、艦船強化、クルー、クレジット）がリセットされ、\n代わりに永続ボーナスの名誉ポイントがもらえます。\nジェム、着せ替え、艦船、実績はそのまま残ります。';
+      '転生すると今の宇宙（星系、植民地、ステーション、艦船強化、クルー、クレジット）がリセットされ、\n代わりに永続ボーナスの名誉ポイントがもらえます。\nジェム、着せ替え、艦船、実績はそのまま残ります。';
 
   @override
   String u_ascendGain(int gain) {
@@ -385,7 +385,7 @@ class L10nJa extends L10n {
   }
 
   @override
-  String get u_ascendLocked => 'セクター4に到達すると転生できます。';
+  String get u_ascendLocked => '星系4に到達すると転生できます。';
 
   @override
   String get u_close => '閉じる';
@@ -428,10 +428,10 @@ class L10nJa extends L10n {
   String get u_merchantE => '商人 (E)';
 
   @override
-  String get u_nextSectorE => '次のセクター (E)';
+  String get u_nextSectorE => '次の星系 (E)';
 
   @override
-  String get u_prevSectorE => '前のセクター (E)';
+  String get u_prevSectorE => '前の星系 (E)';
 
   @override
   String u_gateLocked(int pct) {
@@ -615,7 +615,7 @@ class L10nJa extends L10n {
 
   @override
   String u_unknownSector(int n) {
-    return '未知のセクター $n';
+    return '未知の星系 $n';
   }
 
   @override
@@ -633,13 +633,13 @@ class L10nJa extends L10n {
   String get u_build => '建設';
 
   @override
-  String get u_toNextSector => '🌀 次のセクターへ';
+  String get u_toNextSector => '🌀 次の星系へ';
 
   @override
   String get u_bossLocked => '🔒 ボスを倒すと開放';
 
   @override
-  String get u_toPrevSector => '🌀 前のセクターへ';
+  String get u_toPrevSector => '🌀 前の星系へ';
 
   @override
   String get u_raidAlert => '⚠ 襲撃中！';
@@ -968,11 +968,11 @@ class L10nJa extends L10n {
 
   @override
   String get m_legendDescNoGame =>
-      '★4 レジェンドクルー1人（ボーナス20%〜、称号・金色のオーラ）\nゲーム開始後に購入できます';
+      '★4 レジェンドクルー1人（ボーナス20%〜＋全生産+40%、称号・金色のオーラ）\nゲーム開始後に購入できます';
 
   @override
   String m_legendDesc(int count, int cap) {
-    return '★4 レジェンドクルー1人（ボーナス20%〜、称号・金色のオーラ）\nクルー $count/$cap';
+    return '★4 レジェンドクルー1人（ボーナス20%〜＋全生産+40%、称号・金色のオーラ）\nクルー $count/$cap';
   }
 
   @override
@@ -1190,8 +1190,18 @@ class L10nJa extends L10n {
       '自己修復: 3秒間被弾しないと毎秒HP3%回復\n守護膜: 8秒ごとに被弾を1回防ぐ';
 
   @override
+  String g_crewLegendPerk(int pct) {
+    return '👑 レジェンド指揮: 全生産（クレジット・鉱石）+$pct%（重複なし）';
+  }
+
+  @override
+  String g_shipCreditBonus(int pct) {
+    return '💰 ハンターボーナス: 自分で稼ぐクレジット+$pct%（賞金・小惑星・任務・襲撃防衛）';
+  }
+
+  @override
   String g_unlockSector(int n) {
-    return 'セクター$nに到達';
+    return '星系$nに到達';
   }
 
   @override
@@ -1550,13 +1560,13 @@ class L10nJa extends L10n {
   String get g_achExplorerTitle => '探検家';
 
   @override
-  String get g_achExplorerDesc => 'セクター3に到達';
+  String get g_achExplorerDesc => '星系3に到達';
 
   @override
   String get g_achVoyagerTitle => '航海者';
 
   @override
-  String get g_achVoyagerDesc => 'セクター6に到達';
+  String get g_achVoyagerDesc => '星系6に到達';
 
   @override
   String get g_achRichTitle => 'お金持ち艦長';
@@ -1974,7 +1984,7 @@ class L10nJa extends L10n {
 
   @override
   String g_unknownSector(int n) {
-    return '未知のセクター$n';
+    return '未知の星系$n';
   }
 
   @override
@@ -1994,7 +2004,7 @@ class L10nJa extends L10n {
   String get g_dlgWelcome => 'ようこそ、艦長！私は副官のミナです。';
 
   @override
-  String get g_dlgMissionsCancelled => '前のセクターの輸送・指名手配任務はキャンセルされました。';
+  String get g_dlgMissionsCancelled => '前の星系の輸送・指名手配任務はキャンセルされました。';
 
   @override
   String get g_floatDisabled => '機能停止！';
@@ -2045,7 +2055,7 @@ class L10nJa extends L10n {
   String get g_floatGuard => '守護膜！';
 
   @override
-  String get g_pirateBossLose => 'ぐわぁっ！このセクターは…お前のものだ…';
+  String get g_pirateBossLose => 'ぐわぁっ！この星系は…お前のものだ…';
 
   @override
   String get g_pirateBossFlee => 'ぐわぁっ！覚えてやがれ、艦長！';
@@ -2070,7 +2080,7 @@ class L10nJa extends L10n {
       'ジェム入りの補給カプセルの信号をキャッチしました！海賊が守っているので気をつけてください。';
 
   @override
-  String get g_dlgBossWarning => '警告！セクターボスの艦が接近中です！';
+  String get g_dlgBossWarning => '警告！星系ボスの艦が接近中です！';
 
   @override
   String get g_pirateRevenge => 'リベンジしに来たぜ！覚悟しな！';
@@ -2182,7 +2192,7 @@ class L10nJa extends L10n {
 
   @override
   String g_dlgBossDefeated(int credits) {
-    return 'セクターボス撃破！報酬 💰$credits';
+    return '星系ボス撃破！報酬 💰$credits';
   }
 
   @override

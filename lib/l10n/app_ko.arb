@@ -294,7 +294,7 @@
       }
     }
   },
-  "u_sectorStats": "정착한 행성 {colonies} / {planets}\n정거장 {stations}개\n섹터 보너스: 생산량 x{mul}\n다른 섹터 수입: 💰{other}/s",
+  "u_sectorStats": "정착한 행성 {colonies} / {planets}\n정거장 {stations}개\n항성계 보너스: 생산량 x{mul}\n다른 항성계 수입: 💰{other}/s",
   "@u_sectorStats": {
     "description": "Station tab sector summary (4 lines)",
     "placeholders": {
@@ -676,7 +676,7 @@
       }
     }
   },
-  "u_ascendExplain": "환생하면 지금 우주(섹터, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.",
+  "u_ascendExplain": "환생하면 지금 우주(항성계, 식민지, 정거장, 함선 강화, 승무원, 크레딧)가 초기화되고\n대신 영구 보너스인 명예 점수를 받아요.\n젬, 꾸미기, 함선, 업적은 유지돼요.",
   "@u_ascendExplain": {
     "description": "Ascension dialog explanation"
   },
@@ -690,7 +690,7 @@
       }
     }
   },
-  "u_ascendLocked": "섹터 4에 도달하면 환생할 수 있어요.",
+  "u_ascendLocked": "항성계 4에 도달하면 환생할 수 있어요.",
   "@u_ascendLocked": {
     "description": "Ascension dialog when not yet allowed"
   },
@@ -776,11 +776,11 @@
   "@u_merchantE": {
     "description": "Interact button: merchant"
   },
-  "u_nextSectorE": "다음 섹터 (E)",
+  "u_nextSectorE": "다음 항성계 (E)",
   "@u_nextSectorE": {
     "description": "Interact button: warp forward"
   },
-  "u_prevSectorE": "이전 섹터 (E)",
+  "u_prevSectorE": "이전 항성계 (E)",
   "@u_prevSectorE": {
     "description": "Interact button: warp back"
   },
@@ -1088,7 +1088,7 @@
   "@u_underRaid": {
     "description": "Planet status: being raided"
   },
-  "u_unknownSector": "미지의 섹터 {n}",
+  "u_unknownSector": "미지의 항성계 {n}",
   "@u_unknownSector": {
     "description": "Fallback sector name",
     "placeholders": {
@@ -1124,7 +1124,7 @@
   "@u_build": {
     "description": "Build button"
   },
-  "u_toNextSector": "🌀 다음 섹터로",
+  "u_toNextSector": "🌀 다음 항성계로",
   "@u_toNextSector": {
     "description": "Gate label in world"
   },
@@ -1132,7 +1132,7 @@
   "@u_bossLocked": {
     "description": "Locked gate label in world"
   },
-  "u_toPrevSector": "🌀 이전 섹터로",
+  "u_toPrevSector": "🌀 이전 항성계로",
   "@u_toPrevSector": {
     "description": "Gate label in world"
   },
@@ -1660,11 +1660,11 @@
   "@m_legendTitle": {
     "description": "젬 아이템: 전설 승무원 모집"
   },
-  "m_legendDescNoGame": "★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요",
+  "m_legendDescNoGame": "★4 전설 승무원 1명 (보너스 20%~ + 모든 생산 +40%, 칭호·금빛 오라)\n게임을 시작한 뒤 구매할 수 있어요",
   "@m_legendDescNoGame": {
     "description": "전설 모집 설명 (게임 시작 전)"
   },
-  "m_legendDesc": "★4 전설 승무원 1명 (보너스 20%~, 칭호·금빛 오라)\n승무원 {count}/{cap}",
+  "m_legendDesc": "★4 전설 승무원 1명 (보너스 20%~ + 모든 생산 +40%, 칭호·금빛 오라)\n승무원 {count}/{cap}",
   "@m_legendDesc": {
     "description": "전설 모집 설명 (게임 중)",
     "placeholders": {
@@ -2072,7 +2072,27 @@
   "@g_shipAuroraAbility": {
     "description": "Aurora unique ability, two lines (hangar, shop)"
   },
-  "g_unlockSector": "섹터 {n} 도달",
+  "g_crewLegendPerk": "👑 전설 지휘: 모든 생산(크레딧·광석) +{pct}% (여러 명이어도 한 번만)",
+  "@g_crewLegendPerk": {
+    "description": "★4 전설 승무원 지휘 보너스 줄 (승무원 카드)",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "보너스 퍼센트"
+      }
+    }
+  },
+  "g_shipCreditBonus": "💰 사냥꾼 보너스: 직접 버는 크레딧 +{pct}% (현상금·소행성·임무·습격 방어)",
+  "@g_shipCreditBonus": {
+    "description": "프리미엄 함선 능력 줄: 직접 버는 크레딧 보너스 (격납고·상점)",
+    "placeholders": {
+      "pct": {
+        "type": "int",
+        "description": "보너스 퍼센트"
+      }
+    }
+  },
+  "g_unlockSector": "항성계 {n} 도달",
   "@g_unlockSector": {
     "description": "ship unlock condition; n = sector number",
     "placeholders": {
@@ -2583,7 +2603,7 @@
   "@g_achExplorerTitle": {
     "description": "achievement title"
   },
-  "g_achExplorerDesc": "섹터 3 도달",
+  "g_achExplorerDesc": "항성계 3 도달",
   "@g_achExplorerDesc": {
     "description": "achievement goal description"
   },
@@ -2591,7 +2611,7 @@
   "@g_achVoyagerTitle": {
     "description": "achievement title"
   },
-  "g_achVoyagerDesc": "섹터 6 도달",
+  "g_achVoyagerDesc": "항성계 6 도달",
   "@g_achVoyagerDesc": {
     "description": "achievement goal description"
   },
@@ -3160,7 +3180,7 @@
   "@g_upgradeMagnet": {
     "description": "ship upgrade name (station upgrade list)"
   },
-  "g_unknownSector": "미지의 섹터 {n}",
+  "g_unknownSector": "미지의 항성계 {n}",
   "@g_unknownSector": {
     "description": "name for sectors beyond the named list; n = sector number",
     "placeholders": {
@@ -3198,7 +3218,7 @@
   "@g_dlgWelcome": {
     "description": "advisor greeting at new game"
   },
-  "g_dlgMissionsCancelled": "이전 섹터의 운송·현상수배 임무는 취소됐어요.",
+  "g_dlgMissionsCancelled": "이전 항성계의 운송·현상수배 임무는 취소됐어요.",
   "@g_dlgMissionsCancelled": {
     "description": "advisor line after warping"
   },
@@ -3266,7 +3286,7 @@
   "@g_floatGuard": {
     "description": "floating text when Aurora guard blocks a hit"
   },
-  "g_pirateBossLose": "으아악! 이 섹터는… 네 것이다…",
+  "g_pirateBossLose": "으아악! 이 항성계는… 네 것이다…",
   "@g_pirateBossLose": {
     "description": "sector boss defeat line"
   },
@@ -3298,7 +3318,7 @@
   "@g_dlgSupplySignal": {
     "description": "advisor line for supply event"
   },
-  "g_dlgBossWarning": "경고! 섹터 두목 함선이 접근 중입니다!",
+  "g_dlgBossWarning": "경고! 항성계 두목 함선이 접근 중입니다!",
   "@g_dlgBossWarning": {
     "description": "advisor warning"
   },
@@ -3512,7 +3532,7 @@
       }
     }
   },
-  "g_dlgBossDefeated": "섹터 두목 격파! 보상 💰{credits}",
+  "g_dlgBossDefeated": "항성계 두목 격파! 보상 💰{credits}",
   "@g_dlgBossDefeated": {
     "description": "advisor line; credits = reward",
     "placeholders": {

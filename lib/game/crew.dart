@@ -128,6 +128,15 @@ class CrewMember {
   /// ★4 전설
   bool get legendary => rarity >= 4;
 
+  /// ★4 전설 지휘: 배치되어 있으면 역할과 별개로 모든 생산(식민지·정거장·다른 항성계 크레딧, 광석) +[legendPerkPct]%.
+  /// 여러 명 배치해도 한 번만 적용된다 ([GameWorld.legendIncomeMul])
+  static const legendPerkPct = 40;
+
+  /// 효과 설명 한 줄 ('공격력 +20%'), 전설이면 지휘 보너스 줄이 붙는다
+  String get effectText => legendary
+      ? '${role.effect} +$bonusPct%\n${tr.g_crewLegendPerk(legendPerkPct)}'
+      : '${role.effect} +$bonusPct%';
+
   /// ★4는 칭호가 붙는다 (예: '은하수호자 뭉치')
   String get displayName =>
       legendary ? tr.g_crewLegendName(_legendTitles[lookSeed % _legendTitles.length], name) : name;

@@ -336,7 +336,7 @@ class _CrewTab extends StatelessWidget {
             ChibiPortrait(style: ChibiStyle.forCrew(c), size: 140),
             Text(c.stars, style: Ts.title.copyWith(color: Color(0xFFFFD54F))),
             Text('${c.role.icon} ${c.role.label} ${c.displayName}', style: titleStyle),
-            Text('${c.role.effect} +${c.bonusPct}%', style: bodyStyle),
+            Text(c.effectText, textAlign: TextAlign.center, style: bodyStyle),
           ],
         ),
         actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: Text(tr.u_great))],
@@ -428,7 +428,7 @@ class _CrewTab extends StatelessWidget {
                                   ? const Color(0xFFFF9E40)
                                   : (c.rarity == 3 ? const Color(0xFFFFD54F) : Colors.white),
                               fontWeight: FontWeight.bold)),
-                      Text('${c.role.icon} ${c.role.label} · ${c.role.effect} +${c.bonusPct}%',
+                      Text('${c.role.icon} ${c.role.label} · ${c.effectText}',
                           style: dimStyle),
                     ],
                   ),
