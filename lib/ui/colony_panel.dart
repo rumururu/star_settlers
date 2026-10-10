@@ -60,7 +60,20 @@ class ColonyPanel extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(14, 10, 6, 4),
       child: Row(
         children: [
-          GameIcon(p.raided ? 'raid' : (p.domeUp ? 'dome' : 'act_settle'), size: 44),
+          // 행성 그림 + 오른쪽 아래 상태 배지 (습격 / 방어막)
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Image.asset('assets/sprites/planet_${p.kind.name}.png',
+                    width: 44, height: 44, filterQuality: FilterQuality.medium),
+                if (p.raided || p.domeUp)
+                  Positioned(right: -2, bottom: -2, child: GameIcon(p.raided ? 'raid' : 'dome', size: 22)),
+              ],
+            ),
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
