@@ -2453,4 +2453,7 @@ class L10nZh extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return '用⭐$gems兑换💰$credits吗？';
   }
+
+  @override
+  String get m_adPrivacy => '广告隐私设置';
 }

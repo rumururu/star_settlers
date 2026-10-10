@@ -701,5 +701,6 @@
   "u_topUpOk": "Compléter",
   "u_goShop": "Boutique",
   "u_exchangeTitle": "💰 Échanger des crédits",
-  "u_exchangeBody": "Échanger ⭐{gems} contre 💰{credits} ?"
+  "u_exchangeBody": "Échanger ⭐{gems} contre 💰{credits} ?",
+  "m_adPrivacy": "Confidentialité des annonces"
 }

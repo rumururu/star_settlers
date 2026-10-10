@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:flutter/services.dart' show PlatformException;
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../l10n/l.dart';
 import 'ads.dart';
@@ -41,10 +43,11 @@ const productDefs = [
 
 /// 결제/광고 추상화.
 /// - 개발/웹: [DevMonetization] (테스트 확인창)
-/// - 출시: [StoreMonetization] (in_app_purchase + AdMob 보상형 광고)
+/// - 출시: [RevenueCatMonetization] (RevenueCat + AdMob 보상형 광고)
 abstract class MonetizationService {
-  /// 결제 성공 시 호출 (상품 지급은 앱에서 처리)
-  void Function(String productId)? onGrant;
+  /// 결제 성공 시 호출 (상품 지급은 앱에서 처리).
+  /// [tx]는 거래 ID — 같은 거래는 한 번만 지급된다. [at]은 구매 시각. 새로 지급했으면 true.
+  bool Function(String productId, {String? tx, DateTime? at})? onGrant;
 
   /// 개발 모드 확인창 (UI가 주입)
   Future<bool> Function(String title, String body)? confirm;
@@ -60,10 +63,12 @@ abstract class MonetizationService {
   bool get isTestMode;
 
   static MonetizationService create() {
+    // 키가 있으면 디버그에서도 RevenueCat (Test Store 키로 결제 흐름 시험)
+    if (RevenueCatMonetization.configured) return RevenueCatMonetization();
     if (!kReleaseMode) return DevMonetization();
     // 웹 정식 빌드(데모)에서는 결제/광고를 막는다 (무료 지급 방지)
     if (kIsWeb) return WebDemoMonetization();
-    return StoreMonetization();
+    return RevenueCatMonetization();
   }
 }
 
@@ -127,11 +132,18 @@ class WebDemoMonetization extends MonetizationService {
   Future<bool> showRewardedAd() => _notice();
 }
 
-class StoreMonetization extends MonetizationService {
-  final _iap = InAppPurchase.instance;
-  final _products = <String, ProductDetails>{};
-  final _pending = <String, Completer<bool>>{};
-  StreamSubscription<List<PurchaseDetails>>? _sub;
+/// 출시 결제: RevenueCat (익명 사용자, 로그인 없음).
+/// RevenueCat 서버가 스토어 영수증을 검증한 뒤에만 구매 성공이 돌아온다.
+/// 지급은 거래 ID 단위로 한 번만 ([onGrant]의 `tx`) — 구매 직후, 앱 시작, 복원이 같은 경로를 탄다.
+/// 키는 빌드 때 `--dart-define=REVENUECAT_API_KEY_ANDROID=goog_...` / `REVENUECAT_API_KEY_IOS=appl_...`.
+class RevenueCatMonetization extends MonetizationService {
+  static const _androidKey = String.fromEnvironment('REVENUECAT_API_KEY_ANDROID');
+  static const _iosKey = String.fromEnvironment('REVENUECAT_API_KEY_IOS');
+  static String get apiKey => kIsWeb ? '' : (Platform.isAndroid ? _androidKey : (Platform.isIOS ? _iosKey : ''));
+  static bool get configured => apiKey.isNotEmpty;
+
+  final _products = <String, StoreProduct>{};
+  final _packages = <String, Package>{};
   bool _available = false;
 
   @override
@@ -139,72 +151,87 @@ class StoreMonetization extends MonetizationService {
 
   @override
   Future<void> init() async {
-    try {
-      _available = await _iap.isAvailable();
-      if (!_available) return;
-      _sub = _iap.purchaseStream.listen(_onPurchases, onError: (Object e) {
-        debugPrint('purchase stream error: $e');
-      });
-      final res = await _iap.queryProductDetails(productDefs.map((p) => p.id).toSet());
-      for (final p in res.productDetails) {
-        _products[p.id] = p;
-      }
-    } catch (e) {
-      debugPrint('IAP init failed: $e');
-      _available = false;
+    if (!configured) {
+      debugPrint('RevenueCat key missing: purchases disabled');
+      return;
     }
+    try {
+      await Purchases.setLogLevel(kReleaseMode ? LogLevel.warn : LogLevel.debug);
+      await Purchases.configure(PurchasesConfiguration(apiKey));
+      _available = true;
+      Purchases.addCustomerInfoUpdateListener(_sync);
+      await _loadProducts();
+      _sync(await Purchases.getCustomerInfo());
+    } catch (e) {
+      debugPrint('RevenueCat init failed: $e');
+    }
+  }
+
+  /// 표준 경로: 현재 offering 의 package. offering 에 없는 상품만 getProducts 로 보충.
+  Future<void> _loadProducts() async {
+    final offering = (await Purchases.getOfferings()).current;
+    for (final pkg in offering?.availablePackages ?? const <Package>[]) {
+      final id = _baseId(pkg.storeProduct.identifier);
+      _packages[id] = pkg;
+      _products[id] = pkg.storeProduct;
+    }
+    final missing = productDefs.map((p) => p.id).where((id) => !_products.containsKey(id)).toList();
+    if (missing.isEmpty) return;
+    for (final p in await Purchases.getProducts(missing, productCategory: ProductCategory.nonSubscription)) {
+      _products[_baseId(p.identifier)] = p;
+    }
+  }
+
+  /// Play 상품 ID 는 `gems_100:base` 꼴로 올 수 있다
+  static String _baseId(String id) => id.split(':').first;
+
+  /// RevenueCat 고객 기록의 거래를 지급한다. 새로 지급한 상품 ID 를 돌려준다.
+  Set<String> _sync(CustomerInfo info) {
+    final got = <String>{};
+    for (final t in info.nonSubscriptionTransactions) {
+      final id = _baseId(t.productIdentifier);
+      if (onGrant?.call(id, tx: t.transactionIdentifier, at: DateTime.tryParse(t.purchaseDate)) ?? false) got.add(id);
+    }
+    return got;
   }
 
   @override
   String priceOf(String productId) =>
-      _products[productId]?.price ??
-      productDefs.firstWhere((p) => p.id == productId).fallbackPrice;
+      _products[productId]?.priceString ?? productDefs.firstWhere((p) => p.id == productId).fallbackPrice;
 
   @override
   Future<bool> buy(String productId) async {
-    final details = _products[productId];
-    if (!_available || details == null) return false;
-    final def = productDefs.firstWhere((p) => p.id == productId);
-    final c = Completer<bool>();
-    _pending[productId] = c;
-    final param = PurchaseParam(productDetails: details);
-    final started = def.consumable
-        ? await _iap.buyConsumable(purchaseParam: param)
-        : await _iap.buyNonConsumable(purchaseParam: param);
-    if (!started) {
-      _pending.remove(productId);
+    if (!_available) return false;
+    final pkg = _packages[productId];
+    final product = _products[productId];
+    if (pkg == null && product == null) return false;
+    try {
+      final r = await Purchases.purchase(
+          pkg != null ? PurchaseParams.package(pkg) : PurchaseParams.storeProduct(product!));
+      // 기본은 고객 기록(_sync)으로 지급. 기록에 아직 없을 때만 이번 거래로 지급
+      // (구매 결과의 거래 ID 는 고객 기록의 ID 와 체계가 달라 같은 거래로 묶이지 않는다)
+      if (!_sync(r.customerInfo).contains(productId)) {
+        final t = r.storeTransaction;
+        onGrant?.call(productId, tx: 'store:${t.transactionIdentifier}', at: DateTime.now());
+      }
+      return true;
+    } on PlatformException catch (e) {
+      final code = PurchasesErrorHelper.getErrorCode(e);
+      if (code != PurchasesErrorCode.purchaseCancelledError) debugPrint('purchase failed: $code');
       return false;
-    }
-    return c.future.timeout(const Duration(minutes: 5), onTimeout: () => false);
-  }
-
-  Future<void> _onPurchases(List<PurchaseDetails> list) async {
-    for (final p in list) {
-      switch (p.status) {
-        case PurchaseStatus.purchased:
-        case PurchaseStatus.restored:
-          // TODO(출시 전): 서버에서 영수증 검증 후 지급
-          onGrant?.call(p.productID);
-          _pending.remove(p.productID)?.complete(true);
-        case PurchaseStatus.error:
-        case PurchaseStatus.canceled:
-          _pending.remove(p.productID)?.complete(false);
-        case PurchaseStatus.pending:
-          break;
-      }
-      if (p.pendingCompletePurchase) {
-        await _iap.completePurchase(p);
-      }
     }
   }
 
   @override
   Future<void> restore() async {
-    if (_available) await _iap.restorePurchases();
+    if (!_available) return;
+    try {
+      _sync(await Purchases.restorePurchases());
+    } on PlatformException catch (e) {
+      debugPrint('restore failed: ${PurchasesErrorHelper.getErrorCode(e)}');
+    }
   }
 
   @override
   Future<bool> showRewardedAd() => AdService.instance.showRewarded();
-
-  void dispose() => _sub?.cancel();
 }

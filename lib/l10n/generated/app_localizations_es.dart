@@ -2517,4 +2517,7 @@ class L10nEs extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return '¿Cambiar ⭐$gems por 💰$credits?';
   }
+
+  @override
+  String get m_adPrivacy => 'Privacidad de anuncios';
 }

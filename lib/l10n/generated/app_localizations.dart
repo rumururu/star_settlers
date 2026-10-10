@@ -4344,6 +4344,12 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'⭐{gems} → 💰{credits}로 교환할까요?'**
   String u_exchangeBody(int gems, int credits);
+
+  /// Settings item: reopen the ad consent (GDPR/UMP) form to change or withdraw consent
+  ///
+  /// In ko, this message translates to:
+  /// **'광고 개인정보 설정'**
+  String get m_adPrivacy;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

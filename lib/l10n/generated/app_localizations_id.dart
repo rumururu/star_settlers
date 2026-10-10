@@ -2504,4 +2504,7 @@ class L10nId extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return 'Tukar ⭐$gems jadi 💰$credits?';
   }
+
+  @override
+  String get m_adPrivacy => 'Pengaturan privasi iklan';
 }

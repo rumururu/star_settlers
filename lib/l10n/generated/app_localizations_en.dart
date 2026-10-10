@@ -2499,4 +2499,7 @@ class L10nEn extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return 'Exchange ⭐$gems for 💰$credits?';
   }
+
+  @override
+  String get m_adPrivacy => 'Ad privacy settings';
 }

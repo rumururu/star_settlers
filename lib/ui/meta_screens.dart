@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../game/models.dart';
 import '../game/profile.dart';
 import '../game/save.dart';
+import '../services/ads.dart';
 import '../services/app_state.dart';
 import '../services/audio.dart';
 import '../services/feedback.dart';
@@ -174,6 +175,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 actions: [TextButton(onPressed: () => Navigator.pop(c), child: Text(tr.m_close))],
               ),
             ),
+          ),
+          // 광고 동의가 필요한 지역(유럽 등)에서만: 동의 변경·철회
+          FutureBuilder<bool>(
+            future: AdService.instance.privacyOptionsRequired(),
+            builder: (context, snap) => snap.data != true
+                ? const SizedBox.shrink()
+                : ListTile(
+                    leading: const Icon(Icons.ads_click),
+                    title: Text(tr.m_adPrivacy),
+                    onTap: AdService.instance.showPrivacyOptions,
+                  ),
           ),
           ListTile(
             leading: const Icon(Icons.delete_forever, color: Colors.redAccent),

@@ -701,5 +701,6 @@
   "u_topUpOk": "Fill & go",
   "u_goShop": "Go to shop",
   "u_exchangeTitle": "💰 Exchange credits",
-  "u_exchangeBody": "Exchange ⭐{gems} for 💰{credits}?"
+  "u_exchangeBody": "Exchange ⭐{gems} for 💰{credits}?",
+  "m_adPrivacy": "Ad privacy settings"
 }

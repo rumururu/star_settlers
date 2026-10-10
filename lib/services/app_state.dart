@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart' show WidgetsBinding;
 
 import '../game/models.dart';
 import '../game/profile.dart';
@@ -26,7 +27,8 @@ class AppState {
       ..soundOn = profile.sound
       ..musicOn = profile.music;
     AudioService.instance.init();
-    AdService.instance.init();
+    // 광고 동의 창은 첫 화면이 뜬 뒤에
+    WidgetsBinding.instance.addPostFrameCallback((_) => AdService.instance.init());
     NotificationService.instance.init();
   }
 
@@ -43,9 +45,21 @@ class AppState {
 
   static void play(Sfx s) => AudioService.instance.play(s);
 
-  /// 결제 완료 상품 지급 (중복 호출에도 안전하게)
-  static void grant(String productId) {
+  /// 소모성 상품 (재설치 후 복원 대상이 아님)
+  static const consumables = {'gems_100', 'gems_550', 'gems_1200'};
+
+  /// 결제 완료 상품 지급 (중복 호출에도 안전하게).
+  /// [tx]가 있으면 거래 ID당 한 번만 지급한다. 이 기기 저장보다 먼저 산 소모성 상품은 기록만 한다.
+  static bool grant(String productId, {String? tx, DateTime? at}) {
     final p = profile;
+    if (tx != null && tx.isNotEmpty) {
+      if (!p.grantedTx.add(tx)) return false;
+      if (consumables.contains(productId) && at != null && at.isBefore(p.txSince)) {
+        p.dirty = true;
+        SaveService.saveProfile(p);
+        return false;
+      }
+    }
     switch (productId) {
       case 'gems_100':
         p.gems += 100;
@@ -67,6 +81,7 @@ class AppState {
     deliverPending();
     SaveService.saveProfile(p);
     play(Sfx.gem);
+    return true;
   }
 
   /// 결제로 받은 승무원을 현재 월드에 지급

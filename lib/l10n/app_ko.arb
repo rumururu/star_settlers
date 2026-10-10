@@ -3940,5 +3940,9 @@
         "description": "받는 크레딧"
       }
     }
+  },
+  "m_adPrivacy": "광고 개인정보 설정",
+  "@m_adPrivacy": {
+    "description": "Settings item: reopen the ad consent (GDPR/UMP) form to change or withdraw consent"
   }
 }

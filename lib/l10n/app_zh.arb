@@ -701,5 +701,6 @@
   "u_topUpOk": "补足并继续",
   "u_goShop": "去商店",
   "u_exchangeTitle": "💰 兑换信用点",
-  "u_exchangeBody": "用⭐{gems}兑换💰{credits}吗？"
+  "u_exchangeBody": "用⭐{gems}兑换💰{credits}吗？",
+  "m_adPrivacy": "广告隐私设置"
 }

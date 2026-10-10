@@ -2447,4 +2447,7 @@ class L10nKo extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return '⭐$gems → 💰$credits로 교환할까요?';
   }
+
+  @override
+  String get m_adPrivacy => '광고 개인정보 설정';
 }

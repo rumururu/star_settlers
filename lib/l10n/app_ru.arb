@@ -701,5 +701,6 @@
   "u_topUpOk": "Доплатить",
   "u_goShop": "В магазин",
   "u_exchangeTitle": "💰 Обмен кредитов",
-  "u_exchangeBody": "Обменять ⭐{gems} на 💰{credits}?"
+  "u_exchangeBody": "Обменять ⭐{gems} на 💰{credits}?",
+  "m_adPrivacy": "Настройки конфиденциальности рекламы"
 }

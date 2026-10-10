@@ -2462,4 +2462,7 @@ class L10nJa extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return '⭐$gemsを💰$creditsに交換しますか？';
   }
+
+  @override
+  String get m_adPrivacy => '広告のプライバシー設定';
 }

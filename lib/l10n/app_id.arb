@@ -701,5 +701,6 @@
   "u_topUpOk": "Tutupi & lanjut",
   "u_goShop": "Ke toko",
   "u_exchangeTitle": "💰 Tukar kredit",
-  "u_exchangeBody": "Tukar ⭐{gems} jadi 💰{credits}?"
+  "u_exchangeBody": "Tukar ⭐{gems} jadi 💰{credits}?",
+  "m_adPrivacy": "Pengaturan privasi iklan"
 }

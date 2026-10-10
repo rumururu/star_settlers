@@ -29,14 +29,63 @@ class AdService {
 
   String get _unitId => Platform.isAndroid ? _androidUnit : _iosUnit;
 
-  Future<void> init() async {
-    if (!supported || _initialized) return;
+  Future<void>? _initFuture;
+
+  /// 광고 동의(UMP) → 동의 상태가 허락하면 AdMob 초기화. 여러 번 불러도 한 번만 돈다.
+  Future<void> init() => _initFuture ??= _init();
+
+  Future<void> _init() async {
+    if (!supported) return;
     try {
+      await _gatherConsent();
+      if (!await ConsentInformation.instance.canRequestAds()) return;
       await MobileAds.instance.initialize();
       _initialized = true;
       _preload();
     } catch (e) {
       debugPrint('AdMob init failed: $e');
+    }
+  }
+
+  /// 유럽 등 동의가 필요한 지역이면 AdMob 콘솔의 동의 메시지를 띄운다 (그 외 지역은 바로 통과)
+  Future<void> _gatherConsent() {
+    final done = Completer<void>();
+    void finish([Object? e]) {
+      if (e != null) debugPrint('consent: $e');
+      if (!done.isCompleted) done.complete();
+    }
+
+    ConsentInformation.instance.requestConsentInfoUpdate(
+      ConsentRequestParameters(),
+      () => ConsentForm.loadAndShowConsentFormIfRequired((e) => finish(e?.message)),
+      (e) => finish(e.message),
+    );
+    // 네트워크가 없을 때 무한 대기하지 않게
+    return done.future.timeout(const Duration(seconds: 15), onTimeout: () {});
+  }
+
+  /// 설정 화면에 "광고 개인정보 설정"을 보여줘야 하는지 (동의 철회·변경 경로)
+  Future<bool> privacyOptionsRequired() async {
+    if (!supported) return false;
+    try {
+      return await ConsentInformation.instance.getPrivacyOptionsRequirementStatus() ==
+          PrivacyOptionsRequirementStatus.required;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// 동의 변경 화면. 바뀐 동의로 광고를 다시 받을 수 있게 초기화를 다시 시도한다.
+  Future<void> showPrivacyOptions() async {
+    final done = Completer<void>();
+    ConsentForm.showPrivacyOptionsForm((e) {
+      if (e != null) debugPrint('privacy options: ${e.message}');
+      if (!done.isCompleted) done.complete();
+    });
+    await done.future;
+    if (!_initialized) {
+      _initFuture = null;
+      await init();
     }
   }
 
@@ -66,7 +115,7 @@ class AdService {
   /// 광고를 끝까지 봐서 보상을 받으면 true
   Future<bool> showRewarded() async {
     if (!supported) return false;
-    if (!_initialized) await init();
+    await init();
     final ad = _ad;
     if (ad == null) {
       _preload();

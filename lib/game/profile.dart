@@ -106,6 +106,13 @@ class Profile {
   bool premium = false;
   bool starterBought = false;
 
+  /// 이미 지급한 스토어 거래 ID (같은 결제를 두 번 지급하지 않게)
+  Set<String> grantedTx = {};
+
+  /// 이 기기 저장이 처음 생긴 시각. 이보다 이전에 산 소모성 상품은 다시 지급하지 않는다
+  /// (재설치·데이터 삭제 후 젬을 또 받는 것 방지. 비소모성은 언제든 복원)
+  DateTime txSince = DateTime.now();
+
   /// 젬으로 산 추가 배치 슬롯 수 (0..[crewSlotPrices].length)
   int extraCrewSlots = 0;
 
@@ -357,6 +364,8 @@ class Profile {
         'gems': gems,
         'premium': premium,
         'starter': starterBought,
+        'tx': grantedTx.toList(),
+        'txSince': txSince.millisecondsSinceEpoch,
         'slots': extraCrewSlots,
         'rosterPacks': rosterPacks,
         'skins': ownedSkins.toList(),
@@ -395,6 +404,8 @@ class Profile {
       ..gems = j['gems'] as int? ?? 0
       ..premium = j['premium'] as bool? ?? false
       ..starterBought = j['starter'] as bool? ?? false
+      ..grantedTx = {...((j['tx'] as List?)?.cast<String>() ?? const <String>[])}
+      ..txSince = j['txSince'] is int ? DateTime.fromMillisecondsSinceEpoch(j['txSince'] as int) : DateTime.now()
       // 예전 저장: 'slot'(bool) 하나 → 슬롯 1개
       ..extraCrewSlots = (j['slots'] as int? ?? ((j['slot'] as bool? ?? false) ? 1 : 0))
           .clamp(0, crewSlotPrices.length)

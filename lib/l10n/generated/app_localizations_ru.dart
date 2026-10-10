@@ -2512,4 +2512,7 @@ class L10nRu extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return 'Обменять ⭐$gems на 💰$credits?';
   }
+
+  @override
+  String get m_adPrivacy => 'Настройки конфиденциальности рекламы';
 }
