@@ -4,17 +4,22 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-/// AdMob 보상형 광고.
-/// 기본값은 구글 공식 **테스트 광고 단위**이고, 출시 빌드에서는
-/// `--dart-define=ADMOB_REWARDED_ANDROID=...` / `ADMOB_REWARDED_IOS=...` 로 실제 ID를 넣는다.
+/// AdMob 보상형 광고 (퍼블리셔 ca-app-pub-9040255849498359, 앱 "Star Settlers").
+/// 릴리즈 빌드는 실제 광고 단위, 디버그·프로필 빌드는 구글 공식 **테스트 광고 단위**를 쓴다
+/// (개발 중 자기 실제 광고를 보거나 누르면 AdMob 정책 위반).
+/// `--dart-define=ADMOB_REWARDED_ANDROID=...` / `ADMOB_REWARDED_IOS=...` 로 덮어쓸 수 있다.
 class AdService {
   AdService._();
   static final instance = AdService._();
 
   static const _androidUnit = String.fromEnvironment('ADMOB_REWARDED_ANDROID',
-      defaultValue: 'ca-app-pub-3940256099942544/5224354917');
+      defaultValue: kReleaseMode
+          ? 'ca-app-pub-9040255849498359/9710243093'
+          : 'ca-app-pub-3940256099942544/5224354917');
   static const _iosUnit = String.fromEnvironment('ADMOB_REWARDED_IOS',
-      defaultValue: 'ca-app-pub-3940256099942544/1712485313');
+      defaultValue: kReleaseMode
+          ? 'ca-app-pub-9040255849498359/5906729458'
+          : 'ca-app-pub-3940256099942544/1712485313');
 
   static bool get supported => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 

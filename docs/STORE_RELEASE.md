@@ -29,21 +29,17 @@
 
 > ⚠️ 출시 전에 **영수증 서버 검증**을 추가하는 것을 권장합니다 (`StoreMonetization._onPurchases`의 TODO 참고). Firebase Functions 등으로 구현할 수 있습니다.
 
-## 3. 보상형 광고 (AdMob)
-`google_mobile_ads` 연동은 끝나 있습니다(`lib/services/ads.dart`). 지금은 **구글 공식 테스트 ID**라서 테스트 광고가 나옵니다. 출시 전에 실제 ID로 바꾸세요.
+## 3. 보상형 광고 (AdMob) — 등록 완료 (2026-10-10)
+퍼블리셔 `ca-app-pub-9040255849498359` 계정에 앱 "Star Settlers"를 등록했습니다(스토어 미연결 상태라 "검토 필요" — 스토어 출시 후 AdMob에서 스토어를 연결하면 검토가 시작됩니다).
 
-1. AdMob에서 앱(Android/iOS)을 등록하고 **앱 ID**와 **보상형 광고 단위 ID**를 발급받습니다.
-2. 앱 ID 교체
-   - Android: `android/app/src/main/AndroidManifest.xml`의 `com.google.android.gms.ads.APPLICATION_ID`
-   - iOS: `ios/Runner/Info.plist`의 `GADApplicationIdentifier`
-3. 광고 단위 ID는 빌드할 때 넣습니다(코드 수정 불필요).
-   ```bash
-   flutter build appbundle --release \
-     --dart-define=ADMOB_REWARDED_ANDROID=ca-app-pub-XXXX/YYYY
-   flutter build ipa --release \
-     --dart-define=ADMOB_REWARDED_IOS=ca-app-pub-XXXX/ZZZZ
-   ```
-4. AdMob 콘솔에서 GDPR/UMP 동의 메시지와 아동 대상 설정을 구성합니다.
+| | 앱 ID | 보상형 광고 단위 ("Rewarded - gems") |
+|---|---|---|
+| Android | `ca-app-pub-9040255849498359~8708152613` | `ca-app-pub-9040255849498359/9710243093` |
+| iOS | `ca-app-pub-9040255849498359~8397161423` | `ca-app-pub-9040255849498359/5906729458` |
+
+- 앱 ID: `android/app/src/main/AndroidManifest.xml`, `ios/Runner/Info.plist`에 반영됨.
+- 광고 단위: `lib/services/ads.dart` — **릴리즈 빌드만 실제 단위**, 디버그/프로필은 구글 테스트 단위(자기 광고 클릭은 정책 위반). `--dart-define=ADMOB_REWARDED_ANDROID/IOS`로 덮어쓸 수 있음.
+- 남은 일: AdMob 콘솔에서 GDPR/UMP 동의 메시지·아동 대상 설정, 스토어 출시 후 앱에 스토어 연결, `app-ads.txt` 게시.
 
 사령관 패스 보유자는 광고 없이 바로 보상을 받습니다(`AppState.watchAd`).
 

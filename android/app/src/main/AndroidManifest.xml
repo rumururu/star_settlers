@@ -7,7 +7,7 @@
         <!-- AdMob 앱 ID. 지금은 구글 공식 테스트 ID — 출시 전에 실제 ID로 교체 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-9040255849498359~8708152613"/>
         <!-- 예약 알림 (flutter_local_notifications) -->
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
