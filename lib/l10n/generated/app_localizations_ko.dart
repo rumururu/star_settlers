@@ -77,9 +77,6 @@ class L10nKo extends L10n {
   String get u_equip => '장착';
 
   @override
-  String get u_boostNote => '💨 부스트(Shift / 💨 버튼)는 기본 장착되어 있어요.';
-
-  @override
   String get u_hangarSection => '🛸 격납고';
 
   @override
@@ -505,7 +502,7 @@ class L10nKo extends L10n {
   }
 
   @override
-  String get u_resume => '▶ 계속하기';
+  String get u_resume => '▶︎ 계속하기';
 
   @override
   String get u_shop => '⭐ 상점';
@@ -792,7 +789,7 @@ class L10nKo extends L10n {
   }
 
   @override
-  String get m_continue => '▶ 이어하기';
+  String get m_continue => '이어하기';
 
   @override
   String get m_newGame => '✨ 새 게임';

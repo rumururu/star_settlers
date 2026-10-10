@@ -45,7 +45,10 @@ Future<void> main() async {
       e.visitChildren(rebuild);
     }
 
-    WidgetsBinding.instance.rootElement?.visitChildren(rebuild);
+    // 빌드 도중에 언어가 바뀌면 바로 표시하면 안 되므로, 지금 프레임이 끝난 뒤 다시 그린다
+    final binding = WidgetsBinding.instance;
+    binding.addPostFrameCallback((_) => binding.rootElement?.visitChildren(rebuild));
+    binding.scheduleFrame();
   });
   runApp(const StarSettlersApp());
 }
@@ -256,7 +259,8 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                       },
                     ),
                     const SizedBox(height: Space.m),
-                    _menuButton(tr.m_continue, _hasSave ? _continue : null, primary: _hasSave),
+                    _menuButton(tr.m_continue, _hasSave ? _continue : null,
+                        primary: _hasSave, leading: Icons.play_arrow_rounded),
                     const SizedBox(height: Space.m),
                     _menuButton(tr.m_newGame, _newGame, primary: !_hasSave),
                     const SizedBox(height: Space.l),
@@ -285,12 +289,15 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
   }
 
   /// 타이틀의 두 버튼은 글자 길이와 무관하게 같은 크기
-  Widget _menuButton(String label, VoidCallback? onTap, {bool primary = false}) => actionBtn(
+  /// ▶ 같은 기호는 언어 글꼴에 없으면 컬러 이모지로 바뀌므로 아이콘으로 그린다
+  Widget _menuButton(String label, VoidCallback? onTap, {bool primary = false, IconData? leading}) =>
+      actionBtn(
         label,
         onTap != null,
         onTap,
         primary: true,
         color: primary ? const Color(0xFF7E57C2) : const Color(0xFF2A2357),
+        leadingIcon: leading,
       );
 
   Widget _iconMenu(String icon, String label, VoidCallback onTap, double width, {bool badge = false}) =>

@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "Kapten chibi<br><em>jelajahi antariksa</em>",
+      "sub": "Kalahkan bajak laut, jelajahi planet, dan bangun galaksimu sendiri",
+      "detail": "Kapten · Letnan Mina · Bos Bajak Laut",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "Bajak laut datang?<br><em>Lawan dari dekat!</em>",
+      "sub": "Kejar dengan satu joystick, balas dengan rudal dan perisai",
+      "detail": "Rudal Pelacak · Perisai Energi · Boost",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "Tancapkan bendera,<br><em>kembangkan koloni</em>",
+      "sub": "Kota planet milikmu, aman di bawah kubah perisai",
+      "detail": "Planet Taman · Gurun · Es · Lava · Gas",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "Menara & perisai,<br><em>koloni makin kuat</em>",
+      "sub": "Makin banyak bangunan, makin besar pendapatan dan pertahanan",
+      "detail": "Menara Tembak · Rig Tambang · Pos Dagang · Dok · Perisai",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "Majukan sistem,<br><em>terbang lebih jauh</em>",
+      "sub": "Kembangkan semua planet untuk membuka gerbang warp ke sistem berikutnya",
+      "detail": "Perkembangan 100% → Gerbang warp terbuka",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "Pilih di Hanggar<br><em>kapal impianmu</em>",
+      "sub": "7 kapal, dari Interceptor yang gesit hingga Nova Dragon",
+      "detail": "Scout · Fortress · Phantom · Nova Dragon · Aurora, dll.",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "Upgrade kapalmu<br><em>di Stasiun</em>",
+      "sub": "Senjata · Lapisan Baja · Mesin · Rudal · Perisai · Drone · Magnet",
+      "detail": "Koloni tetap menghasilkan saat kamu istirahat",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "Rekrut kru<br><em>yang imut!</em>",
+      "sub": "Tugaskan kru untuk bonus kapal, bahkan yang ★4 Legendaris",
+      "detail": "Penembak · Teknisi · Pilot · Pedagang · Penambang · Ilmuwan",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

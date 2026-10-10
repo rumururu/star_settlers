@@ -1,0 +1,8 @@
+(() {
+  _GameScreenState? s;
+  void v(Element e) { if (e is StatefulElement && e.state is _GameScreenState) s = e.state as _GameScreenState; e.visitChildren(v); }
+  WidgetsBinding.instance.rootElement!.visitChildren(v);
+  final st = s!;
+  Future.delayed(const Duration(milliseconds: 50), () { ACTION });
+  return 'ok';
+})()

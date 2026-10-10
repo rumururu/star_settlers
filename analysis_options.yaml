@@ -15,6 +15,7 @@ analyzer:
     - android/**
     - ios/**
     - web/**
+    - docs/**  # 스토어 캡처용 보조 스크립트 (앱 코드 아님)
 
 linter:
   # The lint rules applied to this project can be customized in the

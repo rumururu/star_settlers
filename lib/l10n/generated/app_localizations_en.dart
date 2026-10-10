@@ -84,10 +84,6 @@ class L10nEn extends L10n {
   String get u_equip => 'Equip';
 
   @override
-  String get u_boostNote =>
-      '💨 Boost (Shift / 💨 button) is equipped by default.';
-
-  @override
   String get u_hangarSection => '🛸 Hangar';
 
   @override
@@ -515,7 +511,7 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get u_resume => '▶ Resume';
+  String get u_resume => '▶︎ Resume';
 
   @override
   String get u_shop => '⭐ Shop';
@@ -802,7 +798,7 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get m_continue => '▶ Continue';
+  String get m_continue => 'Continue';
 
   @override
   String get m_newGame => '✨ New Game';

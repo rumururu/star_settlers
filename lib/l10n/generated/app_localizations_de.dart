@@ -85,10 +85,6 @@ class L10nDe extends L10n {
   String get u_equip => 'Ausrüsten';
 
   @override
-  String get u_boostNote =>
-      '💨 Boost (Shift / 💨-Knopf) ist standardmäßig ausgerüstet.';
-
-  @override
   String get u_hangarSection => '🛸 Hangar';
 
   @override
@@ -520,7 +516,7 @@ class L10nDe extends L10n {
   }
 
   @override
-  String get u_resume => '▶ Weiter';
+  String get u_resume => '▶︎ Weiter';
 
   @override
   String get u_shop => '⭐ Shop';
@@ -807,7 +803,7 @@ class L10nDe extends L10n {
   }
 
   @override
-  String get m_continue => '▶ Fortsetzen';
+  String get m_continue => 'Fortsetzen';
 
   @override
   String get m_newGame => '✨ Neues Spiel';

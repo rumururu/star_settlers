@@ -86,10 +86,6 @@ class L10nFr extends L10n {
   String get u_equip => 'Équiper';
 
   @override
-  String get u_boostNote =>
-      '💨 Le boost (Shift / bouton 💨) est équipé par défaut.';
-
-  @override
   String get u_hangarSection => '🛸 Hangar';
 
   @override
@@ -127,12 +123,12 @@ class L10nFr extends L10n {
 
   @override
   String u_unlockOrGems(String condition) {
-    return 'Déblocage : $condition ou gemmes';
+    return 'Déblocage : $condition ou gemmes';
   }
 
   @override
   String u_unlock(String condition) {
-    return 'Déblocage : $condition';
+    return 'Déblocage : $condition';
   }
 
   @override
@@ -185,20 +181,20 @@ class L10nFr extends L10n {
     String mul,
     String other,
   ) {
-    return 'Planètes colonisées $colonies / $planets\nStations : $stations\nBonus de secteur : production x$mul\nAutres secteurs : 💰$other/s';
+    return 'Planètes colonisées $colonies / $planets\nStations : $stations\nBonus de secteur : production x$mul\nAutres secteurs : 💰$other/s';
   }
 
   @override
-  String get u_legendaryGet => '🌟 Légendaire ! 🌟';
+  String get u_legendaryGet => '🌟 Légendaire ! 🌟';
 
   @override
-  String get u_rareGet => '✨ Équipier rare ! ✨';
+  String get u_rareGet => '✨ Équipier rare ! ✨';
 
   @override
-  String get u_newCrew => 'Nouvel équipier !';
+  String get u_newCrew => 'Nouvel équipier !';
 
   @override
-  String get u_great => 'Super !';
+  String get u_great => 'Super !';
 
   @override
   String u_crewHeader(int count, int cap, int assigned, int slots) {
@@ -222,7 +218,7 @@ class L10nFr extends L10n {
 
   @override
   String u_recruitOdds(String normal, String premium) {
-    return 'Chances · Recrutement : $normal\nRecrutement premium : $premium\nLégendaire garanti : ★4 100 %';
+    return 'Chances · Recrutement : $normal\nRecrutement premium : $premium\nLégendaire garanti : ★4 100 %';
   }
 
   @override
@@ -247,7 +243,7 @@ class L10nFr extends L10n {
 
   @override
   String get u_noCrew =>
-      'Pas encore d\'équipage. Recrutez-en et affectez-les à votre vaisseau !';
+      'Pas encore d\'équipage. Recrutez-en et affectez-les à votre vaisseau !';
 
   @override
   String get u_unassign => 'Retirer';
@@ -263,7 +259,7 @@ class L10nFr extends L10n {
 
   @override
   String u_dismissCrewBody(String name) {
-    return 'Laisser partir $name ? C\'est irréversible.';
+    return 'Laisser partir $name ? C\'est irréversible.';
   }
 
   @override
@@ -297,7 +293,7 @@ class L10nFr extends L10n {
   String get u_accept => 'Accepter';
 
   @override
-  String get u_priceHigh => '📈 Élevé ! C\'est le moment de vendre';
+  String get u_priceHigh => '📈 Élevé ! C\'est le moment de vendre';
 
   @override
   String get u_priceLow => '📉 Bas… mieux vaut attendre';
@@ -319,7 +315,7 @@ class L10nFr extends L10n {
 
   @override
   String get u_marketTip =>
-      'Les prix montent et descendent. Vendez quand c\'est cher !';
+      'Les prix montent et descendent. Vendez quand c\'est cher !';
 
   @override
   String get u_gemExchange => '⭐ Échange de gemmes';
@@ -335,7 +331,7 @@ class L10nFr extends L10n {
 
   @override
   String u_achievementDone(String title, int gems) {
-    return '🏆 Succès : $title ! Récupérez ⭐$gems dans Menu > Succès.';
+    return '🏆 Succès : $title ! Récupérez ⭐$gems dans Menu > Succès.';
   }
 
   @override
@@ -343,20 +339,20 @@ class L10nFr extends L10n {
       'Ressources insuffisantes, ou impossible pour l\'instant.';
 
   @override
-  String get u_welcomeBack => 'Bon retour, Capitaine !';
+  String get u_welcomeBack => 'Bon retour, Capitaine !';
 
   @override
   String u_offlineHm(int h, int m) {
-    return 'Pendant vos $h h $m min d\'absence,\nvos colonies ont bien travaillé !';
+    return 'Pendant vos $h h $m min d\'absence,\nvos colonies ont bien travaillé !';
   }
 
   @override
   String u_offlineM(int m) {
-    return 'Pendant vos $m min d\'absence,\nvos colonies ont bien travaillé !';
+    return 'Pendant vos $m min d\'absence,\nvos colonies ont bien travaillé !';
   }
 
   @override
-  String get u_passOfflineHint => 'Pass Commandant : jusqu\'à 8 h + x2 auto';
+  String get u_passOfflineHint => 'Pass Commandant : jusqu\'à 8 h + x2 auto';
 
   @override
   String get u_collect => 'Récupérer';
@@ -379,12 +375,12 @@ class L10nFr extends L10n {
 
   @override
   String u_honorStatus(int honor, int ascensions) {
-    return 'Honneur $honor (renaissances : $ascensions)';
+    return 'Honneur $honor (renaissances : $ascensions)';
   }
 
   @override
   String u_honorBonus(int income, int attack) {
-    return 'Revenu +$income % · Dégâts +$attack %';
+    return 'Revenu +$income % · Dégâts +$attack %';
   }
 
   @override
@@ -393,7 +389,7 @@ class L10nFr extends L10n {
 
   @override
   String u_ascendGain(int gain) {
-    return 'Renaissez maintenant pour +$gain d\'honneur !\n(Plus votre empire est grand, plus vous gagnez)';
+    return 'Renaissez maintenant pour +$gain d\'honneur !\n(Plus votre empire est grand, plus vous gagnez)';
   }
 
   @override
@@ -408,7 +404,7 @@ class L10nFr extends L10n {
   }
 
   @override
-  String get u_ascendConfirmTitle => 'Vraiment renaître ?';
+  String get u_ascendConfirmTitle => 'Vraiment renaître ?';
 
   @override
   String get u_ascendConfirmBody =>
@@ -424,7 +420,7 @@ class L10nFr extends L10n {
 
   @override
   String u_hudSector(String sector, int dev, String threat, String value) {
-    return '$sector · Dév. $dev %\n⚠ Menace $threat  🏛 $value';
+    return '$sector · Dév. $dev %\n⚠ Menace $threat  🏛 $value';
   }
 
   @override
@@ -434,7 +430,7 @@ class L10nFr extends L10n {
 
   @override
   String u_baseHp(int pct) {
-    return 'Base $pct %';
+    return 'Base $pct %';
   }
 
   @override
@@ -448,7 +444,7 @@ class L10nFr extends L10n {
 
   @override
   String u_gateLocked(int pct) {
-    return '🔒 S\'ouvre à 100 % de développement ($pct %)';
+    return '🔒 S\'ouvre à 100 % de développement ($pct %)';
   }
 
   @override
@@ -469,10 +465,10 @@ class L10nFr extends L10n {
 
   @override
   String get u_equipAtStation =>
-      'Équipez-le dans l\'onglet Vaisseau de la station !';
+      'Équipez-le dans l\'onglet Vaisseau de la station !';
 
   @override
-  String get u_shotDown => '💥 Vous avez été abattu !';
+  String get u_shotDown => '💥 Vous avez été abattu !';
 
   @override
   String u_autoRespawn(int sec) {
@@ -490,7 +486,7 @@ class L10nFr extends L10n {
 
   @override
   String u_respawnBase(int pct) {
-    return '🏠 Retour à la base (perte de $pct % des crédits)';
+    return '🏠 Retour à la base (perte de $pct % des crédits)';
   }
 
   @override
@@ -521,7 +517,7 @@ class L10nFr extends L10n {
   }
 
   @override
-  String get u_resume => '▶ Reprendre';
+  String get u_resume => '▶︎ Reprendre';
 
   @override
   String get u_shop => '⭐ Boutique';
@@ -546,7 +542,7 @@ class L10nFr extends L10n {
 
   @override
   String get u_keyboardHelp =>
-      'Touches : WASD bouger · Espace tirer · Q missile · F bouclier · Shift boost\nE interagir · B construire station · Échap menu';
+      'Touches : WASD bouger · Espace tirer · Q missile · F bouclier · Shift boost\nE interagir · B construire station · Échap menu';
 
   @override
   String get u_recharging => 'Recharge';
@@ -581,7 +577,7 @@ class L10nFr extends L10n {
 
   @override
   String u_incomePct(int pct) {
-    return 'Revenu +$pct %';
+    return 'Revenu +$pct %';
   }
 
   @override
@@ -606,17 +602,17 @@ class L10nFr extends L10n {
 
   @override
   String u_development(int pct) {
-    return 'Développement $pct %';
+    return 'Développement $pct %';
   }
 
   @override
   String get u_nextSystemOpen => 'Système suivant ouvert';
 
   @override
-  String get u_opensAt100 => 'S\'ouvre à 100 %';
+  String get u_opensAt100 => 'S\'ouvre à 100 %';
 
   @override
-  String get u_devHint => 'Montez chaque planète au Lv.3 pour 100 %';
+  String get u_devHint => 'Montez chaque planète au Lv.3 pour 100 %';
 
   @override
   String get u_conqueredSystems => 'Systèmes conquis (produisent toujours)';
@@ -634,7 +630,7 @@ class L10nFr extends L10n {
 
   @override
   String u_sectorDev(String name, int pct) {
-    return '$name · Dév. $pct %';
+    return '$name · Dév. $pct %';
   }
 
   @override
@@ -656,11 +652,11 @@ class L10nFr extends L10n {
   String get u_toPrevSector => '🌀 Vers le secteur précédent';
 
   @override
-  String get u_raidAlert => '⚠ Attaque en cours !';
+  String get u_raidAlert => '⚠ Attaque en cours !';
 
   @override
   String u_rechargePct(int pct) {
-    return 'Recharge $pct %';
+    return 'Recharge $pct %';
   }
 
   @override
@@ -691,7 +687,7 @@ class L10nFr extends L10n {
   String get u_rareCrewOffer => 'Équipier rare à recruter';
 
   @override
-  String get u_crewSoldOut => 'L\'équipier du jour est déjà parti, miaou !';
+  String get u_crewSoldOut => 'L\'équipier du jour est déjà parti, miaou !';
 
   @override
   String get u_gemTrade => 'Échange de gemmes (max 3)';
@@ -715,12 +711,12 @@ class L10nFr extends L10n {
 
   @override
   String u_buyShipConfirm(String ship, String price) {
-    return 'Dépenser $price pour le $ship ?';
+    return 'Dépenser $price pour le $ship ?';
   }
 
   @override
   String u_shipBought(String ship) {
-    return '$ship obtenu ! Vous êtes à bord.';
+    return '$ship obtenu ! Vous êtes à bord.';
   }
 
   @override
@@ -777,25 +773,25 @@ class L10nFr extends L10n {
 
   @override
   String m_spendGemsConfirm(String price) {
-    return 'Dépenser $price ?';
+    return 'Dépenser $price ?';
   }
 
   @override
   String get m_loginTitle => '📅 Connexion du jour';
 
   @override
-  String get m_loginWelcome => 'Bon retour, Capitaine !';
+  String get m_loginWelcome => 'Bon retour, Capitaine !';
 
   @override
   String get m_loginStreakHint =>
-      'Connectez-vous 7 jours d\'affilée pour ⭐50 !';
+      'Connectez-vous 7 jours d\'affilée pour ⭐50 !';
 
   @override
   String get m_newGameTitle => 'Nouvelle partie';
 
   @override
   String get m_newGameBody =>
-      'Votre progression actuelle sera effacée.\n(Gemmes, cosmétiques, succès et achats sont conservés.) Continuer ?';
+      'Votre progression actuelle sera effacée.\n(Gemmes, cosmétiques, succès et achats sont conservés.) Continuer ?';
 
   @override
   String get m_start => 'Commencer';
@@ -805,11 +801,11 @@ class L10nFr extends L10n {
 
   @override
   String m_honorLine(int honor, int income, int attack) {
-    return '🌌 Honneur galactique $honor · Revenu +$income % · Attaque +$attack %';
+    return '🌌 Honneur galactique $honor · Revenu +$income % · Attaque +$attack %';
   }
 
   @override
-  String get m_continue => '▶ Continuer';
+  String get m_continue => 'Continuer';
 
   @override
   String get m_newGame => '✨ Nouvelle partie';
@@ -878,7 +874,7 @@ class L10nFr extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers enregistre les données de jeu (progression, paramètres) uniquement sur votre appareil et ne collecte aucune information personnelle identifiable.\n\nLes achats intégrés sont traités par Google Play / App Store ; les informations de paiement ne sont jamais transmises au développeur.\n\nSi les publicités récompensées sont activées, le fournisseur (Google AdMob) peut collecter des données comme les identifiants publicitaires.\n\nContact : $email (Paramètres → Envoyer un avis au développeur)';
+    return 'Star Settlers enregistre les données de jeu (progression, paramètres) uniquement sur votre appareil et ne collecte aucune information personnelle identifiable.\n\nLes achats intégrés sont traités par Google Play / App Store ; les informations de paiement ne sont jamais transmises au développeur.\n\nSi les publicités récompensées sont activées, le fournisseur (Google AdMob) peut collecter des données comme les identifiants publicitaires.\n\nContact : $email (Paramètres → Envoyer un avis au développeur)';
   }
 
   @override
@@ -889,11 +885,11 @@ class L10nFr extends L10n {
       'Supprime toute la progression, les gemmes et les cosmétiques';
 
   @override
-  String get m_wipeConfirmTitle => 'Vraiment tout réinitialiser ?';
+  String get m_wipeConfirmTitle => 'Vraiment tout réinitialiser ?';
 
   @override
   String get m_wipeConfirmBody =>
-      'C\'est irréversible. Les achats peuvent être récupérés avec « Restaurer les achats ».';
+      'C\'est irréversible. Les achats peuvent être récupérés avec « Restaurer les achats ».';
 
   @override
   String get m_wipeOk => 'Réinitialiser';
@@ -903,7 +899,7 @@ class L10nFr extends L10n {
 
   @override
   String get m_feedbackDesc =>
-      'Bugs, idées, tout ! L\'appareil et la version de l\'app sont ajoutés automatiquement.';
+      'Bugs, idées, tout ! L\'appareil et la version de l\'app sont ajoutés automatiquement.';
 
   @override
   String m_noMailApp(String email) {
@@ -922,19 +918,19 @@ class L10nFr extends L10n {
   String get m_shopTitle => '⭐ Boutique';
 
   @override
-  String get m_buyThanks => 'Achat effectué ! Merci 💜';
+  String get m_buyThanks => 'Achat effectué ! Merci 💜';
 
   @override
   String get m_adLoading => 'Chargement de la pub. Réessayez dans un instant.';
 
   @override
   String m_buyShipConfirm(String ship, String price) {
-    return 'Dépenser $price pour $ship ?';
+    return 'Dépenser $price pour $ship ?';
   }
 
   @override
   String m_shipAcquired(String ship) {
-    return '$ship obtenu ! Vous êtes à bord';
+    return '$ship obtenu ! Vous êtes à bord';
   }
 
   @override
@@ -956,7 +952,7 @@ class L10nFr extends L10n {
   String get m_tabFree => 'Gemmes gratuites';
 
   @override
-  String get m_testMode => '🧪 Mode test : aucun vrai paiement ni pub';
+  String get m_testMode => '🧪 Mode test : aucun vrai paiement ni pub';
 
   @override
   String get m_owned => 'Possédé';
@@ -990,16 +986,16 @@ class L10nFr extends L10n {
 
   @override
   String get m_legendDescNoGame =>
-      '1 équipier légendaire ★4 (bonus 20 %+, titre, aura dorée)\nDisponible après le début d\'une partie';
+      '1 équipier légendaire ★4 (bonus 20 %+, titre, aura dorée)\nDisponible après le début d\'une partie';
 
   @override
   String m_legendDesc(int count, int cap) {
-    return '1 équipier légendaire ★4 (bonus 20 %+, titre, aura dorée)\nÉquipage $count/$cap';
+    return '1 équipier légendaire ★4 (bonus 20 %+, titre, aura dorée)\nÉquipage $count/$cap';
   }
 
   @override
   String m_crewJoined(String stars, String name) {
-    return '$stars $name a rejoint l\'équipage !';
+    return '$stars $name a rejoint l\'équipage !';
   }
 
   @override
@@ -1022,7 +1018,7 @@ class L10nFr extends L10n {
 
   @override
   String m_crewOdds(String odds) {
-    return 'Chances premium : $odds · Légendaire garanti : ★4 100 %';
+    return 'Chances premium : $odds · Légendaire garanti : ★4 100 %';
   }
 
   @override
@@ -1046,14 +1042,14 @@ class L10nFr extends L10n {
   }
 
   @override
-  String get m_adClaimPremium => 'Récupérer ⭐5 (Pass Commandant : sans pub)';
+  String get m_adClaimPremium => 'Récupérer ⭐5 (Pass Commandant : sans pub)';
 
   @override
   String get m_adWatch => 'Pub pour ⭐5';
 
   @override
   String m_loginStreak(int days) {
-    return 'Série de connexions : jour $days';
+    return 'Série de connexions : jour $days';
   }
 
   @override
@@ -1085,12 +1081,12 @@ class L10nFr extends L10n {
 
   @override
   String m_currentEffect(String effect) {
-    return 'Actuel : $effect';
+    return 'Actuel : $effect';
   }
 
   @override
   String m_nextLevel(String effect) {
-    return 'Niveau suivant : $effect';
+    return 'Niveau suivant : $effect';
   }
 
   @override
@@ -1121,14 +1117,14 @@ class L10nFr extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Un cadeau de vos $count habitants !',
-      one: 'Un cadeau de votre habitant !',
+      other: 'Un cadeau de vos $count habitants !',
+      one: 'Un cadeau de votre habitant !',
     );
     return '$_temp0';
   }
 
   @override
-  String get m_giftThanks => 'Merci !';
+  String get m_giftThanks => 'Merci !';
 
   @override
   String m_planetStatus(int level, int residents, int built, int slots) {
@@ -1144,7 +1140,7 @@ class L10nFr extends L10n {
     int cooldown,
     int offline,
   ) {
-    return 'Bonus permanent · Revenu +$income %  Minerai +$ore %  Attaque +$attack %  PV +$hp %  Recharge -$cooldown %  Hors ligne $offline %';
+    return 'Bonus permanent · Revenu +$income %  Minerai +$ore %  Attaque +$attack %  PV +$hp %  Recharge -$cooldown %  Hors ligne $offline %';
   }
 
   @override
@@ -1196,10 +1192,10 @@ class L10nFr extends L10n {
   String get g_shipFortressDesc => 'Lent mais robuste, frappe fort';
 
   @override
-  String get g_shipProspectorDesc => 'Minerai +50 %, attire les objets de loin';
+  String get g_shipProspectorDesc => 'Minerai +50 %, attire les objets de loin';
 
   @override
-  String get g_shipPhantomDesc => '25 % de chances de critique x2,5';
+  String get g_shipPhantomDesc => '25 % de chances de critique x2,5';
 
   @override
   String get g_shipNovaDesc => 'Chasseur premium aux tirs perforants';
@@ -1210,11 +1206,11 @@ class L10nFr extends L10n {
 
   @override
   String get g_shipNovaAbility =>
-      'Tirs perforants : chaque tir traverse jusqu\'à 2 ennemis';
+      'Tirs perforants : chaque tir traverse jusqu\'à 2 ennemis';
 
   @override
   String get g_shipAuroraAbility =>
-      'Auto-réparation : +3 % PV/s après 3 s sans dégâts\nGarde : bloque 1 coup toutes les 8 s';
+      'Auto-réparation : +3 % PV/s après 3 s sans dégâts\nGarde : bloque 1 coup toutes les 8 s';
 
   @override
   String g_unlockSector(int n) {
@@ -1435,7 +1431,7 @@ class L10nFr extends L10n {
 
   @override
   String g_bldFarmEffect(int n) {
-    return 'Revenu en crédits +$n %';
+    return 'Revenu en crédits +$n %';
   }
 
   @override
@@ -1443,7 +1439,7 @@ class L10nFr extends L10n {
 
   @override
   String g_bldMineEffect(int n) {
-    return 'Gain de minerai +$n %';
+    return 'Gain de minerai +$n %';
   }
 
   @override
@@ -1451,7 +1447,7 @@ class L10nFr extends L10n {
 
   @override
   String g_bldLabEffect(int n) {
-    return 'Recharge des compétences -$n %';
+    return 'Recharge des compétences -$n %';
   }
 
   @override
@@ -1459,7 +1455,7 @@ class L10nFr extends L10n {
 
   @override
   String g_bldTowerEffect(int n) {
-    return 'PV max +$n %';
+    return 'PV max +$n %';
   }
 
   @override
@@ -1467,7 +1463,7 @@ class L10nFr extends L10n {
 
   @override
   String g_bldShipyardEffect(int n) {
-    return 'Attaque +$n %';
+    return 'Attaque +$n %';
   }
 
   @override
@@ -1692,7 +1688,7 @@ class L10nFr extends L10n {
 
   @override
   String g_missionBounty(String name) {
-    return 'Recherché : $name';
+    return 'Recherché : $name';
   }
 
   @override
@@ -1730,21 +1726,21 @@ class L10nFr extends L10n {
 
   @override
   String get g_storyAsteroidsLine0 =>
-      'Capitaine ! D\'abord, détruisez des astéroïdes pour récolter du minerai.';
+      'Capitaine ! D\'abord, détruisez des astéroïdes pour récolter du minerai.';
 
   @override
   String get g_storyAsteroidsLine1 =>
-      'Déplacez-vous avec le joystick et tirez avec le bouton de tir !';
+      'Déplacez-vous avec le joystick et tirez avec le bouton de tir !';
 
   @override
   String get g_storyKillsTitle => 'Abattre 3 pirates';
 
   @override
-  String get g_storyKillsLine0 => 'Pirates au radar ! Suivez la flèche rouge.';
+  String get g_storyKillsLine0 => 'Pirates au radar ! Suivez la flèche rouge.';
 
   @override
   String get g_storyKillsLine1 =>
-      'Des pirates ? Rien que de la ferraille face à mon vaisseau !';
+      'Des pirates ? Rien que de la ferraille face à mon vaisseau !';
 
   @override
   String get g_storyColoniesTitle => 'Coloniser Terra Nova';
@@ -1755,7 +1751,7 @@ class L10nFr extends L10n {
 
   @override
   String get g_storyColoniesLine1 =>
-      'Les colonies rapportent des crédits même pendant que vous vous reposez !';
+      'Les colonies rapportent des crédits même pendant que vous vous reposez !';
 
   @override
   String get g_storyShipLevelsTitle => 'Améliorer le vaisseau à une station';
@@ -1769,7 +1765,7 @@ class L10nFr extends L10n {
 
   @override
   String get g_storyCrewLine0 =>
-      'On se sent seul ici ? Recrutez un compagnon dans l\'onglet Équipage du menu de la station !';
+      'On se sent seul ici ? Recrutez un compagnon dans l\'onglet Équipage du menu de la station !';
 
   @override
   String get g_storyMissionsTitle => 'Terminer 1 mission';
@@ -1783,33 +1779,33 @@ class L10nFr extends L10n {
 
   @override
   String get g_storyStationsLine0 =>
-      'Il est temps de s\'étendre ! Construisez une station dans l\'espace libre, loin des planètes.';
+      'Il est temps de s\'étendre ! Construisez une station dans l\'espace libre, loin des planètes.';
 
   @override
-  String get g_storyDevPercentTitle => 'Développement du système 100 %';
+  String get g_storyDevPercentTitle => 'Système à 100 %';
 
   @override
   String get g_storyDevPercentLine0 =>
-      'Montez chaque planète au Lv.3 pour ouvrir le système suivant. Voyez le bouton Système en haut à droite !';
+      'Montez chaque planète au Lv.3 pour ouvrir le système suivant. Voyez le bouton Système en haut à droite !';
 
   @override
   String get g_storySectorTitle => 'Saut vers le système suivant';
 
   @override
   String get g_storySectorLine0 =>
-      'La porte de distorsion est ouverte ! Allez à la porte violette sur la mini-carte.';
+      'La porte de distorsion est ouverte ! Allez à la porte violette sur la mini-carte.';
 
   @override
-  String get g_storySectorLine1 => 'Tout un nouvel univers nous attend !';
+  String get g_storySectorLine1 => 'Tout un nouvel univers nous attend !';
 
   @override
   String g_storyDevNTitle(int n) {
-    return 'Développement du système $n 100 %';
+    return 'Système $n à 100 %';
   }
 
   @override
   String get g_storyDevNLine =>
-      'Montez chaque planète du nouveau système au Lv.3 !';
+      'Montez chaque planète du nouveau système au Lv.3 !';
 
   @override
   String g_systemN(int n) {
@@ -1818,12 +1814,12 @@ class L10nFr extends L10n {
 
   @override
   String g_storyWarpNTitle(String system) {
-    return 'Saut vers : $system';
+    return 'Saut vers : $system';
   }
 
   @override
   String get g_storyWarpNLine =>
-      'La porte est ouverte. On s\'enfonce plus loin dans l\'espace ?';
+      'La porte est ouverte. On s\'enfonce plus loin dans l\'espace ?';
 
   @override
   String get g_powerUpRapid => 'Tir rapide';
@@ -1869,7 +1865,7 @@ class L10nFr extends L10n {
 
   @override
   String get g_colonyBldBlurbTurret =>
-      'Tire tout seul sur les pirates près de la colonie. Indispensable contre les raids !';
+      'Tire tout seul sur les pirates près de la colonie. Indispensable contre les raids !';
 
   @override
   String get g_colonyBldBlurbMine =>
@@ -1877,7 +1873,7 @@ class L10nFr extends L10n {
 
   @override
   String get g_colonyBldBlurbTrade =>
-      'Augmente le revenu en crédits de cette colonie de 25 % par niveau.';
+      'Augmente le revenu en crédits de cette colonie de 25 % par niveau.';
 
   @override
   String get g_colonyBldBlurbDock =>
@@ -1908,11 +1904,11 @@ class L10nFr extends L10n {
 
   @override
   String get g_stationRoleBlurbRepair =>
-      'Réparation rapide étendue · relance à 10 % du coût · recharge x2 des boucliers des colonies proches';
+      'Réparation rapide étendue · relance à 10 % du coût · recharge x2 des boucliers des colonies proches';
 
   @override
   String get g_stationRoleBlurbSupport =>
-      'Production des colonies proches +25 % (+5 % par niveau d\'habitat)';
+      'Production des colonies proches +25 % (+5 % par niveau d\'habitat)';
 
   @override
   String g_eventRaid(String planet) {
@@ -1944,18 +1940,18 @@ class L10nFr extends L10n {
   String get g_productPassTitle => 'Pass Commandant';
 
   @override
-  String get g_productGems550Desc => '⭐550 (+10 % de bonus)';
+  String get g_productGems550Desc => '⭐550 (+10 % de bonus)';
 
   @override
-  String get g_productGems1200Desc => '⭐1200 (+20 % de bonus)';
+  String get g_productGems1200Desc => '⭐1200 (+20 % de bonus)';
 
   @override
   String get g_productStarterDesc =>
-      '⭐300 + skin exclusif « Galaxie » + équipier ★3 (une seule fois)';
+      '⭐300 + skin exclusif « Galaxie » + équipier ★3 (une seule fois)';
 
   @override
   String get g_productPassDesc =>
-      'Revenu en crédits +25 %, revenu hors ligne 8 h, récompenses sans pub, skin exclusif « Or royal »';
+      'Revenu en crédits +25 %, revenu hors ligne 8 h, récompenses sans pub, skin exclusif « Or royal »';
 
   @override
   String g_testPurchaseTitle(String product) {
@@ -1964,14 +1960,14 @@ class L10nFr extends L10n {
 
   @override
   String g_testPurchaseBody(String desc, String price) {
-    return 'Aucun paiement réel ne sera effectué.\n$desc\nPrix : $price';
+    return 'Aucun paiement réel ne sera effectué.\n$desc\nPrix : $price';
   }
 
   @override
   String get g_testAdTitle => '[Pub test]';
 
   @override
-  String get g_testAdBody => 'Considérer la pub comme regardée en entier ?';
+  String get g_testAdBody => 'Considérer la pub comme regardée en entier ?';
 
   @override
   String get g_webDemoTitle => 'Démo web';
@@ -1988,15 +1984,15 @@ class L10nFr extends L10n {
       'Rappels pour le revenu des colonies et les récompenses quotidiennes';
 
   @override
-  String get g_notifStorageTitle => 'L\'entrepôt de votre colonie est plein !';
+  String get g_notifStorageTitle => 'L\'entrepôt de votre colonie est plein !';
 
   @override
   String get g_notifStorageBody =>
-      'Capitaine, venez récupérer vos crédits avant que le revenu ne s\'arrête !';
+      'Capitaine, venez récupérer vos crédits avant que le revenu ne s\'arrête !';
 
   @override
   String get g_notifPiratesTitle =>
-      'Les pirates sèment à nouveau la pagaille !';
+      'Les pirates sèment à nouveau la pagaille !';
 
   @override
   String get g_notifPiratesBody =>
@@ -2193,109 +2189,109 @@ class L10nFr extends L10n {
 
   @override
   String get g_dlgWelcome =>
-      'Bienvenue, Capitaine ! Je suis Mina, votre seconde.';
+      'Bienvenue, Capitaine ! Je suis Mina, votre seconde.';
 
   @override
   String get g_dlgMissionsCancelled =>
       'Les missions de livraison et de prime du secteur précédent ont été annulées.';
 
   @override
-  String get g_floatDisabled => 'Hors service !';
+  String get g_floatDisabled => 'Hors service !';
 
   @override
-  String get g_floatRebooted => 'De retour !';
+  String get g_floatRebooted => 'De retour !';
 
   @override
   String get g_dlgBaseRebooted =>
-      'La base principale est de retour ! Résistance restaurée à 30 %.';
+      'La base principale est de retour ! Résistance restaurée à 30 %.';
 
   @override
-  String get g_dlgUpWeapon => 'Armes améliorées ! Gare à vous, les pirates !';
+  String get g_dlgUpWeapon => 'Armes améliorées ! Gare à vous, les pirates !';
 
   @override
-  String get g_dlgUpHull => 'Blindage amélioré ! Je me sens plus solide.';
+  String get g_dlgUpHull => 'Blindage amélioré ! Je me sens plus solide.';
 
   @override
-  String get g_dlgUpEngine => 'Moteur amélioré ! Plus vite !';
+  String get g_dlgUpEngine => 'Moteur amélioré ! Plus vite !';
 
   @override
-  String get g_dlgMissileNew => 'Missiles à tête chercheuse équipés ! (Q)';
+  String get g_dlgMissileNew => 'Missiles à tête chercheuse équipés ! (Q)';
 
   @override
-  String get g_dlgMissileUp => 'Missiles améliorés !';
+  String get g_dlgMissileUp => 'Missiles améliorés !';
 
   @override
-  String get g_dlgShieldNew => 'Bouclier d\'énergie équipé ! (F)';
+  String get g_dlgShieldNew => 'Bouclier d\'énergie équipé ! (F)';
 
   @override
-  String get g_dlgShieldUp => 'Bouclier amélioré !';
+  String get g_dlgShieldUp => 'Bouclier amélioré !';
 
   @override
-  String get g_dlgDroneNew => 'Drone de combat lancé ! Un nouvel ami fidèle.';
+  String get g_dlgDroneNew => 'Drone de combat lancé ! Un nouvel ami fidèle.';
 
   @override
-  String get g_dlgDroneUp => 'Drone amélioré !';
+  String get g_dlgDroneUp => 'Drone amélioré !';
 
   @override
   String get g_dlgUpMagnet =>
-      'Aimant amélioré ! Les crédits volent droit vers moi !';
+      'Aimant amélioré ! Les crédits volent droit vers moi !';
 
   @override
-  String get g_dlgNotOver => 'Ce n\'est pas encore fini !';
+  String get g_dlgNotOver => 'Ce n\'est pas encore fini !';
 
   @override
-  String get g_floatBlocked => 'Bloqué !';
+  String get g_floatBlocked => 'Bloqué !';
 
   @override
-  String get g_floatGuard => 'Protégé !';
+  String get g_floatGuard => 'Protégé !';
 
   @override
-  String get g_pirateBossLose => 'Argh ! Ce secteur… est à toi…';
+  String get g_pirateBossLose => 'Argh ! Ce secteur… est à toi…';
 
   @override
-  String get g_pirateBossFlee => 'Argh ! Je m\'en souviendrai, Capitaine !';
+  String get g_pirateBossFlee => 'Argh ! Je m\'en souviendrai, Capitaine !';
 
   @override
-  String get g_dlgSupplyCollected => 'Capsule de ravitaillement récupérée !';
+  String get g_dlgSupplyCollected => 'Capsule de ravitaillement récupérée !';
 
   @override
-  String get g_merchantBye => 'À la prochaine~ miaou !';
+  String get g_merchantBye => 'À la prochaine~ miaou !';
 
   @override
   String get g_pirateRaidTaunt =>
-      'Cette colonie est à nous maintenant ! Hahaha !';
+      'Cette colonie est à nous maintenant ! Hahaha !';
 
   @override
   String get g_dlgMeteor =>
-      'Pluie de météores repérée ! Pleine de cristaux. Gros filon de minerai !';
+      'Pluie de météores repérée ! Pleine de cristaux. Gros filon de minerai !';
 
   @override
   String get g_merchantHello =>
-      'Nyang-nyang, la marchande ambulante, est là~ Plein de bonnes affaires, miaou !';
+      'Nyang-nyang, la marchande ambulante, est là~ Plein de bonnes affaires, miaou !';
 
   @override
   String get g_dlgSupplySignal =>
-      'Signal d\'une capsule de ravitaillement avec des gemmes ! Des pirates la gardent, soyez prudent.';
+      'Signal d\'une capsule de ravitaillement avec des gemmes ! Des pirates la gardent, soyez prudent.';
 
   @override
   String get g_dlgBossWarning =>
-      'Alerte ! Le vaisseau du boss du secteur approche !';
+      'Alerte ! Le vaisseau du boss du secteur approche !';
 
   @override
-  String get g_pirateRevenge => 'Je reviens me venger ! Prépare-toi !';
+  String get g_pirateRevenge => 'Je reviens me venger ! Prépare-toi !';
 
   @override
-  String get g_floatShieldBroken => 'Brisé !';
+  String get g_floatShieldBroken => 'Brisé !';
 
   @override
   String get g_floatShieldBack => 'Rétabli';
 
   @override
-  String get g_floatGoalDone => 'Objectif atteint !';
+  String get g_floatGoalDone => 'Objectif atteint !';
 
   @override
   String g_dlgArrived(String sector) {
-    return 'Arrivée : $sector !';
+    return 'Arrivée : $sector !';
   }
 
   @override
@@ -2303,37 +2299,37 @@ class L10nFr extends L10n {
 
   @override
   String g_dlgBaseUpgraded(String station, int level) {
-    return '$station : Lv.$level ! Les lasers sont plus puissants.';
+    return '$station : Lv.$level ! Les lasers sont plus puissants.';
   }
 
   @override
   String g_dlgBaseDisabled(int sec) {
-    return 'Base principale hors service ! Protection coupée pendant ${sec}s !';
+    return 'Base principale hors service ! Protection coupée pendant ${sec}s !';
   }
 
   @override
   String g_dlgSettled(String planet) {
-    return 'Drapeau planté sur $planet ! Colonisation réussie !';
+    return 'Drapeau planté sur $planet ! Colonisation réussie !';
   }
 
   @override
   String g_dlgStationBuilt(String station, String blurb) {
-    return '$station : construction terminée ! $blurb';
+    return '$station : construction terminée ! $blurb';
   }
 
   @override
   String g_dlgHabitatUp(String station, int level) {
-    return '$station : habitat Lv.$level !';
+    return '$station : habitat Lv.$level !';
   }
 
   @override
   String g_dlgTurretUp(String station, int level) {
-    return '$station : tourelle Lv.$level !';
+    return '$station : tourelle Lv.$level !';
   }
 
   @override
   String g_dlgShipSwitched(String ship) {
-    return 'Je pilote maintenant le $ship ! Ça me plaît !';
+    return 'Je pilote maintenant le $ship ! Ça me plaît !';
   }
 
   @override
@@ -2343,65 +2339,65 @@ class L10nFr extends L10n {
 
   @override
   String g_dlgCrewJoined(String stars, String role, String name) {
-    return '$stars $role $name a rejoint l\'équipage !';
+    return '$stars $role $name a rejoint l\'équipage !';
   }
 
   @override
   String g_dlgCrewLevel(String name, int level) {
-    return '$name passe au Lv.$level ! En progrès.';
+    return '$name passe au Lv.$level ! En progrès.';
   }
 
   @override
   String g_dlgCargoLoaded(String mission) {
-    return 'Cargaison chargée ! $mission';
+    return 'Cargaison chargée ! $mission';
   }
 
   @override
   String g_dlgBountyTaunt(String name) {
-    return 'Tu crois pouvoir attraper $name ? Viens donc essayer !';
+    return 'Tu crois pouvoir attraper $name ? Viens donc essayer !';
   }
 
   @override
-  String get g_floatMissionDone => 'Mission accomplie !';
+  String get g_floatMissionDone => 'Mission accomplie !';
 
   @override
   String g_dlgMissionDone(String mission) {
-    return 'Mission accomplie : $mission !';
+    return 'Mission accomplie : $mission !';
   }
 
   @override
   String g_dlgRepairCost(int credits) {
-    return 'Vous êtes sain et sauf, Capitaine ! Réparations : 💰$credits.';
+    return 'Vous êtes sain et sauf, Capitaine ! Réparations : 💰$credits.';
   }
 
   @override
   String g_dlgSectorDeveloped(String sector) {
-    return '$sector entièrement développé ! La porte de distorsion vers le système suivant est ouverte.';
+    return '$sector entièrement développé ! La porte de distorsion vers le système suivant est ouverte.';
   }
 
   @override
   String g_floatCrit(int dmg) {
-    return 'Critique ! $dmg';
+    return 'Critique ! $dmg';
   }
 
   @override
   String g_dlgStationDestroyed(String station) {
-    return 'Nous avons perdu $station ! Il nous faut des tourelles !';
+    return 'Nous avons perdu $station ! Il nous faut des tourelles !';
   }
 
   @override
   String g_dlgBossDefeated(int credits) {
-    return 'Boss du secteur vaincu ! Récompense 💰$credits';
+    return 'Boss du secteur vaincu ! Récompense 💰$credits';
   }
 
   @override
   String g_dlgBountyCaught(String name) {
-    return 'Cible capturée : $name !';
+    return 'Cible capturée : $name !';
   }
 
   @override
   String g_dlgRaidDefended(String planet, int credits) {
-    return 'Raid repoussé sur $planet ! Les habitants reconnaissants envoient 💰$credits ⭐2.';
+    return 'Raid repoussé sur $planet ! Les habitants reconnaissants envoient 💰$credits ⭐2.';
   }
 
   @override
@@ -2416,58 +2412,58 @@ class L10nFr extends L10n {
 
   @override
   String g_dlgRaidAlert(String planet) {
-    return 'Urgence ! Des pirates attaquent $planet ! La production est à l\'arrêt !';
+    return 'Urgence ! Des pirates attaquent $planet ! La production est à l\'arrêt !';
   }
 
   @override
   String g_pirateBossArrive(String sector) {
-    return 'Je règne sur $sector ! Approche, petit capitaine !';
+    return 'Je règne sur $sector ! Approche, petit capitaine !';
   }
 
   @override
   String g_dlgWelcomeBack(String goal) {
-    return 'Bon retour, Capitaine ! Objectif actuel : $goal';
+    return 'Bon retour, Capitaine ! Objectif actuel : $goal';
   }
 
   @override
-  String get g_pirateWin0 => 'Hahaha ! Pas si coriace !';
+  String get g_pirateWin0 => 'Hahaha ! Pas si coriace !';
 
   @override
-  String get g_pirateWin1 => 'Reviens plus fort la prochaine fois, gamin !';
+  String get g_pirateWin1 => 'Reviens plus fort la prochaine fois, gamin !';
 
   @override
-  String get g_pirateWin2 => 'Ton vaisseau n\'est plus que de la ferraille !';
+  String get g_pirateWin2 => 'Ton vaisseau n\'est plus que de la ferraille !';
 
   @override
-  String get g_pirateRage0 => 'Sortez, les gars ! Donnez-leur une leçon !';
+  String get g_pirateRage0 => 'Sortez, les gars ! Donnez-leur une leçon !';
 
   @override
-  String get g_pirateRage1 => 'Maintenant, ça devient sérieux !';
+  String get g_pirateRage1 => 'Maintenant, ça devient sérieux !';
 
   @override
-  String get g_pirateRage2 => 'Tu m\'as mis en colère, hein ?!';
+  String get g_pirateRage2 => 'Tu m\'as mis en colère, hein ?!';
 
   @override
-  String get g_captainKill0 => 'Un de moins !';
+  String get g_captainKill0 => 'Un de moins !';
 
   @override
-  String get g_captainKill1 => 'Où tu crois aller comme ça !';
+  String get g_captainKill1 => 'Où tu crois aller comme ça !';
 
   @override
-  String get g_captainKill2 => 'Ce territoire est à moi !';
+  String get g_captainKill2 => 'Ce territoire est à moi !';
 
   @override
-  String get g_captainKill3 => 'Au suivant !';
+  String get g_captainKill3 => 'Au suivant !';
 
   @override
-  String get g_pirateAmbush0 => 'Hahaha ! Lâche ta cargaison !';
+  String get g_pirateAmbush0 => 'Hahaha ! Lâche ta cargaison !';
 
   @override
-  String get g_pirateAmbush1 => 'C\'est le territoire de notre bande !';
+  String get g_pirateAmbush1 => 'C\'est le territoire de notre bande !';
 
   @override
-  String get g_pirateAmbush2 => 'Donne-nous ces jolis crédits brillants !';
+  String get g_pirateAmbush2 => 'Donne-nous ces jolis crédits brillants !';
 
   @override
-  String get g_pirateAmbush3 => 'Pas ton jour, gamin !';
+  String get g_pirateAmbush3 => 'Pas ton jour, gamin !';
 }

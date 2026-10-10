@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "L'aventure spatiale<br><em>d'un capitaine chibi</em>",
+      "sub": "Repoussez les pirates, colonisez des planètes et faites grandir votre galaxie",
+      "detail": "Capitaine · Lt. Mina · Boss pirate",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "Pirates en vue ?<br><em>Ripostez !</em>",
+      "sub": "Collez-leur aux trousses d'un seul joystick, avec missiles et boucliers",
+      "detail": "Missile à tête chercheuse · Bouclier d'énergie · Boost",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "Plantez le drapeau,<br><em>fondez une colonie</em>",
+      "sub": "Votre petite ville planétaire, à l'abri sous un dôme de bouclier",
+      "detail": "Planètes jardin · désert · glace · lave · gaz",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "Tourelles, boucliers :<br><em>une colonie solide</em>",
+      "sub": "Plus de bâtiments, c'est plus de revenus et plus de défense",
+      "detail": "Tourelle · Foreuse · Comptoir · Dock de réparation · Bouclier",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "Toujours plus loin<br><em>dans l'espace</em>",
+      "sub": "Faites grandir chaque planète pour ouvrir la porte de distorsion suivante",
+      "detail": "Développement 100 % → Porte de distorsion ouverte",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "Au hangar, votre<br><em>vaisseau de rêve</em>",
+      "sub": "7 vaisseaux, du rapide Intercepteur au Dragon Nova",
+      "detail": "Scout · Forteresse · Fantôme · Dragon Nova · Aurora…",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "Améliorez votre<br><em>vaisseau en station</em>",
+      "sub": "Arme · Blindage · Moteur · Missile · Bouclier · Drone · Aimant",
+      "detail": "Vos colonies rapportent même pendant votre absence",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "Un équipage<br><em>trop mignon !</em>",
+      "sub": "Affectez-le à votre vaisseau pour des bonus, même des ★4 légendaires",
+      "detail": "Artilleur · Mécanicien · Pilote · Marchand · Mineur…",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

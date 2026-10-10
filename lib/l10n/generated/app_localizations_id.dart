@@ -84,10 +84,6 @@ class L10nId extends L10n {
   String get u_equip => 'Pasang';
 
   @override
-  String get u_boostNote =>
-      '💨 Boost (Shift / tombol 💨) sudah terpasang sejak awal.';
-
-  @override
   String get u_hangarSection => '🛸 Hanggar';
 
   @override
@@ -516,7 +512,7 @@ class L10nId extends L10n {
   }
 
   @override
-  String get u_resume => '▶ Lanjutkan';
+  String get u_resume => '▶︎ Lanjutkan';
 
   @override
   String get u_shop => '⭐ Toko';
@@ -803,7 +799,7 @@ class L10nId extends L10n {
   }
 
   @override
-  String get m_continue => '▶ Lanjutkan';
+  String get m_continue => 'Lanjutkan';
 
   @override
   String get m_newGame => '✨ Game Baru';

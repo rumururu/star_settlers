@@ -39,7 +39,8 @@ Widget actionBtn(String label, bool enabled, VoidCallback? onTap,
         String? icon,
         Cost? cost,
         double iconSize = IconSz.button,
-        bool primary = false}) =>
+        bool primary = false,
+        IconData? leadingIcon}) =>
     ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
@@ -55,15 +56,16 @@ Widget actionBtn(String label, bool enabled, VoidCallback? onTap,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(primary ? 28 : 14)),
       ),
       onPressed: enabled ? onTap : null,
-      child: icon == null && cost == null
+      child: icon == null && cost == null && leadingIcon == null
           ? Text(label, style: Ts.label.copyWith(color: null))
           : Opacity(
               opacity: enabled ? 1 : 0.6,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (leadingIcon != null) Icon(leadingIcon, size: iconSize),
                   if (icon != null) GameIcon(icon, size: iconSize),
-                  if (icon != null && label.isNotEmpty) const SizedBox(width: Space.s),
+                  if ((icon != null || leadingIcon != null) && label.isNotEmpty) const SizedBox(width: Space.s),
                   if (label.isNotEmpty) Text(label, style: Ts.label.copyWith(color: null)),
                   if (cost != null) ...[
                     if (label.isNotEmpty || icon != null) const SizedBox(width: Space.s),

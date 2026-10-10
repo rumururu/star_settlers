@@ -84,9 +84,6 @@ class L10nPt extends L10n {
   String get u_equip => 'Equipar';
 
   @override
-  String get u_boostNote => '💨 O impulso (Shift / botão 💨) já vem equipado.';
-
-  @override
   String get u_hangarSection => '🛸 Hangar';
 
   @override
@@ -517,7 +514,7 @@ class L10nPt extends L10n {
   }
 
   @override
-  String get u_resume => '▶ Continuar';
+  String get u_resume => '▶︎ Continuar';
 
   @override
   String get u_shop => '⭐ Loja';
@@ -804,7 +801,7 @@ class L10nPt extends L10n {
   }
 
   @override
-  String get m_continue => '▶ Continuar';
+  String get m_continue => 'Continuar';
 
   @override
   String get m_newGame => '✨ Novo jogo';

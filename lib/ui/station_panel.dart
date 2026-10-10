@@ -188,8 +188,6 @@ class _ShipTab extends StatelessWidget {
                   ),
             leading: GameIcon(k.iconAsset, size: 44),
           ),
-        const SizedBox(height: 8),
-        Text(tr.u_boostNote, style: dimStyle),
         const Divider(color: Colors.white24, height: 28),
         Row(
           children: [

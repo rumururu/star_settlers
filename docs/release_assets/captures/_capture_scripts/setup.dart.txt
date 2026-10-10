@@ -1,0 +1,64 @@
+(() {
+  final p = AppState.profile;
+  p.gems = 322;
+  p.notifications = false;
+  p.tutorialDone = true;
+  p.colonyTutorialSeen = true;
+  p.lastLoginDay = Profile.dayKey(DateTime.now());
+  p.loginStreak = 3;
+  p.extraCrewSlots = 1;
+  p.claimed.addAll(achievements.map((a) => a.id));
+  final w = GameWorld(seed: 4242, profile: p);
+  w.dialogs.clear();
+  w.credits = 53612;
+  w.ore = 5110;
+  final lv = {UpgradeKind.weapon: 5, UpgradeKind.hull: 4, UpgradeKind.engine: 4, UpgradeKind.missile: 3,
+      UpgradeKind.shield: 3, UpgradeKind.drone: 2, UpgradeKind.magnet: 2};
+  lv.forEach((k, v) => w.levels[k] = v);
+  final cl = [5, 1, 2, 2, 3, 3, 3, 3, 4, 4, 3];
+  for (var i = 0; i < w.planets.length && i < cl.length; i++) {
+    w.planets[i].colonyLevel = cl[i];
+  }
+  final t = w.planets[0];
+  t.buildings[ColonyBuilding.turret] = 4;
+  t.buildings[ColonyBuilding.mine] = 3;
+  t.buildings[ColonyBuilding.trade] = 3;
+  t.buildings[ColonyBuilding.dock] = 2;
+  t.buildings[ColonyBuilding.shieldGen] = 4;
+  for (final pl in w.planets.skip(1)) {
+    if (pl.colonyLevel >= 2) pl.buildings[ColonyBuilding.turret] = 1;
+    if (pl.colonyLevel >= 3) pl.buildings[ColonyBuilding.mine] = 2;
+    if (pl.colonyLevel >= 3) pl.buildings[ColonyBuilding.shieldGen] = 1;
+    if (pl.colonyLevel >= 4) pl.buildings[ColonyBuilding.trade] = 2;
+  }
+  for (final pl in w.planets) {
+    if (pl.colonyLevel > 0) pl.shieldHp = pl.shieldMax(w.sectorMul);
+  }
+  final home = w.stations.first;
+  home.habitatLevel = 4;
+  home.turretLevel = 3;
+  home.baseLevel = 4;
+  home.hp = home.maxHp;
+  w.counters['colonies'] = 11;
+  w.counters['kills'] = 412;
+  w.counters['missions'] = 9;
+  w.counters['maxSector'] = 0;
+  w.storyIndex = 7;
+  w.sectorElapsed = 600;
+  final specs = [[4, CrewRole.gunner, 4, 11], [3, CrewRole.pilot, 3, 23], [3, CrewRole.engineer, 2, 37],
+      [2, CrewRole.trader, 3, 41], [2, CrewRole.miner, 2, 53], [2, CrewRole.scientist, 1, 67], [1, CrewRole.gunner, 2, 71]];
+  var n = 0;
+  final made = <CrewMember>[];
+  for (final s in specs) {
+    final c = w.grantCrew(s[0] as int);
+    n++;
+    made.add(CrewMember(id: c.id, name: c.rawName, role: s[1] as CrewRole, rarity: s[0] as int,
+        lookSeed: c.lookSeed + (s[3] as int), level: s[2] as int, assigned: n <= 4));
+  }
+  w.roster..clear()..addAll(made);
+  w.dialogs.clear();
+  w.player.hp = w.playerMaxHp;
+  AppState.world = w;
+  SaveService.save(w);
+  return 'ok ${w.planets.map((e) => e.name).join(',')} dev=${w.development}';
+})()

@@ -1,0 +1,7 @@
+(() {
+  final out = <ScrollableState>[];
+  void v(Element e) { if (e is StatefulElement && e.state is ScrollableState) { final s = e.state as ScrollableState; if (s.widget.axisDirection == AxisDirection.down && s.position.hasContentDimensions && s.position.maxScrollExtent > 0) out.add(s); } e.visitChildren(v); }
+  WidgetsBinding.instance.rootElement!.visitChildren(v);
+  Future.delayed(const Duration(milliseconds: 50), () { for (final s in out) { s.position.jumpTo(OFFSET); } });
+  return 'n=${out.length}';
+})()

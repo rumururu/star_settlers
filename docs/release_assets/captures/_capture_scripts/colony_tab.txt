@@ -1,0 +1,11 @@
+(() {
+  final w = AppState.world!;
+  w.stations.removeWhere((s) => s.role == StationRole.support);
+  w.pirates.clear(); w.bullets.clear(); w.missiles.clear(); w.dialogs.clear(); w.floats.clear();
+  w.events.clear(); w.eventTimer = 99999; w.spawnTimer = 9999; w.jellyTimer = 9999;
+  final t = w.planets[0];
+  w.player.pos = t.pos + const Offset(-150, 40);
+  w.player.hp = w.playerMaxHp;
+  for (final pl in w.planets) { pl.raided = false; if (pl.colonyLevel > 0) pl.shieldHp = pl.shieldMax(w.sectorMul); }
+  return 'ok';
+})()

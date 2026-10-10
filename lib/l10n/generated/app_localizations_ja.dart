@@ -82,9 +82,6 @@ class L10nJa extends L10n {
   String get u_equip => '装備';
 
   @override
-  String get u_boostNote => '💨 ブースト（Shift / 💨ボタン）は最初から装備済みです。';
-
-  @override
   String get u_hangarSection => '🛸 格納庫';
 
   @override
@@ -510,7 +507,7 @@ class L10nJa extends L10n {
   }
 
   @override
-  String get u_resume => '▶ 続ける';
+  String get u_resume => '▶︎ 続ける';
 
   @override
   String get u_shop => '⭐ ショップ';
@@ -796,7 +793,7 @@ class L10nJa extends L10n {
   }
 
   @override
-  String get m_continue => '▶ つづきから';
+  String get m_continue => 'つづきから';
 
   @override
   String get m_newGame => '✨ ニューゲーム';

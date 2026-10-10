@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "Космические<br><em>приключения чиби</em>",
+      "sub": "Победите пиратов, освойте планеты и вырастите свою галактику",
+      "detail": "Капитан · Лейт. Мина · Главарь пиратов",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "Пираты атакуют?<br><em>Дайте отпор!</em>",
+      "sub": "Сближайтесь с врагом одним джойстиком и бейте ракетами и щитом",
+      "detail": "Самонаводящиеся ракеты · Энергощит · Ускорение",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "Поставьте флаг,<br><em>растите колонию</em>",
+      "sub": "Ваш собственный городок на планете под защитным куполом",
+      "detail": "Планеты: сад · пустыня · лёд · лава · газ",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "Турели и щиты:<br><em>крепкая оборона</em>",
+      "sub": "Больше зданий — больше дохода и крепче защита",
+      "detail": "Турель · Буровая · Фактория · Док · Генератор щита",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "Развивайте систему<br><em>и летите дальше</em>",
+      "sub": "Развейте все планеты, чтобы открыть варп-врата в следующую систему",
+      "detail": "Развитие 100% → Варп-врата открыты",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "Выберите в ангаре<br><em>корабль мечты</em>",
+      "sub": "7 кораблей: от быстрого Перехватчика до Нова-Дракона",
+      "detail": "Скаут · Крепость · Фантом · Нова-Дракон · Аврора и др.",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "Улучшайте корабль<br><em>на станции</em>",
+      "sub": "Оружие · Броня · Двигатель · Ракеты · Щит · Дрон · Магнит",
+      "detail": "Колонии приносят доход, даже пока вас нет",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "Наймите милый<br><em>экипаж!</em>",
+      "sub": "Назначайте членов экипажа для бонусов, даже легендарных ★4",
+      "detail": "Стрелок · Инженер · Пилот · Торговец · Шахтёр · Учёный",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

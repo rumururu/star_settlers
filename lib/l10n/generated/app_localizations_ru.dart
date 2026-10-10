@@ -88,10 +88,6 @@ class L10nRu extends L10n {
   String get u_equip => 'Установить';
 
   @override
-  String get u_boostNote =>
-      '💨 Ускорение (Shift / кнопка 💨) установлено по умолчанию.';
-
-  @override
   String get u_hangarSection => '🛸 Ангар';
 
   @override
@@ -523,7 +519,7 @@ class L10nRu extends L10n {
   }
 
   @override
-  String get u_resume => '▶ Продолжить';
+  String get u_resume => '▶︎ Продолжить';
 
   @override
   String get u_shop => '⭐ Магазин';
@@ -810,7 +806,7 @@ class L10nRu extends L10n {
   }
 
   @override
-  String get m_continue => '▶ Продолжить';
+  String get m_continue => 'Продолжить';
 
   @override
   String get m_newGame => '✨ Новая игра';

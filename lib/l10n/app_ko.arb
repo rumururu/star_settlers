@@ -130,10 +130,6 @@
   "@u_equip": {
     "description": "Button to equip a new ship module"
   },
-  "u_boostNote": "💨 부스트(Shift / 💨 버튼)는 기본 장착되어 있어요.",
-  "@u_boostNote": {
-    "description": "Ship tab footnote"
-  },
   "u_hangarSection": "🛸 격납고",
   "@u_hangarSection": {
     "description": "Ship tab section header for ship list"
@@ -916,7 +912,7 @@
       }
     }
   },
-  "u_resume": "▶ 계속하기",
+  "u_resume": "▶︎ 계속하기",
   "@u_resume": {
     "description": "Pause menu button"
   },
@@ -1398,7 +1394,7 @@
       }
     }
   },
-  "m_continue": "▶ 이어하기",
+  "m_continue": "이어하기",
   "@m_continue": {
     "description": "타이틀 화면 이어하기 버튼"
   },

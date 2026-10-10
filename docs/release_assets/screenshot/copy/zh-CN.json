@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "Q版小舰长的<br><em>宇宙开拓冒险</em>",
+      "sub": "击退海盗、开拓行星，打造专属于你的银河",
+      "detail": "舰长 · 副官米娜 · 海盗首领",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "海盗来袭？<br><em>贴身缠斗反击！</em>",
+      "sub": "一根摇杆贴近周旋，用导弹和护盾正面迎战",
+      "detail": "追踪导弹 · 能量护盾 · 加速",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "插上旗帜<br><em>培育殖民地</em>",
+      "sub": "护盾穹顶守护着的专属行星小镇",
+      "detail": "花园 · 沙漠 · 冰冻 · 熔岩 · 气态行星",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "从炮塔到护盾<br><em>用建筑筑牢防线</em>",
+      "sub": "建筑越多，收入和防御力都噌噌上涨",
+      "detail": "防御炮塔 · 采矿设施 · 贸易站 · 维修坞 · 护盾发生器",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "发展星系<br><em>飞向更远的宇宙</em>",
+      "sub": "培育所有行星，就能开启通往下一星系的跃迁门",
+      "detail": "发展度100% → 开启跃迁门",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "在机库挑选<br><em>专属你的飞船</em>",
+      "sub": "从迅捷的截击机到新星巨龙，共7种飞船",
+      "detail": "侦察机 · 堡垒号 · 幻影 · 新星巨龙 · 极光 等",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "在空间站<br><em>升级你的飞船</em>",
+      "sub": "武器 · 装甲 · 引擎 · 导弹 · 护盾 · 无人机 · 磁铁",
+      "detail": "离线时殖民地收入也会持续累积",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "招募可爱伙伴<br><em>派驻上舰！</em>",
+      "sub": "★4传说船员也能招到，派驻越多飞船越强",
+      "detail": "炮手 · 机械师 · 驾驶员 · 商人 · 矿工 · 科学家",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

@@ -243,7 +243,16 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
         padding: const EdgeInsets.symmetric(vertical: 3),
         child: Row(
           children: [
-            SizedBox(width: 56, child: Text(name, style: Ts.body)),
+            // 언어마다 길이가 달라 고정 폭이면 단어 중간에서 줄이 바뀐다. 넓게 잡고 넘치면 줄여서 한 줄로.
+            SizedBox(
+              width: 112,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(name, style: Ts.body, maxLines: 1),
+              ),
+            ),
+            const SizedBox(width: Space.s),
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),

@@ -55,3 +55,19 @@ footer .page { letter-spacing: 0.4em; opacity: .6; font-size: calc(var(--u) * 2.
 .land footer { position: absolute; left: 0; bottom: 0; width: 42%; }
 .land .mascot { width: calc(var(--u) * 26); bottom: calc(var(--u) * 14); }
 .land .mascot.left, .land .mascot.right { left: calc(var(--u) * 14); right: auto; }
+
+/* portrait tablet (iPad 13" 2064x2752): 폭 기준 글자가 너무 커서 기기 프레임이 작아지므로 줄인다 */
+.sheet.tab { --u: calc(var(--w) * 1px / 100 * 0.7); }
+.tab .stage { padding-top: calc(var(--u) * 4); }
+.tab .mascot { width: calc(var(--u) * 30); }
+
+/* 언어별 제목 글꼴: Jua는 한글·기본 라틴만 있다. 나머지는 이 Mac에 설치된 둥근 글꼴. */
+html:lang(ja) .sheet { font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif; }
+html:lang(zh-Hans) .sheet { font-family: "Yuanti SC", "PingFang SC", sans-serif; }
+html:lang(en) .sheet, html:lang(es) .sheet, html:lang(fr) .sheet, html:lang(de) .sheet,
+html:lang(pt) .sheet, html:lang(ru) .sheet, html:lang(id) .sheet { font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif; }
+html:not(:lang(ko)) h1, html:not(:lang(ko)) .brand { font-weight: 800; }
+html:lang(ja) .sub, html:lang(ja) footer { font-family: "Hiragino Sans", sans-serif; }
+html:lang(zh-Hans) .sub, html:lang(zh-Hans) footer { font-family: "PingFang SC", sans-serif; }
+html:not(:lang(ko)):not(:lang(ja)):not(:lang(zh-Hans)) .sub,
+html:not(:lang(ko)):not(:lang(ja)):not(:lang(zh-Hans)) footer { font-family: system-ui, sans-serif; }

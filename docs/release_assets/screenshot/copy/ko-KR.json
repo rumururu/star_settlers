@@ -14,10 +14,10 @@
     {
       "file": "02_combat",
       "capture": "02_combat.png",
-      "title": "해적이 쳐들어와도<br><em>기지 레이저로 반격!</em>",
-      "sub": "조이스틱 하나로 조종하고, 미사일과 실드로 맞서요",
+      "title": "해적이 덤벼들면<br><em>근접전으로 반격!</em>",
+      "sub": "조이스틱 하나로 바짝 붙어 싸우고, 미사일과 실드로 맞서요",
       "detail": "유도 미사일 · 에너지 실드 · 부스트",
-      "mascot": "pirate_boss.png",
+      "mascot": "pirate_raider.png",
       "mascot_pos": "right",
       "theme": "crimson"
     },
@@ -70,6 +70,16 @@
       "mascot": "station.png",
       "mascot_pos": "left",
       "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "귀여운 동료를 모아<br><em>함선에 배치!</em>",
+      "sub": "★4 전설 승무원까지, 배치할수록 함선이 강해져요",
+      "detail": "포수 · 기관사 · 조종사 · 상인 · 광부 · 과학자",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
     }
   ]
 }

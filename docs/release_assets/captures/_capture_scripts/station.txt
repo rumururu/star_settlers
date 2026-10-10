@@ -1,0 +1,9 @@
+(() {
+  final w = AppState.world!;
+  w.stations.removeWhere((s) => s.role == StationRole.support);
+  w.pirates.clear(); w.bullets.clear(); w.missiles.clear(); w.dialogs.clear(); w.floats.clear();
+  w.events.clear(); w.eventTimer = 99999; w.spawnTimer = 9999; w.jellyTimer = 9999;
+  w.player.pos = w.stations.first.pos + const Offset(0, 160);
+  w.player.hp = w.playerMaxHp;
+  return 'ok';
+})()

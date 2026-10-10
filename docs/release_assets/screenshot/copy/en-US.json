@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "A chibi captain's<br><em>space adventure</em>",
+      "sub": "Beat the pirates, settle planets and grow a galaxy all your own",
+      "detail": "Captain · Lt. Mina · Pirate Boss",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "Pirates attack?<br><em>Dogfight back!</em>",
+      "sub": "Get up close with one joystick, then hit back with missiles and shields",
+      "detail": "Homing Missile · Energy Shield · Boost",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "Plant your flag,<br><em>grow a colony</em>",
+      "sub": "Your own little planet town, safe under a shield dome",
+      "detail": "Garden · Desert · Ice · Lava · Gas planets",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "Turrets to shields,<br><em>build it tough</em>",
+      "sub": "More buildings mean more income and stronger defenses",
+      "detail": "Turret · Mining Rig · Trade Post · Repair Dock · Shield Gen",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "Grow your system,<br><em>fly even farther</em>",
+      "sub": "Develop every planet to open the warp gate to the next star system",
+      "detail": "Development 100% → Warp gate opens",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "Your dream ship,<br><em>in the Hangar</em>",
+      "sub": "7 ships, from the speedy Interceptor to the Nova Dragon",
+      "detail": "Scout · Fortress · Phantom · Nova Dragon · Aurora & more",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "Upgrade your ship<br><em>at the Station</em>",
+      "sub": "Weapon · Armor · Engine · Missile · Shield · Drone · Magnet",
+      "detail": "Your colonies keep earning while you're away",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "Recruit a cute<br><em>crew of heroes</em>",
+      "sub": "Assign crew for ship bonuses, even ★4 Legendary ones",
+      "detail": "Gunner · Engineer · Pilot · Trader · Miner · Scientist",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

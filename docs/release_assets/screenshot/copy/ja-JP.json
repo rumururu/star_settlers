@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "ちびっこ艦長の<br><em>宇宙開拓ぼうけん</em>",
+      "sub": "海賊をやっつけて惑星を開拓、自分だけの銀河を育てよう",
+      "detail": "艦長 · 副官ミナ · 海賊ボス",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "海賊が来ても<br><em>接近戦で反撃！</em>",
+      "sub": "ジョイスティックひとつで迫って、ミサイルとシールドで迎え撃て",
+      "detail": "誘導ミサイル · エネルギーシールド · ブースト",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "旗を立てて<br><em>植民地を育てよう</em>",
+      "sub": "シールドドームが守る、自分だけの惑星の町",
+      "detail": "庭園 · 砂漠 · 氷 · 溶岩 · ガス惑星",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "砲台からシールドまで<br><em>建物で守りを固めて</em>",
+      "sub": "建物を増やすほど、収入も防御力もぐんぐんアップ",
+      "detail": "防衛砲台 · 採掘施設 · 交易所 · 修理ドック · シールド発生装置",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "星系を発展させて<br><em>もっと遠くの宇宙へ</em>",
+      "sub": "すべての惑星を育てると、次の星系へのワープゲートが開く",
+      "detail": "発展度100% → ワープゲート開放",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "格納庫で選ぶ<br><em>自分だけの宇宙船</em>",
+      "sub": "速いインターセプターからノヴァドラゴンまで全7機",
+      "detail": "スカウト · フォートレス · ファントム · ノヴァドラゴン ほか",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "ステーションで<br><em>艦船をパワーアップ</em>",
+      "sub": "武器 · 装甲 · エンジン · ミサイル · シールド · ドローン · マグネット",
+      "detail": "留守の間も植民地の収入がたまる",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "かわいい仲間を集めて<br><em>艦船に配置！</em>",
+      "sub": "★4レジェンドクルーまで、配置するほど艦船が強くなる",
+      "detail": "砲手 · 機関士 · パイロット · 商人 · 鉱夫 · 科学者",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

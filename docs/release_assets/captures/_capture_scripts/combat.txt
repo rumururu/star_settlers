@@ -1,0 +1,42 @@
+(() {
+  final w = AppState.world!;
+  var c = const Offset(-1500, 1500);
+  var best = -1.0;
+  for (var x = -3000.0; x <= 3000; x += 250) {
+    for (var y = -3000.0; y <= 3000; y += 250) {
+      final o = Offset(x, y);
+      var d = o.distance - 300;
+      for (final pl in w.planets) { final e = (pl.pos - o).distance - pl.domeRadius; if (e < d) d = e; }
+      for (final st in w.stations) { final e = (st.pos - o).distance - 1100; if (e < d) d = e; }
+      for (final g in w.gates) { final e = (g.pos - o).distance - 300; if (e < d) d = e; }
+      if (d > best) { best = d; c = o; }
+    }
+  }
+  if (!w.player.alive) w.reviveHere();
+  w.player.pos = c;
+  w.player.hp = w.playerMaxHp * 50;
+  w.pirates.clear();
+  w.dialogs.clear();
+  w.spawnTimer = 30;
+  w.eventTimer = 99999;
+  w.events.clear();
+  for (final pl in w.planets) { pl.raided = false; }
+  w.jellyTimer = 60;
+  final specs = [
+    (PirateKind.raider, const Offset(-150, -210)),
+    (PirateKind.scout, const Offset(130, -250)),
+    (PirateKind.sniper, const Offset(230, -60)),
+    (PirateKind.raider, const Offset(-230, -10)),
+    (PirateKind.scout, const Offset(10, -340)),
+    (PirateKind.raider, const Offset(190, 150)),
+    (PirateKind.scout, const Offset(-150, 190)),
+    (PirateKind.sniper, const Offset(-320, -300)),
+  ];
+  for (final s in specs) {
+    w.pirates.add(Pirate(s.$1, c + s.$2, Pirate.baseHp(s.$1) * 40));
+  }
+  w.stations.removeWhere((s) => s.role == StationRole.support);
+  w.stations.add(Station(tr.g_stationOutpost(w.sectorName), c + const Offset(-700, 500), role: StationRole.support));
+  w.fireMissiles();
+  return 'ok';
+})()

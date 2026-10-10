@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "Una aventura<br><em>espacial chibi</em>",
+      "sub": "Derrota a los piratas, coloniza planetas y crea tu propia galaxia",
+      "detail": "Capitán · Tte. Mina · Jefe pirata",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "¿Piratas a la vista?<br><em>¡Al combate!</em>",
+      "sub": "Acércate con un solo joystick y contraataca con misiles y escudos",
+      "detail": "Misil teledirigido · Escudo de energía · Impulso",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "Clava tu bandera,<br><em>crea tu colonia</em>",
+      "sub": "Tu propio pueblo planetario, a salvo bajo una cúpula de escudo",
+      "detail": "Planetas jardín · desierto · hielo · lava · gas",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "Torretas y escudos:<br><em>¡colonia blindada!</em>",
+      "sub": "Cuantos más edificios, más ingresos y más defensa",
+      "detail": "Torreta · Plataforma minera · Puesto comercial · Escudo",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "Expande tu sistema<br><em>y llega más lejos</em>",
+      "sub": "Desarrolla todos los planetas y se abrirá la puerta de salto al siguiente sistema",
+      "detail": "Desarrollo 100% → Puerta de salto abierta",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "Elige tu nave<br><em>en el Hangar</em>",
+      "sub": "7 naves, del veloz Interceptor al Nova Dragon",
+      "detail": "Scout · Fortress · Phantom · Nova Dragon · Aurora y más",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "Mejora tu nave<br><em>en la Estación</em>",
+      "sub": "Arma · Blindaje · Motor · Misil · Escudo · Dron · Imán",
+      "detail": "Tus colonias ganan aunque no juegues",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "¡Recluta a tu<br><em>tripulación cuqui!</em>",
+      "sub": "Asígnala a tu nave para obtener bonus, ¡incluso ★4 legendarios!",
+      "detail": "Artillero · Ingeniero · Piloto · Minero · Científico y más",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

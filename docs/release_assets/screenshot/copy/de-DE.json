@@ -1,0 +1,85 @@
+{
+  "brand": "Star Settlers",
+  "slots": [
+    {
+      "file": "01_title",
+      "capture": "01_title.png",
+      "title": "Das Weltraum-<br><em>abenteuer in Chibi</em>",
+      "sub": "Besiege Piraten, besiedle Planeten und erschaffe deine eigene Galaxie",
+      "detail": "Captain · Lt. Mina · Piratenboss",
+      "mascot": "portrait_advisor.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "02_combat",
+      "capture": "02_combat.png",
+      "title": "Piraten im Anflug?<br><em>Schlag zurück!</em>",
+      "sub": "Mit einem Joystick ran an den Feind, mit Raketen und Schild kontern",
+      "detail": "Zielsuchende Rakete · Energieschild · Boost",
+      "mascot": "pirate_raider.png",
+      "mascot_pos": "right",
+      "theme": "crimson"
+    },
+    {
+      "file": "03_colony_world",
+      "capture": "03_colony_world.png",
+      "title": "Flagge hissen,<br><em>Kolonie aufbauen</em>",
+      "sub": "Deine eigene kleine Planetenstadt, sicher unter der Schildkuppel",
+      "detail": "Garten · Wüste · Eis · Lava · Gas-Planeten",
+      "mascot": "planet_garden.png",
+      "mascot_pos": "left",
+      "theme": "teal"
+    },
+    {
+      "file": "04_colony_panel",
+      "capture": "04_colony_panel.png",
+      "title": "Geschütze, Schilde:<br><em>Bau dich stark!</em>",
+      "sub": "Mehr Gebäude bringen mehr Einkommen und stärkere Abwehr",
+      "detail": "Abwehrgeschütz · Bohranlage · Handelsposten · Dock · Schild",
+      "mascot": "portrait_captain_default.png",
+      "mascot_pos": "right",
+      "theme": "blue"
+    },
+    {
+      "file": "05_star_system",
+      "capture": "05_star_system.png",
+      "title": "System ausbauen,<br><em>weiter fliegen</em>",
+      "sub": "Bau alle Planeten aus, dann öffnet sich das Warp-Tor ins nächste System",
+      "detail": "Entwicklung 100% → Warp-Tor offen",
+      "mascot": "sun.png",
+      "mascot_pos": "left",
+      "theme": "amber"
+    },
+    {
+      "file": "06_hangar",
+      "capture": "06_hangar.png",
+      "title": "Im Hangar wartet<br><em>dein Traumschiff</em>",
+      "sub": "7 Schiffe, vom flinken Abfangjäger bis zum Nova-Drachen",
+      "detail": "Scout · Festung · Phantom · Nova-Drache · Aurora u. a.",
+      "mascot": "ship_aurora_default.png",
+      "mascot_pos": "right",
+      "theme": "magenta"
+    },
+    {
+      "file": "07_station",
+      "capture": "07_station.png",
+      "title": "Rüste dein Schiff<br><em>an der Station auf</em>",
+      "sub": "Waffe · Panzerung · Triebwerk · Rakete · Schild · Drohne · Magnet",
+      "detail": "Deine Kolonien verdienen auch, wenn du offline bist",
+      "mascot": "station.png",
+      "mascot_pos": "left",
+      "theme": "violet"
+    },
+    {
+      "file": "08_crew",
+      "capture": "08_crew.png",
+      "title": "Wirb eine süße<br><em>Crew an!</em>",
+      "sub": "Teile sie für Schiffsboni ein, sogar legendäre ★4-Crew",
+      "detail": "Schütze · Ingenieur · Pilot · Händler · Bergmann u. a.",
+      "mascot": "portrait_captain_bunny.png",
+      "mascot_pos": "right",
+      "theme": "amber"
+    }
+  ]
+}

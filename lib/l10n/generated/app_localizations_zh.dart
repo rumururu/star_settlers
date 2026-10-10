@@ -82,9 +82,6 @@ class L10nZh extends L10n {
   String get u_equip => '装备';
 
   @override
-  String get u_boostNote => '💨 加速（Shift / 💨按钮）默认已装备。';
-
-  @override
   String get u_hangarSection => '🛸 机库';
 
   @override
@@ -510,7 +507,7 @@ class L10nZh extends L10n {
   }
 
   @override
-  String get u_resume => '▶ 继续';
+  String get u_resume => '▶︎ 继续';
 
   @override
   String get u_shop => '⭐ 商店';
@@ -796,7 +793,7 @@ class L10nZh extends L10n {
   }
 
   @override
-  String get m_continue => '▶ 继续游戏';
+  String get m_continue => '继续游戏';
 
   @override
   String get m_newGame => '✨ 新游戏';

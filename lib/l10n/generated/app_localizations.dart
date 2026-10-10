@@ -221,12 +221,6 @@ abstract class L10n {
   /// **'장착'**
   String get u_equip;
 
-  /// Ship tab footnote
-  ///
-  /// In ko, this message translates to:
-  /// **'💨 부스트(Shift / 💨 버튼)는 기본 장착되어 있어요.'**
-  String get u_boostNote;
-
   /// Ship tab section header for ship list
   ///
   /// In ko, this message translates to:
@@ -909,7 +903,7 @@ abstract class L10n {
   /// Pause menu button
   ///
   /// In ko, this message translates to:
-  /// **'▶ 계속하기'**
+  /// **'▶︎ 계속하기'**
   String get u_resume;
 
   /// Pause menu button
@@ -1395,7 +1389,7 @@ abstract class L10n {
   /// 타이틀 화면 이어하기 버튼
   ///
   /// In ko, this message translates to:
-  /// **'▶ 이어하기'**
+  /// **'이어하기'**
   String get m_continue;
 
   /// 타이틀 화면 새 게임 버튼
