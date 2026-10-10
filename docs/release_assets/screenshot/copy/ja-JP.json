@@ -34,7 +34,7 @@
     {
       "file": "04_colony_panel",
       "capture": "04_colony_panel.png",
-      "title": "砲台からシールドまで<br><em>建物で守りを固めて</em>",
+      "title": "砲台もシールドも<br><em>建物で守りを固めて</em>",
       "sub": "建物を増やすほど、収入も防御力もぐんぐんアップ",
       "detail": "防衛砲台 · 採掘施設 · 交易所 · 修理ドック · シールド発生装置",
       "mascot": "portrait_captain_default.png",
@@ -74,7 +74,7 @@
     {
       "file": "08_crew",
       "capture": "08_crew.png",
-      "title": "かわいい仲間を集めて<br><em>艦船に配置！</em>",
+      "title": "かわいい仲間を<br><em>艦船に配置！</em>",
       "sub": "★4レジェンドクルーまで、配置するほど艦船が強くなる",
       "detail": "砲手 · 機関士 · パイロット · 商人 · 鉱夫 · 科学者",
       "mascot": "portrait_captain_bunny.png",
