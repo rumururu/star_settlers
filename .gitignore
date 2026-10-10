@@ -47,3 +47,6 @@ app.*.map.json
 # Widget Preview related
 .widget_preview/
 tool/out/
+
+# 스토어 이미지 생성기의 중간 산출물 (captures/에서 언제든 다시 만든다)
+docs/release_assets/intermediate/
