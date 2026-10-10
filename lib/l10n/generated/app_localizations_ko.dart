@@ -2410,4 +2410,31 @@ class L10nKo extends L10n {
 
   @override
   String get cat_planetNine => '제9행성';
+
+  @override
+  String get u_topUpTitle => '크레딧 부족';
+
+  @override
+  String u_topUpBody(int credits, int gems) {
+    return '💰$credits 부족해요. ⭐$gems로 채우고 진행할까요?';
+  }
+
+  @override
+  String u_topUpNoGems(int gems) {
+    return '⭐$gems 필요해요. 상점에서 젬을 살까요?';
+  }
+
+  @override
+  String get u_topUpOk => '채우고 진행';
+
+  @override
+  String get u_goShop => '상점으로';
+
+  @override
+  String get u_exchangeTitle => '💰 크레딧 교환';
+
+  @override
+  String u_exchangeBody(int gems, int credits) {
+    return '⭐$gems → 💰$credits로 교환할까요?';
+  }
 }

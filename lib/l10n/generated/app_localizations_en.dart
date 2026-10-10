@@ -2462,4 +2462,31 @@ class L10nEn extends L10n {
 
   @override
   String get cat_planetNine => 'Planet Nine';
+
+  @override
+  String get u_topUpTitle => 'Not enough credits';
+
+  @override
+  String u_topUpBody(int credits, int gems) {
+    return 'You need 💰$credits more. Use ⭐$gems to fill the gap and continue?';
+  }
+
+  @override
+  String u_topUpNoGems(int gems) {
+    return 'You need ⭐$gems. Get gems in the shop?';
+  }
+
+  @override
+  String get u_topUpOk => 'Fill & go';
+
+  @override
+  String get u_goShop => 'Go to shop';
+
+  @override
+  String get u_exchangeTitle => '💰 Exchange credits';
+
+  @override
+  String u_exchangeBody(int gems, int credits) {
+    return 'Exchange ⭐$gems for 💰$credits?';
+  }
 }

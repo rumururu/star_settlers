@@ -2480,4 +2480,31 @@ class L10nDe extends L10n {
 
   @override
   String get cat_planetNine => 'Planet Neun';
+
+  @override
+  String get u_topUpTitle => 'Zu wenig Credits';
+
+  @override
+  String u_topUpBody(int credits, int gems) {
+    return 'Dir fehlen 💰$credits. Mit ⭐$gems auffüllen und weiter?';
+  }
+
+  @override
+  String u_topUpNoGems(int gems) {
+    return 'Du brauchst ⭐$gems. Edelsteine im Shop holen?';
+  }
+
+  @override
+  String get u_topUpOk => 'Auffüllen';
+
+  @override
+  String get u_goShop => 'Zum Shop';
+
+  @override
+  String get u_exchangeTitle => '💰 Credits tauschen';
+
+  @override
+  String u_exchangeBody(int gems, int credits) {
+    return '⭐$gems gegen 💰$credits tauschen?';
+  }
 }

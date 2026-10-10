@@ -1354,4 +1354,46 @@ void main() {
       }
     });
   });
+
+  group('부족한 크레딧을 젬으로 채우기', () {
+    test('크레딧만 모자라면 필요한 젬을 계산하고, 채우면 바로 살 수 있다', () {
+      final w = GameWorld(seed: 111);
+      final p = w.planets.first;
+      final c = w.planetCost(p);
+      w.credits = c.$1 - 1000.0;
+      w.ore = 9999;
+      w.profile.gems = 500;
+      final need = w.topUpGemsFor(c)!;
+      expect(need, greaterThan(0));
+      expect(need, w.gemsForCredits(1000));
+      expect(w.topUpCredits(c), isTrue);
+      expect(w.profile.gems, 500 - need);
+      expect(w.canAfford(c), isTrue);
+      expect(w.upgradePlanet(p), isTrue);
+    });
+
+    test('이미 살 수 있으면 0젬, 광석이 모자라면 젬으로 못 채움', () {
+      final w = GameWorld(seed: 112);
+      w.credits = 1e6;
+      w.ore = 0;
+      expect(w.topUpGemsFor((100, 0)), 0);
+      expect(w.topUpGemsFor((100, 50)), isNull);
+    });
+
+    test('젬이 모자라면 실패하고 아무것도 잃지 않는다', () {
+      final w = GameWorld(seed: 113);
+      w.credits = 0;
+      w.profile.gems = 0;
+      final c = (100000, 0);
+      expect(w.topUpCredits(c), isFalse);
+      expect(w.credits, 0);
+      expect(w.profile.gems, 0);
+    });
+
+    test('젬→크레딧 환율은 크레딧 꾸러미와 같다 (꾸러미보다 싸게 사는 구멍 없음)', () {
+      final w = GameWorld(seed: 114);
+      final pack = w.creditPackAmount;
+      expect(w.gemsForCredits(pack), GameWorld.creditPackGems);
+    });
+  });
 }

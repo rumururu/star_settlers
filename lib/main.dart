@@ -50,6 +50,12 @@ Future<void> main() async {
     binding.addPostFrameCallback((_) => binding.rootElement?.visitChildren(rebuild));
     binding.scheduleFrame();
   });
+  // 크레딧이 모자란 비용 버튼 → 젬으로 채우기 (게임이 없으면 비활성)
+  GemTopUp.gemsFor = (c) => AppState.world?.topUpGemsFor(c);
+  GemTopUp.topUp = (c) => AppState.world?.topUpCredits(c) ?? false;
+  GemTopUp.gems = () => AppState.profile.gems;
+  GemTopUp.credits = () => AppState.world?.credits.floor() ?? 0;
+  GemTopUp.openShop = () => navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const ShopScreen()));
   runApp(const StarSettlersApp());
 }
 

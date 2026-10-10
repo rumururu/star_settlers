@@ -2467,4 +2467,31 @@ class L10nId extends L10n {
 
   @override
   String get cat_planetNine => 'Planet Kesembilan';
+
+  @override
+  String get u_topUpTitle => 'Kredit kurang';
+
+  @override
+  String u_topUpBody(int credits, int gems) {
+    return 'Kurang 💰$credits. Pakai ⭐$gems untuk menutupi dan lanjut?';
+  }
+
+  @override
+  String u_topUpNoGems(int gems) {
+    return 'Butuh ⭐$gems. Beli permata di toko?';
+  }
+
+  @override
+  String get u_topUpOk => 'Tutupi & lanjut';
+
+  @override
+  String get u_goShop => 'Ke toko';
+
+  @override
+  String get u_exchangeTitle => '💰 Tukar kredit';
+
+  @override
+  String u_exchangeBody(int gems, int credits) {
+    return 'Tukar ⭐$gems jadi 💰$credits?';
+  }
 }

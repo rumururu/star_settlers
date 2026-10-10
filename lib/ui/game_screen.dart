@@ -78,6 +78,8 @@ class _GameScreenState extends State<GameScreen>
     AppState.deliverPending();
     _notified.addAll(w.profile.claimable.map((a) => a.id));
     _ticker = createTicker(_onTick)..start();
+    // 게임 중 "상점으로"는 게임을 멈추는 모달 경로로
+    GemTopUp.openShop = () => _openShop();
     NotificationService.instance.cancelAll();
     if (w.profile.notifications) NotificationService.instance.requestPermission();
     AudioService.instance.startMusic();
@@ -92,6 +94,7 @@ class _GameScreenState extends State<GameScreen>
     // 환생했거나 설정에서 데이터를 초기화했으면(프로필이 바뀜) 저장하지 않는다
     if (!_discarded && identical(w.profile, AppState.profile)) SaveService.save(w);
     AppState.world = null;
+    GemTopUp.openShop = () => navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const ShopScreen()));
     AudioService.instance.stopMusic();
     WidgetsBinding.instance.removeObserver(this);
     _ticker.dispose();
@@ -142,7 +145,7 @@ class _GameScreenState extends State<GameScreen>
         (_autoFire && _targetInRange());
     _input.autoAim = _autoFire;
 
-    w.paused = _overlay != _Overlay.none || _modal;
+    w.paused = _overlay != _Overlay.none || _modal || GemTopUp.asking;
     w.update(dt, _input);
 
     for (final s in w.sfx) {
@@ -258,6 +261,20 @@ class _GameScreenState extends State<GameScreen>
     AppState.deliverPending();
     if (mounted) setState(() {});
     return r;
+  }
+
+  Future<void> _exchangeCredits() async {
+    _modal = true;
+    final ok = await confirmDialog(
+        context, tr.u_exchangeTitle, tr.u_exchangeBody(GameWorld.creditPackGems, w.creditPackAmount),
+        ok: tr.u_exchange);
+    _endModal();
+    if (!ok) return;
+    if (w.profile.gems < GameWorld.creditPackGems) {
+      _openShop();
+      return;
+    }
+    _act(w.buyCreditsWithGems);
   }
 
   Future<void> _openShop([int tab = 0]) => _modalRoute(ShopScreen(initialTab: tab));
@@ -510,7 +527,8 @@ class _GameScreenState extends State<GameScreen>
               children: [
                 _hpBar(p.hp / w.playerMaxHp),
                 const SizedBox(height: 3),
-                _res('credits', w.credits, w.creditIncome),
+                // 누르면 젬 → 크레딧 교환
+                GestureDetector(onTap: _exchangeCredits, child: _res('credits', w.credits, w.creditIncome)),
                 _res('ore', w.ore, w.oreIncome),
                 GestureDetector(
                   onTap: () => _openShop(),

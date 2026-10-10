@@ -3866,5 +3866,59 @@
   "cat_planetNine": "제9행성",
   "@cat_planetNine": {
     "description": "hypothetical undiscovered 9th planet of the Solar System (real hypothesis \"Planet Nine\")"
+  },
+  "u_topUpTitle": "크레딧 부족",
+  "u_topUpBody": "💰{credits} 부족해요. ⭐{gems}로 채우고 진행할까요?",
+  "u_topUpNoGems": "⭐{gems} 필요해요. 상점에서 젬을 살까요?",
+  "u_topUpOk": "채우고 진행",
+  "u_goShop": "상점으로",
+  "u_exchangeTitle": "💰 크레딧 교환",
+  "u_exchangeBody": "⭐{gems} → 💰{credits}로 교환할까요?",
+  "@u_topUpTitle": {
+    "description": "크레딧이 모자란 버튼을 눌렀을 때 창 제목"
+  },
+  "@u_topUpBody": {
+    "description": "부족한 크레딧을 젬으로 채울지 묻기",
+    "placeholders": {
+      "credits": {
+        "type": "int",
+        "description": "부족한 크레딧"
+      },
+      "gems": {
+        "type": "int",
+        "description": "필요한 젬"
+      }
+    }
+  },
+  "@u_topUpNoGems": {
+    "description": "젬도 모자랄 때 상점 안내",
+    "placeholders": {
+      "gems": {
+        "type": "int",
+        "description": "필요한 젬"
+      }
+    }
+  },
+  "@u_topUpOk": {
+    "description": "젬으로 채우고 진행 버튼"
+  },
+  "@u_goShop": {
+    "description": "상점으로 가는 버튼"
+  },
+  "@u_exchangeTitle": {
+    "description": "HUD 크레딧을 눌렀을 때 교환 창 제목"
+  },
+  "@u_exchangeBody": {
+    "description": "젬→크레딧 교환 확인",
+    "placeholders": {
+      "gems": {
+        "type": "int",
+        "description": "쓰는 젬"
+      },
+      "credits": {
+        "type": "int",
+        "description": "받는 크레딧"
+      }
+    }
   }
 }

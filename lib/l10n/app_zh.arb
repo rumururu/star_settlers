@@ -692,5 +692,12 @@
   "cat_makemake": "鸟神星",
   "cat_eris": "阋神星",
   "cat_sedna": "赛德娜",
-  "cat_planetNine": "第九行星"
+  "cat_planetNine": "第九行星",
+  "u_topUpTitle": "信用点不足",
+  "u_topUpBody": "还差💰{credits}。用⭐{gems}补足并继续吗？",
+  "u_topUpNoGems": "需要⭐{gems}。去商店购买宝石吗？",
+  "u_topUpOk": "补足并继续",
+  "u_goShop": "去商店",
+  "u_exchangeTitle": "💰 兑换信用点",
+  "u_exchangeBody": "用⭐{gems}兑换💰{credits}吗？"
 }

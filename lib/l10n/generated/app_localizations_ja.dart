@@ -2425,4 +2425,31 @@ class L10nJa extends L10n {
 
   @override
   String get cat_planetNine => 'プラネット・ナイン';
+
+  @override
+  String get u_topUpTitle => 'クレジット不足';
+
+  @override
+  String u_topUpBody(int credits, int gems) {
+    return '💰$credits足りません。⭐$gemsで補って続けますか？';
+  }
+
+  @override
+  String u_topUpNoGems(int gems) {
+    return '⭐$gemsが必要です。ショップでジェムを買いますか？';
+  }
+
+  @override
+  String get u_topUpOk => '補って続ける';
+
+  @override
+  String get u_goShop => 'ショップへ';
+
+  @override
+  String get u_exchangeTitle => '💰 クレジット交換';
+
+  @override
+  String u_exchangeBody(int gems, int credits) {
+    return '⭐$gemsを💰$creditsに交換しますか？';
+  }
 }

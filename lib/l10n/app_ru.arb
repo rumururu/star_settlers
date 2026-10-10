@@ -692,5 +692,12 @@
   "cat_makemake": "Макемаке",
   "cat_eris": "Эрида",
   "cat_sedna": "Седна",
-  "cat_planetNine": "Девятая планета"
+  "cat_planetNine": "Девятая планета",
+  "u_topUpTitle": "Мало кредитов",
+  "u_topUpBody": "Не хватает 💰{credits}. Доплатить ⭐{gems} и продолжить?",
+  "u_topUpNoGems": "Нужно ⭐{gems}. Купить кристаллы в магазине?",
+  "u_topUpOk": "Доплатить",
+  "u_goShop": "В магазин",
+  "u_exchangeTitle": "💰 Обмен кредитов",
+  "u_exchangeBody": "Обменять ⭐{gems} на 💰{credits}?"
 }

@@ -2415,4 +2415,31 @@ class L10nZh extends L10n {
 
   @override
   String get cat_planetNine => '第九行星';
+
+  @override
+  String get u_topUpTitle => '信用点不足';
+
+  @override
+  String u_topUpBody(int credits, int gems) {
+    return '还差💰$credits。用⭐$gems补足并继续吗？';
+  }
+
+  @override
+  String u_topUpNoGems(int gems) {
+    return '需要⭐$gems。去商店购买宝石吗？';
+  }
+
+  @override
+  String get u_topUpOk => '补足并继续';
+
+  @override
+  String get u_goShop => '去商店';
+
+  @override
+  String get u_exchangeTitle => '💰 兑换信用点';
+
+  @override
+  String u_exchangeBody(int gems, int credits) {
+    return '用⭐$gems兑换💰$credits吗？';
+  }
 }

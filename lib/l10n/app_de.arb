@@ -692,5 +692,12 @@
   "cat_makemake": "Makemake",
   "cat_eris": "Eris",
   "cat_sedna": "Sedna",
-  "cat_planetNine": "Planet Neun"
+  "cat_planetNine": "Planet Neun",
+  "u_topUpTitle": "Zu wenig Credits",
+  "u_topUpBody": "Dir fehlen 💰{credits}. Mit ⭐{gems} auffüllen und weiter?",
+  "u_topUpNoGems": "Du brauchst ⭐{gems}. Edelsteine im Shop holen?",
+  "u_topUpOk": "Auffüllen",
+  "u_goShop": "Zum Shop",
+  "u_exchangeTitle": "💰 Credits tauschen",
+  "u_exchangeBody": "⭐{gems} gegen 💰{credits} tauschen?"
 }

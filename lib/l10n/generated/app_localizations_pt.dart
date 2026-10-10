@@ -2474,4 +2474,31 @@ class L10nPt extends L10n {
 
   @override
   String get cat_planetNine => 'Planeta Nove';
+
+  @override
+  String get u_topUpTitle => 'Créditos insuficientes';
+
+  @override
+  String u_topUpBody(int credits, int gems) {
+    return 'Faltam 💰$credits. Usar ⭐$gems para completar e continuar?';
+  }
+
+  @override
+  String u_topUpNoGems(int gems) {
+    return 'Você precisa de ⭐$gems. Comprar gemas na loja?';
+  }
+
+  @override
+  String get u_topUpOk => 'Completar';
+
+  @override
+  String get u_goShop => 'Ir à loja';
+
+  @override
+  String get u_exchangeTitle => '💰 Trocar créditos';
+
+  @override
+  String u_exchangeBody(int gems, int credits) {
+    return 'Trocar ⭐$gems por 💰$credits?';
+  }
 }

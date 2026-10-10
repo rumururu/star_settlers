@@ -4290,6 +4290,48 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'제9행성'**
   String get cat_planetNine;
+
+  /// 크레딧이 모자란 버튼을 눌렀을 때 창 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'크레딧 부족'**
+  String get u_topUpTitle;
+
+  /// 부족한 크레딧을 젬으로 채울지 묻기
+  ///
+  /// In ko, this message translates to:
+  /// **'💰{credits} 부족해요. ⭐{gems}로 채우고 진행할까요?'**
+  String u_topUpBody(int credits, int gems);
+
+  /// 젬도 모자랄 때 상점 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'⭐{gems} 필요해요. 상점에서 젬을 살까요?'**
+  String u_topUpNoGems(int gems);
+
+  /// 젬으로 채우고 진행 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'채우고 진행'**
+  String get u_topUpOk;
+
+  /// 상점으로 가는 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'상점으로'**
+  String get u_goShop;
+
+  /// HUD 크레딧을 눌렀을 때 교환 창 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'💰 크레딧 교환'**
+  String get u_exchangeTitle;
+
+  /// 젬→크레딧 교환 확인
+  ///
+  /// In ko, this message translates to:
+  /// **'⭐{gems} → 💰{credits}로 교환할까요?'**
+  String u_exchangeBody(int gems, int credits);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

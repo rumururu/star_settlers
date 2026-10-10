@@ -692,5 +692,12 @@
   "cat_makemake": "Makemake",
   "cat_eris": "Eris",
   "cat_sedna": "Sedna",
-  "cat_planetNine": "Planet Kesembilan"
+  "cat_planetNine": "Planet Kesembilan",
+  "u_topUpTitle": "Kredit kurang",
+  "u_topUpBody": "Kurang 💰{credits}. Pakai ⭐{gems} untuk menutupi dan lanjut?",
+  "u_topUpNoGems": "Butuh ⭐{gems}. Beli permata di toko?",
+  "u_topUpOk": "Tutupi & lanjut",
+  "u_goShop": "Ke toko",
+  "u_exchangeTitle": "💰 Tukar kredit",
+  "u_exchangeBody": "Tukar ⭐{gems} jadi 💰{credits}?"
 }

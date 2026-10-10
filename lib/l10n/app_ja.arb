@@ -692,5 +692,12 @@
   "cat_makemake": "マケマケ",
   "cat_eris": "エリス",
   "cat_sedna": "セドナ",
-  "cat_planetNine": "プラネット・ナイン"
+  "cat_planetNine": "プラネット・ナイン",
+  "u_topUpTitle": "クレジット不足",
+  "u_topUpBody": "💰{credits}足りません。⭐{gems}で補って続けますか？",
+  "u_topUpNoGems": "⭐{gems}が必要です。ショップでジェムを買いますか？",
+  "u_topUpOk": "補って続ける",
+  "u_goShop": "ショップへ",
+  "u_exchangeTitle": "💰 クレジット交換",
+  "u_exchangeBody": "⭐{gems}を💰{credits}に交換しますか？"
 }

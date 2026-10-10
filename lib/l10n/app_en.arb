@@ -692,5 +692,12 @@
   "cat_makemake": "Makemake",
   "cat_eris": "Eris",
   "cat_sedna": "Sedna",
-  "cat_planetNine": "Planet Nine"
+  "cat_planetNine": "Planet Nine",
+  "u_topUpTitle": "Not enough credits",
+  "u_topUpBody": "You need 💰{credits} more. Use ⭐{gems} to fill the gap and continue?",
+  "u_topUpNoGems": "You need ⭐{gems}. Get gems in the shop?",
+  "u_topUpOk": "Fill & go",
+  "u_goShop": "Go to shop",
+  "u_exchangeTitle": "💰 Exchange credits",
+  "u_exchangeBody": "Exchange ⭐{gems} for 💰{credits}?"
 }

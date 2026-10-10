@@ -1081,6 +1081,31 @@ class GameWorld {
     return true;
   }
 
+  // ---------- 부족한 크레딧을 젬으로 채우기 ----------
+  /// 크레딧 [shortfall]을 채우는 데 드는 젬 (크레딧 꾸러미와 같은 환율, 1젬 단위 올림)
+  int gemsForCredits(num shortfall) {
+    if (shortfall <= 0) return 0;
+    return max(1, (shortfall * creditPackGems / creditPackAmount).ceil());
+  }
+
+  /// [cost]에서 크레딧만 모자랄 때 필요한 젬. 이미 살 수 있으면 0, 광석이 모자라면 null(젬으로 못 채움).
+  int? topUpGemsFor(Cost cost) {
+    if (canAfford(cost)) return 0;
+    if (ore < cost.$2) return null;
+    return gemsForCredits(cost.$1 - credits);
+  }
+
+  /// 부족한 크레딧을 젬으로 채운다 (딱 필요한 만큼 이상)
+  bool topUpCredits(Cost cost) {
+    final gems = topUpGemsFor(cost);
+    if (gems == null) return false;
+    if (gems == 0) return true;
+    if (!profile.spendGems(gems)) return false;
+    credits += gems * creditPackAmount / creditPackGems;
+    sfx.add(Sfx.coin);
+    return true;
+  }
+
   // ---------- 승무원 ----------
   CrewMember? recruitWithCredits() {
     if (roster.length >= rosterCap) return null;
