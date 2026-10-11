@@ -185,7 +185,9 @@ class _ShopScreenState extends State<ShopScreen> {
         const SizedBox(height: 12),
         actionBtn(tr.m_restorePurchases, true, () async {
           await AppState.money.restore();
-          if (mounted) toast(context, tr.m_restoreDone);
+          if (!mounted) return;
+          setState(() {}); // 복원된 패키지를 바로 "보유 중"으로
+          toast(context, tr.m_restoreDone);
         }, color: const Color(0xFF455A64)),
       ],
     );

@@ -15,6 +15,7 @@ import 'package:star_settlers/services/app_state.dart';
 import 'package:star_settlers/services/audio.dart';
 import 'package:star_settlers/services/orientation.dart';
 import 'package:star_settlers/ui/colony_panel.dart';
+import 'package:star_settlers/ui/common.dart' show keepAll;
 import 'package:star_settlers/ui/game_screen.dart';
 import 'package:star_settlers/ui/hangar_screen.dart';
 import 'package:star_settlers/ui/home_screen.dart';
@@ -182,6 +183,24 @@ void main() {
     AudioService.instance
       ..soundOn = false
       ..musicOn = false;
+  });
+
+  testWidgets('상점의 구매 복원을 누르면 복원된 패키지가 바로 보유 중으로 바뀐다', (tester) async {
+    Lang.set(const Locale('ko'));
+    // 패키지 탭 전체(맨 아래 복원 버튼까지)가 한 화면에 그려지게 길게
+    await setScreen(tester, const Screen('tall', Size(430, 2400), EdgeInsets.zero));
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(app(const ShopScreen(initialTab: 1)));
+    await tester.pumpAndSettle();
+    expect(find.text(L10n.of(tester.element(find.byType(ShopScreen))).m_owned), findsNothing);
+    // 복원이 지급한 상태 (실제 앱에서는 RevenueCat 복원이 AppState.grant 로 바꾼다)
+    AppState.profile
+      ..starterBought = true
+      ..premium = true;
+    final restore = find.text(keepAll('구매 복원'), findRichText: true);
+    await tester.tap(restore);
+    await tester.pumpAndSettle();
+    expect(find.text(L10n.of(tester.element(find.byType(ShopScreen))).m_owned), findsNWidgets(2));
   });
 
   group('화면 방향 설정', () {
