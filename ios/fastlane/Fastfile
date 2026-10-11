@@ -14,7 +14,7 @@ if File.exist?(env_file)
 end
 
 BUNDLE_ID = "com.mkideabox.starsettlers"
-IPA_GLOB = "../build/ios/ipa/*.ipa"
+IPA_GLOB = File.expand_path("../../build/ios/ipa/*.ipa", __dir__)
 
 platform :ios do
   private_lane :auth_api_key do

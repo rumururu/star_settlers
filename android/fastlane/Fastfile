@@ -55,10 +55,12 @@ platform :android do
   desc "스토어 등록정보 전체(10개 언어 제목·설명·그래픽·스크린샷) 업로드. 앱 빌드는 올리지 않는다"
   lane :listing do
     upload_to_play_store(
-      track: "production",
+      track: "internal",
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_changelogs: true
     )
   end
+
+
 end

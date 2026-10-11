@@ -98,6 +98,19 @@ def check_image(path: pathlib.Path, size: tuple[int, int]) -> list[str]:
     return errs
 
 
+
+def asc_text(text: str) -> str:
+    """App Store 설명·프로모션 문구는 이모지·장식 기호를 받지 않는다 (ASC 오류). 줄 앞 기호와 뒤따르는 공백까지 지운다."""
+    import re
+    sym = re.compile("[\U0001F000-\U0001FAFF\u2600-\u27BF\u2B00-\u2BFF\u2300-\u23FF\uFE0F\u200D\u2605\u2606]")
+    out = []
+    for line in text.split("\n"):
+        line = sym.sub("", line)
+        line = re.sub(r"^\s+", "", line) if line.strip() else ""
+        line = re.sub(r"  +", " ", line)
+        out.append(line)
+    return "\n".join(out)
+
 def write(path: pathlib.Path, text: str, dry: bool) -> None:
     if dry:
         return
@@ -141,8 +154,8 @@ def main() -> int:
         write(adir / "name.txt", d["name"], dry)
         write(adir / "subtitle.txt", d["subtitle"], dry)
         write(adir / "keywords.txt", d["keywords"], dry)
-        write(adir / "promotional_text.txt", d["promo"], dry)
-        write(adir / "description.txt", d["full"], dry)
+        write(adir / "promotional_text.txt", asc_text(d["promo"]), dry)
+        write(adir / "description.txt", asc_text(d["full"]), dry)
         write(adir / "privacy_url.txt", PRIVACY_URL, dry)
         write(adir / "support_url.txt", SUPPORT_URL, dry)
         write(adir / "marketing_url.txt", MARKETING_URL, dry)
