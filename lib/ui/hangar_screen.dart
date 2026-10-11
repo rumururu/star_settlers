@@ -147,9 +147,22 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
     final unlocked = p.shipUnlocked(t);
     final current = p.shipType == t.id;
     final glow = t.premium ? const Color(0xFFFFC107) : kSky;
+    // 넓은 화면(iPad)에서 폭을 제한하고, 키 큰 화면에서는 카드를 내용 높이로 줄여 가운데 둔다
+    // (늘어난 카드 아래쪽이 비어 보이지 않게). 내용이 화면보다 길면 카드 안에서 스크롤.
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Space.s, vertical: Space.m),
-      child: Container(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: _cardBody(t, unlocked, current, glow),
+        ),
+      ),
+    );
+  }
+
+  Widget _cardBody(ShipType t, bool unlocked, bool current, Color glow) {
+    final p = AppState.profile;
+    return Container(
         decoration: BoxDecoration(
           color: kPanelColor,
           borderRadius: BorderRadius.circular(24),
@@ -159,6 +172,7 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
           builder: (context, box) {
             final shipSize = min(box.maxWidth * 0.78, box.maxHeight * 0.42);
             return ListView(
+              shrinkWrap: true,
               padding: const EdgeInsets.all(Space.l),
               children: [
                 // 함선: 크게, 둥실둥실
@@ -234,7 +248,6 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
             );
           },
         ),
-      ),
     );
   }
 

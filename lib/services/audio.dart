@@ -40,9 +40,27 @@ class AudioService {
         _ => 120,
       };
 
+  /// 다른 앱의 음악을 멈추지 않는다. 오디오 포커스를 요청하지 않고(Android) 섞어서 재생한다(iOS ambient).
+  /// 기본값(AUDIOFOCUS_GAIN)이면 효과음이 날 때마다 포커스를 가져가 다른 앱 음악이 끊긴다.
+  /// iOS ambient는 무음 스위치를 따르고 항상 다른 앱 소리와 섞인다.
+  static final mixContext = AudioContext(
+    android: const AudioContextAndroid(
+      audioFocus: AndroidAudioFocus.none,
+      usageType: AndroidUsageType.game,
+      contentType: AndroidContentType.sonification,
+    ),
+    iOS: AudioContextIOS(category: AVAudioSessionCategory.ambient),
+  );
+
   Future<void> init() async {
     if (_ready) return;
     _ready = true;
+    try {
+      // 이후 만드는 모든 플레이어의 기본값 (각 플레이어에도 다시 넣는다)
+      await AudioPlayer.global.setAudioContext(mixContext);
+    } catch (e) {
+      debugPrint('audio context failed: $e');
+    }
     for (final s in Sfx.values) {
       try {
         _pools[s] = await _SfxPool.create(
@@ -71,6 +89,7 @@ class AudioService {
       _bgm ??= AudioPlayer()
         ..positionUpdater = null // 재생 위치를 안 쓰므로 매 프레임 조회를 끈다
         ..setReleaseMode(ReleaseMode.loop);
+      await _bgm!.setAudioContext(mixContext);
       if (_bgm!.state == PlayerState.playing) return;
       await _bgm!.play(AssetSource('audio/bgm.wav'), volume: 0.45);
     } catch (e) {
@@ -102,6 +121,7 @@ class _SfxPool {
     final players = <AudioPlayer>[];
     for (var i = 0; i < count; i++) {
       final p = AudioPlayer()..positionUpdater = null;
+      await p.setAudioContext(AudioService.mixContext);
       await p.setPlayerMode(PlayerMode.lowLatency);
       await p.setReleaseMode(ReleaseMode.stop);
       await p.setVolume(volume);

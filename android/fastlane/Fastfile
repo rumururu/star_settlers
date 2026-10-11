@@ -1,0 +1,64 @@
+# Fastlane Fastfile — 우주 개척단 (Star Settlers)
+# 스토어 빌드는 반드시 이 레인으로 한다 (~/.claude/FLUTTER_BUILD.md).
+#
+# android/fastlane/.env (git 제외):
+#   REVENUECAT_API_KEY_ANDROID=goog_…   (없으면 빌드를 멈춘다 — 결제가 안 되는 앱이 올라가는 것 방지)
+# AdMob 실제 광고 단위는 릴리즈 빌드 기본값(lib/services/ads.dart)이라 따로 넣지 않는다.
+
+default_platform(:android)
+
+AAB = "../build/app/outputs/bundle/release/app-release.aab"
+
+platform :android do
+  desc "Flutter 앱 빌드 (AAB, 릴리스 서명)"
+  lane :build do
+    UI.user_error!("REVENUECAT_API_KEY_ANDROID 없음 (android/fastlane/.env)") if ENV["REVENUECAT_API_KEY_ANDROID"].to_s.empty?
+    UI.user_error!("android/key.properties 없음: 업로드 키로 서명할 수 없습니다") unless File.exist?(File.expand_path("../key.properties", __dir__))
+    args = ["flutter", "build", "appbundle", "--release",
+            "--dart-define=REVENUECAT_API_KEY_ANDROID=#{ENV['REVENUECAT_API_KEY_ANDROID']}"]
+    args += ["--build-name", ENV.fetch("BUILD_NAME")] if ENV["BUILD_NAME"]
+    args += ["--build-number", ENV.fetch("BUILD_NUMBER")] if ENV["BUILD_NUMBER"]
+    Dir.chdir("../..") { sh(*args) }
+    UI.success("빌드 완료: build/app/outputs/bundle/release/app-release.aab")
+  end
+
+  def upload(track, status = "completed")
+    upload_to_play_store(
+      track: track,
+      aab: AAB,
+      release_status: status,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      timeout: 1200
+    )
+  end
+
+  desc "내부 테스트 트랙에 배포 (첫 출시 전 draft 앱은 DRAFT=1)"
+  lane :internal do
+    build
+    upload("internal", ENV["DRAFT"] ? "draft" : "completed")
+  end
+
+  desc "비공개 테스트 트랙에 배포"
+  lane :alpha do
+    build
+    upload("alpha", ENV["DRAFT"] ? "draft" : "completed")
+  end
+
+  desc "프로덕션에 배포"
+  lane :production do
+    build
+    upload("production")
+  end
+
+  desc "스토어 등록정보 전체(10개 언어 제목·설명·그래픽·스크린샷) 업로드. 앱 빌드는 올리지 않는다"
+  lane :listing do
+    upload_to_play_store(
+      track: "production",
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_changelogs: true
+    )
+  end
+end

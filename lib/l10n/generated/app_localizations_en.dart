@@ -777,6 +777,10 @@ class L10nEn extends L10n {
   String get m_loginWelcome => 'Welcome back, Captain!';
 
   @override
+  String get m_loginFirst =>
+      'Welcome aboard, Captain! Here\'s your first login reward.';
+
+  @override
   String get m_loginStreakHint => 'Log in 7 days in a row for ⭐50!';
 
   @override
@@ -867,21 +871,22 @@ class L10nEn extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers stores game data (progress, settings) only on your device and does not collect personally identifiable information.\n\nIn-app purchases are processed by Google Play / App Store; payment details are never shared with the developer.\n\nIf rewarded ads are enabled, the ad provider (Google AdMob) may collect data such as advertising identifiers.\n\nContact: $email (Settings → Send Feedback to Developer)';
+    return 'Star Settlers has no sign-up and does not collect personally identifiable information. Game data (progress, currencies, purchases, settings) is stored only on your device. The only exception is the optional weekly leaderboard below, if you turn it on.\n\nPurchases: processed by Google Play / App Store; payment details are never shared with the developer. RevenueCat verifies and restores purchases, processing an anonymous user ID and purchase history.\n\nAds: Google AdMob rewarded ads play only when you choose to watch one. AdMob may use your advertising ID, IP address and device info to serve ads, personalise them where permitted, and measure them. In the EEA, the UK and Switzerland, consent is asked on first launch and can be changed in Settings → Ad privacy settings.\n\nNotifications: local notifications scheduled on your device; nothing is sent out.\n\nFeedback: your message, app version and device info reach the developer only if you send the email yourself.\n\nWeekly leaderboard (optional): off by default; you join only by turning it on in Settings or on the ranking screen. Only a random install ID, a nickname the game builds from fixed word lists, and your weekly score are sent. No names, nothing you type, and no chat. Other players see only the nickname and score. The server is Supabase (Seoul region).\n\nDeletion: Settings → Reset All Data erases the data on your device. If you joined the leaderboard, resetting also deletes your leaderboard record (install ID, nickname, score) on the server; you can also ask for deletion by email.\n\nFull policy: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContact: $email';
   }
 
   @override
   String get m_wipeTitle => 'Reset All Data';
 
   @override
-  String get m_wipeDesc => 'Deletes all progress, gems and cosmetics';
+  String get m_wipeDesc =>
+      'Deletes all progress, gems, cosmetics and your leaderboard record';
 
   @override
   String get m_wipeConfirmTitle => 'Really reset everything?';
 
   @override
   String get m_wipeConfirmBody =>
-      'This can\'t be undone. Purchases can be recovered with \"Restore Purchases\".';
+      'This can\'t be undone. Gems and progress are deleted permanently. The Starter Pack and Fleet Commander Pass can be recovered with \"Restore Purchases\".';
 
   @override
   String get m_wipeOk => 'Reset';
@@ -944,7 +949,8 @@ class L10nEn extends L10n {
   String get m_tabFree => 'Free Gems';
 
   @override
-  String get m_testMode => '🧪 Test mode: no real payments or ads';
+  String get m_testMode =>
+      '🧪 Test mode: no real payments; ads are Google test ads';
 
   @override
   String get m_owned => 'Owned';
@@ -2499,6 +2505,435 @@ class L10nEn extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return 'Exchange ⭐$gems for 💰$credits?';
   }
+
+  @override
+  String get m_purchaseFailed =>
+      'Couldn\'t reach the store. Please try again later.';
+
+  @override
+  String get m_adWatchToEnd => 'Watch the ad to the end to get the reward.';
+
+  @override
+  String get u_autoFireOn => 'ON';
+
+  @override
+  String get u_autoFireOff => 'OFF';
+
+  @override
+  String u_recruitRoleOdds(int count, String pct) {
+    return 'Role (all recruits): random among $count, $pct each';
+  }
+
+  @override
+  String m_feedbackSubject(String app) {
+    return '$app feedback';
+  }
+
+  @override
+  String get lb_menu => '🏅 Weekly Ranking';
+
+  @override
+  String get lb_menuShort => 'Ranks';
+
+  @override
+  String get lb_title => '🏅 Weekly Ranking';
+
+  @override
+  String get lb_join => 'Join the leaderboard';
+
+  @override
+  String get lb_joinDesc =>
+      'Only an anonymous ID, a nickname made by the game and your weekly score are sent. No names, no chat, nothing you type. You can turn it off any time.';
+
+  @override
+  String get lb_yourNick => 'Your nickname';
+
+  @override
+  String lb_reroll(int count) {
+    return 'New name ($count)';
+  }
+
+  @override
+  String lb_weekPoints(String points) {
+    return 'This week: $points pts';
+  }
+
+  @override
+  String lb_rank(int rank, int total) {
+    return '#$rank of $total';
+  }
+
+  @override
+  String lb_rankOnly(int rank) {
+    return '#$rank';
+  }
+
+  @override
+  String get lb_top50 => 'Top 50 this week';
+
+  @override
+  String get lb_empty => 'No scores yet this week. Be the first!';
+
+  @override
+  String get lb_retry => 'Try again';
+
+  @override
+  String get lb_refresh => 'Refresh';
+
+  @override
+  String get lb_offline =>
+      'No connection. Your game is fine — try again later.';
+
+  @override
+  String get lb_rateLimited => 'Too many tries. Wait a minute and try again.';
+
+  @override
+  String get lb_rejected => 'This score could not be sent.';
+
+  @override
+  String get lb_serverError => 'The leaderboard is busy. Try again later.';
+
+  @override
+  String get lb_unavailable => 'The leaderboard is not available.';
+
+  @override
+  String get lb_optedOut =>
+      'Turn on “Join the leaderboard” to post your score.';
+
+  @override
+  String get lb_howTo =>
+      'Colony level +100 · New star system +500 · Pirate +5 · Boss +200';
+
+  @override
+  String get lb_resets => 'A new week starts every Monday at 00:00 UTC.';
+
+  @override
+  String nickFormat(String adj, String animal, String number) {
+    return '$adj $animal $number';
+  }
+
+  @override
+  String get nickGenders => '';
+
+  @override
+  String nickAdj0(String g) {
+    return 'Brave';
+  }
+
+  @override
+  String get nickAnimal0 => 'Otter';
+
+  @override
+  String nickAdj1(String g) {
+    return 'Bright';
+  }
+
+  @override
+  String get nickAnimal1 => 'Panda';
+
+  @override
+  String nickAdj2(String g) {
+    return 'Calm';
+  }
+
+  @override
+  String get nickAnimal2 => 'Fox';
+
+  @override
+  String nickAdj3(String g) {
+    return 'Clever';
+  }
+
+  @override
+  String get nickAnimal3 => 'Rabbit';
+
+  @override
+  String nickAdj4(String g) {
+    return 'Cosmic';
+  }
+
+  @override
+  String get nickAnimal4 => 'Owl';
+
+  @override
+  String nickAdj5(String g) {
+    return 'Curious';
+  }
+
+  @override
+  String get nickAnimal5 => 'Penguin';
+
+  @override
+  String nickAdj6(String g) {
+    return 'Bouncy';
+  }
+
+  @override
+  String get nickAnimal6 => 'Koala';
+
+  @override
+  String nickAdj7(String g) {
+    return 'Dreamy';
+  }
+
+  @override
+  String get nickAnimal7 => 'Dolphin';
+
+  @override
+  String nickAdj8(String g) {
+    return 'Cozy';
+  }
+
+  @override
+  String get nickAnimal8 => 'Turtle';
+
+  @override
+  String nickAdj9(String g) {
+    return 'Fast';
+  }
+
+  @override
+  String get nickAnimal9 => 'Hedgehog';
+
+  @override
+  String nickAdj10(String g) {
+    return 'Fluffy';
+  }
+
+  @override
+  String get nickAnimal10 => 'Squirrel';
+
+  @override
+  String nickAdj11(String g) {
+    return 'Friendly';
+  }
+
+  @override
+  String get nickAnimal11 => 'Kitten';
+
+  @override
+  String nickAdj12(String g) {
+    return 'Gentle';
+  }
+
+  @override
+  String get nickAnimal12 => 'Puppy';
+
+  @override
+  String nickAdj13(String g) {
+    return 'Glowing';
+  }
+
+  @override
+  String get nickAnimal13 => 'Duckling';
+
+  @override
+  String nickAdj14(String g) {
+    return 'Golden';
+  }
+
+  @override
+  String get nickAnimal14 => 'Lamb';
+
+  @override
+  String nickAdj15(String g) {
+    return 'Happy';
+  }
+
+  @override
+  String get nickAnimal15 => 'Seal';
+
+  @override
+  String nickAdj16(String g) {
+    return 'Funny';
+  }
+
+  @override
+  String get nickAnimal16 => 'Whale';
+
+  @override
+  String nickAdj17(String g) {
+    return 'Kind';
+  }
+
+  @override
+  String get nickAnimal17 => 'Hamster';
+
+  @override
+  String nickAdj18(String g) {
+    return 'Lucky';
+  }
+
+  @override
+  String get nickAnimal18 => 'Beaver';
+
+  @override
+  String nickAdj19(String g) {
+    return 'Musical';
+  }
+
+  @override
+  String get nickAnimal19 => 'Raccoon';
+
+  @override
+  String nickAdj20(String g) {
+    return 'Strong';
+  }
+
+  @override
+  String get nickAnimal20 => 'Parrot';
+
+  @override
+  String nickAdj21(String g) {
+    return 'Colorful';
+  }
+
+  @override
+  String get nickAnimal21 => 'Ladybug';
+
+  @override
+  String nickAdj22(String g) {
+    return 'Sweet';
+  }
+
+  @override
+  String get nickAnimal22 => 'Sparrow';
+
+  @override
+  String nickAdj23(String g) {
+    return 'Polite';
+  }
+
+  @override
+  String get nickAnimal23 => 'Fawn';
+
+  @override
+  String nickAdj24(String g) {
+    return 'Playful';
+  }
+
+  @override
+  String get nickAnimal24 => 'Pony';
+
+  @override
+  String nickAdj25(String g) {
+    return 'Quiet';
+  }
+
+  @override
+  String get nickAnimal25 => 'Bear Cub';
+
+  @override
+  String nickAdj26(String g) {
+    return 'Shiny';
+  }
+
+  @override
+  String get nickAnimal26 => 'Lion Cub';
+
+  @override
+  String nickAdj27(String g) {
+    return 'Silver';
+  }
+
+  @override
+  String get nickAnimal27 => 'Tiger Cub';
+
+  @override
+  String nickAdj28(String g) {
+    return 'Sleepy';
+  }
+
+  @override
+  String get nickAnimal28 => 'Giraffe';
+
+  @override
+  String nickAdj29(String g) {
+    return 'Lunar';
+  }
+
+  @override
+  String get nickAnimal29 => 'Zebra';
+
+  @override
+  String nickAdj30(String g) {
+    return 'Solar';
+  }
+
+  @override
+  String get nickAnimal30 => 'Elephant';
+
+  @override
+  String nickAdj31(String g) {
+    return 'Magic';
+  }
+
+  @override
+  String get nickAnimal31 => 'Hippo';
+
+  @override
+  String nickAdj32(String g) {
+    return 'Super';
+  }
+
+  @override
+  String get nickAnimal32 => 'Llama';
+
+  @override
+  String nickAdj33(String g) {
+    return 'Starry';
+  }
+
+  @override
+  String get nickAnimal33 => 'Alpaca';
+
+  @override
+  String nickAdj34(String g) {
+    return 'Sunny';
+  }
+
+  @override
+  String get nickAnimal34 => 'Meerkat';
+
+  @override
+  String nickAdj35(String g) {
+    return 'Noble';
+  }
+
+  @override
+  String get nickAnimal35 => 'Starfish';
+
+  @override
+  String nickAdj36(String g) {
+    return 'Tiny';
+  }
+
+  @override
+  String get nickAnimal36 => 'Seahorse';
+
+  @override
+  String nickAdj37(String g) {
+    return 'Wise';
+  }
+
+  @override
+  String get nickAnimal37 => 'Chipmunk';
+
+  @override
+  String nickAdj38(String g) {
+    return 'Snowy';
+  }
+
+  @override
+  String get nickAnimal38 => 'Goldfish';
+
+  @override
+  String nickAdj39(String g) {
+    return 'Loyal';
+  }
+
+  @override
+  String get nickAnimal39 => 'Firefly';
 
   @override
   String get m_adPrivacy => 'Ad privacy settings';

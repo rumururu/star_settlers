@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import '../l10n/l.dart';
+import 'star_catalog.dart' show systemName;
 
 extension OffsetX on Offset {
   Offset normalized() {
@@ -60,7 +61,7 @@ class PlayerShip {
 enum PirateKind { scout, raider, bomber, sniper, boss, jelly }
 
 class Pirate {
-  Pirate(this.kind, this.pos, this.hp, {this.name, this.dmgScale = 1})
+  Pirate(this.kind, this.pos, this.hp, {this.bountyId, this.dmgScale = 1})
       : maxHp = hp;
 
   final PirateKind kind;
@@ -75,8 +76,11 @@ class Pirate {
   double hitFlash = 0;
   double contactCooldown = 0;
 
-  /// 현상수배범 / 섹터 두목 이름
-  final String? name;
+  /// 현상수배범 이름표 번호 ([bountyNameOf]). 이름은 표시할 때 현재 언어로 만든다.
+  final int? bountyId;
+
+  /// 현상수배범 이름 (현재 언어). 일반 해적은 null
+  String? get name => bountyId == null ? null : bountyNameOf(bountyId!);
   bool sectorBoss = false;
 
   /// 두목 패턴: 체력 절반 이하 2페이즈, 특수 공격 타이머
@@ -254,8 +258,25 @@ enum PlanetKind { garden, desert, ice, lava, gas }
 
 /// 항성(섹터 중심, 원점)을 도는 행성
 class Planet {
-  Planet(this.name, this.radius, this.kind, {required this.orbitRadius, required this.orbitPhase});
-  final String name;
+  Planet(String name, this.radius, this.kind,
+      {required this.orbitRadius, required this.orbitPhase, String Function()? nameOf})
+      : _name = name,
+        _nameOf = nameOf,
+        _nameLocale = Lang.locale;
+
+  /// 이름은 언어가 바뀌면 [_nameOf]로 다시 만든다 (만든 때의 언어에 굳지 않게)
+  String _name;
+  final String Function()? _nameOf;
+  Locale _nameLocale;
+  String get name {
+    final f = _nameOf;
+    if (f != null && _nameLocale != Lang.locale) {
+      _name = f();
+      _nameLocale = Lang.locale;
+    }
+    return _name;
+  }
+
   final double radius;
   final PlanetKind kind;
 
@@ -398,11 +419,14 @@ extension ColonyBuildingInfo on ColonyBuilding {
 enum StationRole { home, defense, repair, support }
 
 extension StationRoleInfo on StationRole {
-  String get label => switch (this) {
-        StationRole.home => tr.g_stationRoleHome,
-        StationRole.defense => tr.g_stationRoleDefense,
-        StationRole.repair => tr.g_stationRoleRepair,
-        StationRole.support => tr.g_stationRoleSupport,
+  String get label => labelIn(tr);
+
+  /// [t] 언어의 역할 이름 (예전 저장의 정거장 이름을 알아볼 때 쓴다)
+  String labelIn(L10n t) => switch (this) {
+        StationRole.home => t.g_stationRoleHome,
+        StationRole.defense => t.g_stationRoleDefense,
+        StationRole.repair => t.g_stationRoleRepair,
+        StationRole.support => t.g_stationRoleSupport,
       };
   String get iconAsset => switch (this) {
         StationRole.home => 'act_station',
@@ -418,9 +442,127 @@ extension StationRoleInfo on StationRole {
       };
 }
 
+/// 지원하는 모든 언어의 번역표 (예전 저장의 현지화된 이름을 키로 되돌릴 때)
+Iterable<L10n> get allL10n => L10n.supportedLocales.map(lookupL10n);
+
+/// 현상수배범 이름표 수 (g_bounty0 … g_bounty9)
+const bountyCount = 10;
+
+/// 현상수배범 이름 [id]를 [t] 언어(기본: 현재 언어)로
+String bountyNameOf(int id, [L10n? t]) {
+  final l = t ?? tr;
+  return switch (id % bountyCount) {
+    0 => l.g_bounty0,
+    1 => l.g_bounty1,
+    2 => l.g_bounty2,
+    3 => l.g_bounty3,
+    4 => l.g_bounty4,
+    5 => l.g_bounty5,
+    6 => l.g_bounty6,
+    7 => l.g_bounty7,
+    8 => l.g_bounty8,
+    _ => l.g_bounty9,
+  };
+}
+
+/// 예전 저장의 현상수배범 이름(어느 언어든)을 이름표 번호로. 모르는 이름이면 null
+int? bountyIdFromText(String? text) {
+  if (text == null || text.isEmpty) return null;
+  for (final t in allL10n) {
+    for (var i = 0; i < bountyCount; i++) {
+      if (bountyNameOf(i, t) == text) return i;
+    }
+  }
+  return null;
+}
+
+enum StationNameKind { haven, outpost, numbered, custom }
+
+/// 정거장 이름. 언어 중립 키로 저장하고 표시할 때 현재 언어로 만든다.
+class StationName {
+  const StationName.haven()
+      : kind = StationNameKind.haven, sector = 0, role = null, number = 0, custom = null;
+  const StationName.outpost(this.sector)
+      : kind = StationNameKind.outpost, role = null, number = 0, custom = null;
+  const StationName.numbered(StationRole this.role, this.number)
+      : kind = StationNameKind.numbered, sector = 0, custom = null;
+  const StationName.custom(String this.custom)
+      : kind = StationNameKind.custom, sector = 0, role = null, number = 0;
+
+  final StationNameKind kind;
+  final int sector;
+  final StationRole? role;
+  final int number;
+  final String? custom;
+
+  /// 현재 언어로 된 이름
+  String get text => switch (kind) {
+        StationNameKind.haven => tr.g_stationHaven,
+        StationNameKind.outpost => tr.g_stationOutpost(systemName(sector)),
+        StationNameKind.numbered => tr.g_stationNumbered(role!.label, number),
+        StationNameKind.custom => custom ?? '',
+      };
+
+  Map<String, dynamic> toJson() => {
+        'k': kind.name,
+        if (kind == StationNameKind.outpost) 's': sector,
+        if (kind == StationNameKind.numbered) 'r': role!.name,
+        if (kind == StationNameKind.numbered) 'n': number,
+        if (kind == StationNameKind.custom) 'c': custom,
+      };
+
+  /// 새 형식 키. 알아볼 수 없으면 null
+  static StationName? fromJson(Object? j) {
+    if (j is! Map) return null;
+    final kind = StationNameKind.values.where((k) => k.name == j['k']).firstOrNull;
+    switch (kind) {
+      case StationNameKind.haven:
+        return const StationName.haven();
+      case StationNameKind.outpost:
+        final s = j['s'];
+        return s is int ? StationName.outpost(s) : null;
+      case StationNameKind.numbered:
+        final r = StationRole.values.where((r) => r.name == j['r']).firstOrNull;
+        final n = j['n'];
+        return r != null && n is int ? StationName.numbered(r, n) : null;
+      case StationNameKind.custom:
+        final c = j['c'];
+        return c is String ? StationName.custom(c) : null;
+      case null:
+        return null;
+    }
+  }
+
+  /// 예전 저장(이름이 저장 당시 언어의 문자열)을 키로 되돌린다.
+  /// 어느 언어의 기본 이름과도 맞지 않으면 역할로 기본 키를 정한다
+  /// (본거지: 태양계면 헤이븐, 아니면 그 항성계 전진기지 / 나머지: 이름 속 번호, 없으면 [fallbackNumber]).
+  static StationName fromLegacy(String? text,
+      {required StationRole role, required int sector, required int fallbackNumber}) {
+    final name = text ?? '';
+    final digits = RegExp(r'\d+').allMatches(name).map((m) => int.parse(m.group(0)!)).toList();
+    for (final t in allL10n) {
+      if (name == t.g_stationHaven) return const StationName.haven();
+      for (final n in digits) {
+        if (name == t.g_stationNumbered(role.labelIn(t), n)) return StationName.numbered(role, n);
+      }
+    }
+    if (role == StationRole.home) {
+      return sector == 0 ? const StationName.haven() : StationName.outpost(sector);
+    }
+    return StationName.numbered(role, digits.isNotEmpty ? digits.last : fallbackNumber);
+  }
+}
+
 class Station {
-  Station(this.name, this.pos, {this.role = StationRole.support});
-  final String name;
+  /// [name]은 사용자가 정한 그대로의 이름. 게임이 짓는 이름은 [Station.named]
+  Station(String name, this.pos, {this.role = StationRole.support}) : label = StationName.custom(name);
+  Station.named(this.label, this.pos, {this.role = StationRole.support});
+
+  /// 언어 중립 이름 키 (저장 키 'nk')
+  final StationName label;
+
+  /// 현재 언어로 된 이름
+  String get name => label.text;
   final Offset pos;
   final StationRole role;
   int habitatLevel = 1;

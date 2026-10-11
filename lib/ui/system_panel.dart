@@ -75,7 +75,7 @@ class SystemPanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: Space.xs),
-              Text(tr.u_devHint, style: dimStyle),
+              Text(keepAll(tr.u_devHint), style: dimStyle),
             ],
           ),
         ),
@@ -218,7 +218,7 @@ class StationBuildPanel extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(r.label, style: Ts.body.copyWith(fontWeight: FontWeight.bold)),
-                        Text(r.blurb, style: dimStyle),
+                        Text(keepAll(r.blurb), style: dimStyle),
                       ],
                     ),
                   ),

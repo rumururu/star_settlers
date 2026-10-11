@@ -1,0 +1,5 @@
+# Fastlane Appfile — 우주 개척단 (Star Settlers)
+package_name("com.mkideabox.starsettlers")
+
+# Google Play Console API 키 (git에 올리지 않음). 원본은 ~/.claude/FASTLANE.md 참고.
+json_key_file("fastlane/play-store-key.json")

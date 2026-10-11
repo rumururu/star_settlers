@@ -5,7 +5,7 @@
 ## 1. 지금 준비된 것
 | 항목 | 위치 |
 |---|---|
-| 패키지 ID `com.newpl.star_settlers` | `android/app/build.gradle.kts` |
+| 패키지 ID `com.mkideabox.starsettlers` | `android/app/build.gradle.kts` |
 | 앱 이름 "우주 개척단" | AndroidManifest, iOS Info.plist, web |
 | 앱 아이콘 (치비 선장) | `assets/icon/`, 생성 스크립트 `tool/gen_icon_test.dart`, `tool/gen_platform_icons.py` |
 | 인앱결제 연동 코드 | `lib/services/monetization.dart` (`StoreMonetization`, `in_app_purchase`) |

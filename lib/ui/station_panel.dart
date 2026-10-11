@@ -129,7 +129,7 @@ Widget _row(String title, String desc, Widget trailing, {Widget? leading, Widget
                       badge,
                     ],
                   ),
-                Text(desc, style: dimStyle),
+                Text(keepAll(desc), style: dimStyle),
               ],
             ),
           ),
@@ -154,10 +154,10 @@ class _ShipTab extends StatelessWidget {
       UpgradeKind.hull => tr.u_upHull(w.playerMaxHp.toInt()),
       UpgradeKind.engine => tr.u_upEngine(w.playerSpeed.toInt()),
       UpgradeKind.missile => w.level(k) == 0
-          ? tr.u_upMissileIntro
+          ? keyHint(tr.u_upMissileIntro)
           : tr.u_upMissile(2 + w.level(k) ~/ 2, w.missileCooldownMax.toStringAsFixed(1)),
       UpgradeKind.shield => w.level(k) == 0
-          ? tr.u_upShieldIntro
+          ? keyHint(tr.u_upShieldIntro)
           : tr.u_upShield((2.5 + w.level(k) * 0.5).toStringAsFixed(1), w.shieldCooldownMax.toStringAsFixed(1)),
       UpgradeKind.drone => w.level(k) == 0
           ? tr.u_upDroneIntro
@@ -219,8 +219,8 @@ class _ShipTab extends StatelessWidget {
     } else if (unlocked) {
       trailing = actionBtn(tr.u_board, true, () => act(() => world.switchShip(t)));
     } else {
-      trailing = actionBtn('⭐${t.gemPrice}', p.gems >= t.gemPrice, () => act(() => world.buyShip(t)),
-          color: const Color(0xFFAD1457));
+      trailing = actionBtn('${t.gemPrice}', p.gems >= t.gemPrice, () => act(() => world.buyShip(t)),
+          icon: 'gem', iconSize: IconSz.inline, color: const Color(0xFFAD1457));
     }
     final ability = t.ability.isEmpty ? '' : '\n✨ ${t.ability}';
     final unlockHint = unlocked ? '' : (t.premium ? '\n${tr.u_gemsOnly}' : '\n${tr.u_unlockOrGems(t.unlockDesc)}');
@@ -378,6 +378,8 @@ class _CrewTab extends StatelessWidget {
               CrewMember.oddsText(CrewMember.creditOdds), CrewMember.oddsText(CrewMember.gemOdds)),
           style: dimStyle,
         ),
+        // 직책은 모든 모집에서 직책 목록 중 균등 추첨 (crew.dart CrewMember.random)
+        Text(tr.u_recruitRoleOdds(CrewRole.values.length, _pct(100 / CrewRole.values.length)), style: dimStyle),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8,
@@ -554,4 +556,10 @@ class _MarketTab extends StatelessWidget {
       ],
     );
   }
+}
+
+/// 확률 표기: 16.666… → "16.7%", 20 → "20%"
+String _pct(double v) {
+  final s = v.toStringAsFixed(1);
+  return '${s.endsWith('.0') ? s.substring(0, s.length - 2) : s}%';
 }

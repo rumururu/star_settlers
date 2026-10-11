@@ -1,0 +1,87 @@
+# Fastlane Fastfile — 우주 개척단 (Star Settlers)
+# ios/.env.local (git 제외)에 둔다:
+#   ASC_KEY_ID=…  ASC_ISSUER_ID=…   (키 파일: ios/fastlane/AuthKey_<KEY_ID>.p8)
+#   REVENUECAT_API_KEY_IOS=appl_…   (없으면 빌드를 멈춘다)
+default_platform(:ios)
+
+env_file = File.expand_path('../.env.local', __dir__)
+if File.exist?(env_file)
+  File.foreach(env_file) do |line|
+    next if line.strip.empty? || line.strip.start_with?('#')
+    key, value = line.strip.split('=', 2)
+    ENV[key] = value if key && value && ENV[key].nil?
+  end
+end
+
+BUNDLE_ID = "com.mkideabox.starsettlers"
+IPA_GLOB = "../build/ios/ipa/*.ipa"
+
+platform :ios do
+  private_lane :auth_api_key do
+    app_store_connect_api_key(
+      key_id: ENV['ASC_KEY_ID'],
+      issuer_id: ENV['ASC_ISSUER_ID'],
+      key_filepath: "./fastlane/AuthKey_#{ENV['ASC_KEY_ID']}.p8",
+      duration: 1200,
+      in_house: false,
+    )
+  end
+
+  desc "Apple Developer 에 번들 ID 등록 + 인앱 결제 기능 (API 키, 웹 로그인 불필요)"
+  lane :register_id do
+    auth_api_key
+    b = Spaceship::ConnectAPI::BundleId.find(BUNDLE_ID) ||
+        Spaceship::ConnectAPI::BundleId.create(name: "Star Settlers", platform: "IOS", identifier: BUNDLE_ID)
+    UI.success("bundle id #{b.identifier} (#{b.id})")
+    caps = b.get_capabilities.map(&:capability_type)
+    UI.message("capabilities: #{caps.inspect}")
+    app = Spaceship::ConnectAPI::App.find(BUNDLE_ID)
+    UI.message(app ? "App Store Connect 앱 있음: #{app.name} (#{app.id})" : "App Store Connect 앱 없음 (웹에서 생성 필요)")
+  end
+
+  desc "배포용 프로비저닝 프로필 받기 (수동 서명)"
+  lane :sync_profile do
+    sigh(app_identifier: BUNDLE_ID, api_key: auth_api_key, force: false)
+  end
+
+  desc "IPA 빌드"
+  lane :build do
+    project_root = File.expand_path('../..', __dir__)
+    extra = ""
+    extra += " --build-number=#{ENV['BUILD_NUMBER']}" unless ENV["BUILD_NUMBER"].to_s.empty?
+    UI.user_error!("REVENUECAT_API_KEY_IOS 없음 (ios/.env.local)") if ENV["REVENUECAT_API_KEY_IOS"].to_s.empty?
+    extra += " --dart-define=REVENUECAT_API_KEY_IOS=#{ENV['REVENUECAT_API_KEY_IOS']}"
+    clean_env = "env -u GEM_HOME -u GEM_PATH -u GEM_ROOT -u RUBYLIB -u RUBYOPT -u BUNDLE_BIN_PATH -u BUNDLE_GEMFILE"
+    sh("cd #{project_root} && #{clean_env} PATH=/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:$PATH flutter build ipa --release --export-options-plist=ios/ExportOptions.plist#{extra}")
+  end
+
+  desc "TestFlight 업로드"
+  lane :beta do
+    api_key = auth_api_key
+    sync_profile
+    build
+    upload_to_testflight(api_key: api_key, ipa: Dir[IPA_GLOB].first, skip_waiting_for_build_processing: true, skip_submission: true)
+  end
+
+  desc "App Store 빌드 업로드 (심사 제출은 수동)"
+  lane :release do
+    api_key = auth_api_key
+    sync_profile
+    build
+    upload_to_app_store(
+      api_key: api_key, ipa: Dir[IPA_GLOB].first, skip_metadata: true, skip_screenshots: true,
+      submit_for_review: false, automatic_release: false, force: true,
+      precheck_include_in_app_purchases: false, run_precheck_before_submit: false,
+    )
+  end
+
+  desc "App Store 등록정보(10개 언어 이름·부제·설명·키워드·스크린샷)만 업로드. 빌드·심사 제출 없음"
+  lane :listing do
+    upload_to_app_store(
+      api_key: auth_api_key, app_identifier: BUNDLE_ID,
+      skip_binary_upload: true, skip_app_version_update: true,
+      overwrite_screenshots: true, submit_for_review: false,
+      precheck_include_in_app_purchases: false, run_precheck_before_submit: false, force: true,
+    )
+  end
+end

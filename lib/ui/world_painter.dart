@@ -287,7 +287,8 @@ class WorldPainter extends CustomPainter {
               deco);
         }
       } else {
-        final r = Random(p.name.hashCode);
+        // 이름은 언어마다 달라서 시드로 쓰면 언어를 바꿀 때 무늬가 바뀐다. 궤도로 정한다.
+        final r = Random(p.orbitRadius.round() * 7919 + (p.orbitPhase * 1000).round());
         for (var i = 0; i < 6; i++) {
           final o = Offset(randRange(r, -0.7, 0.7), randRange(r, -0.7, 0.7)) * p.radius;
           canvas.drawCircle(

@@ -768,6 +768,9 @@ class L10nKo extends L10n {
   String get m_loginWelcome => '오늘도 와주셨네요, 선장님!';
 
   @override
+  String get m_loginFirst => '어서 오세요, 선장님! 첫 출석 보상이에요.';
+
+  @override
   String get m_loginStreakHint => '7일 연속 출석하면 ⭐50!';
 
   @override
@@ -857,20 +860,21 @@ class L10nKo extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return '우주 개척단은 게임 진행 데이터(진행 상황, 설정)를 기기 안에만 저장하며, 개인을 식별할 수 있는 정보를 수집하지 않습니다.\n\n인앱 결제는 Google Play / App Store가 처리하며, 결제 정보는 개발자에게 전달되지 않습니다.\n\n보상형 광고가 적용될 경우 광고 제공사(Google AdMob)가 광고 식별자 등을 수집할 수 있습니다.\n\n문의: $email (설정 → 개발자에게 피드백 보내기)';
+    return '우주 개척단은 회원가입이 없고 개인을 식별하는 정보를 수집하지 않습니다. 게임 데이터(진행 상황, 재화, 구매 기록, 설정)는 기기 안에만 저장됩니다. 단, 주간 순위표에 직접 참여하면 아래 순위표 정보만 서버로 보냅니다.\n\n결제: Google Play / App Store가 처리하며 결제 수단 정보는 개발자에게 전달되지 않습니다. 구매 확인과 복원에 RevenueCat을 사용하며, 익명 사용자 ID와 구매 내역이 처리됩니다.\n\n광고: 직접 선택할 때만 Google AdMob 보상형 광고가 나옵니다. AdMob은 광고 제공, 허용되는 경우의 맞춤형 광고, 광고 측정을 위해 광고 ID, IP 주소, 기기 정보를 사용할 수 있습니다. 유럽 경제 지역·영국·스위스에서는 처음 실행할 때 동의를 묻고, 설정 → 광고 개인정보 설정에서 바꿀 수 있습니다.\n\n알림: 기기 안에서 예약하는 로컬 알림이며 외부로 전송되지 않습니다.\n\n피드백: 직접 메일을 보낼 때만 내용과 앱 버전·기기 정보가 개발자에게 전달됩니다.\n\n주간 순위표(선택): 설정이나 순위 화면에서 직접 켤 때만 참여하며 기본은 꺼져 있습니다. 보내는 것은 무작위 설치 ID, 게임이 정해진 단어 목록으로 만든 별명, 주간 점수뿐입니다. 이름이나 직접 입력한 글자는 보내지 않고 채팅도 없습니다. 다른 플레이어에게는 별명과 점수만 보입니다. 서버는 Supabase(서울 리전)입니다.\n\n삭제: 설정 → 모든 데이터 초기화로 기기의 데이터를 지울 수 있습니다. 순위표에 참여했다면 초기화할 때 서버의 순위표 기록(설치 ID·별명·점수)도 함께 삭제되며, 메일로 삭제를 요청할 수도 있습니다.\n\n전체 방침: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\n문의: $email';
   }
 
   @override
   String get m_wipeTitle => '모든 데이터 초기화';
 
   @override
-  String get m_wipeDesc => '진행 상황, 젬, 꾸미기가 모두 삭제돼요';
+  String get m_wipeDesc => '진행 상황, 젬, 꾸미기와 순위표 기록이 모두 삭제돼요';
 
   @override
   String get m_wipeConfirmTitle => '정말 초기화할까요?';
 
   @override
-  String get m_wipeConfirmBody => '되돌릴 수 없어요. 구매한 상품은 \"구매 복원\"으로 되찾을 수 있어요.';
+  String get m_wipeConfirmBody =>
+      '되돌릴 수 없어요. 젬과 진행 상황은 영구히 삭제돼요. 스타터 팩과 함대 사령관 패스는 \"구매 복원\"으로 되찾을 수 있어요.';
 
   @override
   String get m_wipeOk => '초기화';
@@ -932,7 +936,7 @@ class L10nKo extends L10n {
   String get m_tabFree => '무료 젬';
 
   @override
-  String get m_testMode => '🧪 테스트 모드: 실제 결제/광고가 일어나지 않아요';
+  String get m_testMode => '🧪 테스트 모드: 실제 결제 없음 · 광고는 Google 테스트 광고';
 
   @override
   String get m_owned => '보유 중';
@@ -2447,6 +2451,431 @@ class L10nKo extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return '⭐$gems → 💰$credits로 교환할까요?';
   }
+
+  @override
+  String get m_purchaseFailed => '스토어에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.';
+
+  @override
+  String get m_adWatchToEnd => '광고를 끝까지 봐야 보상을 받을 수 있어요.';
+
+  @override
+  String get u_autoFireOn => '켬';
+
+  @override
+  String get u_autoFireOff => '끔';
+
+  @override
+  String u_recruitRoleOdds(int count, String pct) {
+    return '직책(모든 모집 공통): $count종 중 무작위, 각 $pct';
+  }
+
+  @override
+  String m_feedbackSubject(String app) {
+    return '$app 피드백';
+  }
+
+  @override
+  String get lb_menu => '🏅 주간 순위';
+
+  @override
+  String get lb_menuShort => '순위';
+
+  @override
+  String get lb_title => '🏅 주간 개척 순위';
+
+  @override
+  String get lb_join => '순위표 참여하기';
+
+  @override
+  String get lb_joinDesc =>
+      '익명 ID, 게임이 만든 별명, 이번 주 점수만 보내요. 이름·채팅·직접 입력한 글자는 보내지 않아요. 언제든 끌 수 있어요.';
+
+  @override
+  String get lb_yourNick => '내 별명';
+
+  @override
+  String lb_reroll(int count) {
+    return '새 별명 ($count)';
+  }
+
+  @override
+  String lb_weekPoints(String points) {
+    return '이번 주 개척 점수 $points점';
+  }
+
+  @override
+  String lb_rank(int rank, int total) {
+    return '$rank위 / $total명';
+  }
+
+  @override
+  String lb_rankOnly(int rank) {
+    return '$rank위';
+  }
+
+  @override
+  String get lb_top50 => '이번 주 상위 50';
+
+  @override
+  String get lb_empty => '아직 이번 주 기록이 없어요. 첫 번째가 되어 보세요!';
+
+  @override
+  String get lb_retry => '다시 시도';
+
+  @override
+  String get lb_refresh => '새로고침';
+
+  @override
+  String get lb_offline => '연결이 없어요. 게임은 그대로 할 수 있어요. 나중에 다시 해 보세요.';
+
+  @override
+  String get lb_rateLimited => '너무 자주 보냈어요. 1분 뒤에 다시 해 보세요.';
+
+  @override
+  String get lb_rejected => '이 점수는 보낼 수 없어요.';
+
+  @override
+  String get lb_serverError => '순위표가 바빠요. 나중에 다시 해 보세요.';
+
+  @override
+  String get lb_unavailable => '순위표를 사용할 수 없어요.';
+
+  @override
+  String get lb_optedOut => '‘순위표 참여하기’를 켜면 내 점수가 올라가요.';
+
+  @override
+  String get lb_howTo => '식민지 레벨 +100 · 새 항성계 +500 · 해적 격추 +5 · 두목 +200';
+
+  @override
+  String get lb_resets => '매주 월요일 0시(UTC)에 새 주가 시작돼요.';
+
+  @override
+  String nickFormat(String adj, String animal, String number) {
+    return '$adj $animal $number';
+  }
+
+  @override
+  String get nickGenders => '';
+
+  @override
+  String nickAdj0(String g) {
+    return '용감한';
+  }
+
+  @override
+  String get nickAnimal0 => '수달';
+
+  @override
+  String nickAdj1(String g) {
+    return '밝은';
+  }
+
+  @override
+  String get nickAnimal1 => '판다';
+
+  @override
+  String nickAdj2(String g) {
+    return '차분한';
+  }
+
+  @override
+  String get nickAnimal2 => '여우';
+
+  @override
+  String nickAdj3(String g) {
+    return '영리한';
+  }
+
+  @override
+  String get nickAnimal3 => '토끼';
+
+  @override
+  String nickAdj4(String g) {
+    return '우주의';
+  }
+
+  @override
+  String get nickAnimal4 => '부엉이';
+
+  @override
+  String nickAdj5(String g) {
+    return '호기심 많은';
+  }
+
+  @override
+  String get nickAnimal5 => '펭귄';
+
+  @override
+  String nickAdj6(String g) {
+    return '통통 튀는';
+  }
+
+  @override
+  String get nickAnimal6 => '코알라';
+
+  @override
+  String nickAdj7(String g) {
+    return '꿈꾸는';
+  }
+
+  @override
+  String get nickAnimal7 => '돌고래';
+
+  @override
+  String nickAdj8(String g) {
+    return '포근한';
+  }
+
+  @override
+  String get nickAnimal8 => '거북이';
+
+  @override
+  String nickAdj9(String g) {
+    return '빠른';
+  }
+
+  @override
+  String get nickAnimal9 => '고슴도치';
+
+  @override
+  String nickAdj10(String g) {
+    return '복슬복슬한';
+  }
+
+  @override
+  String get nickAnimal10 => '청설모';
+
+  @override
+  String nickAdj11(String g) {
+    return '다정한';
+  }
+
+  @override
+  String get nickAnimal11 => '아기 고양이';
+
+  @override
+  String nickAdj12(String g) {
+    return '상냥한';
+  }
+
+  @override
+  String get nickAnimal12 => '강아지';
+
+  @override
+  String nickAdj13(String g) {
+    return '빛나는';
+  }
+
+  @override
+  String get nickAnimal13 => '아기 오리';
+
+  @override
+  String nickAdj14(String g) {
+    return '황금빛';
+  }
+
+  @override
+  String get nickAnimal14 => '아기 양';
+
+  @override
+  String nickAdj15(String g) {
+    return '행복한';
+  }
+
+  @override
+  String get nickAnimal15 => '물범';
+
+  @override
+  String nickAdj16(String g) {
+    return '재미있는';
+  }
+
+  @override
+  String get nickAnimal16 => '고래';
+
+  @override
+  String nickAdj17(String g) {
+    return '착한';
+  }
+
+  @override
+  String get nickAnimal17 => '햄스터';
+
+  @override
+  String nickAdj18(String g) {
+    return '행운의';
+  }
+
+  @override
+  String get nickAnimal18 => '비버';
+
+  @override
+  String nickAdj19(String g) {
+    return '노래하는';
+  }
+
+  @override
+  String get nickAnimal19 => '너구리';
+
+  @override
+  String nickAdj20(String g) {
+    return '힘센';
+  }
+
+  @override
+  String get nickAnimal20 => '앵무새';
+
+  @override
+  String nickAdj21(String g) {
+    return '알록달록한';
+  }
+
+  @override
+  String get nickAnimal21 => '무당벌레';
+
+  @override
+  String nickAdj22(String g) {
+    return '달콤한';
+  }
+
+  @override
+  String get nickAnimal22 => '참새';
+
+  @override
+  String nickAdj23(String g) {
+    return '예의 바른';
+  }
+
+  @override
+  String get nickAnimal23 => '아기 사슴';
+
+  @override
+  String nickAdj24(String g) {
+    return '장난스러운';
+  }
+
+  @override
+  String get nickAnimal24 => '조랑말';
+
+  @override
+  String nickAdj25(String g) {
+    return '조용한';
+  }
+
+  @override
+  String get nickAnimal25 => '아기 곰';
+
+  @override
+  String nickAdj26(String g) {
+    return '반짝이는';
+  }
+
+  @override
+  String get nickAnimal26 => '아기 사자';
+
+  @override
+  String nickAdj27(String g) {
+    return '은빛';
+  }
+
+  @override
+  String get nickAnimal27 => '아기 호랑이';
+
+  @override
+  String nickAdj28(String g) {
+    return '졸린';
+  }
+
+  @override
+  String get nickAnimal28 => '기린';
+
+  @override
+  String nickAdj29(String g) {
+    return '달빛';
+  }
+
+  @override
+  String get nickAnimal29 => '얼룩말';
+
+  @override
+  String nickAdj30(String g) {
+    return '태양의';
+  }
+
+  @override
+  String get nickAnimal30 => '코끼리';
+
+  @override
+  String nickAdj31(String g) {
+    return '마법의';
+  }
+
+  @override
+  String get nickAnimal31 => '하마';
+
+  @override
+  String nickAdj32(String g) {
+    return '슈퍼';
+  }
+
+  @override
+  String get nickAnimal32 => '라마';
+
+  @override
+  String nickAdj33(String g) {
+    return '별빛';
+  }
+
+  @override
+  String get nickAnimal33 => '알파카';
+
+  @override
+  String nickAdj34(String g) {
+    return '해맑은';
+  }
+
+  @override
+  String get nickAnimal34 => '미어캣';
+
+  @override
+  String nickAdj35(String g) {
+    return '고귀한';
+  }
+
+  @override
+  String get nickAnimal35 => '불가사리';
+
+  @override
+  String nickAdj36(String g) {
+    return '조그만';
+  }
+
+  @override
+  String get nickAnimal36 => '해마';
+
+  @override
+  String nickAdj37(String g) {
+    return '지혜로운';
+  }
+
+  @override
+  String get nickAnimal37 => '다람쥐';
+
+  @override
+  String nickAdj38(String g) {
+    return '눈꽃';
+  }
+
+  @override
+  String get nickAnimal38 => '금붕어';
+
+  @override
+  String nickAdj39(String g) {
+    return '든든한';
+  }
+
+  @override
+  String get nickAnimal39 => '반딧불이';
 
   @override
   String get m_adPrivacy => '광고 개인정보 설정';

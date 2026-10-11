@@ -74,6 +74,9 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  /// 화면을 열 때 한 번만 묻는다 (스위치를 켤 때마다 다시 묻고 깜박이지 않게)
+  final Future<bool> _adPrivacyRequired = AdService.instance.privacyOptionsRequired();
+
   Future<void> _save() async {
     await SaveService.saveProfile(AppState.profile);
     setState(() {});
@@ -110,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF0D0B26),
       appBar: AppBar(backgroundColor: const Color(0xFF151236), title: Text(tr.m_settingsTitle)),
-      body: ListView(
+      body: contentWidth(ListView(
         children: [
           SwitchListTile(
             title: Text(tr.m_settingsSound),
@@ -132,7 +135,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           SwitchListTile(
             title: Text(tr.m_settingsNotify),
-            subtitle: Text(tr.m_settingsNotifyDesc),
+            subtitle: Text(keepAll(tr.m_settingsNotifyDesc)),
             value: p.notifications,
             onChanged: (v) {
               p.notifications = v;
@@ -148,6 +151,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _save();
             },
           ),
+          // 주간 순위표 참여 (순위 화면의 스위치와 같은 값)
+          if (AppState.leaderboard.configured)
+            SwitchListTile(
+              title: Text(tr.lb_join),
+              subtitle: Text(keepAll(tr.lb_joinDesc)),
+              value: p.leaderboardOptIn,
+              onChanged: (v) async {
+                await AppState.leaderboard.setOptIn(v);
+                if (v) AppState.submitLeaderboard();
+                setState(() {});
+              },
+            ),
           ListTile(
             leading: const Icon(Icons.language),
             title: Text(tr.m_settingsLanguage == 'Language' ? 'Language' : '${tr.m_settingsLanguage} / Language'),
@@ -171,14 +186,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               builder: (c) => AlertDialog(
                 backgroundColor: kPanelColor,
                 title: Text(tr.m_privacyTitle),
-                content: SingleChildScrollView(child: Text(tr.m_privacyBody(FeedbackService.email))),
+                content: SingleChildScrollView(child: SelectableText(tr.m_privacyBody(FeedbackService.email))),
                 actions: [TextButton(onPressed: () => Navigator.pop(c), child: Text(tr.m_close))],
               ),
             ),
           ),
           // 광고 동의가 필요한 지역(유럽 등)에서만: 동의 변경·철회
           FutureBuilder<bool>(
-            future: AdService.instance.privacyOptionsRequired(),
+            future: _adPrivacyRequired,
             builder: (context, snap) => snap.data != true
                 ? const SizedBox.shrink()
                 : ListTile(
@@ -190,12 +205,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.delete_forever, color: Colors.redAccent),
             title: Text(tr.m_wipeTitle, style: const TextStyle(color: Colors.redAccent)),
-            subtitle: Text(tr.m_wipeDesc),
+            subtitle: Text(keepAll(tr.m_wipeDesc)),
             onTap: () async {
               if (!await confirmDialog(context, tr.m_wipeConfirmTitle, tr.m_wipeConfirmBody,
                   ok: tr.m_wipeOk)) {
                 return;
               }
+              // 순위표에 참여했으면 서버 기록도 지운다 (기다리지 않음 — 실패해도 초기화는 진행)
+              AppState.forgetLeaderboard();
               await SaveService.wipeAll();
               AppState.profile = Profile();
               AppState.world = null;
@@ -206,7 +223,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.mail_outline),
             title: Text(tr.m_feedbackTitle),
-            subtitle: Text(tr.m_feedbackDesc),
+            subtitle: Text(keepAll(tr.m_feedbackDesc)),
             onTap: () async {
               if (!await FeedbackService.send() && context.mounted) {
                 toast(context, tr.m_noMailApp(FeedbackService.email));
@@ -215,7 +232,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ListTile(title: Text(tr.m_aboutTitle), subtitle: Text(tr.m_version('1.0.0'))),
         ],
-      ),
+      )),
     );
   }
 }
@@ -277,7 +294,7 @@ class _DailyQuestScreenState extends State<DailyQuestScreen> {
             color: const Color(0xFF311B92),
             child: ListTile(
               title: Text(tr.m_dailyBonusTitle, style: bodyStyle),
-              subtitle: Text(tr.m_dailyBonusDesc, style: dimStyle),
+              subtitle: Text(keepAll(tr.m_dailyBonusDesc), style: dimStyle),
               trailing: p.dailyClaimed.contains('bonus')
                   ? Text(tr.m_done, style: const TextStyle(color: Color(0xFF7CFFB2)))
                   : actionBtn(tr.m_claimGems(dailyBonusGems), p.dailyBonusReady, () => _claim('bonus'),

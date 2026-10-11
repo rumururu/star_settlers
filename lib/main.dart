@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'game/cosmetics.dart';
 import 'game/models.dart';
@@ -14,12 +15,15 @@ import 'ui/common.dart';
 import 'ui/game_icons.dart';
 import 'ui/game_screen.dart';
 import 'ui/home_screen.dart';
+import 'ui/leaderboard_screen.dart';
 import 'ui/meta_screens.dart';
 import 'ui/shop_screen.dart';
 import 'ui/sprites.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // 세로 전용 게임 (네이티브 설정과 함께 Dart 쪽에서도 고정)
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Future.wait([
     AppState.init().then((_) => Lang.apply(AppState.profile.language)),
     // 게임 화면 스프라이트 (함선 종류 × 스킨, 해적, 행성, 정거장)
@@ -78,7 +82,7 @@ class StarSettlersApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           colorSchemeSeed: kAccent,
-          fontFamily: 'Jua',
+          fontFamily: Ts.family,
           useMaterial3: true,
           // 스타일을 안 준 글자도 토큰 크기를 따른다
           textTheme: const TextTheme(
@@ -90,6 +94,9 @@ class StarSettlersApp extends StatelessWidget {
             titleLarge: Ts.title,
           ),
         ),
+        // 접근성 큰 글자에서도 HUD·버튼이 넘치지 않게 글자 배율은 1.3배까지만
+        builder: (context, child) =>
+            MediaQuery.withClampedTextScaling(maxScaleFactor: 1.3, child: child ?? const SizedBox.shrink()),
         home: const TitleScreen(),
       );
 }
@@ -129,6 +136,7 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
     final p = AppState.profile;
     final reward = p.pendingLogin(now);
     if (reward == null || !mounted) return;
+    final first = p.lastLoginDay == 0;
     await showDialog<void>(
       context: context,
       builder: (c) => AlertDialog(
@@ -138,10 +146,11 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
           mainAxisSize: MainAxisSize.min,
           children: [
             const ChibiPortrait(style: ChibiStyle.advisor, size: 90),
-            Text(tr.m_loginWelcome, style: bodyStyle),
+            // 처음 받는 출석 보상이면 '오늘도 와주셨네요' 대신 첫 인사
+            Text(keepAll(first ? tr.m_loginFirst : tr.m_loginWelcome), style: bodyStyle, textAlign: TextAlign.center),
             const SizedBox(height: 8),
-            Text('⭐ $reward', style: Ts.title.copyWith(color: Color(0xFFFF80AB))),
-            Text(tr.m_loginStreakHint, style: dimStyle),
+            iconValue('gem', '$reward', size: 28, style: Ts.title.copyWith(color: const Color(0xFFFF80AB))),
+            gemText(keepAll(tr.m_loginStreakHint), style: dimStyle, textAlign: TextAlign.center),
           ],
         ),
         actions: [
@@ -183,7 +192,8 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
 
   Future<void> _open(Widget page) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => page));
-    if (mounted) setState(() {});
+    // 설정의 '데이터 초기화' 등으로 세이브가 사라졌을 수 있으니 이어하기 상태를 다시 읽는다
+    await _refresh();
   }
 
   @override
@@ -211,8 +221,8 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
             child: LayoutBuilder(
               builder: (context, box) {
                 final logoW = min(box.maxWidth * 0.82, 520.0);
-                // 메뉴 5칸이 좁은 폰에서도 한 줄에 들어가게
-                final tileW = min(76.0, (box.maxWidth - Space.l * 2 - Space.s * 4) / 5);
+                // 메뉴 6칸이 좁은 폰에서도 한 줄에 들어가게
+                final tileW = min(76.0, (box.maxWidth - Space.l * 2 - Space.s * 5) / 6);
                 return Column(
                   children: [
                     Align(
@@ -280,6 +290,7 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                             badge: p.dailyClaimable > 0),
                         _iconMenu('menu_trophy', tr.m_menuAchievements, () => _open(const AchievementsScreen()), tileW,
                             badge: p.claimable.isNotEmpty),
+                        _iconMenu('menu_rank', tr.lb_menuShort, () => _open(appLeaderboardScreen()), tileW),
                         _iconMenu('menu_settings', tr.m_menuSettings, () => _open(const SettingsScreen()), tileW),
                       ],
                     ),

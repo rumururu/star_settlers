@@ -1,10 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 주간 순위표(공용 게임 서버)·광고·결제 통신. 라이브러리 병합에 기대지 않고 직접 선언한다 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:label="@string/app_name"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
-        <!-- AdMob 앱 ID. 지금은 구글 공식 테스트 ID — 출시 전에 실제 ID로 교체 -->
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true">
+        <!-- AdMob 앱 ID (실제 운영 ID, Android 앱용). 테스트 시에는 광고 단위 쪽에서 테스트 단위를 쓴다 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-9040255849498359~8708152613"/>
@@ -23,6 +26,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
+            android:screenOrientation="portrait"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"

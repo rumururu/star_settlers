@@ -1350,6 +1350,12 @@ abstract class L10n {
   /// **'오늘도 와주셨네요, 선장님!'**
   String get m_loginWelcome;
 
+  /// 출석 보상 대화상자 인사 (처음 받는 날: 첫 실행이라 "오늘도 와주셨네요"를 쓰지 않는다)
+  ///
+  /// In ko, this message translates to:
+  /// **'어서 오세요, 선장님! 첫 출석 보상이에요.'**
+  String get m_loginFirst;
+
   /// 출석 보상 대화상자 안내
   ///
   /// In ko, this message translates to:
@@ -1515,7 +1521,7 @@ abstract class L10n {
   /// 개인정보처리방침 요약 본문
   ///
   /// In ko, this message translates to:
-  /// **'우주 개척단은 게임 진행 데이터(진행 상황, 설정)를 기기 안에만 저장하며, 개인을 식별할 수 있는 정보를 수집하지 않습니다.\n\n인앱 결제는 Google Play / App Store가 처리하며, 결제 정보는 개발자에게 전달되지 않습니다.\n\n보상형 광고가 적용될 경우 광고 제공사(Google AdMob)가 광고 식별자 등을 수집할 수 있습니다.\n\n문의: {email} (설정 → 개발자에게 피드백 보내기)'**
+  /// **'우주 개척단은 회원가입이 없고 개인을 식별하는 정보를 수집하지 않습니다. 게임 데이터(진행 상황, 재화, 구매 기록, 설정)는 기기 안에만 저장됩니다. 단, 주간 순위표에 직접 참여하면 아래 순위표 정보만 서버로 보냅니다.\n\n결제: Google Play / App Store가 처리하며 결제 수단 정보는 개발자에게 전달되지 않습니다. 구매 확인과 복원에 RevenueCat을 사용하며, 익명 사용자 ID와 구매 내역이 처리됩니다.\n\n광고: 직접 선택할 때만 Google AdMob 보상형 광고가 나옵니다. AdMob은 광고 제공, 허용되는 경우의 맞춤형 광고, 광고 측정을 위해 광고 ID, IP 주소, 기기 정보를 사용할 수 있습니다. 유럽 경제 지역·영국·스위스에서는 처음 실행할 때 동의를 묻고, 설정 → 광고 개인정보 설정에서 바꿀 수 있습니다.\n\n알림: 기기 안에서 예약하는 로컬 알림이며 외부로 전송되지 않습니다.\n\n피드백: 직접 메일을 보낼 때만 내용과 앱 버전·기기 정보가 개발자에게 전달됩니다.\n\n주간 순위표(선택): 설정이나 순위 화면에서 직접 켤 때만 참여하며 기본은 꺼져 있습니다. 보내는 것은 무작위 설치 ID, 게임이 정해진 단어 목록으로 만든 별명, 주간 점수뿐입니다. 이름이나 직접 입력한 글자는 보내지 않고 채팅도 없습니다. 다른 플레이어에게는 별명과 점수만 보입니다. 서버는 Supabase(서울 리전)입니다.\n\n삭제: 설정 → 모든 데이터 초기화로 기기의 데이터를 지울 수 있습니다. 순위표에 참여했다면 초기화할 때 서버의 순위표 기록(설치 ID·별명·점수)도 함께 삭제되며, 메일로 삭제를 요청할 수도 있습니다.\n\n전체 방침: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\n문의: {email}'**
   String m_privacyBody(String email);
 
   /// 설정: 데이터 초기화 항목
@@ -1527,7 +1533,7 @@ abstract class L10n {
   /// 설정: 데이터 초기화 설명
   ///
   /// In ko, this message translates to:
-  /// **'진행 상황, 젬, 꾸미기가 모두 삭제돼요'**
+  /// **'진행 상황, 젬, 꾸미기와 순위표 기록이 모두 삭제돼요'**
   String get m_wipeDesc;
 
   /// 데이터 초기화 확인 제목
@@ -1539,7 +1545,7 @@ abstract class L10n {
   /// 데이터 초기화 확인 본문
   ///
   /// In ko, this message translates to:
-  /// **'되돌릴 수 없어요. 구매한 상품은 \"구매 복원\"으로 되찾을 수 있어요.'**
+  /// **'되돌릴 수 없어요. 젬과 진행 상황은 영구히 삭제돼요. 스타터 팩과 함대 사령관 패스는 \"구매 복원\"으로 되찾을 수 있어요.'**
   String get m_wipeConfirmBody;
 
   /// 데이터 초기화 확인 버튼
@@ -1647,7 +1653,7 @@ abstract class L10n {
   /// 상점 하단 테스트 모드 띠
   ///
   /// In ko, this message translates to:
-  /// **'🧪 테스트 모드: 실제 결제/광고가 일어나지 않아요'**
+  /// **'🧪 테스트 모드: 실제 결제 없음 · 광고는 Google 테스트 광고'**
   String get m_testMode;
 
   /// 상점: 이미 가진 상품/함선
@@ -4344,6 +4350,666 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'⭐{gems} → 💰{credits}로 교환할까요?'**
   String u_exchangeBody(int gems, int credits);
+
+  /// 상점: 결제 실패(스토어 연결 불가·상품 없음) 안내. 사용자 취소일 때는 안 뜬다
+  ///
+  /// In ko, this message translates to:
+  /// **'스토어에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.'**
+  String get m_purchaseFailed;
+
+  /// 보상형 광고를 보상 전에 닫았을 때 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'광고를 끝까지 봐야 보상을 받을 수 있어요.'**
+  String get m_adWatchToEnd;
+
+  /// 전투 HUD 자동 사격 토글: 켜짐 (아주 짧게)
+  ///
+  /// In ko, this message translates to:
+  /// **'켬'**
+  String get u_autoFireOn;
+
+  /// 전투 HUD 자동 사격 토글: 꺼짐 (아주 짧게)
+  ///
+  /// In ko, this message translates to:
+  /// **'끔'**
+  String get u_autoFireOff;
+
+  /// 승무원 모집 확률 안내: 직책 확률 (모든 모집에서 직책은 균등 추첨)
+  ///
+  /// In ko, this message translates to:
+  /// **'직책(모든 모집 공통): {count}종 중 무작위, 각 {pct}'**
+  String u_recruitRoleOdds(int count, String pct);
+
+  /// 피드백 메일 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'{app} 피드백'**
+  String m_feedbackSubject(String app);
+
+  /// 일시정지 메뉴: 주간 순위 화면 열기 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'🏅 주간 순위'**
+  String get lb_menu;
+
+  /// 타이틀 아이콘 메뉴: 주간 순위 (짧게)
+  ///
+  /// In ko, this message translates to:
+  /// **'순위'**
+  String get lb_menuShort;
+
+  /// 주간 순위 화면 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'🏅 주간 개척 순위'**
+  String get lb_title;
+
+  /// 순위표 참여 스위치 (기본 꺼짐)
+  ///
+  /// In ko, this message translates to:
+  /// **'순위표 참여하기'**
+  String get lb_join;
+
+  /// 참여 스위치 설명: 보내는 정보 안내 (아동 보호)
+  ///
+  /// In ko, this message translates to:
+  /// **'익명 ID, 게임이 만든 별명, 이번 주 점수만 보내요. 이름·채팅·직접 입력한 글자는 보내지 않아요. 언제든 끌 수 있어요.'**
+  String get lb_joinDesc;
+
+  /// 자동 생성 별명 라벨
+  ///
+  /// In ko, this message translates to:
+  /// **'내 별명'**
+  String get lb_yourNick;
+
+  /// 별명 다시 뽑기 버튼 (남은 횟수)
+  ///
+  /// In ko, this message translates to:
+  /// **'새 별명 ({count})'**
+  String lb_reroll(int count);
+
+  /// 이번 주 내 점수
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 개척 점수 {points}점'**
+  String lb_weekPoints(String points);
+
+  /// 내 순위 / 참여 인원
+  ///
+  /// In ko, this message translates to:
+  /// **'{rank}위 / {total}명'**
+  String lb_rank(int rank, int total);
+
+  /// 내 순위 (참여 인원 모를 때)
+  ///
+  /// In ko, this message translates to:
+  /// **'{rank}위'**
+  String lb_rankOnly(int rank);
+
+  /// 상위 50 목록 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 상위 50'**
+  String get lb_top50;
+
+  /// 이번 주 기록 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 이번 주 기록이 없어요. 첫 번째가 되어 보세요!'**
+  String get lb_empty;
+
+  /// 다시 시도 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 시도'**
+  String get lb_retry;
+
+  /// 새로고침 버튼 툴팁
+  ///
+  /// In ko, this message translates to:
+  /// **'새로고침'**
+  String get lb_refresh;
+
+  /// 오프라인 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'연결이 없어요. 게임은 그대로 할 수 있어요. 나중에 다시 해 보세요.'**
+  String get lb_offline;
+
+  /// 요청 제한(429) 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'너무 자주 보냈어요. 1분 뒤에 다시 해 보세요.'**
+  String get lb_rateLimited;
+
+  /// 서버가 값을 거부(400)
+  ///
+  /// In ko, this message translates to:
+  /// **'이 점수는 보낼 수 없어요.'**
+  String get lb_rejected;
+
+  /// 서버 오류 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'순위표가 바빠요. 나중에 다시 해 보세요.'**
+  String get lb_serverError;
+
+  /// 서버 설정 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'순위표를 사용할 수 없어요.'**
+  String get lb_unavailable;
+
+  /// 참여 전 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'‘순위표 참여하기’를 켜면 내 점수가 올라가요.'**
+  String get lb_optedOut;
+
+  /// 주간 개척 점수 계산 방법
+  ///
+  /// In ko, this message translates to:
+  /// **'식민지 레벨 +100 · 새 항성계 +500 · 해적 격추 +5 · 두목 +200'**
+  String get lb_howTo;
+
+  /// 주간 순위 초기화 시각 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'매주 월요일 0시(UTC)에 새 주가 시작돼요.'**
+  String get lb_resets;
+
+  /// 순위표 별명 표시 형식. 어순만 언어별로 바꾼다 (예: 프랑스어는 동물 다음 형용사)
+  ///
+  /// In ko, this message translates to:
+  /// **'{adj} {animal} {number}'**
+  String nickFormat(String adj, String animal, String number);
+
+  /// 별명 동물 0..39의 문법적 성 (m/f/n, 쉼표 구분). 성이 없는 언어는 빈 문자열. 형용사 select와 맞춘다.
+  ///
+  /// In ko, this message translates to:
+  /// **''**
+  String get nickGenders;
+
+  /// 별명 형용사 0 (영어: Brave). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'용감한'**
+  String nickAdj0(String g);
+
+  /// 별명 동물 0 (영어: Otter). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'수달'**
+  String get nickAnimal0;
+
+  /// 별명 형용사 1 (영어: Bright). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'밝은'**
+  String nickAdj1(String g);
+
+  /// 별명 동물 1 (영어: Panda). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'판다'**
+  String get nickAnimal1;
+
+  /// 별명 형용사 2 (영어: Calm). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'차분한'**
+  String nickAdj2(String g);
+
+  /// 별명 동물 2 (영어: Fox). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'여우'**
+  String get nickAnimal2;
+
+  /// 별명 형용사 3 (영어: Clever). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'영리한'**
+  String nickAdj3(String g);
+
+  /// 별명 동물 3 (영어: Rabbit). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'토끼'**
+  String get nickAnimal3;
+
+  /// 별명 형용사 4 (영어: Cosmic). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'우주의'**
+  String nickAdj4(String g);
+
+  /// 별명 동물 4 (영어: Owl). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'부엉이'**
+  String get nickAnimal4;
+
+  /// 별명 형용사 5 (영어: Curious). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'호기심 많은'**
+  String nickAdj5(String g);
+
+  /// 별명 동물 5 (영어: Penguin). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'펭귄'**
+  String get nickAnimal5;
+
+  /// 별명 형용사 6 (영어: Bouncy). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'통통 튀는'**
+  String nickAdj6(String g);
+
+  /// 별명 동물 6 (영어: Koala). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'코알라'**
+  String get nickAnimal6;
+
+  /// 별명 형용사 7 (영어: Dreamy). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'꿈꾸는'**
+  String nickAdj7(String g);
+
+  /// 별명 동물 7 (영어: Dolphin). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'돌고래'**
+  String get nickAnimal7;
+
+  /// 별명 형용사 8 (영어: Cozy). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'포근한'**
+  String nickAdj8(String g);
+
+  /// 별명 동물 8 (영어: Turtle). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'거북이'**
+  String get nickAnimal8;
+
+  /// 별명 형용사 9 (영어: Fast). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'빠른'**
+  String nickAdj9(String g);
+
+  /// 별명 동물 9 (영어: Hedgehog). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'고슴도치'**
+  String get nickAnimal9;
+
+  /// 별명 형용사 10 (영어: Fluffy). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'복슬복슬한'**
+  String nickAdj10(String g);
+
+  /// 별명 동물 10 (영어: Squirrel). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'청설모'**
+  String get nickAnimal10;
+
+  /// 별명 형용사 11 (영어: Friendly). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'다정한'**
+  String nickAdj11(String g);
+
+  /// 별명 동물 11 (영어: Kitten). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 고양이'**
+  String get nickAnimal11;
+
+  /// 별명 형용사 12 (영어: Gentle). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'상냥한'**
+  String nickAdj12(String g);
+
+  /// 별명 동물 12 (영어: Puppy). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'강아지'**
+  String get nickAnimal12;
+
+  /// 별명 형용사 13 (영어: Glowing). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'빛나는'**
+  String nickAdj13(String g);
+
+  /// 별명 동물 13 (영어: Duckling). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 오리'**
+  String get nickAnimal13;
+
+  /// 별명 형용사 14 (영어: Golden). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'황금빛'**
+  String nickAdj14(String g);
+
+  /// 별명 동물 14 (영어: Lamb). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 양'**
+  String get nickAnimal14;
+
+  /// 별명 형용사 15 (영어: Happy). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'행복한'**
+  String nickAdj15(String g);
+
+  /// 별명 동물 15 (영어: Seal). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'물범'**
+  String get nickAnimal15;
+
+  /// 별명 형용사 16 (영어: Funny). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'재미있는'**
+  String nickAdj16(String g);
+
+  /// 별명 동물 16 (영어: Whale). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'고래'**
+  String get nickAnimal16;
+
+  /// 별명 형용사 17 (영어: Kind). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'착한'**
+  String nickAdj17(String g);
+
+  /// 별명 동물 17 (영어: Hamster). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'햄스터'**
+  String get nickAnimal17;
+
+  /// 별명 형용사 18 (영어: Lucky). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'행운의'**
+  String nickAdj18(String g);
+
+  /// 별명 동물 18 (영어: Beaver). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'비버'**
+  String get nickAnimal18;
+
+  /// 별명 형용사 19 (영어: Musical). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'노래하는'**
+  String nickAdj19(String g);
+
+  /// 별명 동물 19 (영어: Raccoon). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'너구리'**
+  String get nickAnimal19;
+
+  /// 별명 형용사 20 (영어: Strong). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'힘센'**
+  String nickAdj20(String g);
+
+  /// 별명 동물 20 (영어: Parrot). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'앵무새'**
+  String get nickAnimal20;
+
+  /// 별명 형용사 21 (영어: Colorful). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'알록달록한'**
+  String nickAdj21(String g);
+
+  /// 별명 동물 21 (영어: Ladybug). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'무당벌레'**
+  String get nickAnimal21;
+
+  /// 별명 형용사 22 (영어: Sweet). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'달콤한'**
+  String nickAdj22(String g);
+
+  /// 별명 동물 22 (영어: Sparrow). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'참새'**
+  String get nickAnimal22;
+
+  /// 별명 형용사 23 (영어: Polite). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'예의 바른'**
+  String nickAdj23(String g);
+
+  /// 별명 동물 23 (영어: Fawn). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 사슴'**
+  String get nickAnimal23;
+
+  /// 별명 형용사 24 (영어: Playful). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'장난스러운'**
+  String nickAdj24(String g);
+
+  /// 별명 동물 24 (영어: Pony). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'조랑말'**
+  String get nickAnimal24;
+
+  /// 별명 형용사 25 (영어: Quiet). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'조용한'**
+  String nickAdj25(String g);
+
+  /// 별명 동물 25 (영어: Bear Cub). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 곰'**
+  String get nickAnimal25;
+
+  /// 별명 형용사 26 (영어: Shiny). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'반짝이는'**
+  String nickAdj26(String g);
+
+  /// 별명 동물 26 (영어: Lion Cub). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 사자'**
+  String get nickAnimal26;
+
+  /// 별명 형용사 27 (영어: Silver). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'은빛'**
+  String nickAdj27(String g);
+
+  /// 별명 동물 27 (영어: Tiger Cub). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'아기 호랑이'**
+  String get nickAnimal27;
+
+  /// 별명 형용사 28 (영어: Sleepy). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'졸린'**
+  String nickAdj28(String g);
+
+  /// 별명 동물 28 (영어: Giraffe). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'기린'**
+  String get nickAnimal28;
+
+  /// 별명 형용사 29 (영어: Lunar). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'달빛'**
+  String nickAdj29(String g);
+
+  /// 별명 동물 29 (영어: Zebra). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'얼룩말'**
+  String get nickAnimal29;
+
+  /// 별명 형용사 30 (영어: Solar). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'태양의'**
+  String nickAdj30(String g);
+
+  /// 별명 동물 30 (영어: Elephant). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'코끼리'**
+  String get nickAnimal30;
+
+  /// 별명 형용사 31 (영어: Magic). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'마법의'**
+  String nickAdj31(String g);
+
+  /// 별명 동물 31 (영어: Hippo). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'하마'**
+  String get nickAnimal31;
+
+  /// 별명 형용사 32 (영어: Super). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'슈퍼'**
+  String nickAdj32(String g);
+
+  /// 별명 동물 32 (영어: Llama). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'라마'**
+  String get nickAnimal32;
+
+  /// 별명 형용사 33 (영어: Starry). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'별빛'**
+  String nickAdj33(String g);
+
+  /// 별명 동물 33 (영어: Alpaca). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'알파카'**
+  String get nickAnimal33;
+
+  /// 별명 형용사 34 (영어: Sunny). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'해맑은'**
+  String nickAdj34(String g);
+
+  /// 별명 동물 34 (영어: Meerkat). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'미어캣'**
+  String get nickAnimal34;
+
+  /// 별명 형용사 35 (영어: Noble). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'고귀한'**
+  String nickAdj35(String g);
+
+  /// 별명 동물 35 (영어: Starfish). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'불가사리'**
+  String get nickAnimal35;
+
+  /// 별명 형용사 36 (영어: Tiny). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'조그만'**
+  String nickAdj36(String g);
+
+  /// 별명 동물 36 (영어: Seahorse). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'해마'**
+  String get nickAnimal36;
+
+  /// 별명 형용사 37 (영어: Wise). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'지혜로운'**
+  String nickAdj37(String g);
+
+  /// 별명 동물 37 (영어: Chipmunk). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'다람쥐'**
+  String get nickAnimal37;
+
+  /// 별명 형용사 38 (영어: Snowy). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'눈꽃'**
+  String nickAdj38(String g);
+
+  /// 별명 동물 38 (영어: Goldfish). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'금붕어'**
+  String get nickAnimal38;
+
+  /// 별명 형용사 39 (영어: Loyal). 아이에게 긍정적인 말. 성이 있는 언어는 g(m/f/n)로 select
+  ///
+  /// In ko, this message translates to:
+  /// **'든든한'**
+  String nickAdj39(String g);
+
+  /// 별명 동물 39 (영어: Firefly). 귀여운 동물, 순서 고정
+  ///
+  /// In ko, this message translates to:
+  /// **'반딧불이'**
+  String get nickAnimal39;
 
   /// Settings item: reopen the ad consent (GDPR/UMP) form to change or withdraw consent
   ///

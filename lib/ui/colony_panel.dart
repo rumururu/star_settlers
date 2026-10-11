@@ -111,9 +111,7 @@ class ColonyPanel extends StatelessWidget {
             children: [
               GameIcon(icon, size: 48),
               const SizedBox(height: 2),
-              Text(label,
-                  textAlign: TextAlign.center,
-                  style: Ts.body.copyWith(color: Colors.white)),
+              fitLines(label, Ts.body.copyWith(color: Colors.white), 72),
             ],
           ),
         );
@@ -179,7 +177,7 @@ class ColonyPanel extends StatelessWidget {
     return _row(
       b.iconAsset,
       '${b.label}  Lv.$lv',
-      Text(_effect(b, lv == 0 ? 1 : lv), style: dimStyle),
+      Text(keepAll(_effect(b, lv == 0 ? 1 : lv)), style: dimStyle),
       btn,
     );
   }

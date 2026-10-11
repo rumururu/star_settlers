@@ -8,6 +8,21 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 /// 릴리즈 빌드는 실제 광고 단위, 디버그·프로필 빌드는 구글 공식 **테스트 광고 단위**를 쓴다
 /// (개발 중 자기 실제 광고를 보거나 누르면 AdMob 정책 위반).
 /// `--dart-define=ADMOB_REWARDED_ANDROID=...` / `ADMOB_REWARDED_IOS=...` 로 덮어쓸 수 있다.
+/// 보상형 광고 결과. UI는 [notReady]일 때만 "불러오는 중"을, [closedEarly]일 때는 "끝까지 봐야 보상"을 안내한다.
+enum AdResult {
+  /// 끝까지 봐서 보상을 받음
+  rewarded,
+
+  /// 광고가 아직 준비되지 않았거나 띄우지 못함
+  notReady,
+
+  /// 광고를 띄웠지만 보상 전에 닫음
+  closedEarly,
+
+  /// 사용자가 확인창에서 취소했거나 이미 안내창을 보여줌 (추가 안내 불필요)
+  cancelled,
+}
+
 class AdService {
   AdService._();
   static final instance = AdService._();
@@ -39,6 +54,10 @@ class AdService {
     try {
       await _gatherConsent();
       if (!await ConsentInformation.instance.canRequestAds()) return;
+      // 일반(13세 이상) 대상: 아동·청소년 처리 없음, 광고 등급은 T 까지
+      await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
+        maxAdContentRating: MaxAdContentRating.t,
+      ));
       await MobileAds.instance.initialize();
       _initialized = true;
       _preload();
@@ -68,6 +87,8 @@ class AdService {
   Future<bool> privacyOptionsRequired() async {
     if (!supported) return false;
     try {
+      // 동의 정보 갱신(init) 전에는 상태가 unknown 이므로 먼저 끝낸다
+      await init();
       return await ConsentInformation.instance.getPrivacyOptionsRequirementStatus() ==
           PrivacyOptionsRequirementStatus.required;
     } catch (_) {
@@ -77,6 +98,7 @@ class AdService {
 
   /// 동의 변경 화면. 바뀐 동의로 광고를 다시 받을 수 있게 초기화를 다시 시도한다.
   Future<void> showPrivacyOptions() async {
+    if (!supported) return;
     final done = Completer<void>();
     ConsentForm.showPrivacyOptionsForm((e) {
       if (e != null) debugPrint('privacy options: ${e.message}');
@@ -112,27 +134,27 @@ class AdService {
 
   bool get ready => _ad != null;
 
-  /// 광고를 끝까지 봐서 보상을 받으면 true
-  Future<bool> showRewarded() async {
-    if (!supported) return false;
+  /// 보상형 광고를 띄운다. 끝까지 봐서 보상을 받았으면 [AdResult.rewarded].
+  Future<AdResult> showRewarded() async {
+    if (!supported) return AdResult.notReady;
     await init();
     final ad = _ad;
     if (ad == null) {
       _preload();
-      return false;
+      return AdResult.notReady;
     }
     _ad = null;
-    final done = Completer<bool>();
+    final done = Completer<AdResult>();
     var earned = false;
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
-        if (!done.isCompleted) done.complete(earned);
+        if (!done.isCompleted) done.complete(earned ? AdResult.rewarded : AdResult.closedEarly);
         _preload();
       },
       onAdFailedToShowFullScreenContent: (ad, e) {
         ad.dispose();
-        if (!done.isCompleted) done.complete(false);
+        if (!done.isCompleted) done.complete(AdResult.notReady);
         _preload();
       },
     );

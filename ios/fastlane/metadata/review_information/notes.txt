@@ -1,0 +1,4 @@
+No account or login is required. All features are available from the first launch.
+The app shows optional rewarded ads (Google AdMob) only when the user taps a "watch ad" button. Ads are configured as child-directed and non-personalized for all users.
+In-app purchases (gems, Starter Pack, Fleet Commander Pass) are optional; the whole game can be played without paying. Restore Purchases is in the Shop.
+The UI supports 10 languages and follows the device language (it can also be changed in Settings).

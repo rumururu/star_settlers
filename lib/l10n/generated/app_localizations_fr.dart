@@ -783,6 +783,10 @@ class L10nFr extends L10n {
   String get m_loginWelcome => 'Bon retour, Capitaine !';
 
   @override
+  String get m_loginFirst =>
+      'Bienvenue à bord, Capitaine ! Voici votre première récompense.';
+
+  @override
   String get m_loginStreakHint =>
       'Connectez-vous 7 jours d\'affilée pour ⭐50 !';
 
@@ -874,7 +878,7 @@ class L10nFr extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers enregistre les données de jeu (progression, paramètres) uniquement sur votre appareil et ne collecte aucune information personnelle identifiable.\n\nLes achats intégrés sont traités par Google Play / App Store ; les informations de paiement ne sont jamais transmises au développeur.\n\nSi les publicités récompensées sont activées, le fournisseur (Google AdMob) peut collecter des données comme les identifiants publicitaires.\n\nContact : $email (Paramètres → Envoyer un avis au développeur)';
+    return 'Star Settlers ne demande aucune inscription et ne collecte aucune information personnelle identifiable. Les données de jeu (progression, monnaies, achats, réglages) sont enregistrées uniquement sur votre appareil. Seule exception : le classement hebdomadaire facultatif ci-dessous, si vous l\'activez.\n\nAchats : traités par Google Play / App Store ; les informations de paiement ne sont jamais transmises au développeur. RevenueCat vérifie et restaure les achats en traitant un identifiant utilisateur anonyme et l\'historique d\'achats.\n\nPublicités : les pubs récompensées Google AdMob ne s\'affichent que si vous choisissez d\'en regarder une. AdMob peut utiliser l\'identifiant publicitaire, l\'adresse IP et les infos de l\'appareil pour diffuser les pubs, les personnaliser lorsque c\'est autorisé et les mesurer. Dans l\'EEE, au Royaume-Uni et en Suisse, votre consentement est demandé au premier lancement et peut être modifié dans Paramètres → Confidentialité des annonces.\n\nNotifications : notifications locales programmées sur votre appareil ; rien n\'est envoyé.\n\nAvis : votre message, la version de l\'app et les infos de l\'appareil ne parviennent au développeur que si vous envoyez l\'e-mail vous-même.\n\nClassement hebdomadaire (facultatif) : désactivé par défaut ; vous n\'y participez qu\'en l\'activant dans les Réglages ou sur l\'écran du classement. Seuls un identifiant d\'installation aléatoire, un pseudo créé par le jeu à partir de listes de mots fixes et votre score de la semaine sont envoyés. Aucun nom, rien de ce que vous tapez, et pas de chat. Les autres joueurs ne voient que le pseudo et le score. Le serveur est Supabase (région de Séoul).\n\nSuppression : Paramètres → Réinitialiser toutes les données efface les données de votre appareil. Si vous avez rejoint le classement, la réinitialisation supprime aussi votre entrée sur le serveur (identifiant, pseudo, score) ; vous pouvez aussi demander la suppression par e-mail.\n\nPolitique complète : https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContact : $email';
   }
 
   @override
@@ -882,14 +886,14 @@ class L10nFr extends L10n {
 
   @override
   String get m_wipeDesc =>
-      'Supprime toute la progression, les gemmes et les cosmétiques';
+      'Supprime toute la progression, les gemmes, les cosmétiques et votre score au classement';
 
   @override
   String get m_wipeConfirmTitle => 'Vraiment tout réinitialiser ?';
 
   @override
   String get m_wipeConfirmBody =>
-      'C\'est irréversible. Les achats peuvent être récupérés avec « Restaurer les achats ».';
+      'C\'est irréversible. Les gemmes et la progression sont supprimées définitivement. Le Pack de départ et le Pass Commandant peuvent être récupérés avec « Restaurer les achats ».';
 
   @override
   String get m_wipeOk => 'Réinitialiser';
@@ -952,7 +956,8 @@ class L10nFr extends L10n {
   String get m_tabFree => 'Gemmes gratuites';
 
   @override
-  String get m_testMode => '🧪 Mode test : aucun vrai paiement ni pub';
+  String get m_testMode =>
+      '🧪 Mode test : aucun vrai paiement ; pubs de test Google';
 
   @override
   String get m_owned => 'Possédé';
@@ -2517,6 +2522,613 @@ class L10nFr extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return 'Échanger ⭐$gems contre 💰$credits ?';
   }
+
+  @override
+  String get m_purchaseFailed =>
+      'Impossible de joindre la boutique. Réessayez plus tard.';
+
+  @override
+  String get m_adWatchToEnd =>
+      'Regardez la pub jusqu\'au bout pour obtenir la récompense.';
+
+  @override
+  String get u_autoFireOn => 'ON';
+
+  @override
+  String get u_autoFireOff => 'OFF';
+
+  @override
+  String u_recruitRoleOdds(int count, String pct) {
+    return 'Rôle (tous recrutements) : au hasard parmi $count, $pct chacun';
+  }
+
+  @override
+  String m_feedbackSubject(String app) {
+    return 'Avis sur $app';
+  }
+
+  @override
+  String get lb_menu => '🏅 Classement hebdo';
+
+  @override
+  String get lb_menuShort => 'Podium';
+
+  @override
+  String get lb_title => '🏅 Classement hebdo';
+
+  @override
+  String get lb_join => 'Rejoindre le classement';
+
+  @override
+  String get lb_joinDesc =>
+      'Seuls un identifiant anonyme, un pseudo créé par le jeu et votre score de la semaine sont envoyés. Pas de nom, pas de chat, rien de ce que vous tapez. Vous pouvez le désactiver à tout moment.';
+
+  @override
+  String get lb_yourNick => 'Votre pseudo';
+
+  @override
+  String lb_reroll(int count) {
+    return 'Nouveau nom ($count)';
+  }
+
+  @override
+  String lb_weekPoints(String points) {
+    return 'Cette semaine : $points pts';
+  }
+
+  @override
+  String lb_rank(int rank, int total) {
+    return 'N° $rank sur $total';
+  }
+
+  @override
+  String lb_rankOnly(int rank) {
+    return 'N° $rank';
+  }
+
+  @override
+  String get lb_top50 => 'Top 50 de la semaine';
+
+  @override
+  String get lb_empty => 'Aucun score cette semaine. Soyez le premier !';
+
+  @override
+  String get lb_retry => 'Réessayer';
+
+  @override
+  String get lb_refresh => 'Actualiser';
+
+  @override
+  String get lb_offline =>
+      'Pas de connexion. Le jeu continue normalement — réessayez plus tard.';
+
+  @override
+  String get lb_rateLimited =>
+      'Trop d\'essais. Attendez une minute et réessayez.';
+
+  @override
+  String get lb_rejected => 'Ce score n\'a pas pu être envoyé.';
+
+  @override
+  String get lb_serverError => 'Le classement est occupé. Réessayez plus tard.';
+
+  @override
+  String get lb_unavailable => 'Le classement n\'est pas disponible.';
+
+  @override
+  String get lb_optedOut =>
+      'Activez « Rejoindre le classement » pour publier votre score.';
+
+  @override
+  String get lb_howTo =>
+      'Niveau de colonie +100 · Nouveau système +500 · Pirate +5 · Boss +200';
+
+  @override
+  String get lb_resets =>
+      'Une nouvelle semaine commence chaque lundi à 00:00 UTC.';
+
+  @override
+  String nickFormat(String adj, String animal, String number) {
+    return '$animal $adj $number';
+  }
+
+  @override
+  String get nickGenders =>
+      'f,m,m,m,m,m,m,m,f,m,m,m,m,m,m,m,f,m,m,m,m,f,m,m,m,m,m,m,f,m,m,m,m,m,m,f,m,m,m,f';
+
+  @override
+  String nickAdj0(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Courageux',
+      'f': 'Courageuse',
+      'n': 'Courageux',
+      'other': 'Courageux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal0 => 'Loutre';
+
+  @override
+  String nickAdj1(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Rayonnant',
+      'f': 'Rayonnante',
+      'n': 'Rayonnant',
+      'other': 'Rayonnant',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal1 => 'Panda';
+
+  @override
+  String nickAdj2(String g) {
+    return 'Calme';
+  }
+
+  @override
+  String get nickAnimal2 => 'Renard';
+
+  @override
+  String nickAdj3(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Malin',
+      'f': 'Maligne',
+      'n': 'Malin',
+      'other': 'Malin',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal3 => 'Lapin';
+
+  @override
+  String nickAdj4(String g) {
+    return 'Cosmique';
+  }
+
+  @override
+  String get nickAnimal4 => 'Hibou';
+
+  @override
+  String nickAdj5(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Curieux',
+      'f': 'Curieuse',
+      'n': 'Curieux',
+      'other': 'Curieux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal5 => 'Pingouin';
+
+  @override
+  String nickAdj6(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Sautillant',
+      'f': 'Sautillante',
+      'n': 'Sautillant',
+      'other': 'Sautillant',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal6 => 'Koala';
+
+  @override
+  String nickAdj7(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Rêveur',
+      'f': 'Rêveuse',
+      'n': 'Rêveur',
+      'other': 'Rêveur',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal7 => 'Dauphin';
+
+  @override
+  String nickAdj8(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Douillet',
+      'f': 'Douillette',
+      'n': 'Douillet',
+      'other': 'Douillet',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal8 => 'Tortue';
+
+  @override
+  String nickAdj9(String g) {
+    return 'Rapide';
+  }
+
+  @override
+  String get nickAnimal9 => 'Hérisson';
+
+  @override
+  String nickAdj10(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Duveteux',
+      'f': 'Duveteuse',
+      'n': 'Duveteux',
+      'other': 'Duveteux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal10 => 'Écureuil';
+
+  @override
+  String nickAdj11(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Amical',
+      'f': 'Amicale',
+      'n': 'Amical',
+      'other': 'Amical',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal11 => 'Chaton';
+
+  @override
+  String nickAdj12(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Doux',
+      'f': 'Douce',
+      'n': 'Doux',
+      'other': 'Doux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal12 => 'Chiot';
+
+  @override
+  String nickAdj13(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Lumineux',
+      'f': 'Lumineuse',
+      'n': 'Lumineux',
+      'other': 'Lumineux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal13 => 'Caneton';
+
+  @override
+  String nickAdj14(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Doré',
+      'f': 'Dorée',
+      'n': 'Doré',
+      'other': 'Doré',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal14 => 'Agneau';
+
+  @override
+  String nickAdj15(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Joyeux',
+      'f': 'Joyeuse',
+      'n': 'Joyeux',
+      'other': 'Joyeux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal15 => 'Phoque';
+
+  @override
+  String nickAdj16(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Rigolo',
+      'f': 'Rigolote',
+      'n': 'Rigolo',
+      'other': 'Rigolo',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal16 => 'Baleine';
+
+  @override
+  String nickAdj17(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Gentil',
+      'f': 'Gentille',
+      'n': 'Gentil',
+      'other': 'Gentil',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal17 => 'Hamster';
+
+  @override
+  String nickAdj18(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Chanceux',
+      'f': 'Chanceuse',
+      'n': 'Chanceux',
+      'other': 'Chanceux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal18 => 'Castor';
+
+  @override
+  String nickAdj19(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Musicien',
+      'f': 'Musicienne',
+      'n': 'Musicien',
+      'other': 'Musicien',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal19 => 'Raton laveur';
+
+  @override
+  String nickAdj20(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Costaud',
+      'f': 'Costaude',
+      'n': 'Costaud',
+      'other': 'Costaud',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal20 => 'Perroquet';
+
+  @override
+  String nickAdj21(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Coloré',
+      'f': 'Colorée',
+      'n': 'Coloré',
+      'other': 'Coloré',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal21 => 'Coccinelle';
+
+  @override
+  String nickAdj22(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Mignon',
+      'f': 'Mignonne',
+      'n': 'Mignon',
+      'other': 'Mignon',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal22 => 'Moineau';
+
+  @override
+  String nickAdj23(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Poli',
+      'f': 'Polie',
+      'n': 'Poli',
+      'other': 'Poli',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal23 => 'Faon';
+
+  @override
+  String nickAdj24(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Joueur',
+      'f': 'Joueuse',
+      'n': 'Joueur',
+      'other': 'Joueur',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal24 => 'Poney';
+
+  @override
+  String nickAdj25(String g) {
+    return 'Tranquille';
+  }
+
+  @override
+  String get nickAnimal25 => 'Ourson';
+
+  @override
+  String nickAdj26(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Brillant',
+      'f': 'Brillante',
+      'n': 'Brillant',
+      'other': 'Brillant',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal26 => 'Lionceau';
+
+  @override
+  String nickAdj27(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Argenté',
+      'f': 'Argentée',
+      'n': 'Argenté',
+      'other': 'Argenté',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal27 => 'Tigreau';
+
+  @override
+  String nickAdj28(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Endormi',
+      'f': 'Endormie',
+      'n': 'Endormi',
+      'other': 'Endormi',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal28 => 'Girafe';
+
+  @override
+  String nickAdj29(String g) {
+    return 'Lunaire';
+  }
+
+  @override
+  String get nickAnimal29 => 'Zèbre';
+
+  @override
+  String nickAdj30(String g) {
+    return 'Solaire';
+  }
+
+  @override
+  String get nickAnimal30 => 'Éléphant';
+
+  @override
+  String nickAdj31(String g) {
+    return 'Magique';
+  }
+
+  @override
+  String get nickAnimal31 => 'Hippo';
+
+  @override
+  String nickAdj32(String g) {
+    return 'Super';
+  }
+
+  @override
+  String get nickAnimal32 => 'Lama';
+
+  @override
+  String nickAdj33(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Étoilé',
+      'f': 'Étoilée',
+      'n': 'Étoilé',
+      'other': 'Étoilé',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal33 => 'Alpaga';
+
+  @override
+  String nickAdj34(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Ensoleillé',
+      'f': 'Ensoleillée',
+      'n': 'Ensoleillé',
+      'other': 'Ensoleillé',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal34 => 'Suricate';
+
+  @override
+  String nickAdj35(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Royal',
+      'f': 'Royale',
+      'n': 'Royal',
+      'other': 'Royal',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal35 => 'Étoile de mer';
+
+  @override
+  String nickAdj36(String g) {
+    return 'Minuscule';
+  }
+
+  @override
+  String get nickAnimal36 => 'Hippocampe';
+
+  @override
+  String nickAdj37(String g) {
+    return 'Sage';
+  }
+
+  @override
+  String get nickAnimal37 => 'Tamia';
+
+  @override
+  String nickAdj38(String g) {
+    String _temp0 = intl.Intl.selectLogic(g, {
+      'm': 'Neigeux',
+      'f': 'Neigeuse',
+      'n': 'Neigeux',
+      'other': 'Neigeux',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get nickAnimal38 => 'Poisson rouge';
+
+  @override
+  String nickAdj39(String g) {
+    return 'Fidèle';
+  }
+
+  @override
+  String get nickAnimal39 => 'Luciole';
 
   @override
   String get m_adPrivacy => 'Confidentialité des annonces';

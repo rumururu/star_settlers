@@ -150,6 +150,7 @@ class GameWorld {
   final levels = {for (final k in UpgradeKind.values) k: 0};
   final counters = <String, int>{};
   final roster = <CrewMember>[];
+  /// 크레딧으로 모집한 횟수 (크레딧 모집 가격 계산용. 세이브 키는 예전 그대로 'recruits')
   int recruitCount = 0;
   int _nextId = 1;
   final missionOffers = <Mission>[];
@@ -291,10 +292,22 @@ class GameWorld {
   /// 시간이 올리는 위협도 상한: 항성계에 9분 머물면 +6에서 멈춘다 (안 그러면 끝없이 오른다)
   static const threatTimeCap = 6.0;
 
+  /// 튜토리얼 초반(첫 항성계에서 식민지 목표에 닿기 전)에는 시간 위협이 이 비율로만 오른다.
+  /// 처음 2~3분 만에 위협이 올라 연달아 격추되던 문제 — 첫 항성계는 편하게 익히게 한다.
+  static const tutorialThreatRate = 0.25;
+
+  /// 튜토리얼 초반에 덜 오른 시간(초). 첫 항성계의 시간 위협에서만 뺀다.
+  double tutorialThreatSlack = 0;
+
+  /// 첫 항성계에서 소행성·해적 목표를 하는 동안 (스토리 2단계 = 식민지 목표 전)
+  bool get _tutorialCalm => sector == 0 && storyIndex < 2;
+
+  double get _threatTime => max(0, sectorElapsed - (sector == 0 ? tutorialThreatSlack : 0));
+
   double get threat =>
       1 +
       sector * 1.0 +
-      min(sectorElapsed / 90, threatTimeCap) +
+      min(_threatTime / 90, threatTimeCap) +
       colonyCount * 0.3 +
       stations.fold<int>(0, (s, st) => s + st.habitatLevel - 1) * 0.15;
 
@@ -459,7 +472,9 @@ class GameWorld {
         // 같은 궤도에 n개를 고르게, 조금씩 흔들어서
         phase = orbitStart[o] + k * 2 * pi / n + randRange(orbitRng, -0.25, 0.25) / n;
       }
-      planets.add(Planet(name, radius, kind, orbitRadius: orbit, orbitPhase: phase));
+      final at = i;
+      planets.add(Planet(name, radius, kind, orbitRadius: orbit, orbitPhase: phase,
+          nameOf: () => planetIdentity(index, at, count).name));
     }
 
     // 워프 게이트: 앞으로 가는 게이트는 모든 궤도 바깥 모서리, 돌아가는 게이트는 본거지 옆
@@ -483,13 +498,14 @@ class GameWorld {
         if (p.colonyLevel > 0) p.shieldHp = p.shieldMax(sectorMul);
       }
       for (final s in save.stations) {
-        stations.add(_stationFromJson(s));
+        stations.add(_stationFromJson(s, sector: index, order: stations.length));
       }
       sectorElapsed = save.elapsed;
       bossDefeated = save.bossDefeated;
       bossesSpawned = save.bossesSpawned;
     } else {
-      final home = Station(index == 0 ? tr.g_stationHaven : tr.g_stationOutpost(sectorName), homePos,
+      final home = Station.named(
+          index == 0 ? const StationName.haven() : StationName.outpost(index), homePos,
           role: StationRole.home)
         ..turretLevel = 1;
       stations.add(home..hp = home.maxHp);
@@ -498,7 +514,7 @@ class GameWorld {
       bossesSpawned = 0;
     }
     if (stations.isEmpty) {
-      final home = Station(tr.g_stationOutpost(sectorName), homePos, role: StationRole.home);
+      final home = Station.named(StationName.outpost(index), homePos, role: StationRole.home);
       stations.add(home..hp = home.maxHp);
     }
     sectorBossSpawned = false;
@@ -590,7 +606,12 @@ class GameWorld {
       ..pos = arrive + const Offset(0, 180)
       ..vel = Offset.zero
       ..invulnerable = 2;
-    if (to > counter('maxSector')) counters['maxSector'] = to;
+    if (to > counter('maxSector')) {
+      counters['maxSector'] = to;
+      // 주간 개척 점수: 처음 가 보는 항성계 (환생 뒤 다시 도착해도 센다)
+      profile.weeklyScore.addNewSystem();
+      profile.dirty = true;
+    }
     profile.maxStat('sector', to + 1);
     sfx.add(Sfx.warp);
     shake = 12;
@@ -824,6 +845,7 @@ class GameWorld {
     if (!_pay(planetCost(p))) return false;
     p.colonyLevel++;
     profile.addStat('colonyUps');
+    profile.weeklyScore.addColonyLevel();
     if (p.colonyLevel == 1) {
       _count('colonies');
       profile.addStat('colonies');
@@ -936,7 +958,7 @@ class GameWorld {
   bool buildStation(StationRole role) {
     if (role == StationRole.home || !canBuildStationHere) return false;
     if (!_pay(stationBuildCost)) return false;
-    final st = Station(tr.g_stationNumbered(role.label, stations.length + 1), player.pos + const Offset(0, -140),
+    final st = Station.named(StationName.numbered(role, stations.length + 1), player.pos + const Offset(0, -140),
         role: role);
     if (role == StationRole.defense) st.turretLevel = 1;
     st.hp = st.maxHp;
@@ -981,9 +1003,9 @@ class GameWorld {
       case UpgradeKind.engine:
         say(Speaker.captain, tr.g_dlgUpEngine);
       case UpgradeKind.missile:
-        say(Speaker.captain, level(k) == 1 ? tr.g_dlgMissileNew : tr.g_dlgMissileUp);
+        say(Speaker.captain, level(k) == 1 ? keyHint(tr.g_dlgMissileNew) : tr.g_dlgMissileUp);
       case UpgradeKind.shield:
-        say(Speaker.captain, level(k) == 1 ? tr.g_dlgShieldNew : tr.g_dlgShieldUp);
+        say(Speaker.captain, level(k) == 1 ? keyHint(tr.g_dlgShieldNew) : tr.g_dlgShieldUp);
       case UpgradeKind.drone:
         profile.maxStat('drone', 1);
         say(Speaker.captain, level(k) == 1 ? tr.g_dlgDroneNew : tr.g_dlgDroneUp);
@@ -1129,6 +1151,8 @@ class GameWorld {
   CrewMember? recruitWithCredits() {
     if (roster.length >= rosterCap) return null;
     if (!_pay((recruitCost, 0))) return null;
+    // 크레딧 모집 가격은 크레딧 모집 횟수로만 오른다 (젬·결제 상품 승무원은 세지 않는다)
+    recruitCount++;
     return _addCrew(CrewMember.random(_rng, _nextId++, odds: CrewMember.creditOdds));
   }
 
@@ -1146,7 +1170,6 @@ class GameWorld {
   }
 
   CrewMember _addCrew(CrewMember c) {
-    recruitCount++;
     if (assignedCount < crewSlots) c.assigned = true;
     roster.add(c);
     profile.addStat('crew');
@@ -1217,8 +1240,8 @@ class GameWorld {
       default:
         return Mission(
             id: _nextId++, type: MissionType.bounty, target: 1,
-            bountyName: (bountyNames
-                    .where((n) => !activeMissions.any((m) => m.bountyName == n))
+            bountyId: ([for (var i = 0; i < bountyCount; i++) i]
+                    .where((i) => !activeMissions.any((m) => m.bountyId == i))
                     .toList()
                   ..shuffle(_rng))
                 .first,
@@ -1246,7 +1269,7 @@ class GameWorld {
     final a = _rng.nextDouble() * 2 * pi;
     final pos = _clampWorld(player.pos + OffsetX.fromAngle(a, randRange(_rng, 1500, 2400)), (_) {});
     final e = Pirate(PirateKind.raider, pos, Pirate.baseHp(PirateKind.raider) * 5 * enemyHpMul,
-        name: m.bountyName, dmgScale: 1.5 * enemyDamageMul)
+        bountyId: m.bountyId, dmgScale: 1.5 * enemyDamageMul)
       ..missionId = m.id
       ..wanderAngle = a;
     pirates.add(e);
@@ -1427,6 +1450,7 @@ class GameWorld {
     dt = dt.clamp(0, 0.05);
     totalTime += dt;
     sectorElapsed += dt;
+    if (_tutorialCalm) tutorialThreatSlack += dt * (1 - tutorialThreatRate);
     storyTimer += dt;
 
     credits += creditIncome * dt;
@@ -2034,6 +2058,11 @@ class GameWorld {
     }
 
     _count('kills');
+    // 튜토리얼 '해적 3척 격추'는 내 함선(총알·미사일·드론)이 잡은 것만 센다 (본거지 레이저 제외)
+    if (!e.lastHitByBase) {
+      _count('shipKills');
+      profile.weeklyScore.addPirateKill();
+    }
     profile.addStat('kills');
     for (final m in activeMissions) {
       if (m.type == MissionType.kill) m.progress++;
@@ -2048,6 +2077,7 @@ class GameWorld {
 
     if (boss) {
       profile.addStat('bosses');
+      profile.weeklyScore.addBossDefeated();
       _dropPickups(e.pos, PickupKind.ore, (120 * sectorMul).round(), 6);
       _dropPickups(e.pos, PickupKind.gem, 5, 5);
       if (e.sectorBoss) {
@@ -2447,6 +2477,8 @@ class GameWorld {
 
   // ---------- 저장/불러오기 ----------
   static Map<String, dynamic> _stationToJson(Station s) => {
+        // 언어 중립 이름 키. 'name'은 예전 버전 앱 호환용 표시 이름 (불러올 때는 'nk'가 우선)
+        'nk': s.label.toJson(),
         'name': s.name,
         'x': s.pos.dx,
         'y': s.pos.dy,
@@ -2458,14 +2490,18 @@ class GameWorld {
         'off': s.disabledTime,
       };
 
-  static Station _stationFromJson(Map<String, dynamic> s) {
+  /// [sector]: 정거장이 있는 항성계, [order]: 목록 안 순서 (예전 저장 이름에 번호가 없을 때 쓴다)
+  static Station _stationFromJson(Map<String, dynamic> s, {required int sector, required int order}) {
     var pos = Offset((s['x'] as num).toDouble(), (s['y'] as num).toDouble());
     // 예전 저장: 본거지가 원점(지금은 항성 자리)에 있었다
     if (pos == Offset.zero) pos = homePos;
     // 예전 저장: 역할이 없으면 본거지 자리는 본거지, 나머지는 보급 기지
     final role = StationRole.values.where((r) => r.name == s['role']).firstOrNull ??
         (pos == homePos ? StationRole.home : StationRole.support);
-    final st = Station(s['name'] as String, pos, role: role)
+    // 예전 저장은 이름이 저장 당시 언어의 문자열 → 어느 언어 기본 이름인지 찾아 키로 되돌린다
+    final label = StationName.fromJson(s['nk']) ??
+        StationName.fromLegacy(s['name'] as String?, role: role, sector: sector, fallbackNumber: order + 1);
+    final st = Station.named(label, pos, role: role)
       ..habitatLevel = s['hab'] as int
       ..turretLevel = s['tur'] as int
       ..baseLevel = (s['base'] as int?) ?? 1
@@ -2491,6 +2527,7 @@ class GameWorld {
         'missions': activeMissions.map((m) => m.toJson()).toList(),
         'story': storyIndex,
         'storyBase': storyBase,
+        'threatSlack': tutorialThreatSlack,
         'total': totalTime,
         'px': player.pos.dx,
         'py': player.pos.dy,
@@ -2525,6 +2562,10 @@ class GameWorld {
     }
     w.storyIndex = j['story'] as int;
     w.storyBase = j['storyBase'] as int;
+    w.tutorialThreatSlack = (j['threatSlack'] as num?)?.toDouble() ?? 0;
+    // 예전 저장 호환: 진행 중인 단계의 측정 키가 바뀌었으면(kills → shipKills) 기준점이 현재값보다 클 수 있다
+    final cur = w.storyValue(w.story.key);
+    if (w.story.relative && w.storyBase > cur) w.storyBase = cur;
     w.totalTime = (j['total'] as num).toDouble();
     w.player.pos = Offset((j['px'] as num).toDouble(), (j['py'] as num).toDouble());
     w.player.hp = min(w.playerMaxHp, (j['hp'] as num?)?.toDouble() ?? w.playerMaxHp);

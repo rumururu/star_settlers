@@ -154,7 +154,7 @@
 - 사운드: 직접 합성한 효과음과 BGM(wav), `audioplayers`
 
 ## 7. 출시 체크리스트
-- [x] 앱 이름 / 패키지 ID (`com.newpl.star_settlers`)
+- [x] 앱 이름 / 패키지 ID (`com.mkideabox.starsettlers`)
 - [x] 앱 아이콘 (치비 선장)
 - [x] 개인정보처리방침 초안
 - [x] 스토어 등록 문구 (한/영)

@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.newpl.star_settlers"
+    namespace = "com.mkideabox.starsettlers"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -31,7 +31,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.newpl.star_settlers"
+        applicationId = "com.mkideabox.starsettlers"
         // google_mobile_ads 는 minSdk 24 이상 필요
         minSdk = maxOf(24, flutter.minSdkVersion)
         targetSdk = flutter.targetSdkVersion

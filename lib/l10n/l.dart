@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -42,3 +44,18 @@ String iGa(String w) => Lang.isKo ? ko.iGa(w) : w;
 String euro(String w) => Lang.isKo ? ko.euro(w) : w;
 String josa(String w, String withBatchim, String without) =>
     Lang.isKo ? ko.josa(w, withBatchim, without) : w;
+
+/// 키보드가 있는 환경(웹·데스크톱)에서만 단축키 안내를 보인다
+bool get showKeyHints => kIsWeb || !(Platform.isAndroid || Platform.isIOS);
+
+/// 번역 문장 속 단축키 안내를 모바일에서 뺀다. ARB 문장은 하나만 두고 여기서 고친다.
+/// "상인 (E)" → "상인", "미사일 (Q키 / 🚀 버튼)" → "미사일 (🚀 버튼)", "장착! (Q)" → "장착!"
+/// [keyboard]는 테스트용 (생략하면 [showKeyHints]).
+String keyHint(String s, {bool? keyboard}) {
+  if (keyboard ?? showKeyHints) return s;
+  return s
+      // 괄호 안 "키 / 버튼" 중 키 쪽: "(Q키 / 🚀 버튼)" → "(🚀 버튼)"
+      .replaceAllMapped(RegExp(r'([(（])[^()（）/]*/\s*'), (m) => m[1]!)
+      // 끝에 붙은 단축키 한 글자: " (E)"
+      .replaceFirst(RegExp(r'\s*[(（][A-Z][)）]\s*$'), '');
+}

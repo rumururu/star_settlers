@@ -7,6 +7,7 @@ import '../game/save.dart';
 import '../game/world.dart';
 import 'ads.dart';
 import 'audio.dart';
+import 'leaderboard.dart';
 import 'monetization.dart';
 import 'notifications.dart';
 
@@ -17,6 +18,39 @@ class AppState {
   static Profile profile = Profile();
   static final MonetizationService money = MonetizationService.create();
   static GameWorld? world;
+
+  /// 주간 순위표. 저장소는 항상 현재 [profile]을 가리킨다 (초기화로 프로필이 바뀌어도).
+  static final LeaderboardService leaderboard = LeaderboardService(store: _ProfileLeaderboardStore());
+
+  static DateTime? _lastSubmit;
+
+  /// 순위표 자동 제출 최소 간격 (서버 제한은 1분 5회)
+  static const submitThrottle = Duration(seconds: 60);
+
+  /// 참여 중이면 이번 주 점수를 보낸다 (일시정지·저장 후 나가기·백그라운드).
+  /// 기다리지 않고 실패도 무시한다 — 게임을 막지 않는다. [now]는 테스트용.
+  static void submitLeaderboard({DateTime? now}) {
+    final svc = leaderboard;
+    if (!svc.configured || !svc.optedIn) return;
+    final s = profile.weeklyScore;
+    s.rollover();
+    if (s.points <= 0 && s.lastPoints <= 0) return;
+    final t = now ?? DateTime.now();
+    final last = _lastSubmit;
+    if (last != null && t.difference(last) < submitThrottle) return;
+    _lastSubmit = t;
+    svc.submitWeekly(s).then((_) => SaveService.saveProfile(profile)).catchError((Object _) {});
+  }
+
+  /// 화면에서 직접 제출했을 때 자동 제출 간격을 다시 센다
+  static void markSubmitted() => _lastSubmit = DateTime.now();
+
+  /// 모든 데이터 초기화: 순위표에 참여했으면 서버 기록도 지운다 (최선 노력, 기다리지 않음).
+  static void forgetLeaderboard() {
+    final id = profile.installId;
+    if (id == null || !profile.leaderboardOptIn) return;
+    leaderboard.forget(id);
+  }
 
   static Future<void> init() async {
     profile = await SaveService.loadProfile();
@@ -93,4 +127,31 @@ class AppState {
       w.grantCrew(3);
     }
   }
+}
+
+class _ProfileLeaderboardStore implements LeaderboardStore {
+  Profile get _p => AppState.profile;
+
+  @override
+  String? get installId => _p.installId;
+  @override
+  set installId(String? v) => _p.installId = v;
+
+  @override
+  String? get nicknameCode => _p.nicknameCode;
+  @override
+  set nicknameCode(String? v) => _p.nicknameCode = v;
+
+  @override
+  bool get leaderboardOptIn => _p.leaderboardOptIn;
+  @override
+  set leaderboardOptIn(bool v) => _p.leaderboardOptIn = v;
+
+  @override
+  int get nicknameRerolls => _p.nicknameRerolls;
+  @override
+  set nicknameRerolls(int v) => _p.nicknameRerolls = v;
+
+  @override
+  Future<void> save() => SaveService.saveProfile(_p);
 }

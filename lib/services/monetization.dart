@@ -8,6 +8,8 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import '../l10n/l.dart';
 import 'ads.dart';
 
+export 'ads.dart' show AdResult;
+
 /// 인앱 상품 정의 (스토어 콘솔에 같은 ID로 등록해야 함)
 class ProductDef {
   const ProductDef(this.id, this.fallbackPrice, {this.consumable = true});
@@ -41,6 +43,17 @@ const productDefs = [
   ProductDef('premium_pass', '₩6,500', consumable: false),
 ];
 
+/// 결제 결과. UI는 [failed]일 때만 오류를 안내한다 (사용자 취소는 조용히).
+enum PurchaseResult {
+  success,
+
+  /// 사용자가 결제창/확인창에서 취소했거나 이미 안내창을 보여줌
+  cancelled,
+
+  /// 스토어 연결 실패, 상품 없음 등
+  failed,
+}
+
 /// 결제/광고 추상화.
 /// - 개발/웹: [DevMonetization] (테스트 확인창)
 /// - 출시: [RevenueCatMonetization] (RevenueCat + AdMob 보상형 광고)
@@ -54,11 +67,20 @@ abstract class MonetizationService {
 
   Future<void> init();
   String priceOf(String productId);
-  Future<bool> buy(String productId);
+  Future<PurchaseResult> buy(String productId);
   Future<void> restore();
 
-  /// 보상형 광고. 끝까지 보면 true
-  Future<bool> showRewardedAd();
+  /// 보상형 광고 결과 (준비 안 됨 / 중간에 닫음 / 보상 받음 구분)
+  Future<AdResult> showRewardedAdResult();
+
+  /// 마지막 [showRewardedAd] 결과. bool만 받는 호출부(AppState.watchAd)가 실패 이유를 알 수 있게 남겨둔다.
+  AdResult lastAdResult = AdResult.notReady;
+
+  /// 보상형 광고. 끝까지 보면 true (실패 이유는 [lastAdResult])
+  Future<bool> showRewardedAd() async {
+    lastAdResult = await showRewardedAdResult();
+    return lastAdResult == AdResult.rewarded;
+  }
 
   bool get isTestMode;
 
@@ -84,24 +106,26 @@ class DevMonetization extends MonetizationService {
       productDefs.firstWhere((p) => p.id == productId).fallbackPrice;
 
   @override
-  Future<bool> buy(String productId) async {
+  Future<PurchaseResult> buy(String productId) async {
     final def = productDefs.firstWhere((p) => p.id == productId);
     final ok = await (confirm?.call(tr.g_testPurchaseTitle(def.title),
             tr.g_testPurchaseBody(def.desc, def.fallbackPrice)) ??
         Future.value(false));
-    if (ok) onGrant?.call(productId);
-    return ok;
+    if (!ok) return PurchaseResult.cancelled;
+    onGrant?.call(productId);
+    return PurchaseResult.success;
   }
 
   @override
   Future<void> restore() async {}
 
   @override
-  Future<bool> showRewardedAd() async {
+  Future<AdResult> showRewardedAdResult() async {
     // 모바일에서는 구글 테스트 광고를 실제로 띄운다
     if (AdService.supported) return AdService.instance.showRewarded();
-    return await (confirm?.call(tr.g_testAdTitle, tr.g_testAdBody) ??
+    final ok = await (confirm?.call(tr.g_testAdTitle, tr.g_testAdBody) ??
         Future.value(false));
+    return ok ? AdResult.rewarded : AdResult.cancelled;
   }
 }
 
@@ -117,19 +141,24 @@ class WebDemoMonetization extends MonetizationService {
   String priceOf(String productId) =>
       productDefs.firstWhere((p) => p.id == productId).fallbackPrice;
 
-  Future<bool> _notice() async {
+  Future<void> _notice() async {
     await confirm?.call(tr.g_webDemoTitle, tr.g_webDemoBody);
-    return false;
   }
 
   @override
-  Future<bool> buy(String productId) => _notice();
+  Future<PurchaseResult> buy(String productId) async {
+    await _notice();
+    return PurchaseResult.cancelled;
+  }
 
   @override
   Future<void> restore() async {}
 
   @override
-  Future<bool> showRewardedAd() => _notice();
+  Future<AdResult> showRewardedAdResult() async {
+    await _notice();
+    return AdResult.cancelled;
+  }
 }
 
 /// 출시 결제: RevenueCat (익명 사용자, 로그인 없음).
@@ -200,11 +229,11 @@ class RevenueCatMonetization extends MonetizationService {
       _products[productId]?.priceString ?? productDefs.firstWhere((p) => p.id == productId).fallbackPrice;
 
   @override
-  Future<bool> buy(String productId) async {
-    if (!_available) return false;
+  Future<PurchaseResult> buy(String productId) async {
+    if (!_available) return PurchaseResult.failed;
     final pkg = _packages[productId];
     final product = _products[productId];
-    if (pkg == null && product == null) return false;
+    if (pkg == null && product == null) return PurchaseResult.failed;
     try {
       final r = await Purchases.purchase(
           pkg != null ? PurchaseParams.package(pkg) : PurchaseParams.storeProduct(product!));
@@ -214,11 +243,12 @@ class RevenueCatMonetization extends MonetizationService {
         final t = r.storeTransaction;
         onGrant?.call(productId, tx: 'store:${t.transactionIdentifier}', at: DateTime.now());
       }
-      return true;
+      return PurchaseResult.success;
     } on PlatformException catch (e) {
       final code = PurchasesErrorHelper.getErrorCode(e);
-      if (code != PurchasesErrorCode.purchaseCancelledError) debugPrint('purchase failed: $code');
-      return false;
+      if (code == PurchasesErrorCode.purchaseCancelledError) return PurchaseResult.cancelled;
+      debugPrint('purchase failed: $code');
+      return PurchaseResult.failed;
     }
   }
 
@@ -233,5 +263,5 @@ class RevenueCatMonetization extends MonetizationService {
   }
 
   @override
-  Future<bool> showRewardedAd() => AdService.instance.showRewarded();
+  Future<AdResult> showRewardedAdResult() => AdService.instance.showRewarded();
 }

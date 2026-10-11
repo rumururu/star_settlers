@@ -5,19 +5,21 @@ status: canonical
 
 # 출시 테스트 체크리스트 — 우주 개척단 (Star Settlers)
 
-- 기준: `~/.claude/flutter-release-guides/test_checklist.md`(베이스) + `Flutter_Codex_Pre_Release_Audit_Runbook.md`(Gate 오버레이)
-- 릴리즈: **First Release** v1.0.0+1 (`com.newpl.star_settlers`)
+- 공통 기준: [중앙 출시 체크리스트 골격](../../../../mkideabox-corp-process/processes/release/test-checklist-baseline.md), [실행·판정·증거 기록](../../../../mkideabox-corp-process/processes/release/test-execution.md). 아래 게임별 Gate·영구 예외를 함께 적용한다. 기존 전역 템플릿·Runbook 표기는 작성 당시 출처다.
+- 릴리즈: **First Release** v1.0.0+1 (`com.mkideabox.starsettlers`)
 - 판정·증적 기록: `docs/release_procedure/PRE_RELEASE_AUDIT.md`
-- 테스트는 사용자 여정 단위. 증적(로그/스크린샷/재현절차) 없는 통과 금지.
 
 ## 앱 기능 프로필
 
 | 항목 | 값 | 근거 |
 |---|---|---|
-| 광고 | 있음 — AdMob 보상형만 (사용자가 직접 선택) | `lib/services/ads.dart` |
+| 대상 연령 | 13세 이상 (아동 대상 아님). 13세 미만 개인정보를 알면서 수집하지 않음 | 개인정보처리방침 7절, Play 타겟 연령 13+ |
+| 광고 | 있음 — AdMob 보상형만 (사용자가 직접 선택, 사령관 패스 보유 시 없음). 아동 태그 없음, 최대 광고 등급 T. 맞춤형 광고는 UMP 동의에 따름 (EEA·영국·스위스는 첫 실행 시 동의, 설정 → "광고 개인정보 설정"에서 변경·철회). Android 광고 ID(AD_ID 권한) 사용, iOS IDFA·ATT 미사용 | `lib/services/ads.dart`, `lib/ui/meta_screens.dart` |
 | 인앱결제 | 있음 — 젬 소모성 3종, 스타터팩·사령관 패스 비소모성 | `lib/services/monetization.dart` |
-| 확률형 아이템 | 있음 — 승무원 영입 | 정거장 → 승무원 탭 확률 표기 |
-| 계정/로그인 | 없음 (오프라인, 기기 내 저장) | 계정 삭제 시나리오 → "데이터 초기화"로 대체 |
+| 확률형 아이템 | 있음 — 젬(유료 재화 포함)으로 무작위 승무원 영입. 항목별 확률 게임 내 상시 공개 | 정거장 → 승무원 탭 확률 표기 |
+| 배포 국가 | 벨기에 제외 (유료 확률형 아이템 불법). 그 외 전체 | Play Console 국가/지역, App Store Connect 판매 가능 국가 |
+| 콘텐츠 등급 | 유료 무작위 아이템 때문에 호주 Adult·브라질 18+ 로 나옴 — 수용함 | IARC 설문 결과 |
+| 계정/로그인 | 없음 (기기 내 저장). 선택형 주간 순위표만 익명 설치 ID로 서버 사용 | 계정 삭제 시나리오 → "데이터 초기화"로 대체 |
 | 커뮤니티 | 없음 | — |
 | 다국어 | 10개 (ko en ja zh es fr de pt ru id) | `lib/l10n/app_*.arb` |
 | 테마 | 다크 고정 게임 UI | — |
@@ -56,7 +58,7 @@ status: canonical
 - [ ] 스토어 가격 = 앱 표기 = `docs/STORE_RELEASE.md` 표 (₩1,200 / ₩5,900 / ₩12,000 / ₩3,900 / ₩6,500)
 - [ ] **광고 동의(UMP/GDPR)** 수집 및 철회 경로 (설정 화면)
 - [ ] iOS ATT / SKAdNetwork / PrivacyInfo.xcprivacy
-- [ ] 아동 대상 여부 결정 → AdMob 아동 태그·최대 광고 등급 설정과 일치
+- [ ] 대상 연령 13세 이상(아동 대상 아님) 결정과 일치: AdMob 아동 태그 없음, 최대 광고 등급 T, 릴리즈 APK에 `com.google.android.gms.permission.AD_ID` 포함, 개인정보처리방침·앱 내 요약·Play 데이터 보안 양식 일치
 - [ ] 확률형 아이템: 항목별 확률 게임 내 상시 공개 (한국 게임산업법)
 - [ ] 오인 클릭 유도 UI 없음 (보상형 광고는 사용자 선택으로만)
 - [ ] App Store IAP metadata: 심사용 스크린샷 ≠ 프로모션 이미지, 앱 아이콘 재사용 금지, promotion 안 하면 프로모션 이미지 삭제

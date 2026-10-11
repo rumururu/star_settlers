@@ -4,32 +4,37 @@ import 'package:flutter/material.dart';
 /// 기준: 모바일 가독 하한 16dp, 터치 타겟 하한 48dp (Material 3) — ~/.claude/GAME_UI_ARCHITECTURE.md
 
 /// 타이포 스케일 (6단계)
+/// 모든 스타일에 앱 글꼴을 직접 넣는다. 버튼(ElevatedButton.styleFrom(textStyle: …))처럼
+/// 테마 글꼴을 거치지 않고 이 스타일을 그대로 쓰는 곳이 있어, 빠지면 영어 버튼만 Roboto로 보였다.
 abstract final class Ts {
+  /// 앱 본문 글꼴 (pubspec fonts, 테마 fontFamily와 같다)
+  static const family = 'Jua';
+
   /// 타이틀 로고급
-  static const display = TextStyle(fontSize: 36, color: Colors.white, height: 1.1);
+  static const display = TextStyle(fontFamily: family, fontSize: 36, color: Colors.white, height: 1.1);
 
   /// 화면/패널 제목, 큰 보상 숫자
-  static const title = TextStyle(fontSize: 24, color: Colors.white);
+  static const title = TextStyle(fontFamily: family, fontSize: 24, color: Colors.white);
 
   /// 섹션 제목, 목록 항목 이름
-  static const heading = TextStyle(fontSize: 19, color: Colors.white);
+  static const heading = TextStyle(fontFamily: family, fontSize: 19, color: Colors.white);
 
   /// 읽는 글 (설명·대화)
-  static const body = TextStyle(fontSize: 16, color: Colors.white);
+  static const body = TextStyle(fontFamily: family, fontSize: 16, color: Colors.white);
 
   /// 버튼 글자
-  static const label = TextStyle(fontSize: 16, color: Colors.white);
+  static const label = TextStyle(fontFamily: family, fontSize: 16, color: Colors.white);
 
   /// HUD 숫자·타이머·배지 전용. 문장에는 쓰지 않는다.
-  static const caption = TextStyle(fontSize: 13, color: Colors.white70);
+  static const caption = TextStyle(fontFamily: family, fontSize: 13, color: Colors.white70);
 
   // 자주 쓰는 변형
-  static const headingBold = TextStyle(fontSize: 19, color: Colors.white, fontWeight: FontWeight.bold);
-  static const section = TextStyle(fontSize: 19, color: Color(0xFF8AD8FF), fontWeight: FontWeight.bold);
-  static const bodyDim = TextStyle(fontSize: 16, color: Colors.white60);
+  static const headingBold = TextStyle(fontFamily: family, fontSize: 19, color: Colors.white, fontWeight: FontWeight.bold);
+  static const section = TextStyle(fontFamily: family, fontSize: 19, color: Color(0xFF8AD8FF), fontWeight: FontWeight.bold);
+  static const bodyDim = TextStyle(fontFamily: family, fontSize: 16, color: Colors.white60);
 
   /// 아이콘 대신 쓰는 이모지 글리프
-  static const glyph = TextStyle(fontSize: 28);
+  static const glyph = TextStyle(fontFamily: family, fontSize: 28);
 }
 
 /// 간격
@@ -39,6 +44,12 @@ abstract final class Space {
   static const m = 12.0;
   static const l = 16.0;
   static const xl = 24.0;
+}
+
+/// 화면 배치
+abstract final class Layout {
+  /// 목록·설정형 화면 내용의 최대 폭 (iPad 1032pt 폭에서 끝까지 늘어나지 않게)
+  static const contentMaxWidth = 720.0;
 }
 
 /// 터치 크기

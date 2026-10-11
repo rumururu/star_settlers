@@ -3,6 +3,7 @@ import 'dart:math';
 import '../l10n/l.dart';
 import 'home.dart';
 import 'ships.dart';
+import 'weekly_score.dart';
 
 /// 새 게임을 시작해도 유지되는 계정 단위 데이터
 /// (젬, 구매 내역, 꾸미기, 업적, 출석, 일일 퀘스트, 함선, 은하 명예, 설정)
@@ -185,6 +186,18 @@ class Profile {
 
   // 내 행성
   HomePlanet home = HomePlanet();
+
+  // 주간 순위표 (services/leaderboard.dart). 참여는 기본 꺼짐.
+  /// 순위표용 무작위 설치 ID (UUID v4). 참여할 때 처음 만든다.
+  String? installId;
+
+  /// 별명 코드 "형용사-동물-4자리" (자유 입력 없음)
+  String? nicknameCode;
+  bool leaderboardOptIn = false;
+  int nicknameRerolls = 0;
+
+  /// 이번 주 개척 점수
+  WeeklyScore weeklyScore = WeeklyScore.now();
 
   /// 저장 필요 표시
   bool dirty = false;
@@ -397,6 +410,11 @@ class Profile {
         'notifications': notifications,
         'lang': language,
         'home': home.toJson(),
+        'lbId': installId,
+        'lbNick': nicknameCode,
+        'lbOptIn': leaderboardOptIn,
+        'lbRerolls': nicknameRerolls,
+        'weekly': weeklyScore.toJson(),
       };
 
   static Profile fromJson(Map<String, dynamic> j) {
@@ -429,7 +447,12 @@ class Profile {
       ..ascensions = j['ascensions'] as int? ?? 0
       ..dailyDay = j['dailyDay'] as int? ?? 0
       ..notifications = j['notifications'] as bool? ?? true
-      ..language = j['lang'] as String?;
+      ..language = j['lang'] as String?
+      ..installId = j['lbId'] as String?
+      ..nicknameCode = j['lbNick'] as String?
+      ..leaderboardOptIn = j['lbOptIn'] as bool? ?? false
+      ..nicknameRerolls = j['lbRerolls'] as int? ?? 0
+      ..weeklyScore = WeeklyScore.fromJson(j['weekly'] is Map ? (j['weekly'] as Map).cast<String, dynamic>() : null);
     if (j['home'] is Map) {
       p.home = HomePlanet.fromJson((j['home'] as Map).cast<String, dynamic>());
     }

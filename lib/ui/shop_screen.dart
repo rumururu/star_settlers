@@ -12,6 +12,7 @@ import '../services/app_state.dart';
 import '../services/monetization.dart';
 import 'chibi.dart';
 import 'common.dart';
+import 'game_icons.dart';
 import 'hangar_screen.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -30,10 +31,17 @@ class _ShopScreenState extends State<ShopScreen> {
   Future<void> _buy(String id) async {
     if (_busy) return;
     setState(() => _busy = true);
-    final ok = await AppState.money.buy(id);
+    final r = await AppState.money.buy(id);
     if (!mounted) return;
     setState(() => _busy = false);
-    if (ok) toast(context, tr.m_buyThanks);
+    switch (r) {
+      case PurchaseResult.success:
+        toast(context, tr.m_buyThanks);
+      case PurchaseResult.failed:
+        toast(context, tr.m_purchaseFailed);
+      case PurchaseResult.cancelled:
+        break;
+    }
   }
 
   Future<void> _freeGems() async {
@@ -42,7 +50,8 @@ class _ShopScreenState extends State<ShopScreen> {
     final ok = await AppState.watchAd();
     if (!mounted) return;
     if (!ok) {
-      toast(context, tr.m_adLoading);
+      final msg = adFailMessage(AppState.money.lastAdResult);
+      if (msg != null) toast(context, msg);
       return;
     }
     AppState.profile.claimAdGems(now);
@@ -76,13 +85,13 @@ class _ShopScreenState extends State<ShopScreen> {
         backgroundColor: const Color(0xFF0D0B26),
         appBar: AppBar(
           backgroundColor: const Color(0xFF151236),
-          title: Text(tr.m_shopTitle),
+          title: gemText(tr.m_shopTitle, iconSize: 26),
           actions: [
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16),
-                child: Text('⭐ ${p.gems}',
-                    style: Ts.heading.copyWith(color: Color(0xFFFF80AB))),
+                child: iconValue('gem', '${p.gems}',
+                    size: IconSz.inline, style: Ts.heading.copyWith(color: const Color(0xFFFF80AB))),
               ),
             ),
           ],
@@ -99,19 +108,26 @@ class _ShopScreenState extends State<ShopScreen> {
             ],
           ),
         ),
-        body: Stack(
+        // 테스트 모드 띠는 목록 위에 겹치지 않게 아래에 따로 둔다 (목록 맨 아래 "구매 복원" 버튼을 가리지 않게).
+        // iPad 등 넓은 화면에서는 내용 폭을 제한한다.
+        body: Column(
           children: [
-            TabBarView(children: [_gems(), _packs(), _premiumShips(), _skins(), _outfits(), _free()]),
+            Expanded(
+              child: MediaQuery.removePadding(
+                context: context,
+                removeBottom: AppState.money.isTestMode,
+                child: contentWidth(TabBarView(
+                    children: [_gems(), _packs(), _premiumShips(), _skins(), _outfits(), _free()])),
+              ),
+            ),
             if (AppState.money.isTestMode)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  color: const Color(0xCC4A148C),
-                  padding: const EdgeInsets.all(6),
-                  child: Text(tr.m_testMode,
-                      textAlign: TextAlign.center, style: dimStyle),
+              Container(
+                width: double.infinity,
+                color: const Color(0xCC4A148C),
+                padding: const EdgeInsets.all(6),
+                child: SafeArea(
+                  top: false,
+                  child: Text(tr.m_testMode, textAlign: TextAlign.center, style: dimStyle),
                 ),
               ),
           ],
@@ -120,13 +136,16 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
+  /// 목록 여백 + 아래쪽 안전 영역(iPhone 홈 인디케이터)
+  EdgeInsets _pad(double v) => EdgeInsets.fromLTRB(v, v, v, v + MediaQuery.paddingOf(context).bottom);
+
   Widget _productCard(ProductDef d, {Widget? leading, bool owned = false}) => Card(
         color: const Color(0xFF1E1A4A),
         child: ListTile(
           contentPadding: const EdgeInsets.all(12),
           leading: leading,
           title: Text(d.title, style: titleStyle),
-          subtitle: Text(d.desc, style: dimStyle),
+          subtitle: gemText(keepAll(d.desc), style: dimStyle),
           trailing: owned
               ? Text(tr.m_owned, style: const TextStyle(color: Color(0xFF7CFFB2)))
               : actionBtn(AppState.money.priceOf(d.id), !_busy, () => _buy(d.id),
@@ -135,13 +154,13 @@ class _ShopScreenState extends State<ShopScreen> {
       );
 
   Widget _gems() => ListView(
-        padding: const EdgeInsets.all(12),
+        padding: _pad(12),
         children: [
           for (final d in productDefs.where((d) => d.id.startsWith('gems_')))
             _productCard(d,
-                leading: Text(
-                    d.id == 'gems_100' ? '⭐' : (d.id == 'gems_550' ? '💰' : '🎁'),
-                    style: Ts.glyph)),
+                leading: d.id == 'gems_100'
+                    ? const GameIcon('gem', size: 32)
+                    : Text(d.id == 'gems_550' ? '💰' : '🎁', style: Ts.glyph)),
           const SizedBox(height: 8),
           Text(tr.m_gemsInfo, style: dimStyle),
         ],
@@ -151,7 +170,7 @@ class _ShopScreenState extends State<ShopScreen> {
     final starter = productDefs.firstWhere((d) => d.id == 'starter_pack');
     final premium = productDefs.firstWhere((d) => d.id == 'premium_pass');
     return ListView(
-      padding: const EdgeInsets.all(12),
+      padding: _pad(12),
       children: [
         _productCard(starter,
             owned: _p.starterBought,
@@ -203,7 +222,7 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget _premiumShips() {
     final p = AppState.profile;
     return ListView(
-      padding: const EdgeInsets.all(Space.m),
+      padding: _pad(Space.m),
       children: [
         Text(tr.m_premiumSection, style: sectionStyle),
         const SizedBox(height: Space.xs),
@@ -248,8 +267,8 @@ class _ShopScreenState extends State<ShopScreen> {
                   else if (p.ownedShips.contains(t.id))
                     Text(tr.m_owned, style: Ts.label.copyWith(color: const Color(0xFF7CFFB2)))
                   else
-                    actionBtn('⭐${t.gemPrice}', p.gems >= t.gemPrice, () => _buyShip(t),
-                        color: const Color(0xFFAD1457)),
+                    actionBtn('${t.gemPrice}', p.gems >= t.gemPrice, () => _buyShip(t),
+                        icon: 'gem', iconSize: IconSz.inline, color: const Color(0xFFAD1457)),
                 ],
               ),
             ),
@@ -322,11 +341,11 @@ class _ShopScreenState extends State<ShopScreen> {
           contentPadding: const EdgeInsets.all(12),
           leading: Text(icon, style: Ts.glyph),
           title: Text(title, style: titleStyle),
-          subtitle: Text(desc, style: dimStyle),
+          subtitle: gemText(keepAll(desc), style: dimStyle),
           trailing: price == null
               ? const Text('MAX', style: TextStyle(color: Color(0xFF7CFFB2)))
-              : actionBtn('⭐$price', enabled && _p.gems >= price, onBuy,
-                  color: const Color(0xFFAD1457)),
+              : actionBtn('$price', enabled && _p.gems >= price, onBuy,
+                  icon: 'gem', iconSize: IconSz.inline, color: const Color(0xFFAD1457)),
         ),
       );
 
@@ -352,7 +371,7 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget _skins() {
     final p = AppState.profile;
     return GridView.count(
-      padding: const EdgeInsets.all(12),
+      padding: _pad(12),
       crossAxisCount: MediaQuery.sizeOf(context).width > 600 ? 4 : 2,
       childAspectRatio: 0.85,
       mainAxisSpacing: 8,
@@ -380,7 +399,7 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget _outfits() {
     final p = AppState.profile;
     return GridView.count(
-      padding: const EdgeInsets.all(12),
+      padding: _pad(12),
       crossAxisCount: MediaQuery.sizeOf(context).width > 600 ? 4 : 2,
       childAspectRatio: 0.85,
       mainAxisSpacing: 8,
@@ -423,7 +442,8 @@ class _ShopScreenState extends State<ShopScreen> {
       button = Text(exclusive == 'premium_pass' ? tr.m_passOnly : tr.m_starterOnly,
           style: dimStyle, textAlign: TextAlign.center);
     } else {
-      button = actionBtn('⭐$price', true, onBuy, color: const Color(0xFFAD1457));
+      button = actionBtn('$price', true, onBuy,
+          icon: 'gem', iconSize: IconSz.inline, color: const Color(0xFFAD1457));
     }
     return Container(
       decoration: BoxDecoration(
@@ -447,7 +467,7 @@ class _ShopScreenState extends State<ShopScreen> {
     final p = AppState.profile;
     final left = p.adGemsLeft(DateTime.now());
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: _pad(Space.l),
       children: [
         Text(tr.m_adSection, style: sectionStyle),
         const SizedBox(height: 6),
@@ -476,7 +496,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 ),
                 child: Column(children: [
                   Text(tr.m_dayN(i + 1), style: dimStyle),
-                  Text('⭐${[5, 5, 10, 10, 15, 20, 50][i]}', style: bodyStyle),
+                  iconValue('gem', '${[5, 5, 10, 10, 15, 20, 50][i]}', size: IconSz.inline, style: bodyStyle),
                 ]),
               ),
           ],

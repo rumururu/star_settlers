@@ -65,7 +65,25 @@ List<(String, int, int, int)> get homePalettes => [
 ];
 
 class HomePlanet {
-  String name = tr.g_homeDefaultName;
+  /// 사용자가 붙인 이름. null이면 기본 이름(현재 언어의 g_homeDefaultName)을 보여 준다.
+  /// 기본 이름을 문자열로 저장하면 언어를 바꿔도 예전 언어로 남아서 null로 둔다.
+  String? _customName;
+
+  String get name => _customName ?? tr.g_homeDefaultName;
+
+  /// 빈 문자열이나 어느 언어든 기본 이름이면 기본 이름으로 되돌린다
+  set name(String? value) {
+    final v = value?.trim() ?? '';
+    _customName = v.isEmpty || isDefaultName(v) ? null : v;
+  }
+
+  /// 사용자가 이름을 바꿨는지
+  bool get hasCustomName => _customName != null;
+
+  /// [text]가 지원 언어 중 하나의 기본 이름인지 (예전 저장은 기본 이름을 문자열로 저장했다)
+  static bool isDefaultName(String text) =>
+      L10n.supportedLocales.any((l) => lookupL10n(l).g_homeDefaultName == text);
+
   int palette = 0;
   final ownedPalettes = <int>{0, 1, 2, 3, 4};
   bool ring = false;
@@ -146,7 +164,8 @@ class HomePlanet {
       );
 
   Map<String, dynamic> toJson() => {
-        'name': name,
+        // 기본 이름은 저장하지 않는다 (불러올 때 현재 언어로 보여 준다)
+        if (_customName != null) 'name': _customName,
         'palette': palette,
         'owned': ownedPalettes.toList(),
         'ring': ring,
@@ -159,7 +178,7 @@ class HomePlanet {
 
   static HomePlanet fromJson(Map<String, dynamic> j) {
     final h = HomePlanet()
-      ..name = j['name'] as String? ?? tr.g_homeDefaultName
+      ..name = j['name'] as String?
       ..palette = j['palette'] as int? ?? 0
       ..ring = j['ring'] as bool? ?? false
       ..level = j['level'] as int? ?? 1

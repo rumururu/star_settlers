@@ -1,0 +1,51 @@
+{
+  "title": "Star Settlers - Capitán chibi",
+  "name": "Star Settlers - Capitán chibi",
+  "subtitle": "Piratas, colonias y estaciones",
+  "short": "¡De Marte a las estrellas reales! Aventura espacial chibi con piratas y colonias",
+  "full": "🚀 ¡Conviértete en un adorable capitán chibi y despega desde la Tierra hacia una aventura espacial real!\n\n🪐 Empieza en Marte y viaja a estrellas reales\nTu viaje comienza en nuestro Sistema Solar. Clava tu primera bandera en Marte y coloniza la Luna, Venus, Júpiter, las lunas de Saturno y mucho más.\nDesarrolla todos los planetas para abrir la puerta de salto. Visita sistemas estelares reales como Alfa Centauri y Sirio, y llega hasta el centro de la Vía Láctea y la Galaxia de Andrómeda.\n\n🏗 Crea colonias acogedoras\nCada colonia es un pequeño pueblo planetario, a salvo bajo una cúpula de escudo.\nConstruye Torreta, Plataforma minera, Puesto comercial, Dique de reparación y Generador de escudo para ganar más y frenar los ataques piratas.\n\n⚔ Combates espaciales fáciles y emocionantes\n¡Muévete con un solo joystick y toca para disparar!\nUsa misiles teledirigidos, escudos de energía, drones de combate y turbo para ahuyentar a piratas, forajidos buscados y jefes de sistema.\nEl láser de la Base Haven también te cubre las espaldas.\n\n🛸 Hangar y Estación\nMejora arma, blindaje, motor, misiles, escudo, dron e imán en la estación.\nElige entre 7 naves, del veloz Interceptor al Nova Dragon y la Aurora.\n\n👩‍🚀 Una tripulación adorable\nRecluta artilleros, ingenieros, pilotos, comerciantes, mineros y científicos, y asígnalos a tu nave para hacerla más fuerte.\n¡También pueden unirse tripulantes legendarios ★4!\n\n💤 Ingresos mientras descansas\nTus colonias siguen trabajando aunque no estés. Vuelve y recoge tus créditos junto a la Tte. Mina.\n\n📅 Algo nuevo cada día\nRecompensas diarias, misiones diarias, logros, encargos, lluvias de meteoros y Nyang, el gato mercader errante.\n\n✨ Tu propio estilo\nPersonaliza tu nave con aspectos y a tu capitán con trajes como el Casco de gatito y las Orejas de conejo, y decora tu propio planeta.\n\n🌍 10 idiomas\n한국어 · English · 日本語 · 简体中文 · Español · Français · Deutsch · Português · Русский · Bahasa Indonesia\n\n💜 Para todos\nSin registro. Tu progreso se guarda en tu dispositivo.\nPuedes disfrutar de toda la aventura sin pagar. Las compras dentro de la app, como gemas, naves premium, cosméticos y el Pase de Comandante de Flota, son totalmente opcionales.\nLos anuncios solo se muestran cuando tú decides ver uno a cambio de una recompensa.",
+  "keywords": "espacio,galaxia,nave,disparos,lindo,idle,casual,marte,tripulación,explorar,planeta",
+  "promo": "¡Despega desde la Tierra con un capitán chibi! Funda tu primera colonia en Marte, ahuyenta a los piratas y viaja a Alfa Centauri y Andrómeda. Las compras son opcionales.",
+  "slides": [
+    {
+      "title": "Una aventura<br><em>espacial chibi</em>",
+      "sub": "Derrota a los piratas, coloniza planetas y crea tu propia galaxia",
+      "detail": "Capitán · Tte. Mina · Jefe pirata"
+    },
+    {
+      "title": "¿Piratas a la vista?<br><em>¡Al combate!</em>",
+      "sub": "Acércate con un solo joystick y contraataca con misiles y escudos",
+      "detail": "Misil teledirigido · Escudo de energía · Impulso"
+    },
+    {
+      "title": "Clava tu bandera,<br><em>crea tu colonia</em>",
+      "sub": "Tu propio pueblo planetario, a salvo bajo una cúpula de escudo",
+      "detail": "Planetas jardín · desierto · hielo · lava · gas"
+    },
+    {
+      "title": "Torretas y escudos:<br><em>¡colonia blindada!</em>",
+      "sub": "Cuantos más edificios, más ingresos y más defensa",
+      "detail": "Torreta · Plataforma minera · Puesto comercial · Escudo"
+    },
+    {
+      "title": "Expande tu sistema<br><em>y llega más lejos</em>",
+      "sub": "Desarrolla todos los planetas y se abrirá la puerta de salto al siguiente sistema",
+      "detail": "Desarrollo 100% → Puerta de salto abierta"
+    },
+    {
+      "title": "Elige tu nave<br><em>en el Hangar</em>",
+      "sub": "7 naves, del veloz Interceptor al Nova Dragon",
+      "detail": "Scout · Fortress · Phantom · Nova Dragon · Aurora y más"
+    },
+    {
+      "title": "Mejora tu nave<br><em>en la Estación</em>",
+      "sub": "Arma · Blindaje · Motor · Misil · Escudo · Dron · Imán",
+      "detail": "Tus colonias ganan aunque no juegues"
+    },
+    {
+      "title": "¡Recluta a tu<br><em>tripulación cuqui!</em>",
+      "sub": "Asígnala a tu nave para obtener bonus, ¡incluso ★4 legendarios!",
+      "detail": "Artillero · Ingeniero · Piloto · Minero · Científico y más"
+    }
+  ]
+}

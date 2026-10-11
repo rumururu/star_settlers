@@ -17,6 +17,7 @@ import '../services/notifications.dart';
 import 'chibi.dart';
 import 'colony_panel.dart';
 import 'home_screen.dart';
+import 'leaderboard_screen.dart';
 import 'common.dart';
 import 'game_icons.dart';
 import 'merchant_panel.dart';
@@ -81,7 +82,7 @@ class _GameScreenState extends State<GameScreen>
     // 게임 중 "상점으로"는 게임을 멈추는 모달 경로로
     GemTopUp.openShop = () => _openShop();
     NotificationService.instance.cancelAll();
-    if (w.profile.notifications) NotificationService.instance.requestPermission();
+    // 알림 권한은 시작하자마자 묻지 않는다 (첫 튜토리얼 대사를 가린다) — [_maybeAskNotifications]
     AudioService.instance.startMusic();
     WidgetsBinding.instance.addPostFrameCallback((_) => _showOffline());
   }
@@ -103,18 +104,48 @@ class _GameScreenState extends State<GameScreen>
     super.dispose();
   }
 
+  /// 앱 생명주기 저장 시각 (inactive → hidden → paused가 연달아 와도 한 번만 저장)
+  DateTime? _lifecycleSavedAt;
+
+  bool get _canSave => !_discarded && identical(w.profile, AppState.profile);
+
+  void _lifecycleSave() {
+    final now = DateTime.now();
+    final last = _lifecycleSavedAt;
+    if (last != null && now.difference(last) < const Duration(seconds: 2)) return;
+    _lifecycleSavedAt = now;
+    _saveTimer = 0;
+    SaveService.save(w);
+  }
+
+  /// 복귀 알림 권한: 튜토리얼 첫 목표들(소행성·해적)을 마치고 첫 식민지를 세운 뒤,
+  /// 대사·창이 모두 사라졌을 때 묻는다. 시작하자마자 물으면 첫 튜토리얼 대사를 가린다.
+  bool _notifAsked = false;
+
+  Future<void> _maybeAskNotifications() async {
+    if (_notifAsked || !w.profile.notifications) return;
+    if (_overlay != _Overlay.none || _modal || GemTopUp.asking || w.dialogs.isNotEmpty) return;
+    if (!w.player.alive || (w.storyIndex < 3 && w.counter('colonies') == 0)) return;
+    _notifAsked = true;
+    _modal = true;
+    await NotificationService.instance.requestPermission();
+    if (mounted) _endModal();
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.inactive) {
+      // 전화·알림창·결제창 등으로 잠깐 가려질 때도 저장 (이대로 앱이 종료되면 최대 20초를 잃었다)
+      if (_canSave) _lifecycleSave();
+    } else if (state == AppLifecycleState.resumed) {
       AudioService.instance.startMusic();
       NotificationService.instance.cancelAll();
       // 백그라운드에 있던 시간만큼 오프라인 수입 (1분 이상일 때)
       if (w.savedAt != null && !_modal) _showOffline();
-    } else if (!_discarded &&
-        identical(w.profile, AppState.profile) &&
-        (state == AppLifecycleState.paused || state == AppLifecycleState.hidden)) {
+    } else if (_canSave && (state == AppLifecycleState.paused || state == AppLifecycleState.hidden)) {
       w.savedAt ??= DateTime.now();
-      SaveService.save(w);
+      _lifecycleSave();
+      AppState.submitLeaderboard();
       if (w.profile.notifications) {
         NotificationService.instance.scheduleReturn(
           storageFullIn: Duration(hours: w.profile.premium ? 8 : 2),
@@ -155,7 +186,7 @@ class _GameScreenState extends State<GameScreen>
     w.sfx.clear();
 
     _saveTimer += dt;
-    if (_saveTimer > 20 && !_discarded && identical(w.profile, AppState.profile)) {
+    if (_saveTimer > 20 && _canSave) {
       _saveTimer = 0;
       SaveService.save(w);
     }
@@ -182,6 +213,7 @@ class _GameScreenState extends State<GameScreen>
       w.colonyTutorialPending = false;
       if (_nearbyColony != null) _setOverlay(_Overlay.colony);
     }
+    _maybeAskNotifications();
     _frame.tick();
   }
 
@@ -202,6 +234,8 @@ class _GameScreenState extends State<GameScreen>
 
   void _setOverlay(_Overlay o) {
     if (_overlay == o) return;
+    // 일시정지할 때 주간 순위 점수를 보낸다 (참여 중일 때만, 60초 간격, 기다리지 않음)
+    if (o == _Overlay.pause) AppState.submitLeaderboard();
     setState(() => _overlay = o);
   }
 
@@ -257,6 +291,8 @@ class _GameScreenState extends State<GameScreen>
   Future<T?> _modalRoute<T>(Widget page) async {
     _modal = true;
     final r = await Navigator.of(context).push<T>(MaterialPageRoute(builder: (_) => page));
+    // 격추된 채 상점 등에 다녀왔으면 자동 재출격 대기를 처음부터 (젬을 사 와서 젬 부활을 누를 시간)
+    if (w.player.awaitingRevive) w.player.deadTime = 0;
     _endModal();
     AppState.deliverPending();
     if (mounted) setState(() {});
@@ -316,7 +352,8 @@ class _GameScreenState extends State<GameScreen>
               if (ok) {
                 Navigator.pop(ctx, 2);
               } else {
-                toast(ctx, tr.u_adLoading);
+                final msg = adFailMessage(AppState.money.lastAdResult);
+                if (msg != null) toast(ctx, msg);
               }
             },
             child: Text(premium ? tr.u_collectDouble : tr.u_adDouble),
@@ -397,8 +434,9 @@ class _GameScreenState extends State<GameScreen>
     _endModal();
     if (ok && w.profile.useAdRevive(DateTime.now())) {
       w.reviveHere();
-    } else {
-      w.say(Speaker.advisor, tr.u_adLoadingRetry);
+    } else if (!ok) {
+      final msg = adFailMessage(AppState.money.lastAdResult, retry: true);
+      if (msg != null) w.say(Speaker.advisor, msg);
     }
   }
 
@@ -545,7 +583,7 @@ class _GameScreenState extends State<GameScreen>
           child: glass(Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('🎯 ${w.story.title}',
+              Text(keepAll('🎯 ${w.story.title}'),
                   style: Ts.caption.copyWith(color: Color(0xFF7CFFB2), fontWeight: FontWeight.bold)),
               if (st > 1) Text('$sv / $st', style: dimStyle),
               for (final m in w.activeMissions)
@@ -661,16 +699,16 @@ class _GameScreenState extends State<GameScreen>
     final gate = w.nearbyGate;
     final pl = w.nearbyPlanet;
     if (merchant != null) {
-      out.add(actionBtn(tr.u_merchantE, true, () => _setOverlay(_Overlay.merchant),
+      out.add(actionBtn(keyHint(tr.u_merchantE), true, () => _setOverlay(_Overlay.merchant),
           icon: 'act_merchant', color: const Color(0xFF00897B)));
     }
     if (st != null) {
-      out.add(actionBtn('${st.name} (E)', true, () => _setOverlay(_Overlay.station),
+      out.add(actionBtn(keyHint('${st.name} (E)'), true, () => _setOverlay(_Overlay.station),
           icon: 'act_station'));
     }
     if (gate != null) {
       out.add(w.gateOpen(gate)
-          ? actionBtn(gate.forward ? tr.u_nextSectorE : tr.u_prevSectorE, true,
+          ? actionBtn(keyHint(gate.forward ? tr.u_nextSectorE : tr.u_prevSectorE), true,
               () => _act(() => w.warp(gate)),
               icon: 'act_warp', color: const Color(0xFF6A1B9A))
           : actionBtn(tr.u_gateLocked((w.development * 100).floor()), false, null,
@@ -682,7 +720,7 @@ class _GameScreenState extends State<GameScreen>
         out.add(actionBtn(tr.u_settle(pl.name), w.canAfford(c), () => _act(() => w.upgradePlanet(pl)),
             icon: 'act_settle', cost: c));
       } else {
-        out.add(actionBtn(tr.u_manageE(pl.name), true, () => _setOverlay(_Overlay.colony),
+        out.add(actionBtn(keyHint(tr.u_manageE(pl.name)), true, () => _setOverlay(_Overlay.colony),
             icon: pl.raided ? 'raid' : 'colony_levelup', color: const Color(0xFF2E7D32)));
       }
       final (cr, orr) = pl.ratePerLevel;
@@ -793,7 +831,7 @@ class _GameScreenState extends State<GameScreen>
             child: GestureDetector(
               onTap: () => setState(() => _autoFire = !_autoFire),
               child: glass(
-                iconValue('cmb_auto', _autoFire ? 'ON' : 'OFF',
+                iconValue('cmb_auto', _autoFire ? tr.u_autoFireOn : tr.u_autoFireOff,
                     size: 22,
                     style: Ts.caption.copyWith(color: _autoFire ? const Color(0xFF7CFFB2) : Colors.white60)),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -902,7 +940,7 @@ class _GameScreenState extends State<GameScreen>
                   children: [
                     Text(name,
                         style: Ts.caption.copyWith(color: d.speaker == Speaker.pirate ? const Color(0xFFFF8A80) : kSky, fontWeight: FontWeight.bold)),
-                    Text(d.text, style: bodyStyle),
+                    Text(keepAll(d.text), style: bodyStyle),
                   ],
                 ),
               ),
@@ -979,6 +1017,8 @@ class _GameScreenState extends State<GameScreen>
               ),
             ),
             const SizedBox(height: 8),
+            actionBtn(tr.lb_menu, true, () => _modalRoute(appLeaderboardScreen()), color: const Color(0xFF00838F)),
+            const SizedBox(height: 8),
             actionBtn(tr.u_myPlanet, true, () => _modalRoute(const HomePlanetScreen()),
                 color: const Color(0xFF00897B)),
             const SizedBox(height: 8),
@@ -989,14 +1029,18 @@ class _GameScreenState extends State<GameScreen>
             const SizedBox(height: 8),
             actionBtn(tr.u_saveAndQuit, true, () async {
               await SaveService.save(w);
+              AppState.submitLeaderboard();
               if (mounted) Navigator.of(context).pop();
             }, color: const Color(0xFF455A64)),
-            const SizedBox(height: 16),
-            Text(
-              tr.u_keyboardHelp,
-              style: dimStyle,
-              textAlign: TextAlign.center,
-            ),
+            // 키보드 단축키 안내는 키보드가 있는 웹·데스크톱에서만
+            if (showKeyHints) ...[
+              const SizedBox(height: 16),
+              Text(
+                tr.u_keyboardHelp,
+                style: dimStyle,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ],
         ),
       );

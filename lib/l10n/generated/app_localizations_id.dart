@@ -778,6 +778,10 @@ class L10nId extends L10n {
   String get m_loginWelcome => 'Selamat datang kembali, Kapten!';
 
   @override
+  String get m_loginFirst =>
+      'Selamat datang, Kapten! Ini hadiah login pertamamu.';
+
+  @override
   String get m_loginStreakHint => 'Login 7 hari berturut-turut untuk ⭐50!';
 
   @override
@@ -867,21 +871,22 @@ class L10nId extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers menyimpan data game (progres, pengaturan) hanya di perangkatmu dan tidak mengumpulkan informasi identitas pribadi.\n\nPembelian dalam aplikasi diproses oleh Google Play / App Store; detail pembayaran tidak pernah dibagikan ke pengembang.\n\nJika iklan berhadiah aktif, penyedia iklan (Google AdMob) dapat mengumpulkan data seperti ID iklan.\n\nKontak: $email (Pengaturan → Kirim Masukan ke Pengembang)';
+    return 'Star Settlers tidak memerlukan pendaftaran dan tidak mengumpulkan informasi identitas pribadi. Data game (progres, mata uang, pembelian, pengaturan) hanya disimpan di perangkatmu. Satu-satunya pengecualian adalah papan peringkat mingguan opsional di bawah, jika kamu menyalakannya.\n\nPembelian: diproses oleh Google Play / App Store; detail pembayaran tidak pernah dibagikan ke pengembang. RevenueCat memverifikasi dan memulihkan pembelian dengan memproses ID pengguna anonim dan riwayat pembelian.\n\nIklan: iklan berhadiah Google AdMob hanya diputar saat kamu memilih untuk menontonnya. AdMob dapat menggunakan ID iklan, alamat IP, dan info perangkat untuk menayangkan iklan, mempersonalisasinya jika diizinkan, dan mengukurnya. Di Wilayah Ekonomi Eropa, Inggris, dan Swiss, persetujuan diminta saat game pertama kali dibuka dan bisa diubah di Pengaturan → Pengaturan privasi iklan.\n\nNotifikasi: notifikasi lokal yang dijadwalkan di perangkatmu; tidak ada yang dikirim keluar.\n\nMasukan: pesan, versi aplikasi, dan info perangkat hanya sampai ke pengembang jika kamu sendiri mengirim emailnya.\n\nPapan peringkat mingguan (opsional): mati secara default; kamu ikut hanya jika menyalakannya di Pengaturan atau layar peringkat. Yang dikirim hanya ID instalasi acak, nama panggilan yang dibuat game dari daftar kata tetap, dan skor mingguanmu. Tanpa nama, tanpa apa pun yang kamu ketik, dan tanpa chat. Pemain lain hanya melihat nama panggilan dan skor. Servernya Supabase (wilayah Seoul).\n\nPenghapusan: Pengaturan → Reset Semua Data menghapus data di perangkatmu. Jika kamu ikut papan peringkat, reset juga menghapus catatan peringkatmu di server (ID, nama panggilan, skor); kamu juga bisa meminta penghapusan lewat email.\n\nKebijakan lengkap: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nKontak: $email';
   }
 
   @override
   String get m_wipeTitle => 'Reset Semua Data';
 
   @override
-  String get m_wipeDesc => 'Menghapus semua progres, permata, dan kosmetik';
+  String get m_wipeDesc =>
+      'Menghapus semua progres, permata, kosmetik, dan catatan peringkatmu';
 
   @override
   String get m_wipeConfirmTitle => 'Yakin reset semuanya?';
 
   @override
   String get m_wipeConfirmBody =>
-      'Tidak bisa dibatalkan. Pembelian bisa dikembalikan lewat \"Pulihkan Pembelian\".';
+      'Tidak bisa dibatalkan. Permata dan progres dihapus permanen. Paket Pemula dan Pass Komandan bisa dikembalikan lewat \"Pulihkan Pembelian\".';
 
   @override
   String get m_wipeOk => 'Reset';
@@ -944,7 +949,8 @@ class L10nId extends L10n {
   String get m_tabFree => 'Permata Gratis';
 
   @override
-  String get m_testMode => '🧪 Mode uji: tanpa pembayaran atau iklan sungguhan';
+  String get m_testMode =>
+      '🧪 Mode uji: tanpa pembayaran sungguhan; iklan adalah iklan uji Google';
 
   @override
   String get m_owned => 'Dimiliki';
@@ -2504,6 +2510,437 @@ class L10nId extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return 'Tukar ⭐$gems jadi 💰$credits?';
   }
+
+  @override
+  String get m_purchaseFailed =>
+      'Tidak dapat terhubung ke toko. Coba lagi nanti.';
+
+  @override
+  String get m_adWatchToEnd =>
+      'Tonton iklan sampai selesai untuk mendapatkan hadiah.';
+
+  @override
+  String get u_autoFireOn => 'ON';
+
+  @override
+  String get u_autoFireOff => 'OFF';
+
+  @override
+  String u_recruitRoleOdds(int count, String pct) {
+    return 'Peran (semua rekrut): acak dari $count, masing-masing $pct';
+  }
+
+  @override
+  String m_feedbackSubject(String app) {
+    return 'Masukan $app';
+  }
+
+  @override
+  String get lb_menu => '🏅 Peringkat Mingguan';
+
+  @override
+  String get lb_menuShort => 'Peringkat';
+
+  @override
+  String get lb_title => '🏅 Peringkat Mingguan';
+
+  @override
+  String get lb_join => 'Ikut papan peringkat';
+
+  @override
+  String get lb_joinDesc =>
+      'Yang dikirim hanya ID anonim, nama panggilan buatan game, dan skor mingguanmu. Tanpa nama, tanpa chat, tanpa apa pun yang kamu ketik. Bisa dimatikan kapan saja.';
+
+  @override
+  String get lb_yourNick => 'Nama panggilanmu';
+
+  @override
+  String lb_reroll(int count) {
+    return 'Nama baru ($count)';
+  }
+
+  @override
+  String lb_weekPoints(String points) {
+    return 'Minggu ini: $points poin';
+  }
+
+  @override
+  String lb_rank(int rank, int total) {
+    return '#$rank dari $total';
+  }
+
+  @override
+  String lb_rankOnly(int rank) {
+    return '#$rank';
+  }
+
+  @override
+  String get lb_top50 => '50 teratas minggu ini';
+
+  @override
+  String get lb_empty => 'Belum ada skor minggu ini. Jadilah yang pertama!';
+
+  @override
+  String get lb_retry => 'Coba lagi';
+
+  @override
+  String get lb_refresh => 'Muat ulang';
+
+  @override
+  String get lb_offline =>
+      'Tidak ada koneksi. Game tetap bisa dimainkan — coba lagi nanti.';
+
+  @override
+  String get lb_rateLimited =>
+      'Terlalu sering. Tunggu satu menit lalu coba lagi.';
+
+  @override
+  String get lb_rejected => 'Skor ini tidak bisa dikirim.';
+
+  @override
+  String get lb_serverError => 'Papan peringkat sedang sibuk. Coba lagi nanti.';
+
+  @override
+  String get lb_unavailable => 'Papan peringkat tidak tersedia.';
+
+  @override
+  String get lb_optedOut =>
+      'Nyalakan \"Ikut papan peringkat\" untuk mengirim skormu.';
+
+  @override
+  String get lb_howTo =>
+      'Level koloni +100 · Sistem bintang baru +500 · Bajak laut +5 · Bos +200';
+
+  @override
+  String get lb_resets => 'Minggu baru dimulai setiap Senin pukul 00:00 UTC.';
+
+  @override
+  String nickFormat(String adj, String animal, String number) {
+    return '$animal $adj $number';
+  }
+
+  @override
+  String get nickGenders => '';
+
+  @override
+  String nickAdj0(String g) {
+    return 'Pemberani';
+  }
+
+  @override
+  String get nickAnimal0 => 'Berang-berang';
+
+  @override
+  String nickAdj1(String g) {
+    return 'Ceria';
+  }
+
+  @override
+  String get nickAnimal1 => 'Panda';
+
+  @override
+  String nickAdj2(String g) {
+    return 'Tenang';
+  }
+
+  @override
+  String get nickAnimal2 => 'Rubah';
+
+  @override
+  String nickAdj3(String g) {
+    return 'Cerdik';
+  }
+
+  @override
+  String get nickAnimal3 => 'Kelinci';
+
+  @override
+  String nickAdj4(String g) {
+    return 'Kosmik';
+  }
+
+  @override
+  String get nickAnimal4 => 'Burung Hantu';
+
+  @override
+  String nickAdj5(String g) {
+    return 'Ingin Tahu';
+  }
+
+  @override
+  String get nickAnimal5 => 'Penguin';
+
+  @override
+  String nickAdj6(String g) {
+    return 'Lincah';
+  }
+
+  @override
+  String get nickAnimal6 => 'Koala';
+
+  @override
+  String nickAdj7(String g) {
+    return 'Pemimpi';
+  }
+
+  @override
+  String get nickAnimal7 => 'Lumba-lumba';
+
+  @override
+  String nickAdj8(String g) {
+    return 'Hangat';
+  }
+
+  @override
+  String get nickAnimal8 => 'Kura-kura';
+
+  @override
+  String nickAdj9(String g) {
+    return 'Cepat';
+  }
+
+  @override
+  String get nickAnimal9 => 'Landak';
+
+  @override
+  String nickAdj10(String g) {
+    return 'Berbulu';
+  }
+
+  @override
+  String get nickAnimal10 => 'Tupai';
+
+  @override
+  String nickAdj11(String g) {
+    return 'Ramah';
+  }
+
+  @override
+  String get nickAnimal11 => 'Anak Kucing';
+
+  @override
+  String nickAdj12(String g) {
+    return 'Lembut';
+  }
+
+  @override
+  String get nickAnimal12 => 'Anak Anjing';
+
+  @override
+  String nickAdj13(String g) {
+    return 'Bercahaya';
+  }
+
+  @override
+  String get nickAnimal13 => 'Anak Bebek';
+
+  @override
+  String nickAdj14(String g) {
+    return 'Keemasan';
+  }
+
+  @override
+  String get nickAnimal14 => 'Anak Domba';
+
+  @override
+  String nickAdj15(String g) {
+    return 'Bahagia';
+  }
+
+  @override
+  String get nickAnimal15 => 'Anjing Laut';
+
+  @override
+  String nickAdj16(String g) {
+    return 'Lucu';
+  }
+
+  @override
+  String get nickAnimal16 => 'Paus';
+
+  @override
+  String nickAdj17(String g) {
+    return 'Baik Hati';
+  }
+
+  @override
+  String get nickAnimal17 => 'Hamster';
+
+  @override
+  String nickAdj18(String g) {
+    return 'Beruntung';
+  }
+
+  @override
+  String get nickAnimal18 => 'Beaver';
+
+  @override
+  String nickAdj19(String g) {
+    return 'Musikal';
+  }
+
+  @override
+  String get nickAnimal19 => 'Rakun';
+
+  @override
+  String nickAdj20(String g) {
+    return 'Kuat';
+  }
+
+  @override
+  String get nickAnimal20 => 'Burung Beo';
+
+  @override
+  String nickAdj21(String g) {
+    return 'Warna-warni';
+  }
+
+  @override
+  String get nickAnimal21 => 'Kepik';
+
+  @override
+  String nickAdj22(String g) {
+    return 'Manis';
+  }
+
+  @override
+  String get nickAnimal22 => 'Burung Pipit';
+
+  @override
+  String nickAdj23(String g) {
+    return 'Sopan';
+  }
+
+  @override
+  String get nickAnimal23 => 'Anak Rusa';
+
+  @override
+  String nickAdj24(String g) {
+    return 'Suka Bermain';
+  }
+
+  @override
+  String get nickAnimal24 => 'Kuda Poni';
+
+  @override
+  String nickAdj25(String g) {
+    return 'Pendiam';
+  }
+
+  @override
+  String get nickAnimal25 => 'Anak Beruang';
+
+  @override
+  String nickAdj26(String g) {
+    return 'Berkilau';
+  }
+
+  @override
+  String get nickAnimal26 => 'Anak Singa';
+
+  @override
+  String nickAdj27(String g) {
+    return 'Perak';
+  }
+
+  @override
+  String get nickAnimal27 => 'Anak Harimau';
+
+  @override
+  String nickAdj28(String g) {
+    return 'Mengantuk';
+  }
+
+  @override
+  String get nickAnimal28 => 'Jerapah';
+
+  @override
+  String nickAdj29(String g) {
+    return 'Bulan';
+  }
+
+  @override
+  String get nickAnimal29 => 'Zebra';
+
+  @override
+  String nickAdj30(String g) {
+    return 'Surya';
+  }
+
+  @override
+  String get nickAnimal30 => 'Gajah';
+
+  @override
+  String nickAdj31(String g) {
+    return 'Ajaib';
+  }
+
+  @override
+  String get nickAnimal31 => 'Kuda Nil';
+
+  @override
+  String nickAdj32(String g) {
+    return 'Super';
+  }
+
+  @override
+  String get nickAnimal32 => 'Llama';
+
+  @override
+  String nickAdj33(String g) {
+    return 'Berbintang';
+  }
+
+  @override
+  String get nickAnimal33 => 'Alpaka';
+
+  @override
+  String nickAdj34(String g) {
+    return 'Cerah';
+  }
+
+  @override
+  String get nickAnimal34 => 'Meerkat';
+
+  @override
+  String nickAdj35(String g) {
+    return 'Mulia';
+  }
+
+  @override
+  String get nickAnimal35 => 'Bintang Laut';
+
+  @override
+  String nickAdj36(String g) {
+    return 'Mungil';
+  }
+
+  @override
+  String get nickAnimal36 => 'Kuda Laut';
+
+  @override
+  String nickAdj37(String g) {
+    return 'Bijak';
+  }
+
+  @override
+  String get nickAnimal37 => 'Tupai Belang';
+
+  @override
+  String nickAdj38(String g) {
+    return 'Bersalju';
+  }
+
+  @override
+  String get nickAnimal38 => 'Ikan Mas Koki';
+
+  @override
+  String nickAdj39(String g) {
+    return 'Setia';
+  }
+
+  @override
+  String get nickAnimal39 => 'Kunang-kunang';
 
   @override
   String get m_adPrivacy => 'Pengaturan privasi iklan';

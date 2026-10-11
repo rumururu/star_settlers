@@ -773,6 +773,9 @@ class L10nJa extends L10n {
   String get m_loginWelcome => '今日も来てくれたんですね、艦長！';
 
   @override
+  String get m_loginFirst => 'ようこそ、艦長！初めてのログインボーナスです。';
+
+  @override
   String get m_loginStreakHint => '7日連続ログインで⭐50！';
 
   @override
@@ -861,20 +864,21 @@ class L10nJa extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlersはゲームデータ（進行状況、設定）を端末内にのみ保存し、個人を特定できる情報は収集しません。\n\nアプリ内課金はGoogle Play / App Storeが処理し、決済情報が開発者に渡ることはありません。\n\nリワード広告が有効な場合、広告提供元（Google AdMob）が広告IDなどのデータを収集することがあります。\n\nお問い合わせ: $email（設定 → 開発者にフィードバックを送る）';
+    return 'Star Settlersは会員登録がなく、個人を特定できる情報は収集しません。ゲームデータ（進行状況、通貨、購入履歴、設定）は端末内にのみ保存されます。ただし、ご自身でオンにした場合のみ、下記の週間ランキングの情報をサーバーに送ります。\n\n課金: Google Play / App Storeが処理し、決済情報が開発者に渡ることはありません。購入の確認と復元にはRevenueCatを使用し、匿名のユーザーIDと購入履歴が処理されます。\n\n広告: 自分で選んだときだけGoogle AdMobのリワード広告が流れます。AdMobは広告の配信、許可されている場合のパーソナライズ、広告の測定のために、広告ID、IPアドレス、端末情報を使用することがあります。欧州経済領域・英国・スイスでは初回起動時に同意を確認し、設定 → 広告のプライバシー設定 で変更できます。\n\n通知: 端末内で予約するローカル通知で、外部には送信されません。\n\nフィードバック: ご自身でメールを送った場合のみ、内容とアプリのバージョン・端末情報が開発者に届きます。\n\n週間ランキング（任意）: 初期設定はオフで、設定またはランキング画面でオンにしたときだけ参加します。送るのはランダムなインストールID、ゲームが決まった単語リストから作るニックネーム、週間スコアだけです。名前や入力した文字は送らず、チャットもありません。ほかのプレイヤーに見えるのはニックネームとスコアだけです。サーバーはSupabase（ソウルリージョン）です。\n\n削除: 設定 → すべてのデータをリセット で端末のデータを消去できます。ランキングに参加していた場合は、リセット時にサーバー上のランキング記録（ID・ニックネーム・スコア）も削除されます。メールで削除を依頼することもできます。\n\nポリシー全文: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nお問い合わせ: $email';
   }
 
   @override
   String get m_wipeTitle => 'すべてのデータをリセット';
 
   @override
-  String get m_wipeDesc => '進行状況、ジェム、着せ替えがすべて削除されます';
+  String get m_wipeDesc => '進行状況、ジェム、着せ替え、ランキングの記録がすべて削除されます';
 
   @override
   String get m_wipeConfirmTitle => '本当にリセットしますか？';
 
   @override
-  String get m_wipeConfirmBody => '元に戻せません。購入したアイテムは「購入を復元」で取り戻せます。';
+  String get m_wipeConfirmBody =>
+      '元に戻せません。ジェムと進行状況は完全に削除されます。スターターパックと艦隊司令官パスは「購入を復元」で取り戻せます。';
 
   @override
   String get m_wipeOk => 'リセット';
@@ -936,7 +940,7 @@ class L10nJa extends L10n {
   String get m_tabFree => '無料ジェム';
 
   @override
-  String get m_testMode => '🧪 テストモード: 実際の課金・広告は発生しません';
+  String get m_testMode => '🧪 テストモード: 実際の課金なし・広告はGoogleのテスト広告';
 
   @override
   String get m_owned => '所持中';
@@ -2462,6 +2466,431 @@ class L10nJa extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return '⭐$gemsを💰$creditsに交換しますか？';
   }
+
+  @override
+  String get m_purchaseFailed => 'ストアに接続できませんでした。しばらくしてからもう一度お試しください。';
+
+  @override
+  String get m_adWatchToEnd => '広告を最後まで見ると報酬がもらえます。';
+
+  @override
+  String get u_autoFireOn => 'ON';
+
+  @override
+  String get u_autoFireOff => 'OFF';
+
+  @override
+  String u_recruitRoleOdds(int count, String pct) {
+    return '職種（全スカウト共通）: $count種からランダム、各$pct';
+  }
+
+  @override
+  String m_feedbackSubject(String app) {
+    return '$app フィードバック';
+  }
+
+  @override
+  String get lb_menu => '🏅 週間ランキング';
+
+  @override
+  String get lb_menuShort => 'ランキング';
+
+  @override
+  String get lb_title => '🏅 週間ランキング';
+
+  @override
+  String get lb_join => 'ランキングに参加する';
+
+  @override
+  String get lb_joinDesc =>
+      '送るのは匿名ID、ゲームが作ったニックネーム、今週のスコアだけです。名前・チャット・入力した文字は送りません。いつでもオフにできます。';
+
+  @override
+  String get lb_yourNick => 'あなたのニックネーム';
+
+  @override
+  String lb_reroll(int count) {
+    return '新しい名前（$count）';
+  }
+
+  @override
+  String lb_weekPoints(String points) {
+    return '今週の開拓スコア $points点';
+  }
+
+  @override
+  String lb_rank(int rank, int total) {
+    return '$rank位 / $total人';
+  }
+
+  @override
+  String lb_rankOnly(int rank) {
+    return '$rank位';
+  }
+
+  @override
+  String get lb_top50 => '今週のトップ50';
+
+  @override
+  String get lb_empty => '今週の記録はまだありません。一番乗りしよう！';
+
+  @override
+  String get lb_retry => 'もう一度';
+
+  @override
+  String get lb_refresh => '更新';
+
+  @override
+  String get lb_offline => '接続がありません。ゲームはそのまま遊べます。あとでもう一度試してください。';
+
+  @override
+  String get lb_rateLimited => '送信が多すぎます。1分待ってからもう一度試してください。';
+
+  @override
+  String get lb_rejected => 'このスコアは送信できません。';
+
+  @override
+  String get lb_serverError => 'ランキングが混み合っています。あとでもう一度試してください。';
+
+  @override
+  String get lb_unavailable => 'ランキングは利用できません。';
+
+  @override
+  String get lb_optedOut => '「ランキングに参加する」をオンにするとスコアが載ります。';
+
+  @override
+  String get lb_howTo => '植民地レベル +100 · 新しい星系 +500 · 海賊撃墜 +5 · ボス +200';
+
+  @override
+  String get lb_resets => '毎週月曜 0:00（UTC）に新しい週が始まります。';
+
+  @override
+  String nickFormat(String adj, String animal, String number) {
+    return '$adj$animal $number';
+  }
+
+  @override
+  String get nickGenders => '';
+
+  @override
+  String nickAdj0(String g) {
+    return 'ゆうかんな';
+  }
+
+  @override
+  String get nickAnimal0 => 'ラッコ';
+
+  @override
+  String nickAdj1(String g) {
+    return 'あかるい';
+  }
+
+  @override
+  String get nickAnimal1 => 'パンダ';
+
+  @override
+  String nickAdj2(String g) {
+    return 'おだやかな';
+  }
+
+  @override
+  String get nickAnimal2 => 'キツネ';
+
+  @override
+  String nickAdj3(String g) {
+    return 'りこうな';
+  }
+
+  @override
+  String get nickAnimal3 => 'ウサギ';
+
+  @override
+  String nickAdj4(String g) {
+    return 'うちゅうの';
+  }
+
+  @override
+  String get nickAnimal4 => 'フクロウ';
+
+  @override
+  String nickAdj5(String g) {
+    return 'ふしぎずきな';
+  }
+
+  @override
+  String get nickAnimal5 => 'ペンギン';
+
+  @override
+  String nickAdj6(String g) {
+    return 'はずむ';
+  }
+
+  @override
+  String get nickAnimal6 => 'コアラ';
+
+  @override
+  String nickAdj7(String g) {
+    return 'ゆめみる';
+  }
+
+  @override
+  String get nickAnimal7 => 'イルカ';
+
+  @override
+  String nickAdj8(String g) {
+    return 'ぽかぽか';
+  }
+
+  @override
+  String get nickAnimal8 => 'カメ';
+
+  @override
+  String nickAdj9(String g) {
+    return 'はやい';
+  }
+
+  @override
+  String get nickAnimal9 => 'ハリネズミ';
+
+  @override
+  String nickAdj10(String g) {
+    return 'もふもふ';
+  }
+
+  @override
+  String get nickAnimal10 => 'リス';
+
+  @override
+  String nickAdj11(String g) {
+    return 'なかよしの';
+  }
+
+  @override
+  String get nickAnimal11 => 'こねこ';
+
+  @override
+  String nickAdj12(String g) {
+    return 'やさしい';
+  }
+
+  @override
+  String get nickAnimal12 => 'こいぬ';
+
+  @override
+  String nickAdj13(String g) {
+    return 'ひかる';
+  }
+
+  @override
+  String get nickAnimal13 => 'こがも';
+
+  @override
+  String nickAdj14(String g) {
+    return 'きんいろの';
+  }
+
+  @override
+  String get nickAnimal14 => 'こひつじ';
+
+  @override
+  String nickAdj15(String g) {
+    return 'しあわせな';
+  }
+
+  @override
+  String get nickAnimal15 => 'アザラシ';
+
+  @override
+  String nickAdj16(String g) {
+    return 'おもしろい';
+  }
+
+  @override
+  String get nickAnimal16 => 'クジラ';
+
+  @override
+  String nickAdj17(String g) {
+    return 'しんせつな';
+  }
+
+  @override
+  String get nickAnimal17 => 'ハムスター';
+
+  @override
+  String nickAdj18(String g) {
+    return 'ラッキーな';
+  }
+
+  @override
+  String get nickAnimal18 => 'ビーバー';
+
+  @override
+  String nickAdj19(String g) {
+    return 'うたう';
+  }
+
+  @override
+  String get nickAnimal19 => 'アライグマ';
+
+  @override
+  String nickAdj20(String g) {
+    return 'ちからもちの';
+  }
+
+  @override
+  String get nickAnimal20 => 'オウム';
+
+  @override
+  String nickAdj21(String g) {
+    return 'カラフルな';
+  }
+
+  @override
+  String get nickAnimal21 => 'テントウムシ';
+
+  @override
+  String nickAdj22(String g) {
+    return 'あまい';
+  }
+
+  @override
+  String get nickAnimal22 => 'スズメ';
+
+  @override
+  String nickAdj23(String g) {
+    return 'れいぎただしい';
+  }
+
+  @override
+  String get nickAnimal23 => 'こじか';
+
+  @override
+  String nickAdj24(String g) {
+    return 'あそびずきな';
+  }
+
+  @override
+  String get nickAnimal24 => 'ポニー';
+
+  @override
+  String nickAdj25(String g) {
+    return 'しずかな';
+  }
+
+  @override
+  String get nickAnimal25 => 'こぐま';
+
+  @override
+  String nickAdj26(String g) {
+    return 'キラキラ';
+  }
+
+  @override
+  String get nickAnimal26 => 'こじし';
+
+  @override
+  String nickAdj27(String g) {
+    return 'ぎんいろの';
+  }
+
+  @override
+  String get nickAnimal27 => 'ことら';
+
+  @override
+  String nickAdj28(String g) {
+    return 'ねむたい';
+  }
+
+  @override
+  String get nickAnimal28 => 'キリン';
+
+  @override
+  String nickAdj29(String g) {
+    return 'つきの';
+  }
+
+  @override
+  String get nickAnimal29 => 'シマウマ';
+
+  @override
+  String nickAdj30(String g) {
+    return 'たいようの';
+  }
+
+  @override
+  String get nickAnimal30 => 'ゾウ';
+
+  @override
+  String nickAdj31(String g) {
+    return 'まほうの';
+  }
+
+  @override
+  String get nickAnimal31 => 'カバ';
+
+  @override
+  String nickAdj32(String g) {
+    return 'スーパー';
+  }
+
+  @override
+  String get nickAnimal32 => 'ラマ';
+
+  @override
+  String nickAdj33(String g) {
+    return 'ほしぞらの';
+  }
+
+  @override
+  String get nickAnimal33 => 'アルパカ';
+
+  @override
+  String nickAdj34(String g) {
+    return 'にこにこ';
+  }
+
+  @override
+  String get nickAnimal34 => 'ミーアキャット';
+
+  @override
+  String nickAdj35(String g) {
+    return 'けだかい';
+  }
+
+  @override
+  String get nickAnimal35 => 'ヒトデ';
+
+  @override
+  String nickAdj36(String g) {
+    return 'ちいさな';
+  }
+
+  @override
+  String get nickAnimal36 => 'タツノオトシゴ';
+
+  @override
+  String nickAdj37(String g) {
+    return 'ものしりの';
+  }
+
+  @override
+  String get nickAnimal37 => 'シマリス';
+
+  @override
+  String nickAdj38(String g) {
+    return 'ゆきいろの';
+  }
+
+  @override
+  String get nickAnimal38 => 'キンギョ';
+
+  @override
+  String nickAdj39(String g) {
+    return 'たのもしい';
+  }
+
+  @override
+  String get nickAnimal39 => 'ホタル';
 
   @override
   String get m_adPrivacy => '広告のプライバシー設定';

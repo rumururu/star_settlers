@@ -50,3 +50,15 @@ tool/out/
 
 # 스토어 이미지 생성기의 중간 산출물 (captures/에서 언제든 다시 만든다)
 docs/release_assets/intermediate/
+
+# Fastlane 비밀 파일
+android/fastlane/play-store-key.json
+android/fastlane/.env
+android/fastlane/report.xml
+ios/fastlane/AuthKey_*.p8
+ios/fastlane/report.xml
+ios/.env.local
+
+# Supabase 로컬 스택 임시 파일
+supabase/.branches
+supabase/.temp

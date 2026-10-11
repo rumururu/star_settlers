@@ -773,6 +773,9 @@ class L10nZh extends L10n {
   String get m_loginWelcome => '今天也来啦，舰长！';
 
   @override
+  String get m_loginFirst => '欢迎你，舰长！这是你的首次签到奖励。';
+
+  @override
   String get m_loginStreakHint => '连续签到7天得⭐50！';
 
   @override
@@ -861,20 +864,21 @@ class L10nZh extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers 仅在你的设备上保存游戏数据（进度、设置），不收集任何可识别个人身份的信息。\n\n应用内购买由 Google Play / App Store 处理，支付信息不会提供给开发者。\n\n如启用激励广告，广告提供商（Google AdMob）可能会收集广告标识符等数据。\n\n联系方式：$email（设置 → 向开发者发送反馈）';
+    return 'Star Settlers 无需注册，不收集任何可识别个人身份的信息。游戏数据（进度、货币、购买记录、设置）仅保存在你的设备上。唯一的例外是下方的每周排行榜（可选），仅在你主动开启时使用。\n\n购买：由 Google Play / App Store 处理，支付信息不会提供给开发者。购买验证与恢复使用 RevenueCat，会处理匿名用户 ID 和购买记录。\n\n广告：仅在你主动选择时播放 Google AdMob 激励广告。AdMob 可能会使用广告 ID、IP 地址和设备信息来投放广告、在允许的情况下进行个性化，以及衡量广告效果。在欧洲经济区、英国和瑞士，首次启动时会征求你的同意，之后可在 设置 → 广告隐私设置 中更改。\n\n通知：在设备上预约的本地通知，不会向外发送。\n\n反馈：只有你亲自发送邮件时，内容及应用版本、设备信息才会发给开发者。\n\n每周排行榜（可选）：默认关闭，只有在设置或排行榜页面中主动开启才会参加。只发送随机安装 ID、游戏用固定词表生成的昵称和每周分数。不发送名字或你输入的任何文字，也没有聊天功能。其他玩家只能看到昵称和分数。服务器为 Supabase（首尔区域）。\n\n删除：设置 → 重置所有数据 可清除设备上的数据。如果参加过排行榜，重置时也会删除服务器上的排行榜记录（ID、昵称、分数）；也可以通过邮件申请删除。\n\n完整政策：https://rumururu.github.io/mkideabox/star_settlers/privacy.html\n联系方式：$email';
   }
 
   @override
   String get m_wipeTitle => '重置所有数据';
 
   @override
-  String get m_wipeDesc => '删除所有进度、宝石和装扮';
+  String get m_wipeDesc => '删除所有进度、宝石、装扮和排行榜记录';
 
   @override
   String get m_wipeConfirmTitle => '确定要全部重置吗？';
 
   @override
-  String get m_wipeConfirmBody => '此操作无法撤销。已购商品可通过“恢复购买”找回。';
+  String get m_wipeConfirmBody =>
+      '此操作无法撤销。宝石和进度将被永久删除。新手礼包和舰队指挥官通行证可通过“恢复购买”找回。';
 
   @override
   String get m_wipeOk => '重置';
@@ -936,7 +940,7 @@ class L10nZh extends L10n {
   String get m_tabFree => '免费宝石';
 
   @override
-  String get m_testMode => '🧪 测试模式：不会产生真实付款或广告';
+  String get m_testMode => '🧪 测试模式：不会真实付款，广告为 Google 测试广告';
 
   @override
   String get m_owned => '已拥有';
@@ -2453,6 +2457,430 @@ class L10nZh extends L10n {
   String u_exchangeBody(int gems, int credits) {
     return '用⭐$gems兑换💰$credits吗？';
   }
+
+  @override
+  String get m_purchaseFailed => '无法连接商店，请稍后再试。';
+
+  @override
+  String get m_adWatchToEnd => '看完广告才能获得奖励。';
+
+  @override
+  String get u_autoFireOn => '开';
+
+  @override
+  String get u_autoFireOff => '关';
+
+  @override
+  String u_recruitRoleOdds(int count, String pct) {
+    return '职业（所有招募通用）：$count种随机，各$pct';
+  }
+
+  @override
+  String m_feedbackSubject(String app) {
+    return '$app 反馈';
+  }
+
+  @override
+  String get lb_menu => '🏅 每周排行';
+
+  @override
+  String get lb_menuShort => '排行';
+
+  @override
+  String get lb_title => '🏅 每周开拓排行';
+
+  @override
+  String get lb_join => '参加排行榜';
+
+  @override
+  String get lb_joinDesc => '只会发送匿名 ID、游戏生成的昵称和本周分数。不发送名字、聊天或你输入的任何文字。随时可以关闭。';
+
+  @override
+  String get lb_yourNick => '我的昵称';
+
+  @override
+  String lb_reroll(int count) {
+    return '换个名字（$count）';
+  }
+
+  @override
+  String lb_weekPoints(String points) {
+    return '本周开拓分数 $points 分';
+  }
+
+  @override
+  String lb_rank(int rank, int total) {
+    return '第 $rank 名 / 共 $total 人';
+  }
+
+  @override
+  String lb_rankOnly(int rank) {
+    return '第 $rank 名';
+  }
+
+  @override
+  String get lb_top50 => '本周前 50 名';
+
+  @override
+  String get lb_empty => '本周还没有记录。来当第一名吧！';
+
+  @override
+  String get lb_retry => '重试';
+
+  @override
+  String get lb_refresh => '刷新';
+
+  @override
+  String get lb_offline => '没有网络连接。游戏可以照常进行，请稍后再试。';
+
+  @override
+  String get lb_rateLimited => '发送太频繁了。请等一分钟后再试。';
+
+  @override
+  String get lb_rejected => '这个分数无法发送。';
+
+  @override
+  String get lb_serverError => '排行榜正忙，请稍后再试。';
+
+  @override
+  String get lb_unavailable => '排行榜暂不可用。';
+
+  @override
+  String get lb_optedOut => '打开“参加排行榜”即可上传你的分数。';
+
+  @override
+  String get lb_howTo => '殖民地等级 +100 · 新星系 +500 · 击落海盗 +5 · 首领 +200';
+
+  @override
+  String get lb_resets => '每周一 00:00（UTC）开始新的一周。';
+
+  @override
+  String nickFormat(String adj, String animal, String number) {
+    return '$adj$animal $number';
+  }
+
+  @override
+  String get nickGenders => '';
+
+  @override
+  String nickAdj0(String g) {
+    return '勇敢的';
+  }
+
+  @override
+  String get nickAnimal0 => '水獭';
+
+  @override
+  String nickAdj1(String g) {
+    return '开朗的';
+  }
+
+  @override
+  String get nickAnimal1 => '熊猫';
+
+  @override
+  String nickAdj2(String g) {
+    return '沉稳的';
+  }
+
+  @override
+  String get nickAnimal2 => '狐狸';
+
+  @override
+  String nickAdj3(String g) {
+    return '聪明的';
+  }
+
+  @override
+  String get nickAnimal3 => '兔子';
+
+  @override
+  String nickAdj4(String g) {
+    return '宇宙';
+  }
+
+  @override
+  String get nickAnimal4 => '猫头鹰';
+
+  @override
+  String nickAdj5(String g) {
+    return '好奇的';
+  }
+
+  @override
+  String get nickAnimal5 => '企鹅';
+
+  @override
+  String nickAdj6(String g) {
+    return '蹦蹦跳跳的';
+  }
+
+  @override
+  String get nickAnimal6 => '考拉';
+
+  @override
+  String nickAdj7(String g) {
+    return '爱做梦的';
+  }
+
+  @override
+  String get nickAnimal7 => '海豚';
+
+  @override
+  String nickAdj8(String g) {
+    return '暖洋洋的';
+  }
+
+  @override
+  String get nickAnimal8 => '乌龟';
+
+  @override
+  String nickAdj9(String g) {
+    return '飞快的';
+  }
+
+  @override
+  String get nickAnimal9 => '刺猬';
+
+  @override
+  String nickAdj10(String g) {
+    return '毛茸茸的';
+  }
+
+  @override
+  String get nickAnimal10 => '松鼠';
+
+  @override
+  String nickAdj11(String g) {
+    return '友好的';
+  }
+
+  @override
+  String get nickAnimal11 => '小猫';
+
+  @override
+  String nickAdj12(String g) {
+    return '温柔的';
+  }
+
+  @override
+  String get nickAnimal12 => '小狗';
+
+  @override
+  String nickAdj13(String g) {
+    return '发光的';
+  }
+
+  @override
+  String get nickAnimal13 => '小鸭';
+
+  @override
+  String nickAdj14(String g) {
+    return '金色';
+  }
+
+  @override
+  String get nickAnimal14 => '小羊';
+
+  @override
+  String nickAdj15(String g) {
+    return '快乐的';
+  }
+
+  @override
+  String get nickAnimal15 => '海豹';
+
+  @override
+  String nickAdj16(String g) {
+    return '有趣的';
+  }
+
+  @override
+  String get nickAnimal16 => '鲸鱼';
+
+  @override
+  String nickAdj17(String g) {
+    return '善良的';
+  }
+
+  @override
+  String get nickAnimal17 => '仓鼠';
+
+  @override
+  String nickAdj18(String g) {
+    return '幸运的';
+  }
+
+  @override
+  String get nickAnimal18 => '河狸';
+
+  @override
+  String nickAdj19(String g) {
+    return '爱唱歌的';
+  }
+
+  @override
+  String get nickAnimal19 => '浣熊';
+
+  @override
+  String nickAdj20(String g) {
+    return '强壮的';
+  }
+
+  @override
+  String get nickAnimal20 => '鹦鹉';
+
+  @override
+  String nickAdj21(String g) {
+    return '彩色';
+  }
+
+  @override
+  String get nickAnimal21 => '瓢虫';
+
+  @override
+  String nickAdj22(String g) {
+    return '甜甜的';
+  }
+
+  @override
+  String get nickAnimal22 => '麻雀';
+
+  @override
+  String nickAdj23(String g) {
+    return '有礼貌的';
+  }
+
+  @override
+  String get nickAnimal23 => '小鹿';
+
+  @override
+  String nickAdj24(String g) {
+    return '爱玩的';
+  }
+
+  @override
+  String get nickAnimal24 => '小马';
+
+  @override
+  String nickAdj25(String g) {
+    return '安静的';
+  }
+
+  @override
+  String get nickAnimal25 => '小熊';
+
+  @override
+  String nickAdj26(String g) {
+    return '闪亮的';
+  }
+
+  @override
+  String get nickAnimal26 => '小狮子';
+
+  @override
+  String nickAdj27(String g) {
+    return '银色';
+  }
+
+  @override
+  String get nickAnimal27 => '小老虎';
+
+  @override
+  String nickAdj28(String g) {
+    return '困困的';
+  }
+
+  @override
+  String get nickAnimal28 => '长颈鹿';
+
+  @override
+  String nickAdj29(String g) {
+    return '月亮';
+  }
+
+  @override
+  String get nickAnimal29 => '斑马';
+
+  @override
+  String nickAdj30(String g) {
+    return '太阳';
+  }
+
+  @override
+  String get nickAnimal30 => '大象';
+
+  @override
+  String nickAdj31(String g) {
+    return '魔法';
+  }
+
+  @override
+  String get nickAnimal31 => '河马';
+
+  @override
+  String nickAdj32(String g) {
+    return '超级';
+  }
+
+  @override
+  String get nickAnimal32 => '美洲驼';
+
+  @override
+  String nickAdj33(String g) {
+    return '星光';
+  }
+
+  @override
+  String get nickAnimal33 => '羊驼';
+
+  @override
+  String nickAdj34(String g) {
+    return '阳光';
+  }
+
+  @override
+  String get nickAnimal34 => '狐獴';
+
+  @override
+  String nickAdj35(String g) {
+    return '高贵的';
+  }
+
+  @override
+  String get nickAnimal35 => '海星';
+
+  @override
+  String nickAdj36(String g) {
+    return '小小的';
+  }
+
+  @override
+  String get nickAnimal36 => '海马';
+
+  @override
+  String nickAdj37(String g) {
+    return '智慧的';
+  }
+
+  @override
+  String get nickAnimal37 => '花栗鼠';
+
+  @override
+  String nickAdj38(String g) {
+    return '雪白的';
+  }
+
+  @override
+  String get nickAnimal38 => '金鱼';
+
+  @override
+  String nickAdj39(String g) {
+    return '可靠的';
+  }
+
+  @override
+  String get nickAnimal39 => '萤火虫';
 
   @override
   String get m_adPrivacy => '广告隐私设置';
