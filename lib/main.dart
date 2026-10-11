@@ -1,14 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'game/cosmetics.dart';
 import 'game/models.dart';
 import 'game/save.dart';
 import 'game/ships.dart';
 import 'game/world.dart';
+import 'game/profile.dart' show ScreenOrient;
 import 'services/app_state.dart';
+import 'services/orientation.dart';
 import 'ui/chibi.dart';
 import 'l10n/l.dart';
 import 'ui/common.dart';
@@ -22,10 +23,13 @@ import 'ui/sprites.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // 세로 전용 게임 (네이티브 설정과 함께 Dart 쪽에서도 고정)
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  // 화면 방향은 설정(기본 세로)을 따른다. 프로필을 읽기 전에도 세로로 시작한다.
+  await applyOrientation(ScreenOrient.portrait);
   await Future.wait([
-    AppState.init().then((_) => Lang.apply(AppState.profile.language)),
+    AppState.init().then((_) {
+      Lang.apply(AppState.profile.language);
+      return applyOrientation(AppState.profile.orientation);
+    }),
     // 게임 화면 스프라이트 (함선 종류 × 스킨, 해적, 행성, 정거장)
     Sprites.load([
       for (final t in shipTypes)
@@ -140,6 +144,7 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
     await showDialog<void>(
       context: context,
       builder: (c) => AlertDialog(
+        scrollable: true,
         backgroundColor: kPanelColor,
         title: Text(tr.m_loginTitle, textAlign: TextAlign.center),
         content: Column(
@@ -220,81 +225,120 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
           SafeArea(
             child: LayoutBuilder(
               builder: (context, box) {
-                final logoW = min(box.maxWidth * 0.82, 520.0);
+                // 가로(낮은 화면): 왼쪽에 로고·캐릭터, 오른쪽에 버튼. 세로로 쌓으면 높이가 모자란다.
+                final wide = box.maxWidth > box.maxHeight && box.maxHeight < Layout.shortHeight;
+                final menuW = wide ? box.maxWidth / 2 : box.maxWidth;
+                final logoW = min(menuW * 0.82, 520.0);
                 // 메뉴 6칸이 좁은 폰에서도 한 줄에 들어가게
-                final tileW = min(76.0, (box.maxWidth - Space.l * 2 - Space.s * 5) / 6);
-                return Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(Space.s),
-                        child: GestureDetector(
-                          onTap: () => _open(const ShopScreen()),
-                          child: glass(iconValue('gem', '${p.gems}  ＋',
-                              size: IconSz.inline, style: Ts.body.copyWith(color: const Color(0xFFFF80AB)))),
+                final tileW = min(76.0, (menuW - Space.l * 2 - Space.s * 5) / 6);
+                final gemBtn = Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(Space.s),
+                    child: GestureDetector(
+                      onTap: () => _open(const ShopScreen()),
+                      child: glass(iconValue('gem', '${p.gems}  ＋',
+                          size: IconSz.inline, style: Ts.body.copyWith(color: const Color(0xFFFF80AB)))),
+                    ),
+                  ),
+                );
+                final logo = AnimatedBuilder(
+                  animation: _anim,
+                  builder: (context, child) =>
+                      Transform.translate(offset: Offset(0, sin(_anim.value * 2 * pi) * 6), child: child),
+                  child: Image.asset('assets/sprites/logo.png', width: logoW, fit: BoxFit.contain),
+                );
+                final titleLines = <Widget>[
+                  // 로고가 이미 영문 제목이라, 부제는 로고와 다른 언어(한국어 등)일 때만
+                  if (tr.appTitle != 'Star Settlers')
+                    Text(tr.appTitle, style: Ts.title.copyWith(fontWeight: FontWeight.bold)),
+                  if (p.honor > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: Space.xs),
+                      child: Text(tr.m_honorLine(p.honor, p.honor * 5, p.honor * 3),
+                          textAlign: TextAlign.center, style: Ts.body.copyWith(color: const Color(0xFFB388FF))),
+                    ),
+                ];
+                final chibis = AnimatedBuilder(
+                  animation: _anim,
+                  builder: (context, _) {
+                    final t = _anim.value * 2 * pi;
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Transform.translate(
+                            offset: Offset(0, sin(t + 1) * 5),
+                            child: const ChibiPortrait(style: ChibiStyle.advisor, size: 84)),
+                        Transform.translate(
+                            offset: Offset(0, sin(t) * 6), child: ChibiPortrait(style: captain, size: 116)),
+                        Transform.translate(
+                            offset: Offset(0, sin(t + 2) * 5),
+                            child: const ChibiPortrait(style: ChibiStyle.pirate, size: 84)),
+                      ],
+                    );
+                  },
+                );
+                final menu = <Widget>[
+                  _menuButton(tr.m_continue, _hasSave ? _continue : null,
+                      primary: _hasSave, leading: Icons.play_arrow_rounded),
+                  const SizedBox(height: Space.m),
+                  _menuButton(tr.m_newGame, _newGame, primary: !_hasSave),
+                  const SizedBox(height: Space.l),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: Space.s,
+                    children: [
+                      _iconMenu('menu_home', tr.m_menuHome, () => _open(const HomePlanetScreen()), tileW),
+                      _iconMenu('menu_shop', tr.m_menuShop, () => _open(const ShopScreen()), tileW),
+                      _iconMenu('menu_quest', tr.m_menuQuest, () => _open(const DailyQuestScreen()), tileW,
+                          badge: p.dailyClaimable > 0),
+                      _iconMenu('menu_trophy', tr.m_menuAchievements, () => _open(const AchievementsScreen()), tileW,
+                          badge: p.claimable.isNotEmpty),
+                      _iconMenu('menu_rank', tr.lb_menuShort, () => _open(appLeaderboardScreen()), tileW),
+                      _iconMenu('menu_settings', tr.m_menuSettings, () => _open(const SettingsScreen()), tileW),
+                    ],
+                  ),
+                  const SizedBox(height: Space.l),
+                ];
+                if (wide) {
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            const Spacer(),
+                            // 낮은 화면에서는 로고가 남는 높이에 맞춰 줄어든다
+                            Flexible(flex: 6, child: logo),
+                            ...titleLines,
+                            const SizedBox(height: Space.m),
+                            Flexible(flex: 4, child: FittedBox(child: chibis)),
+                            const SizedBox(height: Space.l),
+                          ],
                         ),
                       ),
-                    ),
-                    const Spacer(flex: 2),
-                    AnimatedBuilder(
-                      animation: _anim,
-                      builder: (context, child) => Transform.translate(
-                          offset: Offset(0, sin(_anim.value * 2 * pi) * 6), child: child),
-                      child: Image.asset('assets/sprites/logo.png', width: logoW),
-                    ),
-                    // 로고가 이미 영문 제목이라, 부제는 로고와 다른 언어(한국어 등)일 때만
-                    if (tr.appTitle != 'Star Settlers')
-                      Text(tr.appTitle, style: Ts.title.copyWith(fontWeight: FontWeight.bold)),
-                    if (p.honor > 0)
-                      Padding(
-                        padding: const EdgeInsets.only(top: Space.xs),
-                        child: Text(tr.m_honorLine(p.honor, p.honor * 5, p.honor * 3),
-                            style: Ts.body.copyWith(color: const Color(0xFFB388FF))),
-                      ),
-                    const Spacer(flex: 3),
-                    AnimatedBuilder(
-                      animation: _anim,
-                      builder: (context, _) {
-                        final t = _anim.value * 2 * pi;
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                      Expanded(
+                        child: Column(
                           children: [
-                            Transform.translate(
-                                offset: Offset(0, sin(t + 1) * 5),
-                                child: const ChibiPortrait(style: ChibiStyle.advisor, size: 84)),
-                            Transform.translate(
-                                offset: Offset(0, sin(t) * 6),
-                                child: ChibiPortrait(style: captain, size: 116)),
-                            Transform.translate(
-                                offset: Offset(0, sin(t + 2) * 5),
-                                child: const ChibiPortrait(style: ChibiStyle.pirate, size: 84)),
+                            gemBtn,
+                            const Spacer(),
+                            ...menu,
                           ],
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return Column(
+                  children: [
+                    gemBtn,
+                    const Spacer(flex: 2),
+                    logo,
+                    ...titleLines,
+                    const Spacer(flex: 3),
+                    chibis,
                     const SizedBox(height: Space.m),
-                    _menuButton(tr.m_continue, _hasSave ? _continue : null,
-                        primary: _hasSave, leading: Icons.play_arrow_rounded),
-                    const SizedBox(height: Space.m),
-                    _menuButton(tr.m_newGame, _newGame, primary: !_hasSave),
-                    const SizedBox(height: Space.l),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: Space.s,
-                      children: [
-                        _iconMenu('menu_home', tr.m_menuHome, () => _open(const HomePlanetScreen()), tileW),
-                        _iconMenu('menu_shop', tr.m_menuShop, () => _open(const ShopScreen()), tileW),
-                        _iconMenu('menu_quest', tr.m_menuQuest, () => _open(const DailyQuestScreen()), tileW,
-                            badge: p.dailyClaimable > 0),
-                        _iconMenu('menu_trophy', tr.m_menuAchievements, () => _open(const AchievementsScreen()), tileW,
-                            badge: p.claimable.isNotEmpty),
-                        _iconMenu('menu_rank', tr.lb_menuShort, () => _open(appLeaderboardScreen()), tileW),
-                        _iconMenu('menu_settings', tr.m_menuSettings, () => _open(const SettingsScreen()), tileW),
-                      ],
-                    ),
-                    const SizedBox(height: Space.l),
+                    ...menu,
                   ],
                 );
               },

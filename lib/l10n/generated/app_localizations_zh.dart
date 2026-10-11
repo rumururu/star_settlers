@@ -860,6 +860,18 @@ class L10nZh extends L10n {
   String get m_languageSystem => '跟随设备语言';
 
   @override
+  String get m_settingsOrientation => '屏幕方向';
+
+  @override
+  String get m_orientAuto => '自动';
+
+  @override
+  String get m_orientPortrait => '竖屏';
+
+  @override
+  String get m_orientLandscape => '横屏';
+
+  @override
   String get m_privacyTitle => '隐私政策';
 
   @override
@@ -2075,6 +2087,9 @@ class L10nZh extends L10n {
   String get g_dlgSupplySignal => '收到装有宝石的补给舱信号！有海盗在守着，请小心。';
 
   @override
+  String get g_dlgCruiseOn => '首次训练完成！我打开了摇杆上方的［巡航］：松手后也会朝面向的方向继续飞行。再按一次即可关闭。';
+
+  @override
   String get g_dlgBossWarning => '警告！星系首领的战舰正在接近！';
 
   @override
@@ -2440,8 +2455,8 @@ class L10nZh extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return '需要⭐$gems。去商店购买宝石吗？';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return '还差💰$credits。用宝石兑换需要⭐$gems，你现在有⭐$have。再多收集一些点数吧！';
   }
 
   @override
@@ -2463,6 +2478,9 @@ class L10nZh extends L10n {
 
   @override
   String get m_adWatchToEnd => '看完广告才能获得奖励。';
+
+  @override
+  String get u_cruise => '巡航';
 
   @override
   String get u_autoFireOn => '开';

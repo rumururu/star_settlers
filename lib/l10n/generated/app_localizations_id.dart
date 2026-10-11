@@ -867,6 +867,18 @@ class L10nId extends L10n {
   String get m_languageSystem => 'Ikuti bahasa perangkat';
 
   @override
+  String get m_settingsOrientation => 'Orientasi layar';
+
+  @override
+  String get m_orientAuto => 'Otomatis';
+
+  @override
+  String get m_orientPortrait => 'Potret';
+
+  @override
+  String get m_orientLandscape => 'Lanskap';
+
+  @override
   String get m_privacyTitle => 'Kebijakan Privasi';
 
   @override
@@ -2128,6 +2140,10 @@ class L10nId extends L10n {
       'Ada sinyal kapsul suplai berisi permata! Dijaga bajak laut, jadi hati-hati ya.';
 
   @override
+  String get g_dlgCruiseOn =>
+      'Latihan pertama selesai! Aku menyalakan [Jelajah] di atas joystick: kapal terus terbang ke arah hadapnya walau dilepas. Ketuk lagi untuk mematikan.';
+
+  @override
   String get g_dlgBossWarning => 'Peringatan! Kapal bos sistem mendekat!';
 
   @override
@@ -2493,8 +2509,8 @@ class L10nId extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return 'Butuh ⭐$gems. Beli permata di toko?';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return 'Kurang 💰$credits. Menukar butuh ⭐$gems, tapi kamu punya ⭐$have. Kumpulkan sedikit kredit lagi!';
   }
 
   @override
@@ -2518,6 +2534,9 @@ class L10nId extends L10n {
   @override
   String get m_adWatchToEnd =>
       'Tonton iklan sampai selesai untuk mendapatkan hadiah.';
+
+  @override
+  String get u_cruise => 'Jelajah';
 
   @override
   String get u_autoFireOn => 'ON';

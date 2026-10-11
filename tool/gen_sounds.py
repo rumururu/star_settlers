@@ -107,6 +107,7 @@ def main():
     save("hurt", s, 0.3)
 
     save("bgm", make_bgm(), 0.5)
+    make_music()
 
 
 def note_freq(n):
@@ -158,6 +159,147 @@ def make_bgm():
         out[seg] = bass + arp + mel + drum
     # 두 바퀴 = 약 16초
     return np.concatenate([out, out])
+
+
+# ---------- 배경음악 여러 곡 ----------
+# 곡마다 박자·조성·코드·음색이 다르다. 멜로디는 코드 음을 따라 시드로 만들고 A A' B A 형식으로 짠다.
+# wav로 만든 뒤 ffmpeg로 AAC(.m4a)로 줄여 assets/audio/music/ 에 둔다 (안드로이드·iOS 모두 재생).
+
+MAJOR = [0, 2, 4, 5, 7, 9, 11]
+MINOR = [0, 2, 3, 5, 7, 8, 10]
+
+TRACKS = [
+    # 이름, BPM, 으뜸음(MIDI), 음계, 코드(음계 도수 0~6), 멜로디 음색, 베이스 방식, 시드
+    dict(name="drift", bpm=92, root=62, scale=MAJOR, prog=[0, 5, 3, 4], lead="sine", bass="long", drums="soft", seed=11),
+    dict(name="frontier", bpm=132, root=64, scale=MINOR, prog=[0, 5, 2, 6], lead="square", bass="drive", drums="full", seed=23),
+    dict(name="nebula", bpm=108, root=65, scale=MAJOR, prog=[3, 4, 2, 5], lead="bell", bass="walk", drums="light", seed=37),
+    dict(name="pursuit", bpm=144, root=60, scale=MINOR, prog=[0, 3, 4, 0], lead="saw", bass="drive", drums="full", seed=41),
+    # 보스전: 빠르고 낮은 단조, 감화음(ii°)으로 긴장감. 보스가 있는 동안 반복한다
+    dict(name="boss", bpm=156, root=57, scale=MINOR, prog=[0, 0, 5, 1], lead="saw", bass="drive", drums="full", seed=53),
+]
+
+
+def _deg(tr, d, octave=0):
+    sc = tr["scale"]
+    return tr["root"] + sc[d % 7] + 12 * (d // 7 + octave)
+
+
+def _chord(tr, deg):
+    return [_deg(tr, deg), _deg(tr, deg + 2), _deg(tr, deg + 4)]
+
+
+def _tone(kind, f, tt):
+    ph = 2 * np.pi * f * tt
+    if kind == "square":
+        return 0.6 * np.sign(np.sin(ph)) + 0.4 * np.sin(ph)
+    if kind == "saw":
+        return 2 * ((f * tt) % 1) - 1
+    if kind == "bell":
+        return np.sin(ph) * 0.7 + np.sin(ph * 2.01) * 0.3 * np.exp(-tt * 6)
+    return np.sin(ph) * 0.8 + np.sin(ph * 2) * 0.2
+
+
+def _phrase(tr, rng, bars):
+    """한 소절에 8분음표 8칸. 강박에는 코드 음, 나머지는 음계를 한 칸씩 움직인다."""
+    rhythms = [
+        [1, 0, 1, 1, 1, 0, 1, 0], [1, 0, 0, 1, 1, 0, 1, 1], [1, 1, 1, 0, 1, 0, 0, 0],
+        [1, 0, 1, 0, 1, 1, 1, 0], [1, 0, 0, 0, 1, 0, 1, 0],
+    ]
+    notes = []
+    cur = 7 + tr["prog"][0]  # 한 옥타브 위 으뜸 근처에서 시작
+    for b in range(bars):
+        deg = tr["prog"][b % len(tr["prog"])]
+        tones = [deg + 7, deg + 9, deg + 11]
+        rh = rhythms[rng.integers(len(rhythms))]
+        for i in range(8):
+            if not rh[i]:
+                notes.append(None)
+                continue
+            if i % 4 == 0:
+                cur = min(tones, key=lambda x: abs(x - cur))
+            else:
+                cur += int(rng.choice([-1, 1, 1, -2, 2]))
+                cur = max(5, min(cur, 15))
+            notes.append(cur)
+        if b % 4 == 3:  # 4소절 끝은 길게 쉰다
+            notes[-3:] = [notes[-3], None, None]
+    return notes
+
+
+def make_track(tr):
+    rng = np.random.default_rng(tr["seed"])
+    step = 60 / tr["bpm"] / 2
+    n = int(SR * step)
+    tt = np.arange(n) / SR
+    a = _phrase(tr, rng, 8)
+    a2 = a[:-16] + _phrase(tr, rng, 2)
+    b = _phrase(tr, rng, 8)
+    melody = a + a2 + b + a
+    bars = len(melody) // 8
+    out = np.zeros(len(melody) * n)
+    drng = np.random.default_rng(tr["seed"] + 1)
+    for i, m in enumerate(melody):
+        bar = i // 8
+        in_b = 16 <= bar < 24
+        deg = tr["prog"][bar % len(tr["prog"])]
+        chord = _chord(tr, deg)
+        x = np.zeros(n)
+        # 베이스
+        if tr["bass"] == "long":
+            if i % 4 == 0:
+                x += np.sin(2 * np.pi * note_freq(chord[0] - 24) * tt) * 0.22
+            x += np.sin(2 * np.pi * note_freq(chord[0] - 24) * tt) * 0.12
+        elif tr["bass"] == "walk":
+            bn = [chord[0], chord[2], chord[1], chord[2]][(i // 2) % 4] - 24
+            x += np.sign(np.sin(2 * np.pi * note_freq(bn) * tt)) * 0.12 * np.linspace(1, 0.4, n)
+        else:  # drive: 8분 옥타브
+            bn = chord[0] - 24 + (12 if i % 2 else 0)
+            x += np.sign(np.sin(2 * np.pi * note_freq(bn) * tt)) * 0.16 * np.linspace(1, 0.3, n)
+        # 화음 (잔잔한 곡은 패드, 나머지는 아르페지오)
+        if tr["drums"] == "soft":
+            for c in chord:
+                x += np.sin(2 * np.pi * note_freq(c) * tt) * 0.035
+        else:
+            an = chord[i % 3] + 12
+            x += np.sign(np.sin(2 * np.pi * note_freq(an) * tt)) * 0.05 * np.linspace(1, 0.2, n)
+        # 멜로디 (B 구간은 한 옥타브 낮게 대비)
+        if m is not None:
+            f = note_freq(_deg(tr, m, -1 if in_b else 0))
+            vib = 1 + 0.004 * np.sin(2 * np.pi * 5.5 * tt)
+            decay = np.exp(-tt * (3 if tr["lead"] in ("sine", "bell") else 5))
+            x += _tone(tr["lead"], f * vib, tt) * 0.13 * decay
+        # 드럼
+        d = tr["drums"]
+        if d in ("full", "light") and i % 4 == 0:
+            x += np.sin(2 * np.pi * np.cumsum(np.linspace(150, 40, n)) / SR) * np.linspace(1, 0, n) ** 3 * (0.45 if d == "full" else 0.3)
+        if d == "full" and i % 4 == 2:
+            x += drng.uniform(-1, 1, n) * np.linspace(1, 0, n) ** 4 * 0.2
+        if d != "soft" or i % 2 == 0:
+            x += drng.uniform(-1, 1, n) * np.exp(-tt * 120) * (0.04 if d != "soft" else 0.02)
+        out[i * n:(i + 1) * n] = x
+    # 끝을 짧게 페이드해 이어 붙일 때 딱 소리가 나지 않게
+    fade = int(SR * 0.05)
+    out[-fade:] *= np.linspace(1, 0, fade)
+    return out, bars
+
+
+def make_music():
+    import subprocess
+    import tempfile
+    dst = os.path.join(OUT, "music")
+    os.makedirs(dst, exist_ok=True)
+    for tr in TRACKS:
+        x, bars = make_track(tr)
+        x = np.clip(x * 0.55, -1, 1)
+        with tempfile.NamedTemporaryFile(suffix=".wav") as f:
+            with wave.open(f.name, "wb") as w:
+                w.setnchannels(1)
+                w.setsampwidth(2)
+                w.setframerate(SR)
+                w.writeframes((x * 32767).astype(np.int16).tobytes())
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f.name, "-c:a", "aac", "-b:a", "64k",
+                            os.path.join(dst, tr["name"] + ".m4a")], check=True)
+        print(tr["name"], f"{len(x) / SR:.0f}s", bars, "bars")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:star_settlers/game/models.dart';
+import 'package:star_settlers/game/profile.dart';
 import 'package:star_settlers/game/world.dart';
-import 'package:star_settlers/l10n/l.dart' show keyHint;
+import 'package:star_settlers/l10n/l.dart' show keyHint, tr;
+import 'package:star_settlers/services/audio.dart';
 import 'package:star_settlers/ui/common.dart';
 
 void runFor(GameWorld w, double sec) {
@@ -145,17 +150,75 @@ void main() {
     expect(w.counter('shipKills'), 1);
   });
 
-  test('첫 항성계 튜토리얼 초반에는 위협이 천천히 오른다', () {
-    final calm = GameWorld(seed: 5);
-    runFor(calm, 180);
-    expect(calm.storyIndex, lessThan(2));
-    expect(calm.threat, lessThan(2)); // 예전에는 3분이면 3
-    // 저장해도 유지
-    expect(GameWorld.fromJson(calm.toJson(), calm.profile).threat, closeTo(calm.threat, 0.05));
+  test('첫 항성계 튜토리얼에도 적은 줄이지 않는다 (초반에 많이 나와야 재미있다)', () {
+    final w = GameWorld(seed: 5);
+    runFor(w, 180);
+    expect(w.storyIndex, lessThan(2));
+    expect(w.threat, closeTo(3, 0.05)); // 시간 위협은 원래 속도로 오른다
+    // 3분 동안 기지 포탑이 잡을 만큼 꾸준히 몰려온다 (튜토리얼 감속이 있던 때는 절반 이하)
+    expect(w.counter('kills'), greaterThanOrEqualTo(15));
+  });
 
-    // 식민지 단계부터는 원래 속도
-    final normal = GameWorld(seed: 5)..storyIndex = 2;
-    runFor(normal, 90);
-    expect(normal.threat, closeTo(2, 0.05));
+  test('행성 곁에 있는 함선은 행성과 함께 궤도를 돈다', () {
+    final w = GameWorld(seed: 6);
+    final planet = w.planets.first;
+    w.player.pos = planet.pos + Offset(planet.radius + 60, 0);
+    w.player.vel = Offset.zero;
+    final rel = w.player.pos - planet.pos;
+    runFor(w, 10);
+    expect((planet.pos - (w.player.pos - rel)).distance, lessThan(25)); // 행성 기준 자리는 거의 그대로
+    expect(w.nearbyPlanet, planet);
+  });
+
+  test('배경음악은 여러 곡을 돌아가며 틀고 같은 곡을 연달아 틀지 않는다', () {
+    for (final t in [...AudioService.tracks, AudioService.bossTrack]) {
+      expect(File('assets/$t').existsSync(), isTrue, reason: t);
+    }
+    final rng = Random(1);
+    var cur = AudioService.nextTrack(-1, rng);
+    final seen = {cur};
+    for (var i = 0; i < 200; i++) {
+      final next = AudioService.nextTrack(cur, rng);
+      expect(next, isNot(cur));
+      seen.add(next);
+      cur = next;
+    }
+    expect(seen.length, AudioService.tracks.length);
+  });
+
+  test('순항을 켜면 조이스틱을 놓아도 바라보는 방향으로 계속 날아간다', () {
+    for (final cruise in [false, true]) {
+      final w = GameWorld(seed: 7);
+      final i = InputState()..cruise = cruise;
+      w.player.angle = 0; // 오른쪽
+      final start = w.player.pos;
+      for (var t = 0.0; t < 3; t += 1 / 60) {
+        w.update(1 / 60, i);
+      }
+      final dx = w.player.pos.dx - start.dx;
+      if (cruise) {
+        expect(dx, greaterThan(300));
+      } else {
+        expect(dx.abs(), lessThan(5));
+      }
+    }
+  });
+
+  test('순항은 처음엔 꺼져 있고, 첫 튜토리얼(소행성·해적)을 마칠 때 안내와 함께 한 번만 켜진다', () {
+    final w = GameWorld(seed: 8);
+    expect(w.profile.cruise, isFalse);
+    w.storyIndex = GameWorld.cruiseTipStep - 1; // 해적 격추 단계
+    w.counters['shipKills'] = 99;
+    runFor(w, 1); // 스토리 완료는 0.5초마다 확인한다
+    expect(w.storyIndex, GameWorld.cruiseTipStep);
+    expect(w.profile.cruise, isTrue);
+    expect(w.dialogs.any((d) => d.text == tr.g_dlgCruiseOn), isTrue);
+    expect(Profile.fromJson(w.profile.toJson()).cruise, isTrue);
+    // 사용자가 끄면 다시 켜지 않는다
+    w.profile.cruise = false;
+    w.storyIndex = GameWorld.cruiseTipStep - 1;
+    w.counters['shipKills'] = 999;
+    runFor(w, 1);
+    expect(w.profile.cruise, isFalse);
   });
 }

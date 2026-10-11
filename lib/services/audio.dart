@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
@@ -11,6 +13,36 @@ class AudioService {
   final _pools = <Sfx, _SfxPool>{};
   final _last = <Sfx, DateTime>{};
   AudioPlayer? _bgm;
+
+  /// 배경음악 목록 (tool/gen_sounds.py가 만든다). 한 곡이 끝나면 방금 곡이 아닌 다른 곡을 고른다.
+  static const tracks = [
+    'audio/bgm.wav',
+    'audio/music/drift.m4a',
+    'audio/music/frontier.m4a',
+    'audio/music/nebula.m4a',
+    'audio/music/pursuit.m4a',
+  ];
+  int _track = -1;
+  final _rng = Random();
+
+  /// 보스가 있는 동안 반복하는 긴장감 있는 곡
+  static const bossTrack = 'audio/music/boss.m4a';
+  bool _boss = false;
+
+  /// 게임 화면이 매 프레임 알려 준다. 바뀔 때만 곡을 바꾼다 (보스 → 보스 곡, 끝나면 목록의 다음 곡).
+  Future<void> setBossFight(bool on) async {
+    if (on == _boss) return;
+    _boss = on;
+    if (!musicOn || _bgm == null) return;
+    await _playNext();
+  }
+
+  /// 다음 곡 번호: 첫 곡은 처음 곡, 그다음부터는 직전 곡을 피해 무작위
+  static int nextTrack(int current, Random rng) {
+    if (current < 0) return 0;
+    final n = 1 + rng.nextInt(tracks.length - 1);
+    return (current + n) % tracks.length;
+  }
   bool soundOn = true;
   bool musicOn = true;
   bool _ready = false;
@@ -86,12 +118,32 @@ class AudioService {
   Future<void> startMusic() async {
     if (!musicOn) return;
     try {
-      _bgm ??= AudioPlayer()
-        ..positionUpdater = null // 재생 위치를 안 쓰므로 매 프레임 조회를 끈다
-        ..setReleaseMode(ReleaseMode.loop);
+      if (_bgm == null) {
+        _bgm = AudioPlayer()
+          ..positionUpdater = null // 재생 위치를 안 쓰므로 매 프레임 조회를 끈다
+          ..setReleaseMode(ReleaseMode.stop);
+        // 곡이 끝나면 다음 곡
+        _bgm!.onPlayerComplete.listen((_) {
+          if (musicOn) _playNext();
+        });
+      }
       await _bgm!.setAudioContext(mixContext);
       if (_bgm!.state == PlayerState.playing) return;
-      await _bgm!.play(AssetSource('audio/bgm.wav'), volume: 0.45);
+      // 멈췄다 다시 켜면 이어서 새 곡
+      await _playNext();
+    } catch (e) {
+      debugPrint('bgm failed: $e');
+    }
+  }
+
+  Future<void> _playNext() async {
+    try {
+      if (_boss) {
+        await _bgm!.play(AssetSource(bossTrack), volume: 0.45);
+        return;
+      }
+      _track = nextTrack(_track, _rng);
+      await _bgm!.play(AssetSource(tracks[_track]), volume: 0.45);
     } catch (e) {
       debugPrint('bgm failed: $e');
     }

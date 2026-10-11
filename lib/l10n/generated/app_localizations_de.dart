@@ -872,6 +872,18 @@ class L10nDe extends L10n {
   String get m_languageSystem => 'Gerätesprache verwenden';
 
   @override
+  String get m_settingsOrientation => 'Bildschirmausrichtung';
+
+  @override
+  String get m_orientAuto => 'Automatisch';
+
+  @override
+  String get m_orientPortrait => 'Hochformat';
+
+  @override
+  String get m_orientLandscape => 'Querformat';
+
+  @override
   String get m_privacyTitle => 'Datenschutzerklärung';
 
   @override
@@ -2139,6 +2151,10 @@ class L10nDe extends L10n {
       'Signal einer Versorgungskapsel mit Edelsteinen! Piraten bewachen sie, also sei vorsichtig.';
 
   @override
+  String get g_dlgCruiseOn =>
+      'Erstes Training geschafft! Ich habe [Reise] über dem Joystick eingeschaltet: Du fliegst weiter geradeaus, auch wenn du loslässt. Nochmal tippen schaltet es aus.';
+
+  @override
   String get g_dlgBossWarning =>
       'Warnung! Das Schiff des Systembosses nähert sich!';
 
@@ -2506,8 +2522,8 @@ class L10nDe extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return 'Du brauchst ⭐$gems. Edelsteine im Shop holen?';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return 'Dir fehlen 💰$credits. Der Tausch kostet ⭐$gems, du hast aber ⭐$have. Sammle noch ein paar Credits!';
   }
 
   @override
@@ -2531,6 +2547,9 @@ class L10nDe extends L10n {
   @override
   String get m_adWatchToEnd =>
       'Sieh dir die Werbung bis zum Ende an, um die Belohnung zu erhalten.';
+
+  @override
+  String get u_cruise => 'Reise';
 
   @override
   String get u_autoFireOn => 'AN';

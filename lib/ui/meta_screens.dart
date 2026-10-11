@@ -8,6 +8,7 @@ import '../services/app_state.dart';
 import '../services/audio.dart';
 import '../services/feedback.dart';
 import '../services/notifications.dart';
+import '../services/orientation.dart';
 import '../l10n/l.dart';
 import 'common.dart';
 
@@ -107,6 +108,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await _save();
   }
 
+  /// 화면 방향 선택: 자동 / 세로 / 가로. 고르면 바로 적용하고 저장한다.
+  Future<void> _pickOrientation() async {
+    final p = AppState.profile;
+    final picked = await showDialog<ScreenOrient>(
+      context: context,
+      builder: (c) => SimpleDialog(
+        backgroundColor: kPanelColor,
+        title: Text(tr.m_settingsOrientation),
+        children: [
+          for (final o in ScreenOrient.values)
+            ListTile(
+              leading: Icon(orientIcon(o)),
+              title: Text(orientLabel(o)),
+              trailing: p.orientation == o ? const Icon(Icons.check, color: Color(0xFF7CFFB2)) : null,
+              onTap: () => Navigator.pop(c, o),
+            ),
+        ],
+      ),
+    );
+    if (picked == null || picked == p.orientation) return;
+    p.orientation = picked;
+    await applyOrientation(picked);
+    await _save();
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = AppState.profile;
@@ -169,6 +195,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             subtitle: Text(p.language == null ? tr.m_languageSystem : lookupL10n(Locale(p.language!)).languageName),
             onTap: _pickLanguage,
           ),
+          ListTile(
+            leading: Icon(orientIcon(p.orientation)),
+            title: Text(tr.m_settingsOrientation),
+            subtitle: Text(orientLabel(p.orientation)),
+            onTap: _pickOrientation,
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.restore),
@@ -216,6 +248,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               await SaveService.wipeAll();
               AppState.profile = Profile();
               AppState.world = null;
+              // 설정도 처음으로: 화면 방향은 기본(세로)으로 돌아간다
+              applyOrientation(AppState.profile.orientation);
               if (context.mounted) Navigator.of(context).popUntil((r) => r.isFirst);
             },
           ),
@@ -306,3 +340,16 @@ class _DailyQuestScreenState extends State<DailyQuestScreen> {
     );
   }
 }
+
+/// 화면 방향 이름 (설정 목록)
+String orientLabel(ScreenOrient o) => switch (o) {
+      ScreenOrient.auto => tr.m_orientAuto,
+      ScreenOrient.portrait => tr.m_orientPortrait,
+      ScreenOrient.landscape => tr.m_orientLandscape,
+    };
+
+IconData orientIcon(ScreenOrient o) => switch (o) {
+      ScreenOrient.auto => Icons.screen_rotation,
+      ScreenOrient.portrait => Icons.stay_current_portrait,
+      ScreenOrient.landscape => Icons.stay_current_landscape,
+    };

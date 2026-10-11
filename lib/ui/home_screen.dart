@@ -283,6 +283,7 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
     await showDialog<void>(
       context: context,
       builder: (c) => AlertDialog(
+        scrollable: true,
         backgroundColor: kPanelColor,
         title: Text(tr.m_giftTitle, textAlign: TextAlign.center),
         content: Column(

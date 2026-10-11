@@ -1512,6 +1512,30 @@ abstract class L10n {
   /// **'기기 언어 따라가기'**
   String get m_languageSystem;
 
+  /// 설정: 화면 방향 선택 항목 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'화면 방향'**
+  String get m_settingsOrientation;
+
+  /// 화면 방향: 기기 회전을 따라감 (짧게)
+  ///
+  /// In ko, this message translates to:
+  /// **'자동'**
+  String get m_orientAuto;
+
+  /// 화면 방향: 세로 고정 (짧게)
+  ///
+  /// In ko, this message translates to:
+  /// **'세로'**
+  String get m_orientPortrait;
+
+  /// 화면 방향: 가로 고정 (짧게)
+  ///
+  /// In ko, this message translates to:
+  /// **'가로'**
+  String get m_orientLandscape;
+
   /// 설정: 개인정보처리방침 항목/대화상자 제목
   ///
   /// In ko, this message translates to:
@@ -3703,6 +3727,12 @@ abstract class L10n {
   /// **'젬이 든 보급 캡슐 신호가 잡혔어요! 해적이 지키고 있으니 조심하세요.'**
   String get g_dlgSupplySignal;
 
+  /// 첫 튜토리얼(소행성·해적)을 마칠 때 부관이 순항 토글을 켜며 하는 안내. [순항]은 u_cruise 버튼 이름과 맞출 것
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 훈련 완료! 조이스틱 위 [순항] 버튼을 켜 두었어요. 손을 떼도 바라보는 방향으로 계속 날아가요. 다시 누르면 꺼져요.'**
+  String get g_dlgCruiseOn;
+
   /// advisor warning
   ///
   /// In ko, this message translates to:
@@ -4321,11 +4351,11 @@ abstract class L10n {
   /// **'💰{credits} 부족해요. ⭐{gems}로 채우고 진행할까요?'**
   String u_topUpBody(int credits, int gems);
 
-  /// 젬도 모자랄 때 상점 안내
+  /// 젬도 모자랄 때: 환전에 필요한 젬과 가진 젬을 보여 주고 크레딧을 더 모으라고 안내
   ///
   /// In ko, this message translates to:
-  /// **'⭐{gems} 필요해요. 상점에서 젬을 살까요?'**
-  String u_topUpNoGems(int gems);
+  /// **'💰{credits} 부족해요. 젬으로 환전하려면 ⭐{gems}가 필요한데 지금 ⭐{have} 있어요. 크레딧을 조금 더 모아 보세요!'**
+  String u_topUpNoGems(int credits, int gems, int have);
 
   /// 젬으로 채우고 진행 버튼
   ///
@@ -4362,6 +4392,12 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'광고를 끝까지 봐야 보상을 받을 수 있어요.'**
   String get m_adWatchToEnd;
+
+  /// 조이스틱을 놓아도 바라보는 방향으로 계속 날아가는 토글 이름 (켬/끔 앞에 붙음, 짧게)
+  ///
+  /// In ko, this message translates to:
+  /// **'순항'**
+  String get u_cruise;
 
   /// 전투 HUD 자동 사격 토글: 켜짐 (아주 짧게)
   ///

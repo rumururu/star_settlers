@@ -860,6 +860,18 @@ class L10nJa extends L10n {
   String get m_languageSystem => '端末の言語に合わせる';
 
   @override
+  String get m_settingsOrientation => '画面の向き';
+
+  @override
+  String get m_orientAuto => '自動';
+
+  @override
+  String get m_orientPortrait => '縦';
+
+  @override
+  String get m_orientLandscape => '横';
+
+  @override
   String get m_privacyTitle => 'プライバシーポリシー';
 
   @override
@@ -2084,6 +2096,10 @@ class L10nJa extends L10n {
       'ジェム入りの補給カプセルの信号をキャッチしました！海賊が守っているので気をつけてください。';
 
   @override
+  String get g_dlgCruiseOn =>
+      '最初の訓練完了！スティックの上の［巡航］をオンにしました。指を離しても向いている方向へ進み続けます。もう一度押すとオフです。';
+
+  @override
   String get g_dlgBossWarning => '警告！星系ボスの艦が接近中です！';
 
   @override
@@ -2449,8 +2465,8 @@ class L10nJa extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return '⭐$gemsが必要です。ショップでジェムを買いますか？';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return '💰$credits足りません。ジェムで両替するには⭐$gems必要ですが、今は⭐$haveです。もう少しクレジットを集めましょう！';
   }
 
   @override
@@ -2472,6 +2488,9 @@ class L10nJa extends L10n {
 
   @override
   String get m_adWatchToEnd => '広告を最後まで見ると報酬がもらえます。';
+
+  @override
+  String get u_cruise => '巡航';
 
   @override
   String get u_autoFireOn => 'ON';

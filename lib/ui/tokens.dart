@@ -50,6 +50,9 @@ abstract final class Space {
 abstract final class Layout {
   /// 목록·설정형 화면 내용의 최대 폭 (iPad 1032pt 폭에서 끝까지 늘어나지 않게)
   static const contentMaxWidth = 720.0;
+
+  /// 이보다 낮은 화면(폰 가로, 약 360~430dp)은 세로로 쌓지 않고 좌우로 나눈다
+  static const shortHeight = 560.0;
 }
 
 /// 터치 크기

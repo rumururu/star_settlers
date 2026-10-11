@@ -98,8 +98,8 @@ void main() {
       w.player.angle = -1.5707963;
       runFor(w, 1.5, InputState()..fire = true);
       expect(w.counter('kills'), greaterThanOrEqualTo(1));
-      // 드롭된 크레딧은 자석으로 자동 회수된다
-      expect(w.credits, greaterThan(c + 20));
+      // 드롭된 크레딧은 자석으로 자동 회수된다 (첫 항성계 초반이라 60%만 떨어진다)
+      expect(w.credits, greaterThan(c + 12));
     });
 
     test('미사일은 장착해야 쓸 수 있고 해적을 추적한다', () {

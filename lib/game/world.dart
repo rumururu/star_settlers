@@ -17,6 +17,9 @@ class InputState {
 
   /// true면 360° 가장 가까운 적을 자동 조준 (자동 사격 모드)
   bool autoAim = false;
+
+  /// 순항: 조이스틱을 놓아도 함선이 바라보는 방향으로 계속 날아간다 (조이스틱으로 방향만 바꾼다)
+  bool cruise = false;
 }
 
 enum UpgradeKind { weapon, hull, engine, missile, shield, drone, magnet }
@@ -292,22 +295,17 @@ class GameWorld {
   /// 시간이 올리는 위협도 상한: 항성계에 9분 머물면 +6에서 멈춘다 (안 그러면 끝없이 오른다)
   static const threatTimeCap = 6.0;
 
-  /// 튜토리얼 초반(첫 항성계에서 식민지 목표에 닿기 전)에는 시간 위협이 이 비율로만 오른다.
-  /// 처음 2~3분 만에 위협이 올라 연달아 격추되던 문제 — 첫 항성계는 편하게 익히게 한다.
-  static const tutorialThreatRate = 0.25;
-
-  /// 튜토리얼 초반에 덜 오른 시간(초). 첫 항성계의 시간 위협에서만 뺀다.
-  double tutorialThreatSlack = 0;
-
-  /// 첫 항성계에서 소행성·해적 목표를 하는 동안 (스토리 2단계 = 식민지 목표 전)
+  /// 첫 항성계에서 소행성·해적 목표를 하는 동안 (스토리 2단계 = 식민지 목표 전).
+  /// 적 수는 줄이지 않고(초반에 많이 나와야 재미있다) 적 공격과 적이 떨어뜨리는 크레딧만 줄인다 — [_newbieMul].
   bool get _tutorialCalm => sector == 0 && storyIndex < 2;
 
-  double get _threatTime => max(0, sectorElapsed - (sector == 0 ? tutorialThreatSlack : 0));
+  /// 이 스토리 단계에 들어설 때 순항을 켜고 안내한다 (= 첫 튜토리얼 [_tutorialCalm]이 끝날 때)
+  static const cruiseTipStep = 2;
 
   double get threat =>
       1 +
       sector * 1.0 +
-      min(_threatTime / 90, threatTimeCap) +
+      min(sectorElapsed / 90, threatTimeCap) +
       colonyCount * 0.3 +
       stations.fold<int>(0, (s, st) => s + st.habitatLevel - 1) * 0.15;
 
@@ -913,9 +911,14 @@ class GameWorld {
   }
 
   // ---------- 공전 ----------
+  /// 행성 곁(관리 범위 [nearbyPlanet])에 있는 함선은 그 행성과 함께 궤도를 돈다
+  /// — 행성에 머무는 동안 행성이 빠져나가지 않게.
   void _updateOrbits() {
+    final carrier = player.alive ? nearbyPlanet : null;
     for (final p in planets) {
+      final before = p.pos;
       p.placeOnOrbit(sectorElapsed);
+      if (p == carrier) player.pos = _clampWorld(player.pos + (p.pos - before), (v) => player.vel = v);
       // 지나가는 행성이 소행성을 밀어낸다
       for (final a in asteroids) {
         final d = a.pos - p.pos;
@@ -1329,6 +1332,16 @@ class GameWorld {
         const Color(0xFF7CFFB2), big: true);
     storyIndex++;
     if (storyIndex == storySteps.length) profile.tutorialDone = true;
+    // 첫 튜토리얼(소행성·해적)을 마치면 순항을 켜고 버튼을 알려 준다. 처음부터 켜 두면 조작을 익히기 전에 흘러가 버린다
+    if (storyIndex == cruiseTipStep && !profile.cruiseTipShown) {
+      profile
+        ..cruiseTipShown = true
+        ..cruise = true
+        ..dirty = true;
+      say(Speaker.advisor, tr.g_dlgCruiseOn);
+      // 다음 단계 안내(4초)가 먼저 보이고, 그 뒤에 이어서 보이게 길게 둔다
+      if (dialogs.isNotEmpty && dialogs.last.text == tr.g_dlgCruiseOn) dialogs.last.time = 10;
+    }
     _startStoryStep();
   }
 
@@ -1450,7 +1463,6 @@ class GameWorld {
     dt = dt.clamp(0, 0.05);
     totalTime += dt;
     sectorElapsed += dt;
-    if (_tutorialCalm) tutorialThreatSlack += dt * (1 - tutorialThreatRate);
     storyTimer += dt;
 
     credits += creditIncome * dt;
@@ -1531,7 +1543,8 @@ class GameWorld {
     if (ship.regenRate > 0 && p.sinceHit >= ShipType.regenDelay && p.hp < playerMaxHp) {
       p.hp = min(playerMaxHp, p.hp + playerMaxHp * ship.regenRate * dt);
     }
-    final move = input.move.clampLength(1);
+    var move = input.move.clampLength(1);
+    if (input.cruise && move.distance <= 0.1) move = OffsetX.fromAngle(p.angle, 1);
     p.thrusting = move.distance > 0.1;
     if (p.thrusting) {
       final target = atan2(move.dy, move.dx);
@@ -1608,8 +1621,8 @@ class GameWorld {
     return atan2(lead.dy - p.pos.dy, lead.dx - p.pos.dx);
   }
 
-  /// 첫 섹터 초반에는 해적 공격력을 낮춰 입문을 돕는다
-  double get _newbieMul => sector == 0 && threat < 2 ? 0.6 : 1.0;
+  /// 첫 항성계 초반 난이도 배율: 적 공격력과 적이 떨어뜨리는 크레딧에 같이 곱한다
+  double get _newbieMul => sector == 0 && (threat < 2 || _tutorialCalm) ? 0.6 : 1.0;
 
   void _updateDrone(double dt) {
     if (droneLevel == 0 || !player.alive) return;
@@ -2044,7 +2057,8 @@ class GameWorld {
     shake = min(20, shake + (boss ? 16 : 3));
     final bounty = (e.bounty * rewardMul * (1 + crewBonus(CrewRole.trader)) *
             (e.name != null ? 4 : 1) *
-            (e.lastHitByBase ? laserBountyRatio : shipCreditMul))
+            (e.lastHitByBase ? laserBountyRatio : shipCreditMul) *
+            _newbieMul) // 적이 약한 초반에는 떨어뜨리는 크레딧도 같은 비율로
         .round();
     _dropPickups(e.pos, PickupKind.credits, bounty, boss ? 10 : 3);
 
@@ -2527,7 +2541,6 @@ class GameWorld {
         'missions': activeMissions.map((m) => m.toJson()).toList(),
         'story': storyIndex,
         'storyBase': storyBase,
-        'threatSlack': tutorialThreatSlack,
         'total': totalTime,
         'px': player.pos.dx,
         'py': player.pos.dy,
@@ -2562,7 +2575,6 @@ class GameWorld {
     }
     w.storyIndex = j['story'] as int;
     w.storyBase = j['storyBase'] as int;
-    w.tutorialThreatSlack = (j['threatSlack'] as num?)?.toDouble() ?? 0;
     // 예전 저장 호환: 진행 중인 단계의 측정 키가 바뀌었으면(kills → shipKills) 기준점이 현재값보다 클 수 있다
     final cur = w.storyValue(w.story.key);
     if (w.story.relative && w.storyBase > cur) w.storyBase = cur;

@@ -55,14 +55,6 @@ Flutter 앱 빌드 (AAB, 릴리스 서명)
 
 스토어 등록정보 전체(10개 언어 제목·설명·그래픽·스크린샷) 업로드. 앱 빌드는 올리지 않는다
 
-### android iap
-
-```sh
-[bundle exec] fastlane android iap
-```
-
-인앱 상품 5개 생성/갱신 (Play Developer API, 소모·비소모 동일하게 관리형 상품)
-
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

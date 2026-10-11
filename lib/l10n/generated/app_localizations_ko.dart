@@ -856,6 +856,18 @@ class L10nKo extends L10n {
   String get m_languageSystem => '기기 언어 따라가기';
 
   @override
+  String get m_settingsOrientation => '화면 방향';
+
+  @override
+  String get m_orientAuto => '자동';
+
+  @override
+  String get m_orientPortrait => '세로';
+
+  @override
+  String get m_orientLandscape => '가로';
+
+  @override
   String get m_privacyTitle => '개인정보처리방침';
 
   @override
@@ -2069,6 +2081,10 @@ class L10nKo extends L10n {
   String get g_dlgSupplySignal => '젬이 든 보급 캡슐 신호가 잡혔어요! 해적이 지키고 있으니 조심하세요.';
 
   @override
+  String get g_dlgCruiseOn =>
+      '첫 훈련 완료! 조이스틱 위 [순항] 버튼을 켜 두었어요. 손을 떼도 바라보는 방향으로 계속 날아가요. 다시 누르면 꺼져요.';
+
+  @override
   String get g_dlgBossWarning => '경고! 항성계 두목 함선이 접근 중입니다!';
 
   @override
@@ -2434,8 +2450,8 @@ class L10nKo extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return '⭐$gems 필요해요. 상점에서 젬을 살까요?';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return '💰$credits 부족해요. 젬으로 환전하려면 ⭐$gems가 필요한데 지금 ⭐$have 있어요. 크레딧을 조금 더 모아 보세요!';
   }
 
   @override
@@ -2457,6 +2473,9 @@ class L10nKo extends L10n {
 
   @override
   String get m_adWatchToEnd => '광고를 끝까지 봐야 보상을 받을 수 있어요.';
+
+  @override
+  String get u_cruise => '순항';
 
   @override
   String get u_autoFireOn => '켬';

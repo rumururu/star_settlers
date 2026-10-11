@@ -874,6 +874,18 @@ class L10nRu extends L10n {
   String get m_languageSystem => 'Язык устройства';
 
   @override
+  String get m_settingsOrientation => 'Ориентация экрана';
+
+  @override
+  String get m_orientAuto => 'Авто';
+
+  @override
+  String get m_orientPortrait => 'Портрет';
+
+  @override
+  String get m_orientLandscape => 'Альбом';
+
+  @override
   String get m_privacyTitle => 'Политика конфиденциальности';
 
   @override
@@ -2135,6 +2147,10 @@ class L10nRu extends L10n {
       'Сигнал капсулы снабжения с кристаллами! Её охраняют пираты, будьте осторожны.';
 
   @override
+  String get g_dlgCruiseOn =>
+      'Первая тренировка пройдена! Я включила [Круиз] над джойстиком: корабль летит вперёд, даже если отпустить. Нажми ещё раз, чтобы выключить.';
+
+  @override
   String get g_dlgBossWarning =>
       'Внимание! Приближается корабль босса системы!';
 
@@ -2501,8 +2517,8 @@ class L10nRu extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return 'Нужно ⭐$gems. Купить кристаллы в магазине?';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return 'Не хватает 💰$credits. Обмен стоит ⭐$gems, а у тебя ⭐$have. Собери ещё немного кредитов!';
   }
 
   @override
@@ -2526,6 +2542,9 @@ class L10nRu extends L10n {
   @override
   String get m_adWatchToEnd =>
       'Досмотрите рекламу до конца, чтобы получить награду.';
+
+  @override
+  String get u_cruise => 'Круиз';
 
   @override
   String get u_autoFireOn => 'ВКЛ';

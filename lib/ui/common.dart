@@ -108,7 +108,7 @@ Widget glass(Widget child, {EdgeInsets? padding}) => Container(
     );
 
 /// 크레딧이 모자랄 때 젬으로 채우는 연결. 게임 화면이 [gemsFor]/[topUp]/[openShop]을 넣는다.
-/// 비용([cost])이 붙은 버튼은 크레딧만 모자라면 눌리고, 누르면 "⭐N으로 채울까요?"를 묻는다.
+/// 비용([cost])이 붙은 버튼은 크레딧만 모자라면 크레딧 숫자가 빨개지고, 누르면 환전에 드는 젬을 보여 주며 묻는다.
 abstract final class GemTopUp {
   /// 비용을 채우는 데 필요한 젬: 0 = 이미 살 수 있음, null = 젬으로 못 채움(광석 부족 등)
   static int? Function(Cost cost)? gemsFor;
@@ -136,9 +136,23 @@ abstract final class GemTopUp {
 
   static Future<bool> _ask(BuildContext ctx, Cost cost, int need) async {
     final short = cost.$1 - (credits?.call() ?? 0);
-    if ((gems?.call() ?? 0) < need) {
-      final go = await confirmDialog(ctx, tr.u_topUpTitle, tr.u_topUpNoGems(need), ok: tr.u_goShop);
-      if (go) openShop?.call();
+    final have = gems?.call() ?? 0;
+    if (have < need) {
+      // 시작하자마자 결제부터 권하지 않게: 기본 버튼은 "닫기", 상점은 옆의 작은 버튼
+      final go = await showDialog<bool>(
+        context: ctx,
+        builder: (c) => AlertDialog(
+          scrollable: true,
+          backgroundColor: kPanelColor,
+          title: Text(keepAll(tr.u_topUpTitle)),
+          content: gemText(keepAll(tr.u_topUpNoGems(short, need, have))),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(c, true), child: Text(tr.u_goShop)),
+            FilledButton(onPressed: () => Navigator.pop(c, false), child: Text(tr.u_close)),
+          ],
+        ),
+      );
+      if (go ?? false) openShop?.call();
       return false;
     }
     final ok = await confirmDialog(ctx, tr.u_topUpTitle, tr.u_topUpBody(short, need), ok: tr.u_topUpOk);
@@ -168,7 +182,7 @@ Widget actionBtn(String label, bool enabled, VoidCallback? onTap,
   }
   return _actionBtn(label, enabled, onTap,
       color: color, icon: icon, cost: cost, iconSize: iconSize, primary: primary, leadingIcon: leadingIcon,
-      gemTag: need > 0 ? need : null);
+      creditShort: need > 0);
 }
 
 Widget _actionBtn(String label, bool enabled, VoidCallback? onTap,
@@ -178,7 +192,7 @@ Widget _actionBtn(String label, bool enabled, VoidCallback? onTap,
         required double iconSize,
         required bool primary,
         IconData? leadingIcon,
-        int? gemTag}) =>
+        bool creditShort = false}) =>
     ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
@@ -207,12 +221,8 @@ Widget _actionBtn(String label, bool enabled, VoidCallback? onTap,
                   if (label.isNotEmpty) gemText(keepAll(label), style: Ts.label.copyWith(color: null)),
                   if (cost != null) ...[
                     if (label.isNotEmpty || icon != null) const SizedBox(width: Space.s),
-                    costView(cost, style: Ts.label),
-                  ],
-                  // 크레딧이 모자라면 채우는 데 드는 젬을 함께 보여준다
-                  if (gemTag != null) ...[
-                    const SizedBox(width: Space.xs),
-                    iconValue('gem', '$gemTag', size: 16, style: Ts.caption.copyWith(color: const Color(0xFFFF80AB))),
+                    // 크레딧이 모자라면 크레딧 숫자를 빨갛게 (누르면 환전 창이 젬 수를 알려 준다)
+                    costView(cost, style: Ts.label, creditColor: creditShort ? kShortRed : null),
                   ],
                 ],
               ),
@@ -253,18 +263,21 @@ class OverlayPanel extends StatelessWidget {
         child: Container(
           color: Colors.black54,
           alignment: Alignment.center,
-          child: GestureDetector(
-            onTap: () {},
-            child: Container(
-              margin: const EdgeInsets.all(12),
-              constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: 640),
-              decoration: BoxDecoration(
-                color: kPanelColor,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: kAccent),
+          // 가로 화면의 노치·홈 표시줄을 피한다
+          child: SafeArea(
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                margin: const EdgeInsets.all(12),
+                constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: 640),
+                decoration: BoxDecoration(
+                  color: kPanelColor,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: kAccent),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: child,
               ),
-              clipBehavior: Clip.antiAlias,
-              child: child,
             ),
           ),
         ),
@@ -290,6 +303,7 @@ Future<bool> confirmDialog(BuildContext context, String title, String body,
   final r = await showDialog<bool>(
     context: context,
     builder: (c) => AlertDialog(
+      scrollable: true,
       backgroundColor: kPanelColor,
       title: Text(keepAll(title)),
       content: gemText(keepAll(body)),

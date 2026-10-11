@@ -5,6 +5,17 @@ import 'home.dart';
 import 'ships.dart';
 import 'weekly_score.dart';
 
+/// 화면 방향 설정: 자동(기기 회전 따라감) / 세로 / 가로
+enum ScreenOrient {
+  auto,
+  portrait,
+  landscape;
+
+  /// 저장값 읽기. 없거나 모르는 값이면 세로
+  static ScreenOrient fromName(Object? name) =>
+      values.where((o) => o.name == name).firstOrNull ?? ScreenOrient.portrait;
+}
+
 /// 새 게임을 시작해도 유지되는 계정 단위 데이터
 /// (젬, 구매 내역, 꾸미기, 업적, 출석, 일일 퀘스트, 함선, 은하 명예, 설정)
 class Achievement {
@@ -159,6 +170,12 @@ class Profile {
   bool haptics = true;
   bool tutorialDone = false;
 
+  /// 순항(손을 떼도 계속 날아가기). 처음엔 끄고, 첫 튜토리얼을 마칠 때 설명하며 켠다
+  bool cruise = false;
+
+  /// 순항 안내를 했는지 (한 번만 켜고 알려 준다. 그 뒤로는 사용자가 정한 대로)
+  bool cruiseTipShown = false;
+
   /// 식민지 안내(첫 정착 튜토리얼)를 봤는지
   bool colonyTutorialSeen = false;
 
@@ -183,6 +200,9 @@ class Profile {
 
   /// 언어 설정. null = 기기 언어 따라감
   String? language;
+
+  /// 화면 방향. 기본은 세로 (예전 버전과 같다)
+  ScreenOrient orientation = ScreenOrient.portrait;
 
   // 내 행성
   HomePlanet home = HomePlanet();
@@ -397,6 +417,8 @@ class Profile {
         'music': music,
         'haptics': haptics,
         'tutorial': tutorialDone,
+        'cruise': cruise,
+        'cruiseTip': cruiseTipShown,
         'colonyTut': colonyTutorialSeen,
         'pendingCrew': pendingStarCrew,
         'ship': shipType,
@@ -409,6 +431,7 @@ class Profile {
         'dailyClaimed': dailyClaimed.toList(),
         'notifications': notifications,
         'lang': language,
+        'orient': orientation.name,
         'home': home.toJson(),
         'lbId': installId,
         'lbNick': nicknameCode,
@@ -440,6 +463,8 @@ class Profile {
       ..music = j['music'] as bool? ?? true
       ..haptics = j['haptics'] as bool? ?? true
       ..tutorialDone = j['tutorial'] as bool? ?? false
+      ..cruise = j['cruise'] as bool? ?? false
+      ..cruiseTipShown = j['cruiseTip'] as bool? ?? false
       ..colonyTutorialSeen = j['colonyTut'] as bool? ?? false
       ..pendingStarCrew = j['pendingCrew'] as int? ?? 0
       ..shipType = j['ship'] as String? ?? 'scout'
@@ -448,6 +473,7 @@ class Profile {
       ..dailyDay = j['dailyDay'] as int? ?? 0
       ..notifications = j['notifications'] as bool? ?? true
       ..language = j['lang'] as String?
+      ..orientation = ScreenOrient.fromName(j['orient'])
       ..installId = j['lbId'] as String?
       ..nicknameCode = j['lbNick'] as String?
       ..leaderboardOptIn = j['lbOptIn'] as bool? ?? false

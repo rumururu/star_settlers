@@ -324,6 +324,7 @@ class _CrewTab extends StatelessWidget {
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
+        scrollable: true,
         backgroundColor: kPanelColor,
         title: Text(
             c.legendary

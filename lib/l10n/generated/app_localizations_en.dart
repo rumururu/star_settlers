@@ -867,6 +867,18 @@ class L10nEn extends L10n {
   String get m_languageSystem => 'Use device language';
 
   @override
+  String get m_settingsOrientation => 'Screen orientation';
+
+  @override
+  String get m_orientAuto => 'Auto';
+
+  @override
+  String get m_orientPortrait => 'Portrait';
+
+  @override
+  String get m_orientLandscape => 'Landscape';
+
+  @override
   String get m_privacyTitle => 'Privacy Policy';
 
   @override
@@ -2122,6 +2134,10 @@ class L10nEn extends L10n {
       'Signal from a supply capsule with gems! Pirates are guarding it, so be careful.';
 
   @override
+  String get g_dlgCruiseOn =>
+      'First training done! I turned on [Cruise] above the joystick: you keep flying where you face even after letting go. Tap it again to turn it off.';
+
+  @override
   String get g_dlgBossWarning =>
       'Warning! The system boss ship is approaching!';
 
@@ -2488,8 +2504,8 @@ class L10nEn extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return 'You need ⭐$gems. Get gems in the shop?';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return 'You need 💰$credits more. Exchanging would take ⭐$gems, but you have ⭐$have. Collect a few more credits!';
   }
 
   @override
@@ -2512,6 +2528,9 @@ class L10nEn extends L10n {
 
   @override
   String get m_adWatchToEnd => 'Watch the ad to the end to get the reward.';
+
+  @override
+  String get u_cruise => 'Cruise';
 
   @override
   String get u_autoFireOn => 'ON';

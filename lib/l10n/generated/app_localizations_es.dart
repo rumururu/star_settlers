@@ -875,6 +875,18 @@ class L10nEs extends L10n {
   String get m_languageSystem => 'Usar idioma del dispositivo';
 
   @override
+  String get m_settingsOrientation => 'Orientación de pantalla';
+
+  @override
+  String get m_orientAuto => 'Automática';
+
+  @override
+  String get m_orientPortrait => 'Vertical';
+
+  @override
+  String get m_orientLandscape => 'Horizontal';
+
+  @override
   String get m_privacyTitle => 'Política de privacidad';
 
   @override
@@ -2140,6 +2152,10 @@ class L10nEs extends L10n {
       '¡Señal de una cápsula de suministros con gemas! Los piratas la vigilan, así que ten cuidado.';
 
   @override
+  String get g_dlgCruiseOn =>
+      '¡Primer entrenamiento listo! Activé [Crucero] sobre el joystick: sigues volando hacia donde miras aunque sueltes. Tócalo otra vez para apagarlo.';
+
+  @override
   String get g_dlgBossWarning =>
       '¡Alerta! ¡Se acerca la nave del jefe del sistema!';
 
@@ -2506,8 +2522,8 @@ class L10nEs extends L10n {
   }
 
   @override
-  String u_topUpNoGems(int gems) {
-    return 'Necesitas ⭐$gems. ¿Comprar gemas en la tienda?';
+  String u_topUpNoGems(int credits, int gems, int have) {
+    return 'Te faltan 💰$credits. Cambiarlo costaría ⭐$gems, pero tienes ⭐$have. ¡Junta algunos créditos más!';
   }
 
   @override
@@ -2531,6 +2547,9 @@ class L10nEs extends L10n {
   @override
   String get m_adWatchToEnd =>
       'Mira el anuncio hasta el final para obtener la recompensa.';
+
+  @override
+  String get u_cruise => 'Crucero';
 
   @override
   String get u_autoFireOn => 'SÍ';
