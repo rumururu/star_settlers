@@ -2447,16 +2447,16 @@ class L10nZh extends L10n {
   String get cat_planetNine => '第九行星';
 
   @override
-  String get u_topUpTitle => '信用点不足';
+  String get u_topUpTitle => '资源不足';
 
   @override
-  String u_topUpBody(int credits, int gems) {
-    return '还差💰$credits。用⭐$gems补足并继续吗？';
+  String u_topUpBody(String short, int gems) {
+    return '还差$short。用⭐$gems补足并继续吗？';
   }
 
   @override
-  String u_topUpNoGems(int credits, int gems, int have) {
-    return '还差💰$credits。用宝石兑换需要⭐$gems，你现在有⭐$have。再多收集一些点数吧！';
+  String u_topUpNoGems(String short, int gems, int have) {
+    return '还差$short。用宝石补足需要⭐$gems，你现在有⭐$have。再多收集一些吧！';
   }
 
   @override

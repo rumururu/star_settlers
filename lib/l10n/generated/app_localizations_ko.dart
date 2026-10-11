@@ -2442,16 +2442,16 @@ class L10nKo extends L10n {
   String get cat_planetNine => '제9행성';
 
   @override
-  String get u_topUpTitle => '크레딧 부족';
+  String get u_topUpTitle => '자원 부족';
 
   @override
-  String u_topUpBody(int credits, int gems) {
-    return '💰$credits 부족해요. ⭐$gems로 채우고 진행할까요?';
+  String u_topUpBody(String short, int gems) {
+    return '$short 부족해요. ⭐$gems로 채우고 진행할까요?';
   }
 
   @override
-  String u_topUpNoGems(int credits, int gems, int have) {
-    return '💰$credits 부족해요. 젬으로 환전하려면 ⭐$gems가 필요한데 지금 ⭐$have 있어요. 크레딧을 조금 더 모아 보세요!';
+  String u_topUpNoGems(String short, int gems, int have) {
+    return '$short 부족해요. 젬으로 채우려면 ⭐$gems가 필요한데 지금 ⭐$have 있어요. 조금 더 모아 보세요!';
   }
 
   @override

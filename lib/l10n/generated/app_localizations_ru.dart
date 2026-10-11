@@ -2509,16 +2509,16 @@ class L10nRu extends L10n {
   String get cat_planetNine => 'Девятая планета';
 
   @override
-  String get u_topUpTitle => 'Мало кредитов';
+  String get u_topUpTitle => 'Не хватает ресурсов';
 
   @override
-  String u_topUpBody(int credits, int gems) {
-    return 'Не хватает 💰$credits. Доплатить ⭐$gems и продолжить?';
+  String u_topUpBody(String short, int gems) {
+    return 'Не хватает $short. Доплатить ⭐$gems и продолжить?';
   }
 
   @override
-  String u_topUpNoGems(int credits, int gems, int have) {
-    return 'Не хватает 💰$credits. Обмен стоит ⭐$gems, а у тебя ⭐$have. Собери ещё немного кредитов!';
+  String u_topUpNoGems(String short, int gems, int have) {
+    return 'Не хватает $short. Докупить стоит ⭐$gems, а у тебя ⭐$have. Собери ещё немного!';
   }
 
   @override

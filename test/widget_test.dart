@@ -1366,18 +1366,47 @@ void main() {
       final need = w.topUpGemsFor(c)!;
       expect(need, greaterThan(0));
       expect(need, w.gemsForCredits(1000));
-      expect(w.topUpCredits(c), isTrue);
+      expect(w.topUpCost(c), isTrue);
       expect(w.profile.gems, 500 - need);
       expect(w.canAfford(c), isTrue);
       expect(w.upgradePlanet(p), isTrue);
     });
 
-    test('이미 살 수 있으면 0젬, 광석이 모자라면 젬으로 못 채움', () {
+    test('이미 살 수 있으면 0젬, 광석이 모자라면 광석도 젬으로 채운다', () {
       final w = GameWorld(seed: 112);
       w.credits = 1e6;
       w.ore = 0;
+      w.profile.gems = 1000;
       expect(w.topUpGemsFor((100, 0)), 0);
-      expect(w.topUpGemsFor((100, 50)), isNull);
+      final need = w.topUpGemsFor((100, 50))!;
+      expect(need, w.gemsForOre(50));
+      expect(need, greaterThan(0));
+      expect(w.topUpCost((100, 50)), isTrue);
+      expect(w.ore, 50);
+      expect(w.profile.gems, 1000 - need);
+      expect(w.canAfford((100, 50)), isTrue);
+    });
+
+    test('크레딧과 광석이 둘 다 모자라면 둘 다 채운다', () {
+      final w = GameWorld(seed: 115);
+      w.credits = 0;
+      w.ore = 10;
+      w.profile.gems = 1000;
+      const c = (500, 40);
+      expect(w.topUpGemsFor(c), w.gemsForCredits(500) + w.gemsForOre(30));
+      expect(w.topUpCost(c), isTrue);
+      expect(w.canAfford(c), isTrue);
+    });
+
+    test('젬으로 산 광석을 시장 최고 시세에 팔아도 이득이 없다 (무한 순환 금지)', () {
+      final w = GameWorld(seed: 116);
+      for (final sector in [0, 3, 8]) {
+        w.sector = sector;
+        const n = 1000;
+        final gemCostInCredits = w.gemsForOre(n) * w.creditPackAmount / GameWorld.creditPackGems;
+        final bestSale = n * w.oreBasePrice * 1.35;
+        expect(gemCostInCredits, greaterThan(bestSale), reason: 'sector $sector');
+      }
     });
 
     test('젬이 모자라면 실패하고 아무것도 잃지 않는다', () {
@@ -1385,7 +1414,7 @@ void main() {
       w.credits = 0;
       w.profile.gems = 0;
       final c = (100000, 0);
-      expect(w.topUpCredits(c), isFalse);
+      expect(w.topUpCost(c), isFalse);
       expect(w.credits, 0);
       expect(w.profile.gems, 0);
     });

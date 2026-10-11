@@ -2501,16 +2501,16 @@ class L10nId extends L10n {
   String get cat_planetNine => 'Planet Kesembilan';
 
   @override
-  String get u_topUpTitle => 'Kredit kurang';
+  String get u_topUpTitle => 'Sumber daya kurang';
 
   @override
-  String u_topUpBody(int credits, int gems) {
-    return 'Kurang 💰$credits. Pakai ⭐$gems untuk menutupi dan lanjut?';
+  String u_topUpBody(String short, int gems) {
+    return 'Kurang $short. Pakai ⭐$gems untuk menutupi dan lanjut?';
   }
 
   @override
-  String u_topUpNoGems(int credits, int gems, int have) {
-    return 'Kurang 💰$credits. Menukar butuh ⭐$gems, tapi kamu punya ⭐$have. Kumpulkan sedikit kredit lagi!';
+  String u_topUpNoGems(String short, int gems, int have) {
+    return 'Kurang $short. Menutupinya butuh ⭐$gems, tapi kamu punya ⭐$have. Kumpulkan sedikit lagi!';
   }
 
   @override

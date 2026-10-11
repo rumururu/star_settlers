@@ -107,14 +107,22 @@ Widget glass(Widget child, {EdgeInsets? padding}) => Container(
       child: child,
     );
 
-/// 크레딧이 모자랄 때 젬으로 채우는 연결. 게임 화면이 [gemsFor]/[topUp]/[openShop]을 넣는다.
+/// 크레딧·광석이 모자랄 때 젬으로 채우는 연결. 게임 화면이 [gemsFor]/[topUp]/[openShop]을 넣는다.
 /// 비용([cost])이 붙은 버튼은 크레딧만 모자라면 크레딧 숫자가 빨개지고, 누르면 환전에 드는 젬을 보여 주며 묻는다.
 abstract final class GemTopUp {
-  /// 비용을 채우는 데 필요한 젬: 0 = 이미 살 수 있음, null = 젬으로 못 채움(광석 부족 등)
+  /// 비용을 채우는 데 필요한 젬: 0 = 이미 살 수 있음, null = 젬으로 못 채움
   static int? Function(Cost cost)? gemsFor;
   static bool Function(Cost cost)? topUp;
   static int Function()? gems;
   static int Function()? credits;
+  static int Function()? ore;
+
+  /// 모자란 만큼 "💰120 · 💎30" (모자란 쪽만)
+  static String shortText(Cost cost) {
+    final c = cost.$1 - (credits?.call() ?? 0);
+    final o = cost.$2 - (ore?.call() ?? 0);
+    return [if (c > 0) '💰$c', if (o > 0) '💎$o'].join(' · ');
+  }
   static VoidCallback? openShop;
 
   /// 묻는 창이 떠 있는 동안 true (게임 화면이 이때 게임을 멈춘다)
@@ -135,7 +143,7 @@ abstract final class GemTopUp {
   }
 
   static Future<bool> _ask(BuildContext ctx, Cost cost, int need) async {
-    final short = cost.$1 - (credits?.call() ?? 0);
+    final short = shortText(cost);
     final have = gems?.call() ?? 0;
     if (have < need) {
       // 시작하자마자 결제부터 권하지 않게: 기본 버튼은 "닫기", 상점은 옆의 작은 버튼
@@ -182,7 +190,8 @@ Widget actionBtn(String label, bool enabled, VoidCallback? onTap,
   }
   return _actionBtn(label, enabled, onTap,
       color: color, icon: icon, cost: cost, iconSize: iconSize, primary: primary, leadingIcon: leadingIcon,
-      creditShort: need > 0);
+      creditShort: cost != null && need > 0 && cost.$1 > (GemTopUp.credits?.call() ?? 0),
+      oreShort: cost != null && need > 0 && cost.$2 > (GemTopUp.ore?.call() ?? 0));
 }
 
 Widget _actionBtn(String label, bool enabled, VoidCallback? onTap,
@@ -192,7 +201,8 @@ Widget _actionBtn(String label, bool enabled, VoidCallback? onTap,
         required double iconSize,
         required bool primary,
         IconData? leadingIcon,
-        bool creditShort = false}) =>
+        bool creditShort = false,
+        bool oreShort = false}) =>
     ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
@@ -221,8 +231,11 @@ Widget _actionBtn(String label, bool enabled, VoidCallback? onTap,
                   if (label.isNotEmpty) gemText(keepAll(label), style: Ts.label.copyWith(color: null)),
                   if (cost != null) ...[
                     if (label.isNotEmpty || icon != null) const SizedBox(width: Space.s),
-                    // 크레딧이 모자라면 크레딧 숫자를 빨갛게 (누르면 환전 창이 젬 수를 알려 준다)
-                    costView(cost, style: Ts.label, creditColor: creditShort ? kShortRed : null),
+                    // 모자란 크레딧·광석 숫자를 빨갛게 (누르면 환전 창이 젬 수를 알려 준다)
+                    costView(cost,
+                        style: Ts.label,
+                        creditColor: creditShort ? kShortRed : null,
+                        oreColor: oreShort ? kShortRed : null),
                   ],
                 ],
               ),

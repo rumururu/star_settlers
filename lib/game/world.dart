@@ -419,8 +419,10 @@ class GameWorld {
   /// ★4 전설 확정 모집 가격
   static const legendaryGemCost = 500;
 
-  double get orePrice =>
-      (2 + sector * 0.6) * (1 + 0.35 * sin(totalTime / 40));
+  /// 광석 기본 시세 (시장 시세는 이 값의 0.65~1.35배로 출렁인다)
+  double get oreBasePrice => 2 + sector * 0.6;
+
+  double get orePrice => oreBasePrice * (1 + 0.35 * sin(totalTime / 40));
 
   // ---------- 섹터 생성 / 이동 ----------
   void _loadSector(int index, SectorSave? save) {
@@ -1132,20 +1134,31 @@ class GameWorld {
     return max(1, (shortfall * creditPackGems / creditPackAmount).ceil());
   }
 
-  /// [cost]에서 크레딧만 모자랄 때 필요한 젬. 이미 살 수 있으면 0, 광석이 모자라면 null(젬으로 못 채움).
-  int? topUpGemsFor(Cost cost) {
-    if (canAfford(cost)) return 0;
-    if (ore < cost.$2) return null;
-    return gemsForCredits(cost.$1 - credits);
+  /// 젬으로 사는 광석의 할증: 시장 최고 시세(기본가 1.35배)보다 비싸서
+  /// 젬 → 광석 → 시장 판매로 크레딧을 불릴 수 없다
+  static const oreGemMarkup = 2.0;
+
+  /// 광석 [shortfall]을 채우는 데 드는 젬 (기본 시세 × [oreGemMarkup] 를 크레딧 환율로, 1젬 단위 올림)
+  int gemsForOre(num shortfall) {
+    if (shortfall <= 0) return 0;
+    return max(1, (shortfall * oreBasePrice * oreGemMarkup * creditPackGems / creditPackAmount).ceil());
   }
 
-  /// 부족한 크레딧을 젬으로 채운다 (딱 필요한 만큼 이상)
-  bool topUpCredits(Cost cost) {
-    final gems = topUpGemsFor(cost);
-    if (gems == null) return false;
-    if (gems == 0) return true;
-    if (!profile.spendGems(gems)) return false;
-    credits += gems * creditPackAmount / creditPackGems;
+  /// [cost]에서 모자란 크레딧·광석을 채우는 데 필요한 젬. 이미 살 수 있으면 0.
+  int? topUpGemsFor(Cost cost) {
+    if (canAfford(cost)) return 0;
+    return gemsForCredits(cost.$1 - credits) + gemsForOre(cost.$2 - ore);
+  }
+
+  /// 모자란 크레딧·광석을 젬으로 채운다 (크레딧은 딱 필요한 만큼 이상, 광석은 모자란 만큼)
+  bool topUpCost(Cost cost) {
+    if (canAfford(cost)) return true;
+    final oreShort = max(0.0, cost.$2 - ore).ceil();
+    final creditGems = gemsForCredits(cost.$1 - credits);
+    final oreGems = gemsForOre(oreShort);
+    if (!profile.spendGems(creditGems + oreGems)) return false;
+    credits += creditGems * creditPackAmount / creditPackGems;
+    ore += oreShort;
     sfx.add(Sfx.coin);
     return true;
   }

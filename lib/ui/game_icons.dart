@@ -33,13 +33,16 @@ Widget iconValue(String icon, String value,
 /// 모자란 비용 표시 색
 const kShortRed = Color(0xFFFF6B6B);
 
-/// [creditColor]가 있으면 크레딧 숫자만 그 색으로 (모자랄 때 빨강)
-Widget costView(Cost c, {double size = 18, TextStyle style = Ts.body, Color? creditColor}) =>
+/// [creditColor]·[oreColor]가 있으면 그 숫자만 그 색으로 (모자랄 때 빨강)
+Widget costView(Cost c, {double size = 18, TextStyle style = Ts.body, Color? creditColor, Color? oreColor}) =>
     Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         iconValue('credits', '${c.$1}', size: size, style: creditColor == null ? style : style.copyWith(color: creditColor)),
-        if (c.$2 > 0) ...[const SizedBox(width: 6), iconValue('ore', '${c.$2}', size: size, style: style)],
+        if (c.$2 > 0) ...[
+          const SizedBox(width: 6),
+          iconValue('ore', '${c.$2}', size: size, style: oreColor == null ? style : style.copyWith(color: oreColor)),
+        ],
       ],
     );
 

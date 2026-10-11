@@ -2508,16 +2508,16 @@ class L10nPt extends L10n {
   String get cat_planetNine => 'Planeta Nove';
 
   @override
-  String get u_topUpTitle => 'Créditos insuficientes';
+  String get u_topUpTitle => 'Recursos insuficientes';
 
   @override
-  String u_topUpBody(int credits, int gems) {
-    return 'Faltam 💰$credits. Usar ⭐$gems para completar e continuar?';
+  String u_topUpBody(String short, int gems) {
+    return 'Faltam $short. Usar ⭐$gems para completar e continuar?';
   }
 
   @override
-  String u_topUpNoGems(int credits, int gems, int have) {
-    return 'Faltam 💰$credits. A troca custaria ⭐$gems, mas você tem ⭐$have. Junte mais alguns créditos!';
+  String u_topUpNoGems(String short, int gems, int have) {
+    return 'Faltam $short. Completar custaria ⭐$gems, mas você tem ⭐$have. Junte mais um pouco!';
   }
 
   @override

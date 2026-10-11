@@ -4339,23 +4339,23 @@ abstract class L10n {
   /// **'제9행성'**
   String get cat_planetNine;
 
-  /// 크레딧이 모자란 버튼을 눌렀을 때 창 제목
+  /// 크레딧·광석이 모자란 버튼을 눌렀을 때 창 제목
   ///
   /// In ko, this message translates to:
-  /// **'크레딧 부족'**
+  /// **'자원 부족'**
   String get u_topUpTitle;
 
-  /// 부족한 크레딧을 젬으로 채울지 묻기
+  /// 부족한 크레딧·광석을 젬으로 채울지 묻기. short 예: 💰120 · 💎30
   ///
   /// In ko, this message translates to:
-  /// **'💰{credits} 부족해요. ⭐{gems}로 채우고 진행할까요?'**
-  String u_topUpBody(int credits, int gems);
+  /// **'{short} 부족해요. ⭐{gems}로 채우고 진행할까요?'**
+  String u_topUpBody(String short, int gems);
 
-  /// 젬도 모자랄 때: 환전에 필요한 젬과 가진 젬을 보여 주고 크레딧을 더 모으라고 안내
+  /// 젬도 모자랄 때: 채우는 데 필요한 젬과 가진 젬을 보여 주고 더 모으라고 안내
   ///
   /// In ko, this message translates to:
-  /// **'💰{credits} 부족해요. 젬으로 환전하려면 ⭐{gems}가 필요한데 지금 ⭐{have} 있어요. 크레딧을 조금 더 모아 보세요!'**
-  String u_topUpNoGems(int credits, int gems, int have);
+  /// **'{short} 부족해요. 젬으로 채우려면 ⭐{gems}가 필요한데 지금 ⭐{have} 있어요. 조금 더 모아 보세요!'**
+  String u_topUpNoGems(String short, int gems, int have);
 
   /// 젬으로 채우고 진행 버튼
   ///
