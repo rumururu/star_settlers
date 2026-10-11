@@ -57,9 +57,10 @@ ROOT_FILES = {
     "review_information/notes.txt": (
         "No account or login is required. All features are available from the first launch.\n"
         "The app shows optional rewarded ads (Google AdMob) only when the user taps a \"watch ad\" button. "
-        "Ads are configured as child-directed and non-personalized for all users.\n"
+        "Ad consent is collected with Google UMP where required; Settings has an \"Ad privacy settings\" item to change it.\n"
         "In-app purchases (gems, Starter Pack, Fleet Commander Pass) are optional; the whole game can be played without paying. "
-        "Restore Purchases is in the Shop.\n"
+        "Restore Purchases is in the Shop (Packs tab) and in Settings. Crew recruit odds are shown in the game.\n"
+        "The weekly leaderboard is opt-in and uses an auto-generated nickname; no personal data is entered.\n"
         "The UI supports 10 languages and follows the device language (it can also be changed in Settings)."
     ),
 }
