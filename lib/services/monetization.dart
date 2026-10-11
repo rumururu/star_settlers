@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:purchases_flutter/purchases_flutter.dart';
 
+import 'app_state.dart';
+
 import '../l10n/l.dart';
 import 'ads.dart';
 
@@ -237,11 +239,19 @@ class RevenueCatMonetization extends MonetizationService {
     try {
       final r = await Purchases.purchase(
           pkg != null ? PurchaseParams.package(pkg) : PurchaseParams.storeProduct(product!));
-      // 기본은 고객 기록(_sync)으로 지급. 기록에 아직 없을 때만 이번 거래로 지급
+      // 기본은 고객 기록(_sync)으로 지급. 기록에 이번 거래가 아직 없을 때만 이번 거래로 지급한다.
       // (구매 결과의 거래 ID 는 고객 기록의 ID 와 체계가 달라 같은 거래로 묶이지 않는다)
-      if (!_sync(r.customerInfo).contains(productId)) {
+      // 결제 직후 기록 갱신 알림(_sync)이 먼저 지급했으면 여기서 "새로 지급 없음"이 나오므로,
+      // 새로 지급했는지가 아니라 기록에 최근 거래가 있는지로 판단한다 — 아니면 두 번 지급된다.
+      _sync(r.customerInfo);
+      final now = DateTime.now();
+      final inRecord = r.customerInfo.nonSubscriptionTransactions.any((t) =>
+          _baseId(t.productIdentifier) == productId &&
+          (DateTime.tryParse(t.purchaseDate)?.difference(now).abs() ?? const Duration(days: 1)) <
+              AppState.fallbackMatchWindow);
+      if (!inRecord) {
         final t = r.storeTransaction;
-        onGrant?.call(productId, tx: 'store:${t.transactionIdentifier}', at: DateTime.now());
+        onGrant?.call(productId, tx: '${AppState.fallbackTxPrefix}${t.transactionIdentifier}', at: now);
       }
       return PurchaseResult.success;
     } on PlatformException catch (e) {

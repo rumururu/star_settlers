@@ -84,10 +84,27 @@ class AppState {
 
   /// 결제 완료 상품 지급 (중복 호출에도 안전하게).
   /// [tx]가 있으면 거래 ID당 한 번만 지급한다. 이 기기 저장보다 먼저 산 소모성 상품은 기록만 한다.
+  /// 구매 결과로 바로 지급할 때(고객 기록에 아직 없을 때) 붙이는 거래 ID 앞머리
+  static const fallbackTxPrefix = 'store:';
+
+  /// 바로 지급한 거래와 나중에 고객 기록으로 온 거래를 같은 거래로 보는 시간 차
+  static const fallbackMatchWindow = Duration(minutes: 15);
+
   static bool grant(String productId, {String? tx, DateTime? at}) {
     final p = profile;
     if (tx != null && tx.isNotEmpty) {
-      if (!p.grantedTx.add(tx)) return false;
+      if (p.grantedTx.contains(tx)) return false;
+      // 같은 거래가 두 ID 로 온다: 구매 결과(store:…)와 고객 기록. 먼저 온 쪽이 지급하고 표시를 남기며,
+      // 나중에 온 쪽은 시간이 가까운 상대 표시를 찾으면 지급하지 않고 짝만 맞춘다.
+      final isFallback = tx.startsWith(fallbackTxPrefix);
+      final when = at ?? DateTime.now();
+      p.grantedTx.add(tx);
+      if (_consumeMark(isFallback ? 'rec' : 'fb', productId, when)) {
+        p.dirty = true;
+        SaveService.saveProfile(p);
+        return false;
+      }
+      p.grantedTx.add('${isFallback ? 'fb' : 'rec'}:$productId:${when.millisecondsSinceEpoch}');
       if (consumables.contains(productId) && at != null && at.isBefore(p.txSince)) {
         p.dirty = true;
         SaveService.saveProfile(p);
@@ -116,6 +133,23 @@ class AppState {
     SaveService.saveProfile(p);
     play(Sfx.gem);
     return true;
+  }
+
+  /// 아직 짝이 없는 상대 표시([kind] = fb | rec) 중 [at] 과 가까운 것을 하나 쓴다
+  static bool _consumeMark(String kind, String productId, DateTime at) {
+    final p = profile;
+    final prefix = '$kind:$productId:';
+    for (final m in p.grantedTx.where((e) => e.startsWith(prefix)).toList()) {
+      final ms = int.tryParse(m.substring(prefix.length));
+      if (ms == null) continue;
+      if (DateTime.fromMillisecondsSinceEpoch(ms).difference(at).abs() <= fallbackMatchWindow) {
+        p.grantedTx
+          ..remove(m)
+          ..add('used:$m');
+        return true;
+      }
+    }
+    return false;
   }
 
   /// 결제로 받은 승무원을 현재 월드에 지급

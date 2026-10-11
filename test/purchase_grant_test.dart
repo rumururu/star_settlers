@@ -44,4 +44,40 @@ void main() {
     expect(back.grantedTx, contains('x'));
     expect(back.txSince.millisecondsSinceEpoch, AppState.profile.txSince.millisecondsSinceEpoch);
   });
+
+  test('구매 결과로 바로 준 거래가 나중에 고객 기록(다른 ID)으로 와도 두 번 주지 않는다', () {
+    final t0 = DateTime.now();
+    expect(AppState.grant('gems_100', tx: '${AppState.fallbackTxPrefix}2000001', at: t0), isTrue);
+    expect(AppState.profile.gems, 100);
+    // 같은 거래가 RevenueCat 고객 기록 ID 로 도착 (시간은 몇 초 차이)
+    expect(AppState.grant('gems_100', tx: 'o1_abc', at: t0.add(const Duration(seconds: 4))), isFalse);
+    expect(AppState.profile.gems, 100);
+    // 다시 와도 그대로
+    expect(AppState.grant('gems_100', tx: 'o1_abc', at: t0), isFalse);
+    expect(AppState.profile.gems, 100);
+    // 저장 후에도 짝 맞춘 기록 유지
+    final back = Profile.fromJson(AppState.profile.toJson());
+    expect(back.grantedTx, contains('o1_abc'));
+  });
+
+  test('같은 상품을 연달아 두 번 사면 두 번 다 준다', () {
+    final t0 = DateTime.now();
+    AppState.grant('gems_100', tx: '${AppState.fallbackTxPrefix}A', at: t0);
+    AppState.grant('gems_100', tx: '${AppState.fallbackTxPrefix}B', at: t0.add(const Duration(seconds: 30)));
+    expect(AppState.profile.gems, 200);
+    // 두 거래의 고객 기록이 늦게 와도 추가 지급 없음
+    AppState.grant('gems_100', tx: 'o1_A', at: t0);
+    AppState.grant('gems_100', tx: 'o1_B', at: t0.add(const Duration(seconds: 30)));
+    expect(AppState.profile.gems, 200);
+    // 바로 지급 없이 고객 기록으로만 온 세 번째 구매는 준다
+    expect(AppState.grant('gems_100', tx: 'o1_C', at: t0.add(const Duration(minutes: 1))), isTrue);
+    expect(AppState.profile.gems, 300);
+  });
+
+  test('고객 기록이 먼저 지급하고 구매 결과가 늦게 와도 두 번 주지 않는다', () {
+    final t0 = DateTime.now();
+    expect(AppState.grant('gems_100', tx: 'o1_first', at: t0), isTrue);
+    expect(AppState.grant('gems_100', tx: '${AppState.fallbackTxPrefix}999', at: t0.add(const Duration(seconds: 2))), isFalse);
+    expect(AppState.profile.gems, 100);
+  });
 }
