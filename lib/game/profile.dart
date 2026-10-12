@@ -114,16 +114,34 @@ const dailyPool = [
 const dailyBonusGems = 10;
 
 class Profile {
+  /// 화면에 보이는 젬. 서버 지갑을 쓸 때는 [GemWallet](services/wallet.dart)이
+  /// 서버 잔액 + 아직 보내지 못한 수입 + 미리 받아 둔 차감분([prepaid])으로 맞춘다.
   int gems = 0;
   bool premium = false;
   bool starterBought = false;
 
-  /// 이미 지급한 스토어 거래 ID (같은 결제를 두 번 지급하지 않게)
-  Set<String> grantedTx = {};
+  /// 서버 지갑에 수입을 알리는 곳. null이면 젬을 기기 안에서만 센다 (테스트·웹 데모·결제 키 없는 개발 빌드).
+  /// [source]: ach(업적 id) · login · quest(퀘스트 id 또는 bonus) · ad · play(게임 플레이 수입 전부)
+  static void Function(String source, String key, int amount)? onEarn;
 
-  /// 이 기기 저장이 처음 생긴 시각. 이보다 이전에 산 소모성 상품은 다시 지급하지 않는다
-  /// (재설치·데이터 삭제 후 젬을 또 받는 것 방지. 비소모성은 언제든 복원)
-  DateTime txSince = DateTime.now();
+  /// 서버 지갑을 쓰는지. 그러면 [spendGems]는 서버가 이미 차감해 준 [prepaid] 안에서만 성공한다.
+  static bool get serverWallet => onEarn != null;
+
+  /// 서버에서 이미 차감됐고 아직 게임에 쓰지 않은 젬 (저장하지 않음 — AppState.payGems가 채운다)
+  int prepaid = 0;
+
+  // 서버 지갑 상태 (services/wallet.dart가 읽고 쓴다)
+  /// 마지막으로 받은 서버 잔액
+  int walletGems = 0;
+
+  /// 서버가 센 결제 수. 결제 뒤 이 값이 늘면 지급이 끝난 것이다
+  int walletPurchases = 0;
+
+  /// 아직 서버에 보내지 못한 수입 (요청 ID가 붙은 것)
+  final walletOutbox = <Map<String, Object?>>[];
+
+  /// 아직 요청으로 묶지 않은 게임 플레이 수입 (자주 생기는 +1·+2를 모아서 보낸다)
+  int walletPlay = 0;
 
   /// 젬으로 산 추가 배치 슬롯 수 (0..[crewSlotPrices].length)
   int extraCrewSlots = 0;
@@ -247,8 +265,7 @@ class Profile {
   bool claim(Achievement a) {
     if (!isComplete(a) || claimed.contains(a.id)) return false;
     claimed.add(a.id);
-    gems += a.gems;
-    dirty = true;
+    earnGems('ach', a.id, a.gems);
     return true;
   }
 
@@ -272,8 +289,7 @@ class Profile {
     if (r == null) return 0;
     loginStreak = _nextStreak(now);
     lastLoginDay = dayKey(now);
-    gems += r;
-    dirty = true;
+    earnGems('login', '', r);
     return r;
   }
 
@@ -290,8 +306,7 @@ class Profile {
       adGemsToday = 0;
     }
     adGemsToday++;
-    gems += adGemAmount;
-    dirty = true;
+    earnGems('ad', '', adGemAmount);
     return true;
   }
 
@@ -375,19 +390,34 @@ class Profile {
     if (dailyClaimed.contains(id)) return false;
     if (id == 'bonus') {
       if (!dailyBonusReady) return false;
-      gems += dailyBonusGems;
+      earnGems('quest', 'bonus', dailyBonusGems);
     } else {
       final q = dailyQuests.where((q) => q.id == id).firstOrNull;
       if (q == null || !dailyDone(q)) return false;
-      gems += q.gems;
+      earnGems('quest', q.id, q.gems);
     }
     dailyClaimed.add(id);
     dirty = true;
     return true;
   }
 
+  /// 젬을 번다. 서버 지갑이면 서버에도 알린다 (서버가 규칙대로 확정하고, 화면 값은 확정되면 서버 값으로 맞춰진다).
+  void earnGems(String source, String key, int n) {
+    if (n <= 0) return;
+    gems += n;
+    dirty = true;
+    onEarn?.call(source, key, n);
+  }
+
+  /// 젬을 쓴다. 서버 지갑이면 AppState.payGems로 서버가 먼저 차감한 [prepaid] 안에서만 성공한다
+  /// (기기에서 숫자를 바꿔도 서버가 차감해 주지 않으면 쓸 수 없다).
   bool spendGems(int n) {
-    if (gems < n) return false;
+    if (serverWallet) {
+      if (prepaid < n) return false;
+      prepaid -= n;
+    } else if (gems < n) {
+      return false;
+    }
     gems -= n;
     dirty = true;
     return true;
@@ -397,8 +427,10 @@ class Profile {
         'gems': gems,
         'premium': premium,
         'starter': starterBought,
-        'tx': grantedTx.toList(),
-        'txSince': txSince.millisecondsSinceEpoch,
+        'wGems': walletGems,
+        'wBuys': walletPurchases,
+        'wOut': walletOutbox,
+        'wPlay': walletPlay,
         'slots': extraCrewSlots,
         'rosterPacks': rosterPacks,
         'skins': ownedSkins.toList(),
@@ -445,8 +477,9 @@ class Profile {
       ..gems = j['gems'] as int? ?? 0
       ..premium = j['premium'] as bool? ?? false
       ..starterBought = j['starter'] as bool? ?? false
-      ..grantedTx = {...((j['tx'] as List?)?.cast<String>() ?? const <String>[])}
-      ..txSince = j['txSince'] is int ? DateTime.fromMillisecondsSinceEpoch(j['txSince'] as int) : DateTime.now()
+      ..walletGems = j['wGems'] as int? ?? 0
+      ..walletPurchases = j['wBuys'] as int? ?? 0
+      ..walletPlay = j['wPlay'] as int? ?? 0
       // 예전 저장: 'slot'(bool) 하나 → 슬롯 1개
       ..extraCrewSlots = (j['slots'] as int? ?? ((j['slot'] as bool? ?? false) ? 1 : 0))
           .clamp(0, crewSlotPrices.length)
@@ -481,6 +514,9 @@ class Profile {
       ..weeklyScore = WeeklyScore.fromJson(j['weekly'] is Map ? (j['weekly'] as Map).cast<String, dynamic>() : null);
     if (j['home'] is Map) {
       p.home = HomePlanet.fromJson((j['home'] as Map).cast<String, dynamic>());
+    }
+    for (final o in (j['wOut'] as List?) ?? const []) {
+      if (o is Map) p.walletOutbox.add(o.cast<String, Object?>());
     }
     p.ownedShips.addAll(((j['ships'] as List?) ?? []).cast<String>());
     p.dailyIds.addAll(((j['dailyIds'] as List?) ?? []).cast<String>());

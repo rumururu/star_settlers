@@ -46,6 +46,7 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
       return;
     }
     if (!await confirmDialog(context, tr.u_buyConfirmTitle, tr.u_buyShipConfirm(t.name, eul('⭐${t.gemPrice}')))) return;
+    if (!await payGems(t.gemPrice, 'ship')) return;
     final w = AppState.world;
     final ok = w != null ? w.buyShip(t) : p.buyShip(t);
     if (!ok) return;

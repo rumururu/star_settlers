@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../game/models.dart';
 import '../l10n/l.dart';
 import '../services/ads.dart' show AdResult;
+import '../services/app_state.dart';
+import '../services/wallet.dart' show WalletStatus;
 import 'game_icons.dart';
 import 'tokens.dart';
 
@@ -164,7 +166,7 @@ abstract final class GemTopUp {
       return false;
     }
     final ok = await confirmDialog(ctx, tr.u_topUpTitle, tr.u_topUpBody(short, need), ok: tr.u_topUpOk);
-    return ok && (topUp?.call(cost) ?? false);
+    return ok && await payGems(need, 'top_up') && (topUp?.call(cost) ?? false);
   }
 }
 
@@ -333,4 +335,15 @@ void toast(BuildContext context, String msg) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(SnackBar(content: Text(keepAll(msg)), duration: const Duration(seconds: 2)));
+}
+
+/// 젬 [n]을 쓰는 버튼은 게임 동작 전에 이걸 기다린다. 서버 지갑이 먼저 차감해야 true.
+/// 안 되면 이유(젬 부족 / 서버 연결 안 됨)를 알리고 false. [reason]은 서버 기록용 짧은 이름 (영소문자·숫자·_).
+Future<bool> payGems(int n, String reason) async {
+  if (await AppState.payGems(n, reason)) return true;
+  final ctx = navigatorKey.currentContext;
+  if (ctx != null && ctx.mounted) {
+    toast(ctx, AppState.lastPay == WalletStatus.notEnough ? tr.m_notEnoughGems : tr.m_walletOffline);
+  }
+  return false;
 }

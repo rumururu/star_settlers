@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show WidgetsBinding;
 
@@ -10,6 +13,7 @@ import 'audio.dart';
 import 'leaderboard.dart';
 import 'monetization.dart';
 import 'notifications.dart';
+import 'wallet.dart';
 
 /// 앱 전역 상태: 프로필, 결제, 오디오, 현재 월드
 class AppState {
@@ -21,6 +25,18 @@ class AppState {
 
   /// 주간 순위표. 저장소는 항상 현재 [profile]을 가리킨다 (초기화로 프로필이 바뀌어도).
   static final LeaderboardService leaderboard = LeaderboardService(store: _ProfileLeaderboardStore());
+
+  /// 젬 지갑 (서버). [useServerWallet]일 때만 연결한다. 테스트는 가짜 서버로 바꿔 끼운다.
+  static GemWallet wallet = GemWallet(
+    profile: () => profile,
+    installId: () => leaderboard.installId,
+    save: () => SaveService.saveProfile(profile),
+    onFlags: applyPurchaseFlags,
+  );
+
+  /// 젬을 서버 지갑으로 셀지. 결제(RevenueCat)가 켜진 빌드는 모두 서버를 쓴다.
+  /// 웹 데모와 결제 키 없는 개발 빌드(테스트 결제창)는 기기 안에서만 센다.
+  static bool get useServerWallet => !kIsWeb && RevenueCatMonetization.configured;
 
   static DateTime? _lastSubmit;
 
@@ -45,6 +61,55 @@ class AppState {
   /// 화면에서 직접 제출했을 때 자동 제출 간격을 다시 센다
   static void markSubmitted() => _lastSubmit = DateTime.now();
 
+  /// 젬 [n]을 쓰기 전에 부른다. 서버 지갑이면 서버가 먼저 차감해야 true이고, 차감분은
+  /// [Profile.prepaid]에 들어가 이어서 부르는 게임 동작([Profile.spendGems])이 쓴다.
+  /// 기기 지갑이면 바로 true (게임 동작이 직접 확인한다). 실패 이유는 [lastPay].
+  static Future<bool> payGems(int n, String reason) async {
+    lastPay = WalletStatus.ok;
+    final p = profile;
+    if (!Profile.serverWallet || n <= 0) return true;
+    if (p.prepaid >= n) return true; // 지난번에 차감받고 못 쓴 몫이 있으면 그것부터
+    if (p.gems < n) {
+      lastPay = WalletStatus.notEnough;
+      return false;
+    }
+    lastPay = await wallet.spend(n - p.prepaid, reason);
+    return lastPay == WalletStatus.ok;
+  }
+
+  static WalletStatus lastPay = WalletStatus.ok;
+
+  /// 서버 지갑이면 쌓인 수입을 보낸다 ([refresh]면 잔액·결제도 받아 온다). 기다리지 않는다.
+  static void syncWallet({bool refresh = false}) {
+    if (!Profile.serverWallet) return;
+    unawaited(refresh ? wallet.refresh() : wallet.flush());
+  }
+
+  /// 서버가 알려 준 결제 표시를 게임에 반영한다. 스타터 팩·사령관 패스의 꾸미기와 ★3 승무원은 처음 한 번만 준다.
+  /// 환불되면 사령관 패스 혜택을 끈다.
+  static void applyPurchaseFlags(bool premium, bool starter) {
+    final p = profile;
+    if (starter && !p.starterBought) {
+      p
+        ..starterBought = true
+        ..ownedSkins.add('galaxy')
+        ..pendingStarCrew += 1;
+      deliverPending();
+    }
+    if (premium) p.ownedSkins.add('gold');
+    if (p.premium != premium) p.premium = premium;
+    p.dirty = true;
+  }
+
+  /// 모든 데이터 초기화 뒤 새 프로필로 바꾼다. 설치 ID(= 결제·지갑 ID)는 그대로 두고 서버 젬만 비운다.
+  static void resetProfile() {
+    final id = profile.installId;
+    profile = Profile()..installId = id;
+    world = null;
+    if (Profile.serverWallet) wallet.wipe();
+    SaveService.saveProfile(profile);
+  }
+
   /// 모든 데이터 초기화: 순위표에 참여했으면 서버 기록도 지운다 (최선 노력, 기다리지 않음).
   static void forgetLeaderboard() {
     final id = profile.installId;
@@ -56,7 +121,14 @@ class AppState {
     profile = await SaveService.loadProfile();
     profile.refreshDaily(DateTime.now());
     money.onGrant = grant;
+    if (useServerWallet) {
+      Profile.onEarn = wallet.earned;
+      wallet.recompute();
+      // RevenueCat 사용자 = 설치 ID. 서버가 결제를 이 지갑에 넣는다.
+      money.appUserId = leaderboard.installId;
+    }
     await money.init();
+    if (useServerWallet) unawaited(wallet.refresh());
     AudioService.instance
       ..soundOn = profile.sound
       ..musicOn = profile.music;
@@ -79,38 +151,10 @@ class AppState {
 
   static void play(Sfx s) => AudioService.instance.play(s);
 
-  /// 소모성 상품 (재설치 후 복원 대상이 아님)
-  static const consumables = {'gems_100', 'gems_550', 'gems_1200'};
-
-  /// 결제 완료 상품 지급 (중복 호출에도 안전하게).
-  /// [tx]가 있으면 거래 ID당 한 번만 지급한다. 이 기기 저장보다 먼저 산 소모성 상품은 기록만 한다.
-  /// 구매 결과로 바로 지급할 때(고객 기록에 아직 없을 때) 붙이는 거래 ID 앞머리
-  static const fallbackTxPrefix = 'store:';
-
-  /// 바로 지급한 거래와 나중에 고객 기록으로 온 거래를 같은 거래로 보는 시간 차
-  static const fallbackMatchWindow = Duration(minutes: 15);
-
-  static bool grant(String productId, {String? tx, DateTime? at}) {
+  /// 테스트 결제(개발 빌드, [DevMonetization])로 산 상품을 기기에서 지급한다.
+  /// 출시 빌드의 결제는 서버가 지급한다 (RevenueCat → starset-purchase-webhook → 지갑).
+  static bool grant(String productId) {
     final p = profile;
-    if (tx != null && tx.isNotEmpty) {
-      if (p.grantedTx.contains(tx)) return false;
-      // 같은 거래가 두 ID 로 온다: 구매 결과(store:…)와 고객 기록. 먼저 온 쪽이 지급하고 표시를 남기며,
-      // 나중에 온 쪽은 시간이 가까운 상대 표시를 찾으면 지급하지 않고 짝만 맞춘다.
-      final isFallback = tx.startsWith(fallbackTxPrefix);
-      final when = at ?? DateTime.now();
-      p.grantedTx.add(tx);
-      if (_consumeMark(isFallback ? 'rec' : 'fb', productId, when)) {
-        p.dirty = true;
-        SaveService.saveProfile(p);
-        return false;
-      }
-      p.grantedTx.add('${isFallback ? 'fb' : 'rec'}:$productId:${when.millisecondsSinceEpoch}');
-      if (consumables.contains(productId) && at != null && at.isBefore(p.txSince)) {
-        p.dirty = true;
-        SaveService.saveProfile(p);
-        return false;
-      }
-    }
     switch (productId) {
       case 'gems_100':
         p.gems += 100;
@@ -120,36 +164,16 @@ class AppState {
         p.gems += 1200;
       case 'starter_pack':
         if (p.starterBought) break;
-        p.starterBought = true;
         p.gems += 300;
-        p.ownedSkins.add('galaxy');
-        p.pendingStarCrew++;
+        applyPurchaseFlags(p.premium, true);
       case 'premium_pass':
-        p.premium = true;
-        p.ownedSkins.add('gold');
+        applyPurchaseFlags(true, p.starterBought);
     }
     p.dirty = true;
     deliverPending();
     SaveService.saveProfile(p);
     play(Sfx.gem);
     return true;
-  }
-
-  /// 아직 짝이 없는 상대 표시([kind] = fb | rec) 중 [at] 과 가까운 것을 하나 쓴다
-  static bool _consumeMark(String kind, String productId, DateTime at) {
-    final p = profile;
-    final prefix = '$kind:$productId:';
-    for (final m in p.grantedTx.where((e) => e.startsWith(prefix)).toList()) {
-      final ms = int.tryParse(m.substring(prefix.length));
-      if (ms == null) continue;
-      if (DateTime.fromMillisecondsSinceEpoch(ms).difference(at).abs() <= fallbackMatchWindow) {
-        p.grantedTx
-          ..remove(m)
-          ..add('used:$m');
-        return true;
-      }
-    }
-    return false;
   }
 
   /// 결제로 받은 승무원을 현재 월드에 지급

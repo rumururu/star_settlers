@@ -2,7 +2,7 @@
 slug: pre-release-audit
 status: active
 owner: mkideabox
-updated: 2026-10-11
+updated: 2026-10-13
 ---
 
 # Release Pre-Audit Result - v1.0.0 (5) - 2026-10-11
@@ -10,6 +10,14 @@ updated: 2026-10-11
 우주 개척단 (Star Settlers) 첫 출시 사전점검 결과다.
 기준 문서: `~/.claude/flutter-release-guides/Flutter_Codex_Pre_Release_Audit_Runbook.md`, `~/.claude/APP_REVIEW_REJECTIONS.md`.
 항목별 체크 상태는 `docs/release_procedure/test_checklist.md`에 있다.
+
+> **2026-10-13: 결제·젬 구조 변경으로 아래 GO는 결제·젬 항목에 대해 무효다. 다시 검증해야 한다.**
+> 젬을 기기 저장에서 서버 지갑으로 옮겼다 (`supabase/wallet/`, `lib/services/wallet.dart`).
+> - 젬은 서버(claires-ranch 프로젝트, `starset_` 접두사)에만 있고, 앱은 수입 알림(`starset_earn`, 업적 1회·하루 횟수·플레이 하루 1000 상한)과 차감 요청(`starset_spend`)만 할 수 있다. 쓸 때는 서버 차감이 먼저다.
+> - 결제는 앱이 지급하지 않는다. RevenueCat 사용자 ID = 설치 ID, RevenueCat → `starset-purchase-webhook` → 서버 지급. 환불은 회수, 복원(TRANSFER)은 지갑 이동.
+> - 실서버 검사 51/51 (`supabase/wallet/tests/live.sh`), `flutter test` 전체 통과, `flutter analyze` 0건.
+> - 남은 것: RevenueCat 웹훅 등록(사용자), 실기기에서 젬 수입·사용·초기화 확인, 각 스토어 테스트 구매 → 서버 지급 확인, 개인정보처리방침 게시(10개 언어 갱신본), Play 데이터 보안·App Store 개인정보 라벨 갱신(설치 ID와 구매 기록을 서버에 저장).
+> - 이 변경 전에 기기에서 산 테스트 구매는 서버 지갑으로 옮겨지지 않는다 (출시 전이라 테스터만 해당).
 
 ## 사전 입력값
 

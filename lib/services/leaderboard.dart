@@ -5,6 +5,7 @@ import 'dart:math';
 
 import '../game/weekly_score.dart';
 import '../l10n/l.dart';
+import 'rpc.dart';
 
 export '../game/weekly_score.dart' show isoWeekKey, previousIsoWeekKey, ScorePoints, WeeklyScore;
 
@@ -399,22 +400,8 @@ class LeaderboardService {
         _ => LeaderboardStatus.serverError,
       };
 
-  static Future<(int, String)> _httpPost(String rpc, Map<String, Object?> body) async {
-    final client = HttpClient()..connectionTimeout = LeaderboardConfig.timeout;
-    try {
-      final req = await client.postUrl(Uri.parse('${LeaderboardConfig.baseUrl}/rest/v1/rpc/$rpc'));
-      req.headers
-        ..set('apikey', LeaderboardConfig.anonKey)
-        ..set(HttpHeaders.authorizationHeader, 'Bearer ${LeaderboardConfig.anonKey}')
-        ..contentType = ContentType.json;
-      req.add(utf8.encode(jsonEncode(body)));
-      final res = await req.close();
-      final text = await res.transform(utf8.decoder).join();
-      return (res.statusCode, text);
-    } finally {
-      client.close(force: true);
-    }
-  }
+  static Future<(int, String)> _httpPost(String rpc, Map<String, Object?> body) =>
+      supabaseRpcPost(LeaderboardConfig.baseUrl, LeaderboardConfig.anonKey, LeaderboardConfig.timeout, rpc, body);
 }
 
 final _uuidPattern = RegExp(r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');

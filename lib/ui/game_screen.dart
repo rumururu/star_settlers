@@ -140,12 +140,14 @@ class _GameScreenState extends State<GameScreen>
     } else if (state == AppLifecycleState.resumed) {
       AudioService.instance.startMusic();
       NotificationService.instance.cancelAll();
+      AppState.syncWallet(refresh: true); // 앱 밖에 있는 동안 들어온 결제
       // 백그라운드에 있던 시간만큼 오프라인 수입 (1분 이상일 때)
       if (w.savedAt != null && !_modal) _showOffline();
     } else if (_canSave && (state == AppLifecycleState.paused || state == AppLifecycleState.hidden)) {
       w.savedAt ??= DateTime.now();
       _lifecycleSave();
       AppState.submitLeaderboard();
+      AppState.syncWallet();
       if (w.profile.notifications) {
         NotificationService.instance.scheduleReturn(
           storageFullIn: Duration(hours: w.profile.premium ? 8 : 2),
@@ -312,6 +314,7 @@ class _GameScreenState extends State<GameScreen>
       _openShop();
       return;
     }
+    if (!await payGems(GameWorld.creditPackGems, 'credit_pack')) return;
     _act(w.buyCreditsWithGems);
   }
 
@@ -444,12 +447,15 @@ class _GameScreenState extends State<GameScreen>
     }
   }
 
-  void _reviveWithGems() {
+  Future<void> _reviveWithGems() async {
+    if (w.profile.gems < 10) {
+      _openShop();
+      return;
+    }
+    if (!await payGems(10, 'revive')) return;
     if (w.profile.spendGems(10)) {
       w.reviveHere();
       SaveService.saveProfile(w.profile);
-    } else {
-      _openShop();
     }
   }
 

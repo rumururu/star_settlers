@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-import 'app_state.dart';
 
 import '../l10n/l.dart';
 import 'ads.dart';
@@ -60,9 +59,14 @@ enum PurchaseResult {
 /// - 개발/웹: [DevMonetization] (테스트 확인창)
 /// - 출시: [RevenueCatMonetization] (RevenueCat + AdMob 보상형 광고)
 abstract class MonetizationService {
-  /// 결제 성공 시 호출 (상품 지급은 앱에서 처리).
-  /// [tx]는 거래 ID — 같은 거래는 한 번만 지급된다. [at]은 구매 시각. 새로 지급했으면 true.
-  bool Function(String productId, {String? tx, DateTime? at})? onGrant;
+  /// 테스트 결제([DevMonetization]) 성공 시 기기에서 지급한다. 출시 결제는 서버가 지급하므로 부르지 않는다.
+  bool Function(String productId)? onGrant;
+
+  /// 결제 사용자 ID (= 젬 지갑의 설치 ID). [init] 전에 정한다.
+  String? appUserId;
+
+  /// 결제가 서버 지갑으로 지급되는지 (그러면 구매 뒤 서버 지급을 기다린다)
+  bool get serverGrants => false;
 
   /// 개발 모드 확인창 (UI가 주입)
   Future<bool> Function(String title, String body)? confirm;
@@ -163,9 +167,9 @@ class WebDemoMonetization extends MonetizationService {
   }
 }
 
-/// 출시 결제: RevenueCat (익명 사용자, 로그인 없음).
-/// RevenueCat 서버가 스토어 영수증을 검증한 뒤에만 구매 성공이 돌아온다.
-/// 지급은 거래 ID 단위로 한 번만 ([onGrant]의 `tx`) — 구매 직후, 앱 시작, 복원이 같은 경로를 탄다.
+/// 출시 결제: RevenueCat (로그인 없음, 사용자 ID = 젬 지갑의 설치 ID [appUserId]).
+/// RevenueCat이 스토어 영수증을 검증하고 서버(starset-purchase-webhook)에 알리면 서버가 지갑에 지급한다.
+/// 앱은 지급하지 않는다. 복원하면 RevenueCat이 구매를 이 설치로 옮기고(TRANSFER) 서버가 지갑도 옮긴다.
 /// 키는 빌드 때 `--dart-define=REVENUECAT_API_KEY_ANDROID=goog_...` / `REVENUECAT_API_KEY_IOS=appl_...`.
 class RevenueCatMonetization extends MonetizationService {
   static const _androidKey = String.fromEnvironment('REVENUECAT_API_KEY_ANDROID');
@@ -181,6 +185,9 @@ class RevenueCatMonetization extends MonetizationService {
   bool get isTestMode => false;
 
   @override
+  bool get serverGrants => true;
+
+  @override
   Future<void> init() async {
     if (!configured) {
       debugPrint('RevenueCat key missing: purchases disabled');
@@ -188,11 +195,9 @@ class RevenueCatMonetization extends MonetizationService {
     }
     try {
       await Purchases.setLogLevel(kReleaseMode ? LogLevel.warn : LogLevel.debug);
-      await Purchases.configure(PurchasesConfiguration(apiKey));
+      await Purchases.configure(PurchasesConfiguration(apiKey)..appUserID = appUserId);
       _available = true;
-      Purchases.addCustomerInfoUpdateListener(_sync);
       await _loadProducts();
-      _sync(await Purchases.getCustomerInfo());
     } catch (e) {
       debugPrint('RevenueCat init failed: $e');
     }
@@ -216,16 +221,6 @@ class RevenueCatMonetization extends MonetizationService {
   /// Play 상품 ID 는 `gems_100:base` 꼴로 올 수 있다
   static String _baseId(String id) => id.split(':').first;
 
-  /// RevenueCat 고객 기록의 거래를 지급한다. 새로 지급한 상품 ID 를 돌려준다.
-  Set<String> _sync(CustomerInfo info) {
-    final got = <String>{};
-    for (final t in info.nonSubscriptionTransactions) {
-      final id = _baseId(t.productIdentifier);
-      if (onGrant?.call(id, tx: t.transactionIdentifier, at: DateTime.tryParse(t.purchaseDate)) ?? false) got.add(id);
-    }
-    return got;
-  }
-
   @override
   String priceOf(String productId) =>
       _products[productId]?.priceString ?? productDefs.firstWhere((p) => p.id == productId).fallbackPrice;
@@ -237,22 +232,9 @@ class RevenueCatMonetization extends MonetizationService {
     final product = _products[productId];
     if (pkg == null && product == null) return PurchaseResult.failed;
     try {
-      final r = await Purchases.purchase(
+      await Purchases.purchase(
           pkg != null ? PurchaseParams.package(pkg) : PurchaseParams.storeProduct(product!));
-      // 기본은 고객 기록(_sync)으로 지급. 기록에 이번 거래가 아직 없을 때만 이번 거래로 지급한다.
-      // (구매 결과의 거래 ID 는 고객 기록의 ID 와 체계가 달라 같은 거래로 묶이지 않는다)
-      // 결제 직후 기록 갱신 알림(_sync)이 먼저 지급했으면 여기서 "새로 지급 없음"이 나오므로,
-      // 새로 지급했는지가 아니라 기록에 최근 거래가 있는지로 판단한다 — 아니면 두 번 지급된다.
-      _sync(r.customerInfo);
-      final now = DateTime.now();
-      final inRecord = r.customerInfo.nonSubscriptionTransactions.any((t) =>
-          _baseId(t.productIdentifier) == productId &&
-          (DateTime.tryParse(t.purchaseDate)?.difference(now).abs() ?? const Duration(days: 1)) <
-              AppState.fallbackMatchWindow);
-      if (!inRecord) {
-        final t = r.storeTransaction;
-        onGrant?.call(productId, tx: '${AppState.fallbackTxPrefix}${t.transactionIdentifier}', at: now);
-      }
+      // 지급은 서버가 한다 (RevenueCat 웹훅). 화면은 AppState.wallet.waitForPurchase로 지급을 기다린다.
       return PurchaseResult.success;
     } on PlatformException catch (e) {
       final code = PurchasesErrorHelper.getErrorCode(e);
@@ -266,7 +248,7 @@ class RevenueCatMonetization extends MonetizationService {
   Future<void> restore() async {
     if (!_available) return;
     try {
-      _sync(await Purchases.restorePurchases());
+      await Purchases.restorePurchases();
     } on PlatformException catch (e) {
       debugPrint('restore failed: ${PurchasesErrorHelper.getErrorCode(e)}');
     }

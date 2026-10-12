@@ -1090,7 +1090,7 @@ class GameWorld {
     final r = home.harvestReward(rewardMul);
     home.lastHarvestMs = now.millisecondsSinceEpoch;
     credits += r.$1;
-    profile.gems += r.$2;
+    profile.earnGems('play', '', r.$2);
     profile.dirty = true;
     sfx.add(Sfx.gem);
     return r;
@@ -1297,7 +1297,7 @@ class GameWorld {
     activeMissions.remove(m);
     final c = (m.rewardCredits * (1 + crewBonus(CrewRole.trader)) * shipCreditMul).round();
     credits += c;
-    if (m.rewardGems > 0) profile.gems += m.rewardGems;
+    profile.earnGems('play', '', m.rewardGems);
     _count('missions');
     profile.addStat('missions');
     sfx.add(Sfx.coin);
@@ -1339,7 +1339,7 @@ class GameWorld {
     if (v < t) return;
     final s = story;
     credits += s.credits;
-    profile.gems += s.gems;
+    profile.earnGems('play', '', s.gems);
     sfx.add(Sfx.upgrade);
     _float(player.pos + const Offset(0, -50), '${tr.g_floatGoalDone} +💰${s.credits} ⭐${s.gems}',
         const Color(0xFF7CFFB2), big: true);
@@ -2198,8 +2198,7 @@ class GameWorld {
         sfx.add(Sfx.pickup);
         _float(k.pos, '+$n💎', const Color(0xFF4DD0E1));
       case PickupKind.gem:
-        profile.gems += k.amount;
-        profile.dirty = true;
+        profile.earnGems('play', '', k.amount);
         sfx.add(Sfx.gem);
         _float(k.pos, '+${k.amount}⭐', const Color(0xFFFF80AB), big: true);
       case PickupKind.power:
@@ -2242,7 +2241,7 @@ class GameWorld {
             planet.raided = false;
             final reward = (200 * rewardMul * shipCreditMul).round();
             credits += reward;
-            profile.gems += 2;
+            profile.earnGems('play', '', 2);
             sfx.add(Sfx.coin);
             say(Speaker.advisor, tr.g_dlgRaidDefended(planet.name, reward));
           } else if (ev.timeLeft <= 0) {
@@ -2379,8 +2378,7 @@ class GameWorld {
     if (merchantGemTrades >= 3) return false;
     if (!_pay((merchantGemPrice, 0))) return false;
     merchantGemTrades++;
-    profile.gems += 5;
-    profile.dirty = true;
+    profile.earnGems('play', '', 5);
     sfx.add(Sfx.gem);
     return true;
   }

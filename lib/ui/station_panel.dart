@@ -219,7 +219,9 @@ class _ShipTab extends StatelessWidget {
     } else if (unlocked) {
       trailing = actionBtn(tr.u_board, true, () => act(() => world.switchShip(t)));
     } else {
-      trailing = actionBtn('${t.gemPrice}', p.gems >= t.gemPrice, () => act(() => world.buyShip(t)),
+      trailing = actionBtn('${t.gemPrice}', p.gems >= t.gemPrice, () async {
+        if (await payGems(t.gemPrice, 'ship')) act(() => world.buyShip(t));
+      },
           icon: 'gem', iconSize: IconSz.inline, color: const Color(0xFFAD1457));
     }
     final ability = t.ability.isEmpty ? '' : '\n✨ ${t.ability}';
@@ -313,7 +315,8 @@ class _CrewTab extends StatelessWidget {
   final ActFn act;
   final VoidCallback onOpenShop;
 
-  Future<void> _recruit(BuildContext context, CrewMember? Function() f) async {
+  Future<void> _recruit(BuildContext context, CrewMember? Function() f, {int gems = 0}) async {
+    if (gems > 0 && !await payGems(gems, gems >= GameWorld.legendaryGemCost ? 'legendary' : 'recruit')) return;
     CrewMember? got;
     act(() {
       got = f();
@@ -365,11 +368,11 @@ class _CrewTab extends StatelessWidget {
                 () => _recruit(context, w.recruitWithCredits)),
             actionBtn(tr.u_recruitPremium(GameWorld.recruitGemCost),
                 !full && w.profile.gems >= GameWorld.recruitGemCost,
-                () => _recruit(context, w.recruitWithGems),
+                () => _recruit(context, w.recruitWithGems, gems: GameWorld.recruitGemCost),
                 color: const Color(0xFFAD1457)),
             actionBtn(tr.u_recruitLegendary(GameWorld.legendaryGemCost),
                 !full && p.gems >= GameWorld.legendaryGemCost,
-                () => _recruit(context, w.recruitLegendary),
+                () => _recruit(context, w.recruitLegendary, gems: GameWorld.legendaryGemCost),
                 color: const Color(0xFFFF6F00)),
           ],
         ),
@@ -390,14 +393,18 @@ class _CrewTab extends StatelessWidget {
             actionBtn(
                 slotPrice == null ? tr.u_slotMax(w.crewSlots) : tr.u_slotBuy(slotPrice),
                 slotPrice != null && p.gems >= slotPrice,
-                () => act(p.buyCrewSlot),
+                () async {
+                  if (slotPrice != null && await payGems(slotPrice, 'crew_slot')) act(p.buyCrewSlot);
+                },
                 color: const Color(0xFFAD1457)),
             actionBtn(
                 p.rosterPacks >= Profile.maxRosterPacks
                     ? tr.u_rosterMax(w.rosterCap)
                     : tr.u_rosterBuy(Profile.rosterPackSize, Profile.rosterPackPrice),
                 p.rosterPacks < Profile.maxRosterPacks && p.gems >= Profile.rosterPackPrice,
-                () => act(p.buyRosterPack),
+                () async {
+                  if (await payGems(Profile.rosterPackPrice, 'roster')) act(p.buyRosterPack);
+                },
                 color: const Color(0xFFAD1457)),
           ],
         ),
@@ -550,7 +557,9 @@ class _MarketTab extends StatelessWidget {
         Text(tr.u_gemExchange, style: sectionStyle),
         _row(tr.u_creditPack, '⭐${GameWorld.creditPackGems} → 💰${w.creditPackAmount}',
             actionBtn(tr.u_exchange, w.profile.gems >= GameWorld.creditPackGems,
-                () => act(w.buyCreditsWithGems),
+                () async {
+                  if (await payGems(GameWorld.creditPackGems, 'credit_pack')) act(w.buyCreditsWithGems);
+                },
                 color: const Color(0xFFAD1457))),
         const SizedBox(height: 8),
         actionBtn(tr.u_openShop, true, onOpenShop, color: const Color(0xFFAD1457)),

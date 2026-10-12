@@ -238,8 +238,12 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                     padding: const EdgeInsets.all(Space.s),
                     child: GestureDetector(
                       onTap: () => _open(const ShopScreen()),
-                      child: glass(iconValue('gem', '${p.gems}  ＋',
-                          size: IconSz.inline, style: Ts.body.copyWith(color: const Color(0xFFFF80AB)))),
+                      // 서버 지갑이 답하면 바로 바뀐다 (시작할 때 서버 잔액으로 맞춰진다)
+                      child: StreamBuilder<int>(
+                        stream: AppState.wallet.changed.stream,
+                        builder: (_, _) => glass(iconValue('gem', '${p.gems}  ＋',
+                            size: IconSz.inline, style: Ts.body.copyWith(color: const Color(0xFFFF80AB)))),
+                      ),
                     ),
                   ),
                 );

@@ -246,8 +246,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // 순위표에 참여했으면 서버 기록도 지운다 (기다리지 않음 — 실패해도 초기화는 진행)
               AppState.forgetLeaderboard();
               await SaveService.wipeAll();
-              AppState.profile = Profile();
-              AppState.world = null;
+              AppState.resetProfile();
               // 설정도 처음으로: 화면 방향은 기본(세로)으로 돌아간다
               applyOrientation(AppState.profile.orientation);
               if (context.mounted) Navigator.of(context).popUntil((r) => r.isFirst);

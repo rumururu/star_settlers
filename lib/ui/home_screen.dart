@@ -109,7 +109,10 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                 const SizedBox(height: 8),
                 if (s == null)
                   for (final t in BuildingType.values)
-                    _buildRow(t, w, () => doAct(() => w!.buildHome(i, t)))
+                    _buildRow(t, w, () async {
+                      if (t.gemOnly && !await payGems(_home.statueGemCost(0), 'statue')) return;
+                      doAct(() => w!.buildHome(i, t));
+                    })
                 else ...[
                   Text(tr.m_currentEffect(s.type.effect(s.level)), style: bodyStyle),
                   if (s.level < HomeSlot.maxLevel) ...[
@@ -123,7 +126,10 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                           (s.type.gemOnly
                               ? AppState.profile.gems >= _home.statueGemCost(s.level)
                               : w.canAfford(_home.upgradeCost(s, w.homeCostMul))),
-                      () => doAct(() => w!.upgradeHome(i)),
+                      () async {
+                        if (s.type.gemOnly && !await payGems(_home.statueGemCost(s.level), 'statue')) return;
+                        doAct(() => w!.upgradeHome(i));
+                      },
                       color: s.type.gemOnly ? const Color(0xFFAD1457) : const Color(0xFF5E35B1),
                     ),
                   ] else
@@ -206,9 +212,11 @@ class _HomePlanetScreenState extends State<HomePlanetScreen> with SingleTickerPr
                   children: [
                     for (var i = 0; i < homePalettes.length; i++)
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           final (_, _, _, price) = homePalettes[i];
                           if (!_home.ownedPalettes.contains(i)) {
+                            if (!await payGems(price, 'palette')) return;
+                            if (!mounted || !ctx.mounted) return;
                             if (!p.spendGems(price)) {
                               toast(context, tr.m_notEnoughGems);
                               return;

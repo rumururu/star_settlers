@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../game/cosmetics.dart';
@@ -25,14 +27,41 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreenState extends State<ShopScreen> {
   bool _busy = false;
+  StreamSubscription<int>? _walletSub;
+
+  @override
+  void initState() {
+    super.initState();
+    // 서버 지갑이 답하면 바로 다시 그린다 (결제 지급·수입 확정·보유 표시)
+    _walletSub = AppState.wallet.changed.stream.listen((_) {
+      if (mounted) setState(() {});
+    });
+    AppState.syncWallet(refresh: true);
+  }
+
+  @override
+  void dispose() {
+    _walletSub?.cancel();
+    super.dispose();
+  }
 
   Profile get _p => AppState.profile;
 
   Future<void> _buy(String id) async {
     if (_busy) return;
     setState(() => _busy = true);
+    final before = _p.walletPurchases;
     final r = await AppState.money.buy(id);
     if (!mounted) return;
+    if (r == PurchaseResult.success && AppState.money.serverGrants) {
+      // 지급은 서버가 한다 (RevenueCat 웹훅). 보통 몇 초 안에 들어온다.
+      toast(context, tr.m_buyThanks);
+      final got = await AppState.wallet.waitForPurchase(before);
+      if (!mounted) return;
+      setState(() => _busy = false);
+      if (!got) toast(context, tr.m_purchasePending);
+      return;
+    }
     setState(() => _busy = false);
     switch (r) {
       case PurchaseResult.success:
@@ -67,7 +96,7 @@ class _ShopScreenState extends State<ShopScreen> {
       return;
     }
     if (!await confirmDialog(context, tr.m_buyConfirmTitle, tr.m_spendGemsConfirm(eul('⭐$price')))) return;
-    p.spendGems(price);
+    if (!await payGems(price, 'cosmetic') || !p.spendGems(price)) return;
     give();
     p.addStat('cosmetics');
     AppState.play(Sfx.gem);
@@ -183,9 +212,16 @@ class _ShopScreenState extends State<ShopScreen> {
         const SizedBox(height: 6),
         ..._crewItems(),
         const SizedBox(height: 12),
-        actionBtn(tr.m_restorePurchases, true, () async {
+        actionBtn(tr.m_restorePurchases, !_busy, () async {
+          setState(() => _busy = true);
+          final before = _p.walletPurchases;
           await AppState.money.restore();
+          // 다른 설치에서 산 것이면 RevenueCat이 이 설치로 옮기고 서버가 지갑도 옮긴다 (TRANSFER)
+          if (AppState.money.serverGrants) {
+            await AppState.wallet.waitForPurchase(before, wait: const Duration(seconds: 10));
+          }
           if (!mounted) return;
+          _busy = false;
           setState(() {}); // 복원된 패키지를 바로 "보유 중"으로
           toast(context, tr.m_restoreDone);
         }, color: const Color(0xFF455A64)),
@@ -207,6 +243,7 @@ class _ShopScreenState extends State<ShopScreen> {
       return;
     }
     if (!await confirmDialog(context, tr.m_buyConfirmTitle, tr.m_buyShipConfirm(t.name, eul('⭐${t.gemPrice}')))) return;
+    if (!await payGems(t.gemPrice, 'ship')) return;
     final w = AppState.world;
     final ok = w != null ? w.buyShip(t) : p.buyShip(t);
     if (!ok) return;
@@ -299,7 +336,7 @@ class _ShopScreenState extends State<ShopScreen> {
             : tr.m_legendDesc(w.roster.length, w.rosterCap),
         price: GameWorld.legendaryGemCost,
         enabled: w != null && w.roster.length < w.rosterCap,
-        onBuy: () => _buyGemItem(GameWorld.legendaryGemCost, () {
+        onBuy: () => _buyGemItem(GameWorld.legendaryGemCost, 'legendary', () {
           final c = w?.recruitLegendary();
           if (c != null && w != null) {
             SaveService.save(w);
@@ -314,7 +351,7 @@ class _ShopScreenState extends State<ShopScreen> {
         desc: tr.m_slotDesc(slots),
         price: slotPrice,
         enabled: slotPrice != null,
-        onBuy: () => _buyGemItem(slotPrice ?? 0, p.buyCrewSlot),
+        onBuy: () => _buyGemItem(slotPrice ?? 0, 'crew_slot', p.buyCrewSlot),
       ),
       _gemItemCard(
         icon: '🛏',
@@ -322,7 +359,7 @@ class _ShopScreenState extends State<ShopScreen> {
         desc: tr.m_rosterDesc(cap, GameWorld.maxRoster + Profile.maxRosterPacks * Profile.rosterPackSize),
         price: rosterMax ? null : Profile.rosterPackPrice,
         enabled: !rosterMax,
-        onBuy: () => _buyGemItem(Profile.rosterPackPrice, p.buyRosterPack),
+        onBuy: () => _buyGemItem(Profile.rosterPackPrice, 'roster', p.buyRosterPack),
       ),
       Text(tr.m_crewOdds(CrewMember.oddsText(CrewMember.gemOdds)),
           style: dimStyle),
@@ -351,8 +388,9 @@ class _ShopScreenState extends State<ShopScreen> {
         ),
       );
 
-  Future<void> _buyGemItem(int price, bool Function() buy) async {
+  Future<void> _buyGemItem(int price, String reason, bool Function() buy) async {
     if (!await confirmDialog(context, tr.m_buyConfirmTitle, tr.m_spendGemsConfirm(eul('⭐$price')))) return;
+    if (!await payGems(price, reason)) return;
     if (!mounted || !buy()) return;
     AppState.play(Sfx.gem);
     await SaveService.saveProfile(_p);
