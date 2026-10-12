@@ -1,5 +1,5 @@
 No account or login is required. All features are available from the first launch.
 The app shows optional rewarded ads (Google AdMob) only when the user taps a "watch ad" button. Ad consent is collected with Google UMP where required; Settings has an "Ad privacy settings" item to change it.
-In-app purchases (gems, Starter Pack, Fleet Commander Pass) are optional; the whole game can be played without paying. Restore Purchases is in the Shop (Packs tab) and in Settings. Crew recruit odds are shown in the game.
+In-app purchases (gems, Starter Pack, Fleet Commander Pass) are optional; the whole game can be played without paying. Restore Purchases is in the Shop (Packs tab) and in Settings. Gems are kept in a server wallet tied to a random install ID (no account), so spending gems and receiving purchased gems need an internet connection; a purchase shows in the gem balance a few seconds after the store confirms it. Crew recruit odds are shown in the game.
 The weekly leaderboard is opt-in and uses an auto-generated nickname; no personal data is entered.
 The UI supports 10 languages and follows the device language (it can also be changed in Settings).

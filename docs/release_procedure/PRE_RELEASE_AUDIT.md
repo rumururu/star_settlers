@@ -16,7 +16,11 @@ updated: 2026-10-13
 > - 젬은 서버(claires-ranch 프로젝트, `starset_` 접두사)에만 있고, 앱은 수입 알림(`starset_earn`, 업적 1회·하루 횟수·플레이 하루 1000 상한)과 차감 요청(`starset_spend`)만 할 수 있다. 쓸 때는 서버 차감이 먼저다.
 > - 결제는 앱이 지급하지 않는다. RevenueCat 사용자 ID = 설치 ID, RevenueCat → `starset-purchase-webhook` → 서버 지급. 환불은 회수, 복원(TRANSFER)은 지갑 이동.
 > - 실서버 검사 51/51 (`supabase/wallet/tests/live.sh`), `flutter test` 전체 통과, `flutter analyze` 0건.
-> - 남은 것: RevenueCat 웹훅 등록(사용자), 실기기에서 젬 수입·사용·초기화 확인, 각 스토어 테스트 구매 → 서버 지급 확인, 개인정보처리방침 게시(10개 언어 갱신본), Play 데이터 보안·App Store 개인정보 라벨 갱신(설치 ID와 구매 기록을 서버에 저장).
+> - 실기기(SM G525N): 출석 +5, 웹훅 테스트 구매 +100, 승무원 슬롯 서버 차감, 저장 파일 조작·오프라인 구매 거부, 초기화 후 서버 0 확인.
+> - RevenueCat 웹훅 `whintgrdfebc4b862` (전체 앱·Production+Sandbox·전체 이벤트), v2 API 만들어 둔 비밀 키는 키체인 `star-settlers-revenuecat-v2-secret`/`revenuecat`. 키체인 비밀값으로 함수 호출 200, 틀린 값 401.
+> - 개인정보처리방침 10개 언어 게시(`mkideabox` `115172d`). App Store 라벨(기기 ID·구입 내역·게임 플레이 콘텐츠, 앱 기능)과 Play 데이터 보안(구매 내역·기기 ID·앱 활동)이 이미 서버 지갑 데이터를 덮어 변경 없음.
+> - 1.0.0 (7) 재제출: iOS 빌드 6 심사 취소 → 빌드 7 + IAP 5개 WAITING_FOR_REVIEW. Play 프로덕션 코드 6 → 7 교체(completed), 내부 테스트 7.
+> - 남은 것: 실제 스토어 샌드박스 구매 → 웹훅 → 서버 지급을 한 번 확인 (실기기 billing 가능 기기 필요).
 > - 이 변경 전에 기기에서 산 테스트 구매는 서버 지갑으로 옮겨지지 않는다 (출시 전이라 테스터만 해당).
 
 ## 사전 입력값
