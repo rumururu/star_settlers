@@ -27,7 +27,9 @@ updated: 2026-10-13
 > - 남은 것: iOS 샌드박스 구매 → 서버 지급 확인(선택, 심사 전 권장).
 > - RevenueCat Google 개발자 알림(RTDN) 연결 (2026-10-13): RevenueCat 토픽 `projects/project-da4ee1b7-3fcf-4373-815/topics/Play-Store-Notifications`(ctw와 같은 토픽) + Play Console 수익 창출 설정에 같은 토픽, 알림 콘텐츠 '모든 일회성 제품'. Play 테스트 알림을 RevenueCat이 받음.
 >
-> **다음 버전(1.0.1)에 넣을 것: 클라우드 백업** (빌드 7에는 없음, 코드는 작업 트리에만)
+> **1.0.1 (8) — 클라우드 백업**
+> - 2026-10-14: Android 1.0.0(7) 공개 확인 후 1.0.1(8)을 Play 프로덕션에 올림(검토 중). 업데이트 안내 10개 언어 `android/fastlane/metadata/android/*/changelogs/8.txt`.
+> - iOS 1.0.1은 1.0.0 심사 통과 뒤에: ASC 1.0.1 버전 생성 + Game Center 버전 연결 + 업데이트 문구 + `fastlane release` + 심사 신청.
 > - `lib/services/cloud_backup.dart`: Play 게임즈 저장 게임 / Game Center 저장 게임(iCloud)에 프로필+월드+설치 ID 백업. 복원하면 설치 ID가 돌아와 서버 지갑·RevenueCat 사용자가 따라온다. 자동 백업은 그 기기에서 백업·복원을 한 번 한 뒤에만(새 기기에서 연결만 하고 덮어쓰기 방지), 10분 간격.
 > - Play Games 서비스(2026-10-13 게시 완료): 프로젝트 ID `1080311738151`(GCP `star-settlers`), 저장된 게임 사용, Android OAuth 클라이언트 2개(Play 앱 서명 SHA-1 `FF:76:A5:…:E6:F8`, 디버그 키 `6E:82:25:…:2E:12`), 테스터 = 내부 테스트 트랙 + ru***. 설명(en-US)·아이콘·그래픽·카테고리(시뮬레이션) 입력.
 > - iOS: App ID에 GAME_CENTER·ICLOUD 켬, iCloud 컨테이너 `iCloud.com.mkideabox.starsettlers` 등록·App ID에 연결, `ios/Runner/Runner.entitlements`. ASC Game Center 사용 설정(gameCenterDetail) 완료 — 1.0.1 버전을 만들 때 그 버전에도 Game Center를 붙인다. 디버그 빌드(xcodebuild, 자동 서명) 통과. 배포 프로필은 App ID 변경으로 무효가 되어 다음 `fastlane release`에서 sigh가 새로 만든다.

@@ -268,7 +268,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
             },
           ),
-          ListTile(title: Text(tr.m_aboutTitle), subtitle: Text(tr.m_version('1.0.0'))),
+          ListTile(title: Text(tr.m_aboutTitle), subtitle: Text(tr.m_version('1.0.1'))),
         ],
       )),
     );
