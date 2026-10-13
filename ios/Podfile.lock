@@ -5,6 +5,9 @@ PODS:
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - games_services (4.1.0):
+    - Flutter
+    - FlutterMacOS
   - Google-Mobile-Ads-SDK (13.11.0):
     - GoogleUserMessagingPlatform (>= 1.1)
   - google_mobile_ads (9.1.0):
@@ -29,6 +32,7 @@ DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/darwin`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - games_services (from `.symlinks/plugins/games_services/darwin`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -48,6 +52,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  games_services:
+    :path: ".symlinks/plugins/games_services/darwin"
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
   purchases_flutter:
@@ -61,6 +67,7 @@ SPEC CHECKSUMS:
   audioplayers_darwin: 835ced6edd4c9fc8ebb0a7cc9e294a91d99917d5
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
+  games_services: 6115dc856b31b6e4348a838a49bf89c9342305ba
   Google-Mobile-Ads-SDK: 09d0868abe43b9f851b7b340a245679f0eafc96c
   google_mobile_ads: 6b1c16497394528f4a59e76e2fc947cb32b101e2
   GoogleUserMessagingPlatform: befe603da6501006420c206222acd449bba45a9c

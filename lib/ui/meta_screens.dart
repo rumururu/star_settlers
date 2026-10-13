@@ -1,4 +1,7 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../game/models.dart';
 import '../game/profile.dart';
@@ -6,6 +9,7 @@ import '../game/save.dart';
 import '../services/ads.dart';
 import '../services/app_state.dart';
 import '../services/audio.dart';
+import '../services/cloud_backup.dart';
 import '../services/feedback.dart';
 import '../services/notifications.dart';
 import '../services/orientation.dart';
@@ -210,6 +214,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (context.mounted) toast(context, tr.m_restoreDone);
             },
           ),
+          if (CloudBackup.supported) const CloudBackupTiles(),
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
             title: Text(tr.m_privacyTitle),
@@ -352,3 +357,138 @@ IconData orientIcon(ScreenOrient o) => switch (o) {
       ScreenOrient.portrait => Icons.stay_current_portrait,
       ScreenOrient.landscape => Icons.stay_current_landscape,
     };
+
+/// 설정 > 클라우드 백업 (Android: Google Play 게임즈, iOS: Game Center)
+class CloudBackupTiles extends StatefulWidget {
+  const CloudBackupTiles({super.key});
+
+  @override
+  State<CloudBackupTiles> createState() => _CloudBackupTilesState();
+}
+
+class _CloudBackupTilesState extends State<CloudBackupTiles> {
+  CloudBackup get _cloud => AppState.cloud;
+  bool? _signedIn;
+  bool _busy = false;
+
+  static String get service => Platform.isIOS ? 'Game Center' : 'Google Play Games';
+
+  @override
+  void initState() {
+    super.initState();
+    _cloud.isSignedIn.then((v) {
+      if (mounted) setState(() => _signedIn = v);
+    });
+  }
+
+  String _time(DateTime t) => DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm().format(t);
+
+  Future<void> _run(Future<void> Function() job) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await job();
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _connect() => _run(() async {
+        final ok = await _cloud.signIn();
+        if (!mounted) return;
+        setState(() => _signedIn = ok);
+        if (!ok) {
+          toast(context, tr.m_cloudConnectFailed(service));
+          return;
+        }
+        // 다른 기기(또는 지우기 전)의 백업이 있고 이 기기는 아직 백업·복원을 한 적이 없으면 복원을 먼저 묻는다
+        if (AppState.profile.cloudLinked) return;
+        final (_, snap) = await _cloud.peek();
+        if (snap == null || !mounted) return;
+        if (await confirmDialog(context, tr.m_cloudFoundTitle, tr.m_cloudFoundBody(_time(snap.savedAt)),
+            ok: tr.m_cloudRestoreOk, cancel: tr.m_cloudLater)) {
+          await _restore(snap);
+        }
+      });
+
+  Future<void> _backup() => _run(() async {
+        // 이 기기에서 처음 백업할 때 클라우드에 다른 진행이 있으면 덮어쓰기 전에 묻는다
+        if (!AppState.profile.cloudLinked) {
+          final (_, snap) = await _cloud.peek();
+          if (snap != null && snap.installId != AppState.profile.installId) {
+            if (!mounted) return;
+            if (!await confirmDialog(context, tr.m_cloudOverwriteTitle, tr.m_cloudOverwriteBody(_time(snap.savedAt)),
+                ok: tr.m_cloudOverwriteOk)) {
+              return;
+            }
+          }
+        }
+        final r = await _cloud.backupNow();
+        if (!mounted) return;
+        toast(context, r == BackupStatus.ok ? tr.m_cloudBackedUp : tr.m_cloudFailed);
+      });
+
+  Future<void> _askRestore() => _run(() async {
+        final (status, snap) = await _cloud.peek();
+        if (!mounted) return;
+        if (snap == null) {
+          toast(context, status == BackupStatus.nothingToRestore ? tr.m_cloudNoBackup : tr.m_cloudFailed);
+          return;
+        }
+        if (!await confirmDialog(context, tr.m_cloudRestoreTitle, tr.m_cloudRestoreBody(_time(snap.savedAt)),
+            ok: tr.m_cloudRestoreOk)) {
+          return;
+        }
+        await _restore(snap);
+      });
+
+  Future<void> _restore(CloudSnapshot snap) async {
+    final (status, restored) = await _cloud.restore(snap);
+    if (restored == null || status != BackupStatus.ok) {
+      if (mounted) toast(context, tr.m_cloudFailed);
+      return;
+    }
+    await AppState.adoptRestored(restored);
+    // 설정도 백업의 것으로
+    Lang.apply(restored.language);
+    applyOrientation(restored.orientation);
+    AudioService.instance
+      ..soundOn = restored.sound
+      ..setMusic(restored.music);
+    if (!mounted) return;
+    toast(context, tr.m_cloudRestored);
+    Navigator.of(context).popUntil((r) => r.isFirst);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = AppState.profile;
+    final at = p.cloudBackupAt;
+    if (_signedIn != true) {
+      return ListTile(
+        leading: const Icon(Icons.cloud_outlined),
+        title: Text(tr.m_cloudTitle),
+        subtitle: Text(keepAll(tr.m_cloudDesc(service))),
+        trailing: _busy ? const SizedBox.square(dimension: 20, child: CircularProgressIndicator(strokeWidth: 2)) : null,
+        onTap: _signedIn == null ? null : _connect,
+      );
+    }
+    return Column(
+      children: [
+        ListTile(
+          leading: const Icon(Icons.cloud_upload_outlined),
+          title: Text(tr.m_cloudBackupNow),
+          subtitle: Text(at == null ? tr.m_cloudNever : tr.m_cloudLast(_time(at))),
+          trailing: _busy ? const SizedBox.square(dimension: 20, child: CircularProgressIndicator(strokeWidth: 2)) : null,
+          onTap: _backup,
+        ),
+        ListTile(
+          leading: const Icon(Icons.cloud_download_outlined),
+          title: Text(tr.m_cloudRestore),
+          subtitle: Text(keepAll(tr.m_cloudAccount((_cloud.playerName ?? '').isEmpty ? service : '$service · ${_cloud.playerName}'))),
+          onTap: _askRestore,
+        ),
+      ],
+    );
+  }
+}

@@ -886,7 +886,7 @@ class L10nPt extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers não exige cadastro e não coleta informações de identificação pessoal. Os dados do jogo (progresso, créditos e minério, cosméticos, ajustes) ficam salvos no seu aparelho. As gemas e os registros de compra ficam em uma carteira de gemas no nosso servidor, para que não possam ser falsificados nem perdidos, e o ranking semanal opcional abaixo só envia dados se você ativá-lo.\n\nCompras: processadas pelo Google Play / App Store; os dados de pagamento nunca são compartilhados com o desenvolvedor. O RevenueCat verifica e restaura as compras, processando um ID de instalação aleatório e o histórico de compras. Quando a compra é confirmada, o servidor credita a sua carteira de gemas.\n\nCarteira de gemas: as gemas ficam no nosso servidor, não no seu aparelho, então não dá para aumentá-las adulterando-o. O servidor guarda um ID de instalação aleatório (não é um ID de publicidade nem do aparelho), o seu saldo de gemas, os registros de gemas ganhas e gastas e os registros de compra; nada de nomes nem nada que você digite. Para gastar gemas é preciso internet. O servidor é o Supabase (região de Seul).\n\nAnúncios: os anúncios premiados do Google AdMob só aparecem quando você escolhe assistir. O AdMob pode usar o ID de publicidade, o endereço IP e informações do aparelho para exibir anúncios, personalizá-los quando permitido e medi-los. No EEE, no Reino Unido e na Suíça, seu consentimento é pedido na primeira vez que você abre o jogo e pode ser alterado em Configurações → Privacidade dos anúncios.\n\nNotificações: notificações locais agendadas no seu aparelho; nada é enviado.\n\nFeedback: sua mensagem, a versão do app e as informações do aparelho só chegam ao desenvolvedor se você mesmo enviar o e-mail.\n\nRanking semanal (opcional): desativado por padrão; você só participa se ativar em Ajustes ou na tela do ranking. Só são enviados um ID de instalação aleatório, um apelido que o jogo cria a partir de listas fixas de palavras e sua pontuação semanal. Nada de nomes, nada que você digite e sem chat. Os outros jogadores veem só o apelido e a pontuação. O servidor é o Supabase (região de Seul).\n\nExclusão: Ajustes → Apagar todos os dados apaga os dados do seu aparelho. Apagar os dados também zera o seu saldo de gemas no servidor; o Pacote Inicial e o Passe de Comandante da Frota voltam pelos seus registros de compra. Se você participou do ranking, apagar os dados também exclui seu registro no servidor (ID, apelido, pontuação); você também pode pedir a exclusão por e-mail.\n\nPolítica completa: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContato: $email';
+    return 'Star Settlers não exige cadastro e não coleta informações de identificação pessoal. Os dados do jogo (progresso, créditos e minério, cosméticos, ajustes) ficam salvos no seu aparelho. As gemas e os registros de compra ficam em uma carteira de gemas no nosso servidor, para que não possam ser falsificados nem perdidos, e o ranking semanal opcional abaixo só envia dados se você ativá-lo.\n\nCompras: processadas pelo Google Play / App Store; os dados de pagamento nunca são compartilhados com o desenvolvedor. O RevenueCat verifica e restaura as compras, processando um ID de instalação aleatório e o histórico de compras. Quando a compra é confirmada, o servidor credita a sua carteira de gemas.\n\nCarteira de gemas: as gemas ficam no nosso servidor, não no seu aparelho, então não dá para aumentá-las adulterando-o. O servidor guarda um ID de instalação aleatório (não é um ID de publicidade nem do aparelho), o seu saldo de gemas, os registros de gemas ganhas e gastas e os registros de compra; nada de nomes nem nada que você digite. Para gastar gemas é preciso internet. O servidor é o Supabase (região de Seul).\n\nBackup na nuvem (opcional): só funciona se você conectar sua conta do Google Play Games ou do Game Center nas Configurações e fizer backup. Seu progresso, suas configurações e o ID de instalação aleatório ficam nos seus jogos salvos do Google Play Games ou no iCloud, não no servidor do desenvolvedor.\n\nAnúncios: os anúncios premiados do Google AdMob só aparecem quando você escolhe assistir. O AdMob pode usar o ID de publicidade, o endereço IP e informações do aparelho para exibir anúncios, personalizá-los quando permitido e medi-los. No EEE, no Reino Unido e na Suíça, seu consentimento é pedido na primeira vez que você abre o jogo e pode ser alterado em Configurações → Privacidade dos anúncios.\n\nNotificações: notificações locais agendadas no seu aparelho; nada é enviado.\n\nFeedback: sua mensagem, a versão do app e as informações do aparelho só chegam ao desenvolvedor se você mesmo enviar o e-mail.\n\nRanking semanal (opcional): desativado por padrão; você só participa se ativar em Ajustes ou na tela do ranking. Só são enviados um ID de instalação aleatório, um apelido que o jogo cria a partir de listas fixas de palavras e sua pontuação semanal. Nada de nomes, nada que você digite e sem chat. Os outros jogadores veem só o apelido e a pontuação. O servidor é o Supabase (região de Seul).\n\nExclusão: Ajustes → Apagar todos os dados apaga os dados do seu aparelho. Apagar os dados também zera o seu saldo de gemas no servidor; o Pacote Inicial e o Passe de Comandante da Frota voltam pelos seus registros de compra. Se você participou do ranking, apagar os dados também exclui seu registro no servidor (ID, apelido, pontuação); você também pode pedir a exclusão por e-mail.\n\nPolítica completa: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContato: $email';
   }
 
   @override
@@ -3125,4 +3125,82 @@ class L10nPt extends L10n {
 
   @override
   String get m_adPrivacy => 'Privacidade dos anúncios';
+
+  @override
+  String get m_cloudTitle => 'Backup na nuvem';
+
+  @override
+  String m_cloudDesc(String service) {
+    return 'Faça backup do seu progresso na sua conta $service para continuar jogando depois de trocar de aparelho ou reinstalar. Toque para conectar.';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return 'Não foi possível conectar ao $service. Tente novamente em instantes.';
+  }
+
+  @override
+  String get m_cloudBackupNow => 'Fazer backup agora';
+
+  @override
+  String get m_cloudNever => 'Ainda sem backup';
+
+  @override
+  String m_cloudLast(String time) {
+    return 'Último backup: $time';
+  }
+
+  @override
+  String get m_cloudBackedUp => 'Backup feito.';
+
+  @override
+  String get m_cloudFailed =>
+      'Não foi possível acessar a nuvem. Verifique sua conexão com a internet.';
+
+  @override
+  String get m_cloudRestore => 'Restaurar backup';
+
+  @override
+  String m_cloudAccount(String account) {
+    return 'Conta conectada: $account';
+  }
+
+  @override
+  String get m_cloudNoBackup => 'Não há backup para restaurar.';
+
+  @override
+  String get m_cloudRestoreTitle => 'Restaurar o backup?';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return 'Seu progresso será substituído pelo backup de $time. O progresso neste aparelho será perdido e não poderá ser desfeito. As gemas e compras também passarão a ser as do backup.';
+  }
+
+  @override
+  String get m_cloudRestoreOk => 'Restaurar';
+
+  @override
+  String get m_cloudRestored => 'Restaurado.';
+
+  @override
+  String get m_cloudFoundTitle => 'Backup encontrado';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return 'Há um backup de $time. Restaurar agora? Você também pode restaurar depois em Configurações.';
+  }
+
+  @override
+  String get m_cloudLater => 'Depois';
+
+  @override
+  String get m_cloudOverwriteTitle => 'Substituir o backup na nuvem?';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return 'A nuvem tem um backup de outro aparelho ($time). Se você substituí-lo pelo progresso deste aparelho, ele não poderá ser recuperado.';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => 'Substituir';
 }

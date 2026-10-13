@@ -883,7 +883,7 @@ class L10nEn extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers has no sign-up and does not collect personally identifiable information. Game data (progress, credits and ore, cosmetics, settings) is stored on your device. Gems and purchase records are kept in a gem wallet on our server so they cannot be forged or lost, and the optional weekly leaderboard below sends its data only if you turn it on.\n\nPurchases: processed by Google Play / App Store; payment details are never shared with the developer. RevenueCat verifies and restores purchases, processing a random install ID and purchase history. Once a purchase is confirmed, the server credits your gem wallet.\n\nGem wallet: gems are kept on our server, not on your device, so they cannot be increased by tampering. The server stores a random install ID (not an advertising or device ID), your gem balance, records of gems earned and spent, and purchase records; no names and nothing you type. Spending gems needs an internet connection. The server is Supabase (Seoul region).\n\nAds: Google AdMob rewarded ads play only when you choose to watch one. AdMob may use your advertising ID, IP address and device info to serve ads, personalise them where permitted, and measure them. In the EEA, the UK and Switzerland, consent is asked on first launch and can be changed in Settings → Ad privacy settings.\n\nNotifications: local notifications scheduled on your device; nothing is sent out.\n\nFeedback: your message, app version and device info reach the developer only if you send the email yourself.\n\nWeekly leaderboard (optional): off by default; you join only by turning it on in Settings or on the ranking screen. Only a random install ID, a nickname the game builds from fixed word lists, and your weekly score are sent. No names, nothing you type, and no chat. Other players see only the nickname and score. The server is Supabase (Seoul region).\n\nDeletion: Settings → Reset All Data erases the data on your device. Resetting also sets your gem balance on the server to 0; the Starter Pack and Fleet Commander Pass come back from your purchase records. If you joined the leaderboard, resetting also deletes your leaderboard record (install ID, nickname, score) on the server; you can also ask for deletion by email.\n\nFull policy: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContact: $email';
+    return 'Star Settlers has no sign-up and does not collect personally identifiable information. Game data (progress, credits and ore, cosmetics, settings) is stored on your device. Gems and purchase records are kept in a gem wallet on our server so they cannot be forged or lost, and the optional weekly leaderboard below sends its data only if you turn it on.\n\nPurchases: processed by Google Play / App Store; payment details are never shared with the developer. RevenueCat verifies and restores purchases, processing a random install ID and purchase history. Once a purchase is confirmed, the server credits your gem wallet.\n\nGem wallet: gems are kept on our server, not on your device, so they cannot be increased by tampering. The server stores a random install ID (not an advertising or device ID), your gem balance, records of gems earned and spent, and purchase records; no names and nothing you type. Spending gems needs an internet connection. The server is Supabase (Seoul region).\n\nCloud backup (optional): works only when you connect your Google Play Games or Game Center account in Settings and back up. Your progress, settings and random install ID are stored in your own Google Play Games saved games or iCloud, not on the developer\'s server.\n\nAds: Google AdMob rewarded ads play only when you choose to watch one. AdMob may use your advertising ID, IP address and device info to serve ads, personalise them where permitted, and measure them. In the EEA, the UK and Switzerland, consent is asked on first launch and can be changed in Settings → Ad privacy settings.\n\nNotifications: local notifications scheduled on your device; nothing is sent out.\n\nFeedback: your message, app version and device info reach the developer only if you send the email yourself.\n\nWeekly leaderboard (optional): off by default; you join only by turning it on in Settings or on the ranking screen. Only a random install ID, a nickname the game builds from fixed word lists, and your weekly score are sent. No names, nothing you type, and no chat. Other players see only the nickname and score. The server is Supabase (Seoul region).\n\nDeletion: Settings → Reset All Data erases the data on your device. Resetting also sets your gem balance on the server to 0; the Starter Pack and Fleet Commander Pass come back from your purchase records. If you joined the leaderboard, resetting also deletes your leaderboard record (install ID, nickname, score) on the server; you can also ask for deletion by email.\n\nFull policy: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContact: $email';
   }
 
   @override
@@ -2964,4 +2964,82 @@ class L10nEn extends L10n {
 
   @override
   String get m_adPrivacy => 'Ad privacy settings';
+
+  @override
+  String get m_cloudTitle => 'Cloud backup';
+
+  @override
+  String m_cloudDesc(String service) {
+    return 'Back up your progress to your $service account to keep playing after switching devices or reinstalling. Tap to connect.';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return 'Couldn\'t connect to $service. Please try again in a moment.';
+  }
+
+  @override
+  String get m_cloudBackupNow => 'Back up now';
+
+  @override
+  String get m_cloudNever => 'Not backed up yet';
+
+  @override
+  String m_cloudLast(String time) {
+    return 'Last backup: $time';
+  }
+
+  @override
+  String get m_cloudBackedUp => 'Backed up.';
+
+  @override
+  String get m_cloudFailed =>
+      'Couldn\'t reach the cloud. Check your internet connection.';
+
+  @override
+  String get m_cloudRestore => 'Restore from backup';
+
+  @override
+  String m_cloudAccount(String account) {
+    return 'Connected account: $account';
+  }
+
+  @override
+  String get m_cloudNoBackup => 'There\'s no backup to restore.';
+
+  @override
+  String get m_cloudRestoreTitle => 'Restore from backup?';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return 'Your progress will be replaced with the backup from $time. Progress on this device will be lost and can\'t be undone. Gems and purchases will also switch to the backed-up ones.';
+  }
+
+  @override
+  String get m_cloudRestoreOk => 'Restore';
+
+  @override
+  String get m_cloudRestored => 'Restored.';
+
+  @override
+  String get m_cloudFoundTitle => 'Backup found';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return 'There\'s a backup from $time. Restore it now? You can also restore later in Settings.';
+  }
+
+  @override
+  String get m_cloudLater => 'Later';
+
+  @override
+  String get m_cloudOverwriteTitle => 'Overwrite the cloud backup?';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return 'The cloud has a backup from another device ($time). If you overwrite it with this device\'s progress, that backup can\'t be recovered.';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => 'Overwrite';
 }

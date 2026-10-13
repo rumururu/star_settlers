@@ -53,6 +53,23 @@ class SaveService {
     }
   }
 
+  /// 월드 저장 원문 (클라우드 백업용). 게임을 시작하지 않았으면 null
+  static Future<String?> rawWorld() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_worldKey);
+  }
+
+  /// 클라우드 백업 복원: 프로필과 월드를 통째로 바꾼다 (백업에 월드가 없으면 지운다)
+  static Future<void> writeRaw(Map<String, dynamic> profile, String? world) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (world == null) {
+      await prefs.remove(_worldKey);
+    } else {
+      await prefs.setString(_worldKey, world);
+    }
+    await prefs.setString(_profileKey, jsonEncode(profile));
+  }
+
   /// 모든 데이터 삭제 (설정 > 초기화)
   static Future<void> wipeAll() async {
     final prefs = await SharedPreferences.getInstance();

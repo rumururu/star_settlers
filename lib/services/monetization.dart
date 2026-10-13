@@ -72,6 +72,9 @@ abstract class MonetizationService {
   Future<bool> Function(String title, String body)? confirm;
 
   Future<void> init();
+
+  /// 결제 사용자를 [id]로 바꾼다 (클라우드 백업 복원으로 설치 ID가 바뀔 때)
+  Future<void> switchUser(String id) async => appUserId = id;
   String priceOf(String productId);
   Future<PurchaseResult> buy(String productId);
   Future<void> restore();
@@ -200,6 +203,17 @@ class RevenueCatMonetization extends MonetizationService {
       await _loadProducts();
     } catch (e) {
       debugPrint('RevenueCat init failed: $e');
+    }
+  }
+
+  @override
+  Future<void> switchUser(String id) async {
+    appUserId = id;
+    if (!_available) return;
+    try {
+      await Purchases.logIn(id);
+    } catch (e) {
+      debugPrint('RevenueCat logIn failed: $e');
     }
   }
 

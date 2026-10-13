@@ -891,7 +891,7 @@ class L10nEs extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers no requiere registro ni recopila información de identificación personal. Los datos del juego (progreso, créditos y mineral, cosméticos, ajustes) se guardan en tu dispositivo. Las gemas y los registros de compra se guardan en un monedero de gemas en nuestro servidor para que no se puedan falsificar ni perder, y el ranking semanal opcional de abajo solo envía sus datos si lo activas.\n\nCompras: las procesa Google Play / App Store; los datos de pago nunca se comparten con el desarrollador. RevenueCat verifica y restaura las compras, procesando un ID de instalación aleatorio y el historial de compras. Cuando se confirma una compra, el servidor la abona en tu monedero de gemas.\n\nMonedero de gemas: las gemas se guardan en nuestro servidor, no en tu dispositivo, así que no se pueden aumentar manipulándolo. El servidor guarda un ID de instalación aleatorio (no es un ID de publicidad ni de dispositivo), tu saldo de gemas, los registros de gemas obtenidas y gastadas y los registros de compra; nada de nombres ni nada que escribas. Para gastar gemas se necesita conexión a internet. El servidor es Supabase (región de Seúl).\n\nAnuncios: los anuncios con recompensa de Google AdMob solo se muestran cuando tú eliges verlos. AdMob puede usar el ID de publicidad, la dirección IP y la información del dispositivo para mostrar anuncios, personalizarlos cuando esté permitido y medirlos. En el EEE, el Reino Unido y Suiza se pide tu consentimiento la primera vez que abres el juego, y puedes cambiarlo en Ajustes → Privacidad de anuncios.\n\nNotificaciones: notificaciones locales programadas en tu dispositivo; no se envía nada.\n\nComentarios: tu mensaje, la versión de la app y los datos del dispositivo solo llegan al desarrollador si envías el correo tú mismo.\n\nRanking semanal (opcional): desactivado por defecto; solo participas si lo activas en Ajustes o en la pantalla del ranking. Solo se envían un ID de instalación aleatorio, un apodo que el juego crea con listas de palabras fijas y tu puntuación semanal. Nada de nombres, nada que escribas y sin chat. Los demás jugadores solo ven el apodo y la puntuación. El servidor es Supabase (región de Seúl).\n\nBorrado: Ajustes → Borrar todos los datos elimina los datos de tu dispositivo. Borrar los datos también deja en 0 tu saldo de gemas en el servidor; el Pack de inicio y el Pase de Comandante de Flota vuelven gracias a tus registros de compra. Si te uniste al ranking, al borrar los datos también se elimina tu registro del ranking en el servidor (ID, apodo, puntuación); también puedes pedir el borrado por correo.\n\nPolítica completa: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContacto: $email';
+    return 'Star Settlers no requiere registro ni recopila información de identificación personal. Los datos del juego (progreso, créditos y mineral, cosméticos, ajustes) se guardan en tu dispositivo. Las gemas y los registros de compra se guardan en un monedero de gemas en nuestro servidor para que no se puedan falsificar ni perder, y el ranking semanal opcional de abajo solo envía sus datos si lo activas.\n\nCompras: las procesa Google Play / App Store; los datos de pago nunca se comparten con el desarrollador. RevenueCat verifica y restaura las compras, procesando un ID de instalación aleatorio y el historial de compras. Cuando se confirma una compra, el servidor la abona en tu monedero de gemas.\n\nMonedero de gemas: las gemas se guardan en nuestro servidor, no en tu dispositivo, así que no se pueden aumentar manipulándolo. El servidor guarda un ID de instalación aleatorio (no es un ID de publicidad ni de dispositivo), tu saldo de gemas, los registros de gemas obtenidas y gastadas y los registros de compra; nada de nombres ni nada que escribas. Para gastar gemas se necesita conexión a internet. El servidor es Supabase (región de Seúl).\n\nCopia en la nube (opcional): solo funciona si conectas tu cuenta de Google Play Juegos o Game Center en Ajustes y guardas una copia. Tu progreso, tus ajustes y el ID de instalación aleatorio se guardan en tus partidas de Google Play Juegos o en iCloud, no en el servidor del desarrollador.\n\nAnuncios: los anuncios con recompensa de Google AdMob solo se muestran cuando tú eliges verlos. AdMob puede usar el ID de publicidad, la dirección IP y la información del dispositivo para mostrar anuncios, personalizarlos cuando esté permitido y medirlos. En el EEE, el Reino Unido y Suiza se pide tu consentimiento la primera vez que abres el juego, y puedes cambiarlo en Ajustes → Privacidad de anuncios.\n\nNotificaciones: notificaciones locales programadas en tu dispositivo; no se envía nada.\n\nComentarios: tu mensaje, la versión de la app y los datos del dispositivo solo llegan al desarrollador si envías el correo tú mismo.\n\nRanking semanal (opcional): desactivado por defecto; solo participas si lo activas en Ajustes o en la pantalla del ranking. Solo se envían un ID de instalación aleatorio, un apodo que el juego crea con listas de palabras fijas y tu puntuación semanal. Nada de nombres, nada que escribas y sin chat. Los demás jugadores solo ven el apodo y la puntuación. El servidor es Supabase (región de Seúl).\n\nBorrado: Ajustes → Borrar todos los datos elimina los datos de tu dispositivo. Borrar los datos también deja en 0 tu saldo de gemas en el servidor; el Pack de inicio y el Pase de Comandante de Flota vuelven gracias a tus registros de compra. Si te uniste al ranking, al borrar los datos también se elimina tu registro del ranking en el servidor (ID, apodo, puntuación); también puedes pedir el borrado por correo.\n\nPolítica completa: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContacto: $email';
   }
 
   @override
@@ -3136,4 +3136,82 @@ class L10nEs extends L10n {
 
   @override
   String get m_adPrivacy => 'Privacidad de anuncios';
+
+  @override
+  String get m_cloudTitle => 'Copia en la nube';
+
+  @override
+  String m_cloudDesc(String service) {
+    return 'Guarda tu progreso en tu cuenta de $service para seguir jugando si cambias de dispositivo o reinstalas. Toca para conectar.';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return 'No se pudo conectar con $service. Inténtalo de nuevo en un momento.';
+  }
+
+  @override
+  String get m_cloudBackupNow => 'Guardar copia ahora';
+
+  @override
+  String get m_cloudNever => 'Aún no hay copia';
+
+  @override
+  String m_cloudLast(String time) {
+    return 'Última copia: $time';
+  }
+
+  @override
+  String get m_cloudBackedUp => 'Copia guardada.';
+
+  @override
+  String get m_cloudFailed =>
+      'No se pudo conectar con la nube. Revisa tu conexión a internet.';
+
+  @override
+  String get m_cloudRestore => 'Restaurar copia';
+
+  @override
+  String m_cloudAccount(String account) {
+    return 'Cuenta conectada: $account';
+  }
+
+  @override
+  String get m_cloudNoBackup => 'No hay ninguna copia para restaurar.';
+
+  @override
+  String get m_cloudRestoreTitle => '¿Restaurar la copia?';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return 'Tu progreso se reemplazará por la copia del $time. El progreso de este dispositivo se perderá y no se podrá deshacer. Las gemas y las compras también pasarán a ser las de la copia.';
+  }
+
+  @override
+  String get m_cloudRestoreOk => 'Restaurar';
+
+  @override
+  String get m_cloudRestored => 'Restaurado.';
+
+  @override
+  String get m_cloudFoundTitle => 'Hay una copia';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return 'Hay una copia del $time. ¿Quieres restaurarla ahora? También puedes hacerlo más tarde en Ajustes.';
+  }
+
+  @override
+  String get m_cloudLater => 'Más tarde';
+
+  @override
+  String get m_cloudOverwriteTitle => '¿Sobrescribir la copia en la nube?';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return 'En la nube hay una copia de otro dispositivo ($time). Si la sobrescribes con el progreso de este dispositivo, no podrás recuperarla.';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => 'Sobrescribir';
 }

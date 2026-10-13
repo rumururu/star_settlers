@@ -93,7 +93,9 @@ class _GameScreenState extends State<GameScreen>
   @override
   void dispose() {
     // 환생했거나 설정에서 데이터를 초기화했으면(프로필이 바뀜) 저장하지 않는다
-    if (!_discarded && identical(w.profile, AppState.profile)) SaveService.save(w);
+    if (!_discarded && identical(w.profile, AppState.profile)) {
+      SaveService.save(w).then((_) => AppState.cloud.auto());
+    }
     AppState.world = null;
     GemTopUp.openShop = () => navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const ShopScreen()));
     AudioService.instance.stopMusic();
@@ -109,13 +111,16 @@ class _GameScreenState extends State<GameScreen>
 
   bool get _canSave => !_discarded && identical(w.profile, AppState.profile);
 
-  void _lifecycleSave() {
+  /// 진행 중인 생명주기 저장 (연달아 불리면 같은 저장이 끝나기를 기다린다)
+  Future<void> _lifecycleSaving = Future.value();
+
+  Future<void> _lifecycleSave() {
     final now = DateTime.now();
     final last = _lifecycleSavedAt;
-    if (last != null && now.difference(last) < const Duration(seconds: 2)) return;
+    if (last != null && now.difference(last) < const Duration(seconds: 2)) return _lifecycleSaving;
     _lifecycleSavedAt = now;
     _saveTimer = 0;
-    SaveService.save(w);
+    return _lifecycleSaving = SaveService.save(w);
   }
 
   /// 복귀 알림 권한: 튜토리얼 첫 목표들(소행성·해적)을 마치고 첫 식민지를 세운 뒤,
@@ -145,7 +150,8 @@ class _GameScreenState extends State<GameScreen>
       if (w.savedAt != null && !_modal) _showOffline();
     } else if (_canSave && (state == AppLifecycleState.paused || state == AppLifecycleState.hidden)) {
       w.savedAt ??= DateTime.now();
-      _lifecycleSave();
+      // 저장이 끝난 뒤 클라우드 백업 (연결된 기기만, 10분에 한 번)
+      _lifecycleSave().then((_) => AppState.cloud.auto());
       AppState.submitLeaderboard();
       AppState.syncWallet();
       if (w.profile.notifications) {

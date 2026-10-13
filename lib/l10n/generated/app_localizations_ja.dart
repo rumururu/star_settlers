@@ -876,7 +876,7 @@ class L10nJa extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlersは会員登録がなく、個人を特定できる情報は収集しません。ゲームデータ（進行状況、クレジット・鉱石、着せ替え、設定）は端末内に保存されます。ジェムと購入記録は改ざんや紛失を防ぐためサーバーのジェムウォレットに保管し、週間ランキングはご自身でオンにした場合のみ下記の情報をサーバーに送ります。\n\n課金: Google Play / App Storeが処理し、決済情報が開発者に渡ることはありません。購入の確認と復元にはRevenueCatを使用し、ランダムなインストールIDと購入履歴が処理されます。購入が確認されるとサーバーがジェムウォレットに付与します。\n\nジェムウォレット: ジェムは端末ではなくサーバーに保管するため、改ざんで増やすことはできません。サーバーにはランダムなインストールID（広告IDや端末IDではありません）、ジェム残高、ジェムの獲得・使用記録、購入記録が保存され、名前や入力した文字は送りません。ジェムを使うにはインターネット接続が必要です。サーバーはSupabase（ソウルリージョン）です。\n\n広告: 自分で選んだときだけGoogle AdMobのリワード広告が流れます。AdMobは広告の配信、許可されている場合のパーソナライズ、広告の測定のために、広告ID、IPアドレス、端末情報を使用することがあります。欧州経済領域・英国・スイスでは初回起動時に同意を確認し、設定 → 広告のプライバシー設定 で変更できます。\n\n通知: 端末内で予約するローカル通知で、外部には送信されません。\n\nフィードバック: ご自身でメールを送った場合のみ、内容とアプリのバージョン・端末情報が開発者に届きます。\n\n週間ランキング（任意）: 初期設定はオフで、設定またはランキング画面でオンにしたときだけ参加します。送るのはランダムなインストールID、ゲームが決まった単語リストから作るニックネーム、週間スコアだけです。名前や入力した文字は送らず、チャットもありません。ほかのプレイヤーに見えるのはニックネームとスコアだけです。サーバーはSupabase（ソウルリージョン）です。\n\n削除: 設定 → すべてのデータをリセット で端末のデータを消去できます。リセットするとサーバーのジェム残高も0になり、スターターパックと艦隊司令官パスは購入記録から戻ります。ランキングに参加していた場合は、リセット時にサーバー上のランキング記録（ID・ニックネーム・スコア）も削除されます。メールで削除を依頼することもできます。\n\nポリシー全文: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nお問い合わせ: $email';
+    return 'Star Settlersは会員登録がなく、個人を特定できる情報は収集しません。ゲームデータ（進行状況、クレジット・鉱石、着せ替え、設定）は端末内に保存されます。ジェムと購入記録は改ざんや紛失を防ぐためサーバーのジェムウォレットに保管し、週間ランキングはご自身でオンにした場合のみ下記の情報をサーバーに送ります。\n\n課金: Google Play / App Storeが処理し、決済情報が開発者に渡ることはありません。購入の確認と復元にはRevenueCatを使用し、ランダムなインストールIDと購入履歴が処理されます。購入が確認されるとサーバーがジェムウォレットに付与します。\n\nジェムウォレット: ジェムは端末ではなくサーバーに保管するため、改ざんで増やすことはできません。サーバーにはランダムなインストールID（広告IDや端末IDではありません）、ジェム残高、ジェムの獲得・使用記録、購入記録が保存され、名前や入力した文字は送りません。ジェムを使うにはインターネット接続が必要です。サーバーはSupabase（ソウルリージョン）です。\n\nクラウドバックアップ（任意）：設定で Google Play ゲームまたは Game Center のアカウントを連携してバックアップした場合にのみ動作します。進行データ・設定・ランダムなインストールIDはユーザー自身の Google Play ゲームのセーブデータまたは iCloud に保存され、開発者のサーバーには保存されません。\n\n広告: 自分で選んだときだけGoogle AdMobのリワード広告が流れます。AdMobは広告の配信、許可されている場合のパーソナライズ、広告の測定のために、広告ID、IPアドレス、端末情報を使用することがあります。欧州経済領域・英国・スイスでは初回起動時に同意を確認し、設定 → 広告のプライバシー設定 で変更できます。\n\n通知: 端末内で予約するローカル通知で、外部には送信されません。\n\nフィードバック: ご自身でメールを送った場合のみ、内容とアプリのバージョン・端末情報が開発者に届きます。\n\n週間ランキング（任意）: 初期設定はオフで、設定またはランキング画面でオンにしたときだけ参加します。送るのはランダムなインストールID、ゲームが決まった単語リストから作るニックネーム、週間スコアだけです。名前や入力した文字は送らず、チャットもありません。ほかのプレイヤーに見えるのはニックネームとスコアだけです。サーバーはSupabase（ソウルリージョン）です。\n\n削除: 設定 → すべてのデータをリセット で端末のデータを消去できます。リセットするとサーバーのジェム残高も0になり、スターターパックと艦隊司令官パスは購入記録から戻ります。ランキングに参加していた場合は、リセット時にサーバー上のランキング記録（ID・ニックネーム・スコア）も削除されます。メールで削除を依頼することもできます。\n\nポリシー全文: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nお問い合わせ: $email';
   }
 
   @override
@@ -2919,4 +2919,81 @@ class L10nJa extends L10n {
 
   @override
   String get m_adPrivacy => '広告のプライバシー設定';
+
+  @override
+  String get m_cloudTitle => 'クラウドバックアップ';
+
+  @override
+  String m_cloudDesc(String service) {
+    return '$serviceアカウントに進行状況をバックアップしておけば、機種変更や再インストール後も続きから遊べます。タップして連携しましょう。';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return '$serviceに接続できませんでした。しばらくしてからもう一度お試しください。';
+  }
+
+  @override
+  String get m_cloudBackupNow => '今すぐバックアップ';
+
+  @override
+  String get m_cloudNever => 'まだバックアップしていません';
+
+  @override
+  String m_cloudLast(String time) {
+    return '最終バックアップ：$time';
+  }
+
+  @override
+  String get m_cloudBackedUp => 'バックアップしました。';
+
+  @override
+  String get m_cloudFailed => 'クラウドに接続できませんでした。インターネット接続を確認してください。';
+
+  @override
+  String get m_cloudRestore => 'バックアップから復元';
+
+  @override
+  String m_cloudAccount(String account) {
+    return '連携中のアカウント：$account';
+  }
+
+  @override
+  String get m_cloudNoBackup => '復元できるバックアップがありません。';
+
+  @override
+  String get m_cloudRestoreTitle => 'バックアップから復元しますか？';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return '$timeに保存したバックアップに置き換えます。この端末の現在の進行状況は失われ、元に戻せません。ジェムと購入済みアイテムもバックアップ側のものになります。';
+  }
+
+  @override
+  String get m_cloudRestoreOk => '復元';
+
+  @override
+  String get m_cloudRestored => '復元しました。';
+
+  @override
+  String get m_cloudFoundTitle => 'バックアップがあります';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return '$timeに保存したバックアップがあります。今すぐ復元しますか？あとで設定から復元することもできます。';
+  }
+
+  @override
+  String get m_cloudLater => 'あとで';
+
+  @override
+  String get m_cloudOverwriteTitle => 'クラウドのバックアップを上書きしますか？';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return 'クラウドに別の端末のバックアップ（$time）があります。この端末の進行状況で上書きすると、そのバックアップは元に戻せません。';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => '上書き';
 }

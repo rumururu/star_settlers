@@ -876,7 +876,7 @@ class L10nZh extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers 无需注册，不收集任何可识别个人身份的信息。游戏数据（进度、信用点和矿石、装扮、设置）保存在你的设备上。宝石和购买记录保存在服务器上的宝石钱包中，以防伪造和丢失；每周排行榜（可选）仅在你主动开启时发送下方信息。\n\n购买：由 Google Play / App Store 处理，支付信息不会提供给开发者。购买验证与恢复使用 RevenueCat，会处理随机安装 ID 和购买记录。购买确认后，由服务器发放到宝石钱包。\n\n宝石钱包：宝石保存在服务器上而不是你的设备上，无法通过篡改增加。服务器保存随机安装 ID（不是广告 ID 或设备 ID）、宝石余额、获得和使用宝石的记录以及购买记录，不发送名字或你输入的文字。使用宝石需要联网。服务器为 Supabase（首尔区域）。\n\n广告：仅在你主动选择时播放 Google AdMob 激励广告。AdMob 可能会使用广告 ID、IP 地址和设备信息来投放广告、在允许的情况下进行个性化，以及衡量广告效果。在欧洲经济区、英国和瑞士，首次启动时会征求你的同意，之后可在 设置 → 广告隐私设置 中更改。\n\n通知：在设备上预约的本地通知，不会向外发送。\n\n反馈：只有你亲自发送邮件时，内容及应用版本、设备信息才会发给开发者。\n\n每周排行榜（可选）：默认关闭，只有在设置或排行榜页面中主动开启才会参加。只发送随机安装 ID、游戏用固定词表生成的昵称和每周分数。不发送名字或你输入的任何文字，也没有聊天功能。其他玩家只能看到昵称和分数。服务器为 Supabase（首尔区域）。\n\n删除：设置 → 重置所有数据 可清除设备上的数据。重置还会将服务器上的宝石余额清零，新手礼包和舰队指挥官通行证会根据购买记录恢复。如果参加过排行榜，重置时也会删除服务器上的排行榜记录（ID、昵称、分数）；也可以通过邮件申请删除。\n\n完整政策：https://rumururu.github.io/mkideabox/star_settlers/privacy.html\n联系方式：$email';
+    return 'Star Settlers 无需注册，不收集任何可识别个人身份的信息。游戏数据（进度、信用点和矿石、装扮、设置）保存在你的设备上。宝石和购买记录保存在服务器上的宝石钱包中，以防伪造和丢失；每周排行榜（可选）仅在你主动开启时发送下方信息。\n\n购买：由 Google Play / App Store 处理，支付信息不会提供给开发者。购买验证与恢复使用 RevenueCat，会处理随机安装 ID 和购买记录。购买确认后，由服务器发放到宝石钱包。\n\n宝石钱包：宝石保存在服务器上而不是你的设备上，无法通过篡改增加。服务器保存随机安装 ID（不是广告 ID 或设备 ID）、宝石余额、获得和使用宝石的记录以及购买记录，不发送名字或你输入的文字。使用宝石需要联网。服务器为 Supabase（首尔区域）。\n\n云备份（可选）：只有在设置中自行连接 Google Play 游戏或 Game Center 账号并备份时才会运行。进度、设置和随机安装 ID 保存在用户自己的 Google Play 游戏存档或 iCloud 中，不会保存在开发者的服务器上。\n\n广告：仅在你主动选择时播放 Google AdMob 激励广告。AdMob 可能会使用广告 ID、IP 地址和设备信息来投放广告、在允许的情况下进行个性化，以及衡量广告效果。在欧洲经济区、英国和瑞士，首次启动时会征求你的同意，之后可在 设置 → 广告隐私设置 中更改。\n\n通知：在设备上预约的本地通知，不会向外发送。\n\n反馈：只有你亲自发送邮件时，内容及应用版本、设备信息才会发给开发者。\n\n每周排行榜（可选）：默认关闭，只有在设置或排行榜页面中主动开启才会参加。只发送随机安装 ID、游戏用固定词表生成的昵称和每周分数。不发送名字或你输入的任何文字，也没有聊天功能。其他玩家只能看到昵称和分数。服务器为 Supabase（首尔区域）。\n\n删除：设置 → 重置所有数据 可清除设备上的数据。重置还会将服务器上的宝石余额清零，新手礼包和舰队指挥官通行证会根据购买记录恢复。如果参加过排行榜，重置时也会删除服务器上的排行榜记录（ID、昵称、分数）；也可以通过邮件申请删除。\n\n完整政策：https://rumururu.github.io/mkideabox/star_settlers/privacy.html\n联系方式：$email';
   }
 
   @override
@@ -2908,4 +2908,81 @@ class L10nZh extends L10n {
 
   @override
   String get m_adPrivacy => '广告隐私设置';
+
+  @override
+  String get m_cloudTitle => '云备份';
+
+  @override
+  String m_cloudDesc(String service) {
+    return '将进度备份到你的 $service 账号，换机或重新安装后也能继续游戏。点击进行连接。';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return '无法连接到 $service，请稍后再试。';
+  }
+
+  @override
+  String get m_cloudBackupNow => '立即备份';
+
+  @override
+  String get m_cloudNever => '尚未备份';
+
+  @override
+  String m_cloudLast(String time) {
+    return '上次备份：$time';
+  }
+
+  @override
+  String get m_cloudBackedUp => '已备份。';
+
+  @override
+  String get m_cloudFailed => '无法连接到云端，请检查网络连接。';
+
+  @override
+  String get m_cloudRestore => '从备份恢复';
+
+  @override
+  String m_cloudAccount(String account) {
+    return '已连接账号：$account';
+  }
+
+  @override
+  String get m_cloudNoBackup => '没有可恢复的备份。';
+
+  @override
+  String get m_cloudRestoreTitle => '要从备份恢复吗？';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return '将用 $time 保存的备份替换当前进度。此设备上的现有进度将丢失且无法撤销。宝石和已购商品也会变为备份中的内容。';
+  }
+
+  @override
+  String get m_cloudRestoreOk => '恢复';
+
+  @override
+  String get m_cloudRestored => '已恢复。';
+
+  @override
+  String get m_cloudFoundTitle => '发现备份';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return '有一份 $time 保存的备份。现在恢复吗？之后也可以在设置中恢复。';
+  }
+
+  @override
+  String get m_cloudLater => '稍后';
+
+  @override
+  String get m_cloudOverwriteTitle => '要覆盖云端备份吗？';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return '云端有另一台设备的备份（$time）。用此设备的进度覆盖后，该备份将无法找回。';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => '覆盖';
 }

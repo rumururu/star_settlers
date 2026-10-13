@@ -237,6 +237,11 @@ class Profile {
   /// 이번 주 개척 점수
   WeeklyScore weeklyScore = WeeklyScore.now();
 
+  // 클라우드 백업 (services/cloud_backup.dart)
+  /// 이 기기에서 백업이나 복원을 한 적이 있다 → 자동 백업이 켜진다
+  bool cloudLinked = false;
+  DateTime? cloudBackupAt;
+
   /// 저장 필요 표시
   bool dirty = false;
 
@@ -470,6 +475,8 @@ class Profile {
         'lbOptIn': leaderboardOptIn,
         'lbRerolls': nicknameRerolls,
         'weekly': weeklyScore.toJson(),
+        'cloud': cloudLinked,
+        'cloudAt': cloudBackupAt?.toUtc().toIso8601String(),
       };
 
   static Profile fromJson(Map<String, dynamic> j) {
@@ -511,7 +518,9 @@ class Profile {
       ..nicknameCode = j['lbNick'] as String?
       ..leaderboardOptIn = j['lbOptIn'] as bool? ?? false
       ..nicknameRerolls = j['lbRerolls'] as int? ?? 0
-      ..weeklyScore = WeeklyScore.fromJson(j['weekly'] is Map ? (j['weekly'] as Map).cast<String, dynamic>() : null);
+      ..weeklyScore = WeeklyScore.fromJson(j['weekly'] is Map ? (j['weekly'] as Map).cast<String, dynamic>() : null)
+      ..cloudLinked = j['cloud'] as bool? ?? false
+      ..cloudBackupAt = DateTime.tryParse(j['cloudAt'] as String? ?? '')?.toLocal();
     if (j['home'] is Map) {
       p.home = HomePlanet.fromJson((j['home'] as Map).cast<String, dynamic>());
     }

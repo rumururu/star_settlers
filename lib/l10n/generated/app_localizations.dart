@@ -1545,7 +1545,7 @@ abstract class L10n {
   /// 개인정보처리방침 요약 본문
   ///
   /// In ko, this message translates to:
-  /// **'우주 개척단은 회원가입이 없고 개인을 식별하는 정보를 수집하지 않습니다. 게임 데이터(진행 상황, 크레딧·광석, 꾸미기, 설정)는 기기 안에 저장됩니다. 젬과 결제 기록은 위조와 분실을 막기 위해 서버의 젬 지갑에 보관하고, 주간 순위표에 직접 참여하면 아래 순위표 정보를 서버로 보냅니다.\n\n결제: Google Play / App Store가 처리하며 결제 수단 정보는 개발자에게 전달되지 않습니다. 구매 확인과 복원에 RevenueCat을 사용하며, 무작위 설치 ID와 구매 내역이 처리됩니다. 구매가 확인되면 서버가 젬 지갑에 지급합니다.\n\n젬 지갑: 젬은 기기가 아니라 서버에 보관해 조작으로 늘릴 수 없습니다. 서버에는 무작위 설치 ID(광고 ID·기기 ID가 아님), 젬 잔액, 젬을 얻고 쓴 기록, 결제 기록이 저장되며 이름이나 입력한 글자는 보내지 않습니다. 젬을 쓰려면 인터넷 연결이 필요합니다. 서버는 Supabase(서울 리전)입니다.\n\n광고: 직접 선택할 때만 Google AdMob 보상형 광고가 나옵니다. AdMob은 광고 제공, 허용되는 경우의 맞춤형 광고, 광고 측정을 위해 광고 ID, IP 주소, 기기 정보를 사용할 수 있습니다. 유럽 경제 지역·영국·스위스에서는 처음 실행할 때 동의를 묻고, 설정 → 광고 개인정보 설정에서 바꿀 수 있습니다.\n\n알림: 기기 안에서 예약하는 로컬 알림이며 외부로 전송되지 않습니다.\n\n피드백: 직접 메일을 보낼 때만 내용과 앱 버전·기기 정보가 개발자에게 전달됩니다.\n\n주간 순위표(선택): 설정이나 순위 화면에서 직접 켤 때만 참여하며 기본은 꺼져 있습니다. 보내는 것은 무작위 설치 ID, 게임이 정해진 단어 목록으로 만든 별명, 주간 점수뿐입니다. 이름이나 직접 입력한 글자는 보내지 않고 채팅도 없습니다. 다른 플레이어에게는 별명과 점수만 보입니다. 서버는 Supabase(서울 리전)입니다.\n\n삭제: 설정 → 모든 데이터 초기화로 기기의 데이터를 지울 수 있습니다. 초기화하면 서버의 젬 잔액도 0이 되고, 스타터 팩·함대 사령관 패스는 구매 기록으로 돌아옵니다. 순위표에 참여했다면 초기화할 때 서버의 순위표 기록(설치 ID·별명·점수)도 함께 삭제되며, 메일로 삭제를 요청할 수도 있습니다.\n\n전체 방침: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\n문의: {email}'**
+  /// **'우주 개척단은 회원가입이 없고 개인을 식별하는 정보를 수집하지 않습니다. 게임 데이터(진행 상황, 크레딧·광석, 꾸미기, 설정)는 기기 안에 저장됩니다. 젬과 결제 기록은 위조와 분실을 막기 위해 서버의 젬 지갑에 보관하고, 주간 순위표에 직접 참여하면 아래 순위표 정보를 서버로 보냅니다.\n\n결제: Google Play / App Store가 처리하며 결제 수단 정보는 개발자에게 전달되지 않습니다. 구매 확인과 복원에 RevenueCat을 사용하며, 무작위 설치 ID와 구매 내역이 처리됩니다. 구매가 확인되면 서버가 젬 지갑에 지급합니다.\n\n젬 지갑: 젬은 기기가 아니라 서버에 보관해 조작으로 늘릴 수 없습니다. 서버에는 무작위 설치 ID(광고 ID·기기 ID가 아님), 젬 잔액, 젬을 얻고 쓴 기록, 결제 기록이 저장되며 이름이나 입력한 글자는 보내지 않습니다. 젬을 쓰려면 인터넷 연결이 필요합니다. 서버는 Supabase(서울 리전)입니다.\n\n클라우드 백업(선택): 설정에서 직접 Google Play 게임즈 또는 Game Center 계정을 연결해 백업할 때만 동작합니다. 진행 데이터·설정·무작위 설치 ID가 사용자의 Google Play 게임즈 저장 게임 또는 iCloud에 저장되며, 개발자 서버에는 저장하지 않습니다.\n\n광고: 직접 선택할 때만 Google AdMob 보상형 광고가 나옵니다. AdMob은 광고 제공, 허용되는 경우의 맞춤형 광고, 광고 측정을 위해 광고 ID, IP 주소, 기기 정보를 사용할 수 있습니다. 유럽 경제 지역·영국·스위스에서는 처음 실행할 때 동의를 묻고, 설정 → 광고 개인정보 설정에서 바꿀 수 있습니다.\n\n알림: 기기 안에서 예약하는 로컬 알림이며 외부로 전송되지 않습니다.\n\n피드백: 직접 메일을 보낼 때만 내용과 앱 버전·기기 정보가 개발자에게 전달됩니다.\n\n주간 순위표(선택): 설정이나 순위 화면에서 직접 켤 때만 참여하며 기본은 꺼져 있습니다. 보내는 것은 무작위 설치 ID, 게임이 정해진 단어 목록으로 만든 별명, 주간 점수뿐입니다. 이름이나 직접 입력한 글자는 보내지 않고 채팅도 없습니다. 다른 플레이어에게는 별명과 점수만 보입니다. 서버는 Supabase(서울 리전)입니다.\n\n삭제: 설정 → 모든 데이터 초기화로 기기의 데이터를 지울 수 있습니다. 초기화하면 서버의 젬 잔액도 0이 되고, 스타터 팩·함대 사령관 패스는 구매 기록으로 돌아옵니다. 순위표에 참여했다면 초기화할 때 서버의 순위표 기록(설치 ID·별명·점수)도 함께 삭제되며, 메일로 삭제를 요청할 수도 있습니다.\n\n전체 방침: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\n문의: {email}'**
   String m_privacyBody(String email);
 
   /// 설정: 데이터 초기화 항목
@@ -5064,6 +5064,132 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'광고 개인정보 설정'**
   String get m_adPrivacy;
+
+  /// 설정: 클라우드 백업 항목 제목 (아직 연결 안 됨)
+  ///
+  /// In ko, this message translates to:
+  /// **'클라우드 백업'**
+  String get m_cloudTitle;
+
+  /// 설정: 클라우드 백업 설명. service = Google Play Games 또는 Game Center
+  ///
+  /// In ko, this message translates to:
+  /// **'{service} 계정에 진행 상황을 백업해 두면 기기를 바꾸거나 앱을 다시 설치해도 이어서 할 수 있어요. 눌러서 연결하세요.'**
+  String m_cloudDesc(String service);
+
+  /// 플랫폼 게임 계정 연결 실패 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'{service}에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.'**
+  String m_cloudConnectFailed(String service);
+
+  /// 설정: 지금 백업 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'지금 백업'**
+  String get m_cloudBackupNow;
+
+  /// 아직 백업한 적 없음
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 백업하지 않았어요'**
+  String get m_cloudNever;
+
+  /// 마지막 백업 시각
+  ///
+  /// In ko, this message translates to:
+  /// **'마지막 백업: {time}'**
+  String m_cloudLast(String time);
+
+  /// 백업 성공 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'백업했어요.'**
+  String get m_cloudBackedUp;
+
+  /// 백업/복원 실패 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'클라우드에 연결하지 못했어요. 인터넷 연결을 확인해 주세요.'**
+  String get m_cloudFailed;
+
+  /// 설정: 백업에서 복원 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'백업에서 복원'**
+  String get m_cloudRestore;
+
+  /// 연결된 계정 표시. account = 서비스 이름 · 플레이어 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'연결된 계정: {account}'**
+  String m_cloudAccount(String account);
+
+  /// 복원할 백업 없음 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'복원할 백업이 없어요.'**
+  String get m_cloudNoBackup;
+
+  /// 복원 확인 창 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'백업에서 복원할까요?'**
+  String get m_cloudRestoreTitle;
+
+  /// 복원 확인 창 본문. 지금 진행이 사라진다는 경고
+  ///
+  /// In ko, this message translates to:
+  /// **'{time}에 저장한 백업으로 바꿔요. 이 기기의 지금 진행은 사라지고 되돌릴 수 없어요. 젬과 구매한 상품도 백업한 쪽의 것으로 바뀌어요.'**
+  String m_cloudRestoreBody(String time);
+
+  /// 복원 확인 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'복원'**
+  String get m_cloudRestoreOk;
+
+  /// 복원 완료 토스트
+  ///
+  /// In ko, this message translates to:
+  /// **'복원했어요.'**
+  String get m_cloudRestored;
+
+  /// 계정 연결 직후 기존 백업 발견 창 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'백업이 있어요'**
+  String get m_cloudFoundTitle;
+
+  /// 기존 백업 발견 창 본문
+  ///
+  /// In ko, this message translates to:
+  /// **'{time}에 저장한 백업이 있어요. 지금 복원할까요? 나중에 설정에서도 복원할 수 있어요.'**
+  String m_cloudFoundBody(String time);
+
+  /// 나중에 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'나중에'**
+  String get m_cloudLater;
+
+  /// 다른 기기 백업 덮어쓰기 확인 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'클라우드의 백업을 덮어쓸까요?'**
+  String get m_cloudOverwriteTitle;
+
+  /// 다른 기기 백업 덮어쓰기 경고 본문
+  ///
+  /// In ko, this message translates to:
+  /// **'클라우드에 다른 기기의 백업({time})이 있어요. 지금 이 기기의 진행으로 덮어쓰면 그 백업은 되돌릴 수 없어요.'**
+  String m_cloudOverwriteBody(String time);
+
+  /// 덮어쓰기 확인 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'덮어쓰기'**
+  String get m_cloudOverwriteOk;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

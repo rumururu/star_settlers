@@ -888,7 +888,7 @@ class L10nDe extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers braucht keine Registrierung und erhebt keine personenbezogenen Daten. Spieldaten (Fortschritt, Credits und Erz, Kosmetik, Einstellungen) werden auf deinem Gerät gespeichert. Edelsteine und Kaufdaten liegen in einer Edelstein-Geldbörse auf unserem Server, damit sie weder gefälscht werden noch verloren gehen, und die freiwillige Wochen-Rangliste unten sendet ihre Daten nur, wenn du sie einschaltest.\n\nKäufe: werden von Google Play / App Store abgewickelt; Zahlungsdaten werden nie an den Entwickler weitergegeben. RevenueCat prüft und stellt Käufe wieder her und verarbeitet dafür eine zufällige Installations-ID und den Kaufverlauf. Ist ein Kauf bestätigt, schreibt der Server ihn deiner Edelstein-Geldbörse gut.\n\nEdelstein-Geldbörse: Edelsteine liegen auf unserem Server, nicht auf deinem Gerät, und lassen sich daher nicht durch Manipulation vermehren. Der Server speichert eine zufällige Installations-ID (keine Werbe- oder Geräte-ID), dein Edelsteinguthaben, Buchungen über erhaltene und ausgegebene Edelsteine und Kaufdaten; keine Namen, nichts, was du eintippst. Zum Ausgeben von Edelsteinen brauchst du Internet. Der Server ist Supabase (Region Seoul).\n\nWerbung: Belohnungswerbung von Google AdMob läuft nur, wenn du sie selbst auswählst. AdMob kann deine Werbe-ID, IP-Adresse und Geräteinfos verwenden, um Werbung auszuliefern, sie – soweit zulässig – zu personalisieren und zu messen. Im EWR, im Vereinigten Königreich und in der Schweiz wird beim ersten Start nach deiner Einwilligung gefragt; ändern kannst du sie unter Einstellungen → Datenschutz für Werbung.\n\nBenachrichtigungen: lokale Benachrichtigungen, auf deinem Gerät geplant; nichts wird übertragen.\n\nFeedback: Deine Nachricht, App-Version und Geräteinfos erreichen den Entwickler nur, wenn du die E-Mail selbst sendest.\n\nWochen-Rangliste (freiwillig): standardmäßig aus; du machst nur mit, wenn du sie in den Optionen oder im Ranglisten-Bildschirm einschaltest. Gesendet werden nur eine zufällige Installations-ID, ein Spitzname, den das Spiel aus festen Wortlisten bildet, und deine Wochenpunkte. Keine Namen, nichts, was du eintippst, und kein Chat. Andere Spieler sehen nur Spitzname und Punkte. Der Server ist Supabase (Region Seoul).\n\nLöschen: Einstellungen → Alle Daten zurücksetzen löscht die Daten auf deinem Gerät. Beim Zurücksetzen wird auch dein Edelsteinguthaben auf dem Server auf 0 gesetzt; Starterpaket und Kommandanten-Pass kommen über deine Kaufdaten zurück. Wenn du bei der Rangliste mitgemacht hast, löscht das Zurücksetzen auch deinen Ranglisten-Eintrag auf dem Server (ID, Spitzname, Punkte); du kannst die Löschung auch per E-Mail anfordern.\n\nVollständige Richtlinie: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nKontakt: $email';
+    return 'Star Settlers braucht keine Registrierung und erhebt keine personenbezogenen Daten. Spieldaten (Fortschritt, Credits und Erz, Kosmetik, Einstellungen) werden auf deinem Gerät gespeichert. Edelsteine und Kaufdaten liegen in einer Edelstein-Geldbörse auf unserem Server, damit sie weder gefälscht werden noch verloren gehen, und die freiwillige Wochen-Rangliste unten sendet ihre Daten nur, wenn du sie einschaltest.\n\nKäufe: werden von Google Play / App Store abgewickelt; Zahlungsdaten werden nie an den Entwickler weitergegeben. RevenueCat prüft und stellt Käufe wieder her und verarbeitet dafür eine zufällige Installations-ID und den Kaufverlauf. Ist ein Kauf bestätigt, schreibt der Server ihn deiner Edelstein-Geldbörse gut.\n\nEdelstein-Geldbörse: Edelsteine liegen auf unserem Server, nicht auf deinem Gerät, und lassen sich daher nicht durch Manipulation vermehren. Der Server speichert eine zufällige Installations-ID (keine Werbe- oder Geräte-ID), dein Edelsteinguthaben, Buchungen über erhaltene und ausgegebene Edelsteine und Kaufdaten; keine Namen, nichts, was du eintippst. Zum Ausgeben von Edelsteinen brauchst du Internet. Der Server ist Supabase (Region Seoul).\n\nCloud-Backup (optional): funktioniert nur, wenn du in den Einstellungen dein Google-Play-Spiele- oder Game-Center-Konto verbindest und sicherst. Fortschritt, Einstellungen und die zufällige Installations-ID werden in deinen gespeicherten Spielen bei Google Play Spiele oder in iCloud abgelegt, nicht auf dem Server des Entwicklers.\n\nWerbung: Belohnungswerbung von Google AdMob läuft nur, wenn du sie selbst auswählst. AdMob kann deine Werbe-ID, IP-Adresse und Geräteinfos verwenden, um Werbung auszuliefern, sie – soweit zulässig – zu personalisieren und zu messen. Im EWR, im Vereinigten Königreich und in der Schweiz wird beim ersten Start nach deiner Einwilligung gefragt; ändern kannst du sie unter Einstellungen → Datenschutz für Werbung.\n\nBenachrichtigungen: lokale Benachrichtigungen, auf deinem Gerät geplant; nichts wird übertragen.\n\nFeedback: Deine Nachricht, App-Version und Geräteinfos erreichen den Entwickler nur, wenn du die E-Mail selbst sendest.\n\nWochen-Rangliste (freiwillig): standardmäßig aus; du machst nur mit, wenn du sie in den Optionen oder im Ranglisten-Bildschirm einschaltest. Gesendet werden nur eine zufällige Installations-ID, ein Spitzname, den das Spiel aus festen Wortlisten bildet, und deine Wochenpunkte. Keine Namen, nichts, was du eintippst, und kein Chat. Andere Spieler sehen nur Spitzname und Punkte. Der Server ist Supabase (Region Seoul).\n\nLöschen: Einstellungen → Alle Daten zurücksetzen löscht die Daten auf deinem Gerät. Beim Zurücksetzen wird auch dein Edelsteinguthaben auf dem Server auf 0 gesetzt; Starterpaket und Kommandanten-Pass kommen über deine Kaufdaten zurück. Wenn du bei der Rangliste mitgemacht hast, löscht das Zurücksetzen auch deinen Ranglisten-Eintrag auf dem Server (ID, Spitzname, Punkte); du kannst die Löschung auch per E-Mail anfordern.\n\nVollständige Richtlinie: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nKontakt: $email';
   }
 
   @override
@@ -3226,4 +3226,82 @@ class L10nDe extends L10n {
 
   @override
   String get m_adPrivacy => 'Datenschutz für Werbung';
+
+  @override
+  String get m_cloudTitle => 'Cloud-Backup';
+
+  @override
+  String m_cloudDesc(String service) {
+    return 'Sichere deinen Fortschritt in deinem $service-Konto, um nach einem Gerätewechsel oder einer Neuinstallation weiterzuspielen. Zum Verbinden tippen.';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return 'Verbindung mit $service fehlgeschlagen. Bitte versuche es gleich noch einmal.';
+  }
+
+  @override
+  String get m_cloudBackupNow => 'Jetzt sichern';
+
+  @override
+  String get m_cloudNever => 'Noch nicht gesichert';
+
+  @override
+  String m_cloudLast(String time) {
+    return 'Letzte Sicherung: $time';
+  }
+
+  @override
+  String get m_cloudBackedUp => 'Gesichert.';
+
+  @override
+  String get m_cloudFailed =>
+      'Die Cloud ist nicht erreichbar. Prüfe deine Internetverbindung.';
+
+  @override
+  String get m_cloudRestore => 'Aus Sicherung wiederherstellen';
+
+  @override
+  String m_cloudAccount(String account) {
+    return 'Verbundenes Konto: $account';
+  }
+
+  @override
+  String get m_cloudNoBackup => 'Es gibt keine Sicherung zum Wiederherstellen.';
+
+  @override
+  String get m_cloudRestoreTitle => 'Aus Sicherung wiederherstellen?';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return 'Dein Fortschritt wird durch die Sicherung vom $time ersetzt. Der Fortschritt auf diesem Gerät geht verloren und kann nicht rückgängig gemacht werden. Juwelen und Käufe wechseln ebenfalls zu denen der Sicherung.';
+  }
+
+  @override
+  String get m_cloudRestoreOk => 'Wiederherstellen';
+
+  @override
+  String get m_cloudRestored => 'Wiederhergestellt.';
+
+  @override
+  String get m_cloudFoundTitle => 'Sicherung gefunden';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return 'Es gibt eine Sicherung vom $time. Jetzt wiederherstellen? Du kannst sie auch später in den Einstellungen wiederherstellen.';
+  }
+
+  @override
+  String get m_cloudLater => 'Später';
+
+  @override
+  String get m_cloudOverwriteTitle => 'Cloud-Sicherung überschreiben?';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return 'In der Cloud liegt eine Sicherung eines anderen Geräts ($time). Wenn du sie mit dem Fortschritt dieses Geräts überschreibst, ist sie nicht wiederherstellbar.';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => 'Überschreiben';
 }

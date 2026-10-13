@@ -10,6 +10,7 @@ import '../game/save.dart';
 import '../game/world.dart';
 import 'ads.dart';
 import 'audio.dart';
+import 'cloud_backup.dart';
 import 'leaderboard.dart';
 import 'monetization.dart';
 import 'notifications.dart';
@@ -33,6 +34,9 @@ class AppState {
     save: () => SaveService.saveProfile(profile),
     onFlags: applyPurchaseFlags,
   );
+
+  /// 클라우드 백업 (Play 게임즈 / Game Center)
+  static CloudBackup cloud = CloudBackup.standard(() => profile);
 
   /// 젬을 서버 지갑으로 셀지. 결제(RevenueCat)가 켜진 빌드는 모두 서버를 쓴다.
   /// 웹 데모와 결제 키 없는 개발 빌드(테스트 결제창)는 기기 안에서만 센다.
@@ -110,6 +114,20 @@ class AppState {
     SaveService.saveProfile(profile);
   }
 
+  /// 클라우드 백업으로 바꾼 프로필을 앱에 반영한다. 설치 ID가 바뀌면 결제 사용자도 바꾸고 서버 지갑을 다시 읽는다.
+  static Future<void> adoptRestored(Profile restored) async {
+    final before = profile.installId;
+    profile = restored;
+    world = null;
+    _lastSubmit = null;
+    final id = restored.installId;
+    if (id != null && id != before) await money.switchUser(id);
+    if (Profile.serverWallet) {
+      wallet.recompute();
+      await wallet.refresh();
+    }
+  }
+
   /// 모든 데이터 초기화: 순위표에 참여했으면 서버 기록도 지운다 (최선 노력, 기다리지 않음).
   static void forgetLeaderboard() {
     final id = profile.installId;
@@ -129,6 +147,7 @@ class AppState {
     }
     await money.init();
     if (useServerWallet) unawaited(wallet.refresh());
+    if (CloudBackup.supported) unawaited(cloud.resume());
     AudioService.instance
       ..soundOn = profile.sound
       ..musicOn = profile.music;

@@ -883,7 +883,7 @@ class L10nId extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers tidak memerlukan pendaftaran dan tidak mengumpulkan informasi identitas pribadi. Data game (progres, kredit dan bijih, kosmetik, pengaturan) disimpan di perangkatmu. Permata dan catatan pembelian disimpan di dompet permata pada server kami agar tidak bisa dipalsukan atau hilang, dan papan peringkat mingguan opsional di bawah hanya mengirim datanya jika kamu menyalakannya.\n\nPembelian: diproses oleh Google Play / App Store; detail pembayaran tidak pernah dibagikan ke pengembang. RevenueCat memverifikasi dan memulihkan pembelian dengan memproses ID instalasi acak dan riwayat pembelian. Setelah pembelian dikonfirmasi, server menambahkannya ke dompet permatamu.\n\nDompet permata: permata disimpan di server kami, bukan di perangkatmu, jadi tidak bisa ditambah dengan mengubah data. Server menyimpan ID instalasi acak (bukan ID iklan atau ID perangkat), saldo permata, catatan permata yang didapat dan dipakai, serta catatan pembelian; tanpa nama dan tanpa apa pun yang kamu ketik. Memakai permata perlu internet. Servernya Supabase (wilayah Seoul).\n\nIklan: iklan berhadiah Google AdMob hanya diputar saat kamu memilih untuk menontonnya. AdMob dapat menggunakan ID iklan, alamat IP, dan info perangkat untuk menayangkan iklan, mempersonalisasinya jika diizinkan, dan mengukurnya. Di Wilayah Ekonomi Eropa, Inggris, dan Swiss, persetujuan diminta saat game pertama kali dibuka dan bisa diubah di Pengaturan → Pengaturan privasi iklan.\n\nNotifikasi: notifikasi lokal yang dijadwalkan di perangkatmu; tidak ada yang dikirim keluar.\n\nMasukan: pesan, versi aplikasi, dan info perangkat hanya sampai ke pengembang jika kamu sendiri mengirim emailnya.\n\nPapan peringkat mingguan (opsional): mati secara default; kamu ikut hanya jika menyalakannya di Pengaturan atau layar peringkat. Yang dikirim hanya ID instalasi acak, nama panggilan yang dibuat game dari daftar kata tetap, dan skor mingguanmu. Tanpa nama, tanpa apa pun yang kamu ketik, dan tanpa chat. Pemain lain hanya melihat nama panggilan dan skor. Servernya Supabase (wilayah Seoul).\n\nPenghapusan: Pengaturan → Reset Semua Data menghapus data di perangkatmu. Reset juga membuat saldo permata di server menjadi 0; Paket Pemula dan Pass Komandan kembali lewat catatan pembelianmu. Jika kamu ikut papan peringkat, reset juga menghapus catatan peringkatmu di server (ID, nama panggilan, skor); kamu juga bisa meminta penghapusan lewat email.\n\nKebijakan lengkap: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nKontak: $email';
+    return 'Star Settlers tidak memerlukan pendaftaran dan tidak mengumpulkan informasi identitas pribadi. Data game (progres, kredit dan bijih, kosmetik, pengaturan) disimpan di perangkatmu. Permata dan catatan pembelian disimpan di dompet permata pada server kami agar tidak bisa dipalsukan atau hilang, dan papan peringkat mingguan opsional di bawah hanya mengirim datanya jika kamu menyalakannya.\n\nPembelian: diproses oleh Google Play / App Store; detail pembayaran tidak pernah dibagikan ke pengembang. RevenueCat memverifikasi dan memulihkan pembelian dengan memproses ID instalasi acak dan riwayat pembelian. Setelah pembelian dikonfirmasi, server menambahkannya ke dompet permatamu.\n\nDompet permata: permata disimpan di server kami, bukan di perangkatmu, jadi tidak bisa ditambah dengan mengubah data. Server menyimpan ID instalasi acak (bukan ID iklan atau ID perangkat), saldo permata, catatan permata yang didapat dan dipakai, serta catatan pembelian; tanpa nama dan tanpa apa pun yang kamu ketik. Memakai permata perlu internet. Servernya Supabase (wilayah Seoul).\n\nCadangan cloud (opsional): hanya berjalan jika kamu menghubungkan akun Google Play Game atau Game Center di Pengaturan dan mencadangkan. Progres, pengaturan, dan ID instalasi acak disimpan di game tersimpan Google Play Game atau iCloud milikmu, bukan di server pengembang.\n\nIklan: iklan berhadiah Google AdMob hanya diputar saat kamu memilih untuk menontonnya. AdMob dapat menggunakan ID iklan, alamat IP, dan info perangkat untuk menayangkan iklan, mempersonalisasinya jika diizinkan, dan mengukurnya. Di Wilayah Ekonomi Eropa, Inggris, dan Swiss, persetujuan diminta saat game pertama kali dibuka dan bisa diubah di Pengaturan → Pengaturan privasi iklan.\n\nNotifikasi: notifikasi lokal yang dijadwalkan di perangkatmu; tidak ada yang dikirim keluar.\n\nMasukan: pesan, versi aplikasi, dan info perangkat hanya sampai ke pengembang jika kamu sendiri mengirim emailnya.\n\nPapan peringkat mingguan (opsional): mati secara default; kamu ikut hanya jika menyalakannya di Pengaturan atau layar peringkat. Yang dikirim hanya ID instalasi acak, nama panggilan yang dibuat game dari daftar kata tetap, dan skor mingguanmu. Tanpa nama, tanpa apa pun yang kamu ketik, dan tanpa chat. Pemain lain hanya melihat nama panggilan dan skor. Servernya Supabase (wilayah Seoul).\n\nPenghapusan: Pengaturan → Reset Semua Data menghapus data di perangkatmu. Reset juga membuat saldo permata di server menjadi 0; Paket Pemula dan Pass Komandan kembali lewat catatan pembelianmu. Jika kamu ikut papan peringkat, reset juga menghapus catatan peringkatmu di server (ID, nama panggilan, skor); kamu juga bisa meminta penghapusan lewat email.\n\nKebijakan lengkap: https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nKontak: $email';
   }
 
   @override
@@ -2971,4 +2971,82 @@ class L10nId extends L10n {
 
   @override
   String get m_adPrivacy => 'Pengaturan privasi iklan';
+
+  @override
+  String get m_cloudTitle => 'Cadangan cloud';
+
+  @override
+  String m_cloudDesc(String service) {
+    return 'Cadangkan progresmu ke akun $service agar bisa lanjut bermain setelah ganti perangkat atau instal ulang. Ketuk untuk menghubungkan.';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return 'Tidak bisa terhubung ke $service. Coba lagi sebentar lagi.';
+  }
+
+  @override
+  String get m_cloudBackupNow => 'Cadangkan sekarang';
+
+  @override
+  String get m_cloudNever => 'Belum dicadangkan';
+
+  @override
+  String m_cloudLast(String time) {
+    return 'Cadangan terakhir: $time';
+  }
+
+  @override
+  String get m_cloudBackedUp => 'Sudah dicadangkan.';
+
+  @override
+  String get m_cloudFailed =>
+      'Tidak bisa terhubung ke cloud. Periksa koneksi internetmu.';
+
+  @override
+  String get m_cloudRestore => 'Pulihkan dari cadangan';
+
+  @override
+  String m_cloudAccount(String account) {
+    return 'Akun terhubung: $account';
+  }
+
+  @override
+  String get m_cloudNoBackup => 'Tidak ada cadangan untuk dipulihkan.';
+
+  @override
+  String get m_cloudRestoreTitle => 'Pulihkan dari cadangan?';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return 'Progresmu akan diganti dengan cadangan dari $time. Progres di perangkat ini akan hilang dan tidak bisa dibatalkan. Permata dan pembelian juga akan mengikuti cadangan.';
+  }
+
+  @override
+  String get m_cloudRestoreOk => 'Pulihkan';
+
+  @override
+  String get m_cloudRestored => 'Sudah dipulihkan.';
+
+  @override
+  String get m_cloudFoundTitle => 'Ada cadangan';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return 'Ada cadangan dari $time. Pulihkan sekarang? Kamu juga bisa memulihkannya nanti di Pengaturan.';
+  }
+
+  @override
+  String get m_cloudLater => 'Nanti';
+
+  @override
+  String get m_cloudOverwriteTitle => 'Timpa cadangan cloud?';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return 'Ada cadangan dari perangkat lain di cloud ($time). Jika kamu menimpanya dengan progres perangkat ini, cadangan itu tidak bisa dikembalikan.';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => 'Timpa';
 }

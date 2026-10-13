@@ -890,7 +890,7 @@ class L10nFr extends L10n {
 
   @override
   String m_privacyBody(String email) {
-    return 'Star Settlers ne demande aucune inscription et ne collecte aucune information personnelle identifiable. Les données de jeu (progression, crédits et minerai, cosmétiques, réglages) sont enregistrées sur votre appareil. Les gemmes et les achats sont conservés dans un portefeuille de gemmes sur notre serveur pour qu\'ils ne puissent être ni falsifiés ni perdus, et le classement hebdomadaire facultatif ci-dessous n\'envoie ses données que si vous l\'activez.\n\nAchats : traités par Google Play / App Store ; les informations de paiement ne sont jamais transmises au développeur. RevenueCat vérifie et restaure les achats en traitant un identifiant d\'installation aléatoire et l\'historique d\'achats. Une fois l\'achat confirmé, le serveur le crédite sur votre portefeuille de gemmes.\n\nPortefeuille de gemmes : les gemmes sont conservées sur notre serveur et non sur votre appareil ; impossible de les augmenter en le modifiant. Le serveur enregistre un identifiant d\'installation aléatoire (ni identifiant publicitaire ni identifiant d\'appareil), votre solde de gemmes, l\'historique des gemmes gagnées et dépensées et les achats ; aucun nom, rien de ce que vous tapez. Dépenser des gemmes nécessite une connexion Internet. Le serveur est Supabase (région de Séoul).\n\nPublicités : les pubs récompensées Google AdMob ne s\'affichent que si vous choisissez d\'en regarder une. AdMob peut utiliser l\'identifiant publicitaire, l\'adresse IP et les infos de l\'appareil pour diffuser les pubs, les personnaliser lorsque c\'est autorisé et les mesurer. Dans l\'EEE, au Royaume-Uni et en Suisse, votre consentement est demandé au premier lancement et peut être modifié dans Paramètres → Confidentialité des annonces.\n\nNotifications : notifications locales programmées sur votre appareil ; rien n\'est envoyé.\n\nAvis : votre message, la version de l\'app et les infos de l\'appareil ne parviennent au développeur que si vous envoyez l\'e-mail vous-même.\n\nClassement hebdomadaire (facultatif) : désactivé par défaut ; vous n\'y participez qu\'en l\'activant dans les Réglages ou sur l\'écran du classement. Seuls un identifiant d\'installation aléatoire, un pseudo créé par le jeu à partir de listes de mots fixes et votre score de la semaine sont envoyés. Aucun nom, rien de ce que vous tapez, et pas de chat. Les autres joueurs ne voient que le pseudo et le score. Le serveur est Supabase (région de Séoul).\n\nSuppression : Paramètres → Réinitialiser toutes les données efface les données de votre appareil. La réinitialisation met aussi votre solde de gemmes à 0 sur le serveur ; le Pack de départ et le Pass Commandant reviennent grâce à vos achats. Si vous avez rejoint le classement, la réinitialisation supprime aussi votre entrée sur le serveur (identifiant, pseudo, score) ; vous pouvez aussi demander la suppression par e-mail.\n\nPolitique complète : https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContact : $email';
+    return 'Star Settlers ne demande aucune inscription et ne collecte aucune information personnelle identifiable. Les données de jeu (progression, crédits et minerai, cosmétiques, réglages) sont enregistrées sur votre appareil. Les gemmes et les achats sont conservés dans un portefeuille de gemmes sur notre serveur pour qu\'ils ne puissent être ni falsifiés ni perdus, et le classement hebdomadaire facultatif ci-dessous n\'envoie ses données que si vous l\'activez.\n\nAchats : traités par Google Play / App Store ; les informations de paiement ne sont jamais transmises au développeur. RevenueCat vérifie et restaure les achats en traitant un identifiant d\'installation aléatoire et l\'historique d\'achats. Une fois l\'achat confirmé, le serveur le crédite sur votre portefeuille de gemmes.\n\nPortefeuille de gemmes : les gemmes sont conservées sur notre serveur et non sur votre appareil ; impossible de les augmenter en le modifiant. Le serveur enregistre un identifiant d\'installation aléatoire (ni identifiant publicitaire ni identifiant d\'appareil), votre solde de gemmes, l\'historique des gemmes gagnées et dépensées et les achats ; aucun nom, rien de ce que vous tapez. Dépenser des gemmes nécessite une connexion Internet. Le serveur est Supabase (région de Séoul).\n\nSauvegarde cloud (facultative) : ne fonctionne que si vous connectez votre compte Google Play Jeux ou Game Center dans les paramètres et lancez une sauvegarde. Votre progression, vos paramètres et l\'identifiant d\'installation aléatoire sont enregistrés dans vos jeux sauvegardés Google Play Jeux ou dans iCloud, pas sur le serveur du développeur.\n\nPublicités : les pubs récompensées Google AdMob ne s\'affichent que si vous choisissez d\'en regarder une. AdMob peut utiliser l\'identifiant publicitaire, l\'adresse IP et les infos de l\'appareil pour diffuser les pubs, les personnaliser lorsque c\'est autorisé et les mesurer. Dans l\'EEE, au Royaume-Uni et en Suisse, votre consentement est demandé au premier lancement et peut être modifié dans Paramètres → Confidentialité des annonces.\n\nNotifications : notifications locales programmées sur votre appareil ; rien n\'est envoyé.\n\nAvis : votre message, la version de l\'app et les infos de l\'appareil ne parviennent au développeur que si vous envoyez l\'e-mail vous-même.\n\nClassement hebdomadaire (facultatif) : désactivé par défaut ; vous n\'y participez qu\'en l\'activant dans les Réglages ou sur l\'écran du classement. Seuls un identifiant d\'installation aléatoire, un pseudo créé par le jeu à partir de listes de mots fixes et votre score de la semaine sont envoyés. Aucun nom, rien de ce que vous tapez, et pas de chat. Les autres joueurs ne voient que le pseudo et le score. Le serveur est Supabase (région de Séoul).\n\nSuppression : Paramètres → Réinitialiser toutes les données efface les données de votre appareil. La réinitialisation met aussi votre solde de gemmes à 0 sur le serveur ; le Pack de départ et le Pass Commandant reviennent grâce à vos achats. Si vous avez rejoint le classement, la réinitialisation supprime aussi votre entrée sur le serveur (identifiant, pseudo, score) ; vous pouvez aussi demander la suppression par e-mail.\n\nPolitique complète : https://rumururu.github.io/mkideabox/star_settlers/privacy.html\nContact : $email';
   }
 
   @override
@@ -3159,4 +3159,82 @@ class L10nFr extends L10n {
 
   @override
   String get m_adPrivacy => 'Confidentialité des annonces';
+
+  @override
+  String get m_cloudTitle => 'Sauvegarde cloud';
+
+  @override
+  String m_cloudDesc(String service) {
+    return 'Sauvegardez votre progression sur votre compte $service pour continuer à jouer après un changement d\'appareil ou une réinstallation. Touchez pour vous connecter.';
+  }
+
+  @override
+  String m_cloudConnectFailed(String service) {
+    return 'Impossible de se connecter à $service. Réessayez dans un instant.';
+  }
+
+  @override
+  String get m_cloudBackupNow => 'Sauvegarder maintenant';
+
+  @override
+  String get m_cloudNever => 'Pas encore sauvegardé';
+
+  @override
+  String m_cloudLast(String time) {
+    return 'Dernière sauvegarde : $time';
+  }
+
+  @override
+  String get m_cloudBackedUp => 'Sauvegardé.';
+
+  @override
+  String get m_cloudFailed =>
+      'Impossible de joindre le cloud. Vérifiez votre connexion Internet.';
+
+  @override
+  String get m_cloudRestore => 'Restaurer une sauvegarde';
+
+  @override
+  String m_cloudAccount(String account) {
+    return 'Compte connecté : $account';
+  }
+
+  @override
+  String get m_cloudNoBackup => 'Aucune sauvegarde à restaurer.';
+
+  @override
+  String get m_cloudRestoreTitle => 'Restaurer la sauvegarde ?';
+
+  @override
+  String m_cloudRestoreBody(String time) {
+    return 'Votre progression sera remplacée par la sauvegarde du $time. La progression sur cet appareil sera perdue, sans retour possible. Les gemmes et les achats seront aussi ceux de la sauvegarde.';
+  }
+
+  @override
+  String get m_cloudRestoreOk => 'Restaurer';
+
+  @override
+  String get m_cloudRestored => 'Restauré.';
+
+  @override
+  String get m_cloudFoundTitle => 'Sauvegarde trouvée';
+
+  @override
+  String m_cloudFoundBody(String time) {
+    return 'Une sauvegarde du $time existe. La restaurer maintenant ? Vous pourrez aussi le faire plus tard dans les paramètres.';
+  }
+
+  @override
+  String get m_cloudLater => 'Plus tard';
+
+  @override
+  String get m_cloudOverwriteTitle => 'Écraser la sauvegarde cloud ?';
+
+  @override
+  String m_cloudOverwriteBody(String time) {
+    return 'Le cloud contient une sauvegarde d\'un autre appareil ($time). Si vous l\'écrasez avec la progression de cet appareil, elle sera définitivement perdue.';
+  }
+
+  @override
+  String get m_cloudOverwriteOk => 'Écraser';
 }
