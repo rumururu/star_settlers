@@ -31,7 +31,9 @@ updated: 2026-10-13
 > - `lib/services/cloud_backup.dart`: Play 게임즈 저장 게임 / Game Center 저장 게임(iCloud)에 프로필+월드+설치 ID 백업. 복원하면 설치 ID가 돌아와 서버 지갑·RevenueCat 사용자가 따라온다. 자동 백업은 그 기기에서 백업·복원을 한 번 한 뒤에만(새 기기에서 연결만 하고 덮어쓰기 방지), 10분 간격.
 > - Play Games 서비스(2026-10-13 게시 완료): 프로젝트 ID `1080311738151`(GCP `star-settlers`), 저장된 게임 사용, Android OAuth 클라이언트 2개(Play 앱 서명 SHA-1 `FF:76:A5:…:E6:F8`, 디버그 키 `6E:82:25:…:2E:12`), 테스터 = 내부 테스트 트랙 + ru***. 설명(en-US)·아이콘·그래픽·카테고리(시뮬레이션) 입력.
 > - iOS: App ID에 GAME_CENTER·ICLOUD 켬, iCloud 컨테이너 `iCloud.com.mkideabox.starsettlers` 등록·App ID에 연결, `ios/Runner/Runner.entitlements`. ASC Game Center 사용 설정(gameCenterDetail) 완료 — 1.0.1 버전을 만들 때 그 버전에도 Game Center를 붙인다. 디버그 빌드(xcodebuild, 자동 서명) 통과. 배포 프로필은 App ID 변경으로 무효가 되어 다음 `fastlane release`에서 sigh가 새로 만든다.
-> - 실기기: G525N에서 설정 항목 표시·Play 게임즈 로그인 흐름 시작 확인(기기에 Google 계정 없음). 실제 백업·복원은 테스터 계정 기기에서 미확인.
+> - GCP OAuth 동의 화면을 프로덕션으로 게시(테스트 상태에서는 403 access_denied — 저장된 게임이 Drive 앱 데이터 범위를 쓰기 때문). 홈페이지·개인정보처리방침 링크 = privacy.html, 승인된 도메인 rumururu.github.io, 로고 없음(로고를 넣으면 인증 심사 필요).
+> - 실기기 Android (2026-10-13, SM M205N, 디버그 빌드, rumururu 계정): 앱 시작 때 Play 게임즈 프로필 선택 → 권한 동의(Play 게임즈 활동, Drive 앱 데이터) → 새 게임(크레딧 155.87) → 설정 '지금 백업' → 앱 삭제·재설치(진행 없음) → '백업에서 복원' 확인창(10:21 백업) → 복원 → 이어하기 활성, 크레딧 155·광석 20 그대로, 오프라인 수입 2분. 고친 것: 실패한 백업이 시각을 바꾸던 문제, 자동 로그인 때 플레이어 이름 미표시.
+> - 실기기 iOS: 미확인 (iPad 잠김으로 실행 불가). 디버그 빌드(Game Center·iCloud 권한 포함)는 통과.
 > - 개인정보처리방침 10개 언어에 '클라우드 백업' 절과 요약 문장 추가·게시(`mkideabox` `abe3804`), 앱 안 요약(`m_privacyBody`)에도 문단 추가.
 > - 이 변경 전에 기기에서 산 테스트 구매는 서버 지갑으로 옮겨지지 않는다 (출시 전이라 테스터만 해당).
 

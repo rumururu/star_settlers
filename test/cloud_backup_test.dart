@@ -28,6 +28,9 @@ class FakeGateway implements CloudSaveGateway {
   Future<bool> get isSignedIn async => signedIn;
 
   @override
+  Future<String?> playerName() async => signedIn ? 'Captain' : null;
+
+  @override
   Future<void> write(String name, String data) async {
     if (offline) throw Exception('offline');
     writes++;
@@ -91,6 +94,13 @@ void main() {
         isNull);
   });
 
+  test('플랫폼이 스스로 로그인했어도 플레이어 이름을 받아 온다', () async {
+    gw.signedIn = true;
+    expect(cloud.playerName, isNull);
+    expect(await cloud.isSignedIn, isTrue);
+    expect(cloud.playerName, 'Captain');
+  });
+
   test('연결되지 않았으면 백업하지 않는다', () async {
     expect(await cloud.backupNow(), BackupStatus.notSignedIn);
     expect(gw.writes, 0);
@@ -117,6 +127,8 @@ void main() {
       ..offline = true;
     expect(await cloud.backupNow(), BackupStatus.failed);
     expect((await cloud.peek()).$1, BackupStatus.failed);
+    expect(AppState.profile.cloudBackupAt, isNull, reason: '실패한 백업은 마지막 백업 시각을 바꾸지 않는다');
+    expect(AppState.profile.cloudLinked, isFalse, reason: '실패하면 자동 백업도 켜지지 않는다');
   });
 
   test('복원: 기기 저장을 백업으로 바꾸고, 설치 ID가 돌아와 서버 지갑·결제 사용자가 따라온다', () async {

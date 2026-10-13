@@ -15,6 +15,9 @@ abstract class CloudSaveGateway {
   Future<bool> get isSignedIn;
   Future<void> write(String name, String data);
 
+  /// 연결된 플레이어 이름 (플랫폼이 스스로 로그인한 경우에도)
+  Future<String?> playerName();
+
   /// 슬롯이 없으면 null
   Future<String?> read(String name);
 }
@@ -29,6 +32,9 @@ class GamesServicesGateway implements CloudSaveGateway {
 
   @override
   Future<bool> get isSignedIn => GamesServices.isSignedIn;
+
+  @override
+  Future<String?> playerName() => GamesServices.getPlayerName();
 
   @override
   Future<void> write(String name, String data) async {
@@ -122,7 +128,10 @@ class CloudBackup {
 
   Future<bool> get isSignedIn async {
     try {
-      return await _gw.isSignedIn;
+      final v = await _gw.isSignedIn;
+      // Play 게임즈는 앱을 켤 때 스스로 로그인하므로 이름은 여기서 받아 둔다
+      if (v && playerName == null) playerName = await _gw.playerName().catchError((Object _) => null);
+      return v;
     } catch (_) {
       return false;
     }
@@ -163,12 +172,19 @@ class CloudBackup {
     try {
       final p = profile();
       final now = _clock();
+      final snap = CloudSnapshot(
+        savedAt: now,
+        profile: p.toJson()
+          ..['cloud'] = true
+          ..['cloudAt'] = now.toUtc().toIso8601String(),
+        world: await readWorld(),
+      );
+      await _gw.write(slot, snap.encode());
+      // 클라우드에 쓴 뒤에만 '백업함'으로 기록한다 (실패하면 마지막 백업 시각이 바뀌지 않는다)
       p
         ..cloudLinked = true
         ..cloudBackupAt = now;
       await saveProfile();
-      final snap = CloudSnapshot(savedAt: now, profile: p.toJson(), world: await readWorld());
-      await _gw.write(slot, snap.encode());
       _lastAuto = now;
       return BackupStatus.ok;
     } catch (e) {
