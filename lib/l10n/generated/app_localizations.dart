@@ -752,7 +752,7 @@ abstract class L10n {
   /// HUD top-right sector info (2 lines)
   ///
   /// In ko, this message translates to:
-  /// **'{sector} · 발전 {dev}%\n⚠ 위협 {threat}  🏛 {value}'**
+  /// **'{sector} · 안정화 {dev}%\n⚠ 위협 {threat}  🏛 {value}'**
   String u_hudSector(String sector, int dev, String threat, String value);
 
   /// HUD: home base disabled
@@ -788,7 +788,7 @@ abstract class L10n {
   /// Locked gate button
   ///
   /// In ko, this message translates to:
-  /// **'🔒 발전도 100%에서 열려요 ({pct}%)'**
+  /// **'🔒 안정화 100%에서 열려요 ({pct}%)'**
   String u_gateLocked(int pct);
 
   /// Interact button: settle planet
@@ -872,7 +872,7 @@ abstract class L10n {
   /// Dialog speaker name (advisor character)
   ///
   /// In ko, this message translates to:
-  /// **'부관 미나'**
+  /// **'우주과학자 미나'**
   String get u_spkAdvisor;
 
   /// Dialog speaker name (cat merchant)
@@ -1041,7 +1041,7 @@ abstract class L10n {
   /// Star system development
   ///
   /// In ko, this message translates to:
-  /// **'발전도 {pct}%'**
+  /// **'안정화 {pct}%'**
   String u_development(int pct);
 
   /// Gate status: open
@@ -1059,8 +1059,56 @@ abstract class L10n {
   /// Development hint
   ///
   /// In ko, this message translates to:
-  /// **'모든 행성을 Lv.3까지 키우면 100%'**
+  /// **'위상 정박기 레벨 합계가 행성 수 × 3이면 100%'**
   String get u_devHint;
+
+  /// stabilizer durability
+  ///
+  /// In ko, this message translates to:
+  /// **'내구도 {hp}/{max}'**
+  String u_stabilizerHealth(int hp, int max);
+
+  /// advisor line the first time a late-game enemy appears
+  ///
+  /// In ko, this message translates to:
+  /// **'{kind, select, missile{유도탄 포격선이에요! 미사일이 쫓아오지만 쏘면 떨어뜨릴 수 있어요.} laser{레이저 함이 조준 중이에요! 붉은 조준선이 보이면 옆으로 피하세요.} warden{방패선이 근처 해적을 지켜요. 파란 고리 안 적은 피해가 절반이니 방패선부터!} carrier{드론 모함이에요! 계속 드론을 띄우니 모함을 먼저 노리세요.} phantom{유령선이 숨었다 나타나요. 모습을 드러낼 때 집중 사격하세요!} mine{기뢰 부설선이에요! 노란 기뢰는 가까이 가면 터지지만 쏘면 없앨 수 있어요.} medic{수리선이 해적들을 고쳐요. 뒤에 숨은 수리선부터 잡으세요!} juggernaut{중장갑 돌격함! 정면 장갑이 단단하니 옆이나 뒤를 노리고, 돌진은 피하세요.} other{새로운 적이에요!}}'**
+  String g_foeIntro(String kind);
+
+  /// Progress cap hint showing the star system required to unlock the next level
+  ///
+  /// In ko, this message translates to:
+  /// **'항성계 {system}에서 Lv.{level} 해금'**
+  String u_levelUnlockAtSystem(int level, int system);
+
+  /// colonies panel
+  ///
+  /// In ko, this message translates to:
+  /// **'내 식민지'**
+  String get u_myColonies;
+
+  /// colonies panel
+  ///
+  /// In ko, this message translates to:
+  /// **'어느 항성계에 있든 여기서 바로 레벨업할 수 있어요.'**
+  String get u_myColoniesHint;
+
+  /// colonies panel
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 식민지가 없어요. 행성에 다가가 정착해 보세요.'**
+  String get u_noColonies;
+
+  /// colonies panel
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 위치'**
+  String get u_currentHere;
+
+  /// phase anchor effect at a level
+  ///
+  /// In ko, this message translates to:
+  /// **'수입 +{income}% · 공유 방어막 {shield} · 재생 +{regen}%'**
+  String u_anchorEffect(int income, int shield, int regen);
 
   /// System panel section header
   ///
@@ -1089,7 +1137,7 @@ abstract class L10n {
   /// Conquered system row
   ///
   /// In ko, this message translates to:
-  /// **'{name} · 발전 {pct}%'**
+  /// **'{name} · 안정화 {pct}%'**
   String u_sectorDev(String name, int pct);
 
   /// Build station panel title
@@ -2080,13 +2128,13 @@ abstract class L10n {
   /// Nova Dragon unique ability (hangar, shop)
   ///
   /// In ko, this message translates to:
-  /// **'관통탄: 탄환 하나가 적 2기까지 꿰뚫어요'**
+  /// **'관통탄: 탄환 하나가 적 3기까지 꿰뚫어요'**
   String get g_shipNovaAbility;
 
   /// Aurora unique ability, two lines (hangar, shop)
   ///
   /// In ko, this message translates to:
-  /// **'자가 수리: 3초간 피격이 없으면 초당 체력 3% 회복\n수호막: 8초마다 피격 1회 방어'**
+  /// **'자가 수리: 3초간 피격이 없으면 초당 체력 5% 회복\n수호막: 5초마다 피격 1회 방어'**
   String get g_shipAuroraAbility;
 
   /// ★4 전설 승무원 지휘 보너스 줄 (승무원 카드)
@@ -3052,7 +3100,7 @@ abstract class L10n {
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'선장님! 먼저 소행성을 부숴서 광석을 모아봐요.'**
+  /// **'화성 보급 거점에 쓸 광석이 필요해요. 먼저 소행성 3개를 부숴봐요.'**
   String get g_storyAsteroidsLine0;
 
   /// story dialogue line spoken by advisor Mina or the captain
@@ -3064,19 +3112,19 @@ abstract class L10n {
   /// story/tutorial objective title (top of HUD)
   ///
   /// In ko, this message translates to:
-  /// **'해적 3척 격추'**
+  /// **'습격 함선 3척 격파'**
   String get g_storyKillsTitle;
 
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'레이더에 해적이 잡혀요! 빨간 화살표 방향이에요.'**
+  /// **'정체불명의 함선들이 송신 거점을 노리고 있어요. 빨간 화살표를 따라 습격 함선 3척을 막아주세요.'**
   String get g_storyKillsLine0;
 
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'해적 따위, 내 함선 앞에선 고철이지!'**
+  /// **'우리가 먼저 길을 열자. 뒤따라올 사람들이 있으니까!'**
   String get g_storyKillsLine1;
 
   /// story/tutorial objective title (top of HUD)
@@ -3088,13 +3136,13 @@ abstract class L10n {
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'지구 바로 옆 붉은 행성, 화성에 첫 식민지를 세워봐요. 가까이 가면 정착 버튼이 떠요.'**
+  /// **'이제 화성에 돌아올 곳을 만들어요. 가까이 가서 정착 버튼을 눌러주세요.'**
   String get g_storyColoniesLine0;
 
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'식민지는 가만히 있어도 크레딧을 벌어줘요!'**
+  /// **'주민들이 생산한 크레딧으로 다음 항해를 준비할 수 있어요.'**
   String get g_storyColoniesLine1;
 
   /// story/tutorial objective title (top of HUD)
@@ -3106,7 +3154,7 @@ abstract class L10n {
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'헤이븐 기지로 돌아가서 함선을 개조해봐요. 정거장 근처에선 수리도 돼요.'**
+  /// **'송신망을 넓히려면 함선도 더 튼튼해야 해요. 헤이븐 기지에서 함선을 개조해요.'**
   String get g_storyShipLevelsLine0;
 
   /// story/tutorial objective title (top of HUD)
@@ -3118,7 +3166,7 @@ abstract class L10n {
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'혼자는 외롭잖아요? 정거장 메뉴의 승무원 탭에서 동료를 영입해봐요!'**
+  /// **'먼 길을 함께할 동료가 필요해요. 정거장 승무원 탭에서 한 명을 영입해요.'**
   String get g_storyCrewLine0;
 
   /// story/tutorial objective title (top of HUD)
@@ -3130,7 +3178,7 @@ abstract class L10n {
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'정거장 임무 게시판에서 의뢰를 받아보세요. 보상이 짭짤해요.'**
+  /// **'항로의 사람들에게도 도움이 필요해요. 정거장 게시판의 의뢰를 하나 맡아봐요.'**
   String get g_storyMissionsLine0;
 
   /// story/tutorial objective title (top of HUD)
@@ -3142,19 +3190,19 @@ abstract class L10n {
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'이제 영역을 넓힐 때예요! 행성에서 떨어진 빈 우주에 정거장을 지어봐요.'**
+  /// **'보급선이 쉬어갈 곳을 늘려요. 행성에서 떨어진 빈 우주에 새 정거장을 지어요.'**
   String get g_storyStationsLine0;
 
   /// story/tutorial objective title (top of HUD)
   ///
   /// In ko, this message translates to:
-  /// **'항성계 발전도 100%'**
+  /// **'항성계 안정화 100%'**
   String get g_storyDevPercentTitle;
 
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'모든 행성을 Lv.3까지 키우면 다음 항성계가 열려요. 오른쪽 위 항성계 버튼에서 확인해요!'**
+  /// **'위상 정박기 레벨 합계가 행성 수 × 3이면 보급망이 이어지고 게이트가 열려요. 항성계 버튼에서 확인해요.'**
   String get g_storyDevPercentLine0;
 
   /// story/tutorial objective title (top of HUD)
@@ -3166,25 +3214,25 @@ abstract class L10n {
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'워프 게이트가 열렸어요! 미니맵의 보라색 게이트로 가봐요.'**
+  /// **'다음 항성계에도 송신 거점이 필요해요. 미니맵의 보라색 게이트로 가요.'**
   String get g_storySectorLine0;
 
   /// story dialogue line spoken by advisor Mina or the captain
   ///
   /// In ko, this message translates to:
-  /// **'새로운 우주가 기다리고 있어!'**
+  /// **'우리가 간다는 걸 알려주자. 누구도 혼자 기다리지 않게.'**
   String get g_storySectorLine1;
 
   /// endless story objective; n = star system number
   ///
   /// In ko, this message translates to:
-  /// **'항성계 {n} 발전도 100%'**
+  /// **'항성계 {n} 안정화 100%'**
   String g_storyDevNTitle(int n);
 
   /// advisor dialogue for endless development objective
   ///
   /// In ko, this message translates to:
-  /// **'새 항성계의 행성들을 모두 Lv.3까지 키워요!'**
+  /// **'이곳에도 돌아올 길을 만들어요. 위상 정박기 레벨 합계가 행성 수 × 3이면 다음 게이트가 열려요.'**
   String get g_storyDevNLine;
 
   /// star system with its number
@@ -3202,7 +3250,7 @@ abstract class L10n {
   /// advisor dialogue for endless warp objective
   ///
   /// In ko, this message translates to:
-  /// **'게이트가 열렸어요. 더 깊은 우주로 가볼까요?'**
+  /// **'항로가 이어졌어요. 새 항성계에 헤이븐 송신망을 넓혀요.'**
   String get g_storyWarpNLine;
 
   /// power-up name (HUD)
@@ -3289,6 +3337,12 @@ abstract class L10n {
   /// **'방어막 발생기'**
   String get g_colonyBldShieldGen;
 
+  /// colony building name
+  ///
+  /// In ko, this message translates to:
+  /// **'위상 정박기'**
+  String get g_colonyBldStabilizer;
+
   /// colony building description
   ///
   /// In ko, this message translates to:
@@ -3318,6 +3372,18 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'방어막 용량과 충전 속도를 늘려요.'**
   String get g_colonyBldBlurbShieldGen;
+
+  /// colony building description
+  ///
+  /// In ko, this message translates to:
+  /// **'항성계 안정화 · 공유 방어막\n레벨마다 식민지 수입 +10%'**
+  String get g_colonyBldBlurbStabilizer;
+
+  /// stabilizer damaged on planet and reduced to level
+  ///
+  /// In ko, this message translates to:
+  /// **'위상 정박기 손상: {planet} · Lv.{level}'**
+  String g_stabilizerDamaged(String planet, int level);
 
   /// station role name
   ///
@@ -3586,7 +3652,7 @@ abstract class L10n {
   /// advisor greeting at new game
   ///
   /// In ko, this message translates to:
-  /// **'선장님, 환영합니다! 저는 부관 미나예요.'**
+  /// **'선장님, 환영해요. 저는 우주과학자 미나예요.'**
   String get g_dlgWelcome;
 
   /// advisor line after warping
@@ -3718,7 +3784,7 @@ abstract class L10n {
   /// pirate line during a raid
   ///
   /// In ko, this message translates to:
-  /// **'이 식민지는 이제 우리 거다! 크하하!'**
+  /// **'위상 정박기부터 파괴해라.'**
   String get g_pirateRaidTaunt;
 
   /// advisor line for meteor event
@@ -3934,7 +4000,7 @@ abstract class L10n {
   /// sector boss arrival line; sector = sector name
   ///
   /// In ko, this message translates to:
-  /// **'{sector}의 주인은 나다! 덤벼라, 꼬마 선장!'**
+  /// **'{sector} 중계망을 차단하라.'**
   String g_pirateBossArrive(String sector);
 
   /// advisor line on loading a save; goal = current objective
@@ -4006,25 +4072,25 @@ abstract class L10n {
   /// pirate line when a pirate wave appears
   ///
   /// In ko, this message translates to:
-  /// **'크하하! 짐 내려놔!'**
+  /// **'목표 함선 확인. 추적을 계속한다.'**
   String get g_pirateAmbush0;
 
   /// pirate line when a pirate wave appears
   ///
   /// In ko, this message translates to:
-  /// **'여긴 우리 해적단 구역이다!'**
+  /// **'원정대를 차단해라.'**
   String get g_pirateAmbush1;
 
   /// pirate line when a pirate wave appears
   ///
   /// In ko, this message translates to:
-  /// **'그 반짝이는 크레딧 내놔!'**
+  /// **'송신 설비에 접근하지 못하게 해라.'**
   String get g_pirateAmbush2;
 
   /// pirate line when a pirate wave appears
   ///
   /// In ko, this message translates to:
-  /// **'오늘 운이 나쁘구나, 꼬마!'**
+  /// **'목표 포착. 공격을 시작한다.'**
   String get g_pirateAmbush3;
 
   /// real star system / galaxy name (proper noun, sector title); use the common astronomical name in this language
@@ -5190,6 +5256,372 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'덮어쓰기'**
   String get m_cloudOverwriteOk;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'헤이븐 계획'**
+  String get n_title;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'외곽의 방문자'**
+  String get n_signal;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'벌어낸 시간'**
+  String get n_haven;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'헤이븐 원정대'**
+  String get n_departure;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'송신 준비'**
+  String get n_mars;
+
+  /// First transmission scene title; no placeholders
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 송신'**
+  String get n_transmission;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'태양계 너머'**
+  String get n_gate;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'우주과학자 미나'**
+  String get n_signalSpeaker;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'식민지 주민'**
+  String get n_settler;
+
+  /// Earth report speaker in first transmission scene; no placeholders
+  ///
+  /// In ko, this message translates to:
+  /// **'지구 보고'**
+  String get n_earthReport;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'반물질 입자 검출량이 계속 증가하고 있습니다.\n이 추세라면, 반물질 지구가 태양계에 진입하게 됩니다.'**
+  String get n_open0;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'제가 고안한 위상 정박기를 헤이븐의 고대 코어 엔진으로 처음 시험했어요. 누가 코어를 만들었는지는 모르지만 반물질 지구의 접근을 늦추는 데 성공했습니다.'**
+  String get n_open1;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'정박기는 내가 설치하겠다.\n식민지를 세우고, 헤이븐까지 송신망을 잇는다.'**
+  String get n_open2;
+
+  /// Severance commander orders an attack on the Phase Anchors; no placeholders
+  ///
+  /// In ko, this message translates to:
+  /// **'헤이븐이 가동됐다. 원정대를 추적해라.'**
+  String get n_open3;
+
+  /// Speaker label for the Severance commander; no placeholders
+  ///
+  /// In ko, this message translates to:
+  /// **'발신자 불명'**
+  String get n_enemyCommander;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'정착 준비가 끝났어요, 선장님. 위상 정박기를 세울 자리도 마련했습니다.'**
+  String get n_mars0;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'위상 정박기를 세우면 헤이븐으로 에너지를 보낼 수 있어요.\n\n기기 레벨을 높이고 거점을 늘려 태양계 송신망을 완성해요.'**
+  String get n_mars1;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'정체 모를 습격자들이 위상 정박기를 노립니다. 장치와 방어막을 지켜 주세요.'**
+  String get n_mars2;
+
+  /// First transmission narrative scene; no placeholders
+  ///
+  /// In ko, this message translates to:
+  /// **'위상 정박기 가동. 헤이븐에서 첫 송신 수신을 확인했어요.\n\n우리가 모은 에너지가 지구에 닿았습니다.'**
+  String get n_transmission0;
+
+  /// First transmission narrative scene; no placeholders
+  ///
+  /// In ko, this message translates to:
+  /// **'전력 배급으로 쉬던 학교가 다시 문을 열었습니다. 아이들이 교실로 돌아왔어요.\n\n송신을 계속 부탁드립니다. 이곳의 하루를 지켜 주세요.'**
+  String get n_transmission1;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'태양계 송신망은 안정됐지만 지구와 태양계의 에너지만으로는 부족해요. 반물질 지구를 더 늦추려면 다른 항성계의 에너지가 필요합니다.'**
+  String get n_warp0;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'이곳의 송신을 유지하고 다른 항성계에도 식민지와 정박기를 세워요. 알파 센타우리로 출발하죠, 선장님.'**
+  String get n_warp1;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'다음'**
+  String get n_next;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'장면 건너뛰기'**
+  String get n_skip;
+
+  /// Haven narrative scene; manual advance
+  ///
+  /// In ko, this message translates to:
+  /// **'출항'**
+  String get n_launch;
+
+  /// No description provided for @g_antimatterEarth.
+  ///
+  /// In ko, this message translates to:
+  /// **'반물질 지구'**
+  String get g_antimatterEarth;
+
+  /// No description provided for @u_antimatterHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 행성 궤도 밖에 있습니다. 위상 정박기를 늘리면 접근이 느려집니다.'**
+  String get u_antimatterHint;
+
+  /// No description provided for @c_endingTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'지구의 안전'**
+  String get c_endingTitle;
+
+  /// No description provided for @c_endingBody.
+  ///
+  /// In ko, this message translates to:
+  /// **'반물질 지구를 돌려보냈습니다. 모든 식민지의 노력이 지구를 지켰고, 정착은 계속됩니다.'**
+  String get c_endingBody;
+
+  /// No description provided for @c_finalTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'최종 작전'**
+  String get c_finalTitle;
+
+  /// No description provided for @c_stabilize.
+  ///
+  /// In ko, this message translates to:
+  /// **'현지 정박기망 100% 달성'**
+  String get c_stabilize;
+
+  /// No description provided for @c_syncReady.
+  ///
+  /// In ko, this message translates to:
+  /// **'헤이븐 중계기로 이동해 동기화'**
+  String get c_syncReady;
+
+  /// No description provided for @c_syncProgress.
+  ///
+  /// In ko, this message translates to:
+  /// **'동기화 {percent}%'**
+  String c_syncProgress(int percent);
+
+  /// No description provided for @c_guardian.
+  ///
+  /// In ko, this message translates to:
+  /// **'코어 수호자 격파'**
+  String get c_guardian;
+
+  /// No description provided for @c_counterattack.
+  ///
+  /// In ko, this message translates to:
+  /// **'중계기로 돌아가 역송신'**
+  String get c_counterattack;
+
+  /// No description provided for @c_complete.
+  ///
+  /// In ko, this message translates to:
+  /// **'임무 완료'**
+  String get c_complete;
+
+  /// No description provided for @c_syncButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'함선 동기화'**
+  String get c_syncButton;
+
+  /// No description provided for @c_fireButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'역송신 실행'**
+  String get c_fireButton;
+
+  /// No description provided for @c_guardianName.
+  ///
+  /// In ko, this message translates to:
+  /// **'코어 수호자'**
+  String get c_guardianName;
+
+  /// No description provided for @c_title.
+  ///
+  /// In ko, this message translates to:
+  /// **'{sector, select, 1{알파 센타우리 중계소} 5{시리우스의 습격} 8{타우 세티의 차이} 12{숨겨진 통로} 16{되찾은 명령} 20{심어진 코어} 22{은하 밖의 흔적} 25{수동 위상 제어} 26{삼각형자리 은하 M33 X-7} other{송신망 확장}}'**
+  String c_title(String sector);
+
+  /// No description provided for @c_body.
+  ///
+  /// In ko, this message translates to:
+  /// **'{sector, select, 1{태양계 밖에서 보낸 첫 송신이 헤이븐에 도착했어요. 다른 항성계의 정박기도 지구 방어에 힘을 보탤 수 있습니다.} 5{확장된 송신망이 지구 방어를 강화하고 있어요. 정체 모를 습격자들이 중계소를 노립니다.} 8{헤이븐이 받는 에너지가 타우 세티의 출력보다 조금 적어요. 방어를 유지하면서 원인을 조사하겠습니다.} 12{지금까지 쌓인 송신 기록에서 헤이븐 코어의 미기록 외부 송신 통로가 드러났어요. 위상 정박기 자체에는 문제가 없습니다.} 16{원정 중 적의 명령 기록을 가로챘어요. 습격자들은 단절단이며 외계 세력의 지시를 받고 있습니다.} 20{케플러-90의 외계 기록에 같은 코어 설계가 나옵니다. 지구에서 발견한 고대 오파츠는 누군가 일부러 심어 둔 것이었어요.} 22{케플러-90의 기록과 에너지 흐름을 대조하니 은하 밖으로 빠져나가는 경로가 드러났어요. 외계인들은 에너지를 모으게 하려고 반물질 지구를 보냈고, 필요한 방어에서 코어가 일부를 빼돌렸습니다.} 25{외계 자동 제어를 분리할 방법을 찾았어요. 선장님의 함선을 헤이븐의 직접 제어점으로 쓰겠습니다.} 26{이곳은 외계인들의 기원지인 삼각형자리 은하 M33 X-7입니다. 현지 정박기망을 완성하고 헤이븐 중계소에서 함선을 동기화한 뒤, 코어 수호자를 격파하고 중계소로 돌아와 역송신하세요.} other{식민지를 세우고 위상 정박기 송신을 이어가세요. 지구에는 아직 에너지가 필요합니다.}}'**
+  String c_body(String sector);
+
+  /// No description provided for @c_task.
+  ///
+  /// In ko, this message translates to:
+  /// **'{task, select, anchor{위상 정박기 설치·복구} s1_0{정박기에서 첫 송신 시험} s5{정박기 습격대 격파} s5_0{정박기에서 송신 복구 확인} s8_0{정박기 출력 측정} s8_1{헤이븐에서 수신 기록 대조} s12_0{헤이븐 코어의 숨은 회로 조사} s16{적 지휘선 격파} s16_0{지휘선 잔해에서 명령 기록 회수} s20_0{외계 유적에서 코어 설계 조사} s22_0{유출 경로 관측 지점 조사} s22_1{헤이븐에서 외계 기록과 대조} s25_0{헤이븐에서 자동제어 분리 시험} other{송신망 확장}}'**
+  String c_task(String task);
+
+  /// No description provided for @c_operate.
+  ///
+  /// In ko, this message translates to:
+  /// **'조사·작업 시작'**
+  String get c_operate;
+
+  /// No description provided for @c_finishOperation.
+  ///
+  /// In ko, this message translates to:
+  /// **'지역 작전 완료 필요'**
+  String get c_finishOperation;
+
+  /// No description provided for @c_reverseResult.
+  ///
+  /// In ko, this message translates to:
+  /// **'함선과 헤이븐의 동기화가 유지되고 있습니다. 식민지들이 보낸 에너지를 역송신해 반물질 지구를 밀어냅니다.'**
+  String get c_reverseResult;
+
+  /// No description provided for @c_severanceName.
+  ///
+  /// In ko, this message translates to:
+  /// **'단절단'**
+  String get c_severanceName;
+
+  /// No description provided for @u_sharedShield.
+  ///
+  /// In ko, this message translates to:
+  /// **'공유 방어막'**
+  String get u_sharedShield;
+
+  /// No description provided for @u_supportOffline.
+  ///
+  /// In ko, this message translates to:
+  /// **'헤이븐 지원 중단'**
+  String get u_supportOffline;
+
+  /// 항성계 이름 아래 특성 이름과 효과 표시
+  ///
+  /// In ko, this message translates to:
+  /// **'{trait, select, pirateNest{해적 소굴 · 해적 출현 간격 ×0.7, 현상금 ×1.5} richVeins{풍부한 광맥 · 식민지 광석 ×2, 채굴 광석 ×1.5} solarFlare{항성 플레어 · 식민지 크레딧 ×1.25, 방어막 재생 ×0.5} ionNebula{이온 성운 · 스킬 쿨타임 ×0.7, 식민지·정거장 포탑 피해 ×0.7} gravityWell{중력 우물 · 최고 속도 ×0.85, 전투·임무 보상 ×1.3} tradeLane{교역로 · 광석 판매가 ×1.3, 식민지 습격 빈도 ×1.3} other{}}'**
+  String u_systemTrait(String trait);
+
+  /// 항성계 최초 도착 시 미나의 특성 안내. 항성계별 1회
+  ///
+  /// In ko, this message translates to:
+  /// **'{trait, select, pirateNest{해적 소굴이에요. 해적이 더 자주 나타나지만 현상금도 높아요. 사냥을 준비하세요!} richVeins{풍부한 광맥이에요. 식민지 광석 생산은 두 배, 소행성 채굴은 1.5배예요. 채굴부터 시작해요!} solarFlare{항성 플레어가 강해요. 식민지 크레딧은 늘지만 방어막 재생은 절반이에요. 방어를 챙기세요!} ionNebula{이온 성운이에요. 스킬 쿨타임과 식민지·정거장 포탑 피해가 0.7배예요. 스킬로 직접 지원하세요!} gravityWell{중력 우물이에요. 최고 속도는 0.85배지만 전투·임무 보상은 1.3배예요. 임무를 골라볼까요?} tradeLane{교역로예요. 광석 판매가와 식민지 습격 빈도가 1.3배예요. 교역하되 식민지 경보를 살펴보세요!} other{}}'**
+  String g_traitIntro(String trait);
+
+  /// 식민지 특화 섹션 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'특화'**
+  String get u_specTitle;
+
+  /// 식민지 특화 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'{spec, select, industry{산업 특화} mining{채굴 특화} fortress{요새 특화} other{}}'**
+  String u_specName(String spec);
+
+  /// 식민지 특화 효과 한 줄
+  ///
+  /// In ko, this message translates to:
+  /// **'{spec, select, industry{크레딧 생산 ×1.5} mining{광석 생산 ×2.5} fortress{방어막 ×2 · 포탑 피해 ×1.5 · 습격에도 레벨 유지} other{}}'**
+  String u_specEffect(String spec);
+
+  /// 특화 잠금 안내
+  ///
+  /// In ko, this message translates to:
+  /// **'Lv.{level}에서 특화 해금'**
+  String u_specLocked(int level);
+
+  /// 레벨이 떨어져 특화 효과가 꺼져 있을 때
+  ///
+  /// In ko, this message translates to:
+  /// **'Lv.{level} 이상에서만 효과'**
+  String u_specInactive(int level);
+
+  /// 처음 특화 고르기 버튼 (무료)
+  ///
+  /// In ko, this message translates to:
+  /// **'무료'**
+  String get u_specFree;
+
+  /// 내 식민지 행에서 특화를 아직 안 고른 식민지의 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'특화 선택'**
+  String get u_specChoose;
+
+  /// 처음으로 식민지가 Lv.5가 됐을 때 미나 안내 (1회). planet = 행성 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet} 식민지가 Lv.5에 올랐어요! 이제 특화를 고를 수 있어요. 산업은 크레딧, 채굴은 광석, 요새는 방어를 맡아요. 처음 고르기는 무료예요!'**
+  String g_dlgSpecUnlocked(String planet);
+
+  /// 요새 특화 식민지가 습격에도 레벨을 지켰을 때. planet = 행성 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet} 요새가 습격을 버텨 냈어요. 레벨은 그대로예요!'**
+  String g_dlgRaidFortress(String planet);
+
+  /// 항성계 두목 원형 이름표 (월드 라벨). archetype = fleet/devourer/flare/wraith/gravity/plunder
+  ///
+  /// In ko, this message translates to:
+  /// **'{archetype, select, fleet{☠ 해적 함대장} devourer{☠ 광맥 포식자} flare{☠ 플레어 포격함} wraith{☠ 이온 유령} gravity{☠ 중력 군주} plunder{☠ 약탈 상선} other{}}'**
+  String u_bossName(String archetype);
+
+  /// 항성계 두목 등장 시 미나 경고 (두목 이름 + 공략 한 줄). archetype = 원형 키
+  ///
+  /// In ko, this message translates to:
+  /// **'{archetype, select, fleet{경고! 해적 함대장이에요. 호위 습격선을 계속 불러내요. 호위가 늘기 전에 두목을 노리세요!} devourer{경고! 광맥 포식자예요. 주위에 기뢰를 뿌려요. 기뢰를 쏘아 없애며 싸우세요!} flare{경고! 플레어 포격함이에요. 조준선이 보이면 세 갈래 레이저가 와요. 옆으로 피하세요!} wraith{경고! 이온 유령이에요. 4초마다 모습을 감춰요. 드러났을 때 몰아치세요!} gravity{경고! 중력 군주예요. 가까이 가면 끌려가요. 부스트로 벗어나세요!} plunder{경고! 약탈 상선이에요. 빠르고, 탄에 맞을 때마다 크레딧을 빼앗아요. 잡으면 모두 돌려받아요!} other{}}'**
+  String g_dlgBossArchetype(String archetype);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

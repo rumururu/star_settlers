@@ -287,6 +287,7 @@ void main() {
         var c = 0.0;
         for (var l = 0; l < GameWorld.devLevelCap; l++) {
           c += Planet.settleCost * pow(Planet.levelCostGrowth, l);
+          c += 40 * pow(1.7, l); // 안정화 장치 구매 크레딧
         }
         return c * n * GameWorld.costMulAt(s);
       }

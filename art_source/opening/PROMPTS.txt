@@ -1,0 +1,26 @@
+ARCHIVED EARLIER DIRECTION (not current runtime):
+Generator: built-in image_gen (2026-10-14). Runtime images: assets/cinematics/.
+References: existing ship_scout_default.png, station.png, portrait_advisor.png.
+
+Shared direction: premium animated space-adventure film, detailed cel-shaded figures and craft, painted deep-space environments, teal/violet/navy with red emergency lighting. Keep the white scout's red stripe/blue fins, Haven's grey ring/cyan core/blue panels, and Mina's pink bob/purple glasses/purple-white suit. Dynamic camera, characters acting during an event. No explanatory graphics, captions, logos, title cards or smiling planets.
+
+Shot 1 / haven_crisis.png: Inside a jolted scout cockpit, over the captain's gloved throttle hand. Mina braces against the console and turns urgently. Earth and an overlapping spectral violet Earth fill the canopy; Haven flickers outside. Emergency red strips, cyan instruments, drifting shards. The event is happening now.
+Shot 2 / haven_launch.png: Low camera inside Haven's damaged hangar mouth. The same scout blasts past camera through barely opened doors as Haven's cyan core opens a light corridor. Foreshortened hull and strong diagonal exhaust, Earth crisis behind it.
+Shot 3 / haven_arrival.png: Close camera beside an asteroid above the rust-orange curve of Mars. Same scout banks through rocks as distant pirate fire narrowly misses. Empty red valleys below; no colonies or completed energy network. Moment of handing control to the player.
+
+These are generated keyframes. Runtime adds camera pan/zoom, brief impact motion, shot timing, subtitles, skip and manual advance; it is not generated frame-by-frame video.
+
+CURRENT DIRECTION 2026-10-14: distant antimatter Earth, intact Earth, time for expedition.
+Generator: built-in image_gen. Runtime uses three full-bleed landscape anime keyframes, 9-second camera movement, first two auto advance, final manual launch. No voice narration or progress bar. Not frame-by-frame animation.
+
+haven_observation.png: Mina with pink bob, round violet glasses, white/navy suit at physical orbital telescope; optical projection shows violet Earth, tiny distant violet disc outside window; normal Earth peaceful below. Source exec-58f0ec6d-8b64-4c82-a64a-5cdfcea36854.png.
+haven_defense.png: white Haven ring/cyan nodes activates controlled concentric separation-field waves above intact Earth; tiny distant antimatter point. No collision/destruction. Source exec-d4dd0c9d-3ae0-446f-ad77-2aad54afe86e.png.
+haven_expedition.png: same Mina watches single white scout/red stripe/blue fins depart intact Haven hangar on prepared long expedition; peaceful Earth below, red planet beyond. Source exec-6d0e11fb-9d7d-4d09-83f4-57337e7cd7db.png.
+antimatter_earth.png: isolated alpha-transparent circular indigo/violet Earth globe, magenta continent edges, soft corona, no background/UI. Source exec-395dc332-b4ea-4d70-a369-ea22ae63d8f5.png. Runtime assets/sprites/antimatter_earth.png.
+Sources remain in /Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/.
+
+SUPERSEDING CURRENT DIRECTION 2026-10-15: Scientist Mina discovers antimatter Earth and invents Phase Anchor; captain installs/protects; Severance sabotages to retain control of energy/routes. Four opening shots now use haven_observation, haven_defense, haven_captain, haven_severance. First three auto-advance9s; final manual. Scientists speak first2, captain third, enemy commander fourth.
+haven_captain.png: low angle behind brown-haired captain boarding white/red/blue scout, robotic crew loading folded three-pylon Phase Anchor with cyan toroidal core, intact Havenhangar/Earth. No Mina portrait. Source exec-fd1cda0c-26bf-4502-ad7b-b6bf721db09b.png, references prior departure anime style and actual ship_scout_default sprite.
+haven_severance.png: dark charcoal/red raiders with skull insignia lurk among asteroids, commander gloved hand grips firingcontrol, cannoncharges toward distantrelay, no scientist. Source exec-a77bf923-1e15-4182-9059-c98b4a8b8d8c.png, references actual pirate_raider sprite and Haven anime keyframe.
+
+FINAL FIRST-SHOT REVISION 2026-10-15: haven_conference replaces haven_observation. Mina in white lab coat presents on Earth to assembled scientists; increasing antimatter particle detection predicts future solar entry. Normal terrestrial city outside. Physical phaseanchor prototype ontable. No spacecraft uniform, no Earth collision, no planet outsidewindow. Source exec-eb14820d-02d4-4ce0-9d63-7b8f11085763.png. References previous Mina identity and captain-shot anchorprototype. Previous unused images preserved under art_source/opening/archive, excluded from runtime assets.

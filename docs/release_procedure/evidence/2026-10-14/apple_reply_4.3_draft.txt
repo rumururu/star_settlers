@@ -1,0 +1,25 @@
+DRAFT — NOT SENT. Apple requested answers to all nine questions before resubmission. This draft uses the owner's established testing and ownership history and the recorded build 7 evidence; it does not report a new submission.
+
+Context: This reply concerns the rejected iOS 1.0.0 build 7. The newer Haven story, first-transmission scene, and illustrated pages are local, unsubmitted changes; do not describe them as features of build 7.
+
+Thank you for reviewing Star Settlers. Here are our draft answers to your nine questions:
+
+1. Players pilot a ship, fight pirates, collect resources, settle planets, build and defend colonies, recruit crew, upgrade the ship, and travel to further systems. Colonies continue producing resources while the player is away.
+
+2. The game is intended for players who enjoy short mobile space combat and colony progression. The app supports iPhone and iPad and has ten localized languages: Korean, English, Japanese, Chinese, Spanish, French, German, Portuguese, Russian, and Indonesian.
+
+3. The player combines direct ship control and combat with building colonies, collecting resources, and progressing through star systems. Optional purchases and user-chosen rewarded ads support the game; crew recruitment odds are displayed in the app. We make no claim here about competitors or market uniqueness.
+
+4. We tested internally on physical iOS and Android devices through TestFlight and Play internal testing. We have not run an external TestFlight beta. Earlier internal testing found that the first fights were too difficult, that holding the joystick for travel was tiring, that the purchase restore screen needed to refresh immediately, and that a purchase could grant gems twice. We adjusted early combat, added a cruise control, fixed the restore screen, and corrected the duplicate grant before build 7. In build 7 testing, an Android Play test purchase and an iOS TestFlight sandbox purchase credited the server wallet; we also checked a gem spend and reinstall/restore flows. These are internal test observations, not claims of a public beta. The newer Haven story and its tests were added locally after build 7 and are not evidence for that reviewed build.
+
+5. Star Settlers is a standalone game. Our other games include Claire's Ranch (farm life), Thousand-Year Voyage (naval strategy), Hell Keeper / 지옥키우기 (idle management), Cozy Pet / 포근펫 (virtual pet care), and Gold Frontier (3D adventure). Star Settlers centers on controlling one ship in space combat while developing and defending colonies; its setting, gameplay, and progression are separate from those games.
+
+6. No. The ship controls, space combat, star-system map, colonies, crew, economy, and saved progression form a separate game. They are not an expansion or in-app purchase for any of our other games.
+
+7. The game's gameplay code, art, music, and game content were made for Star Settlers and are not shared gameplay or art from our other apps. We use common tools and services: Flutter, Google AdMob, RevenueCat, the Jua font, and our own backend account. Each game uses separate backend data for its own features; Star Settlers uses it for features including the weekly leaderboard and gem wallet.
+
+8. We did not obtain this game from an app template, app generation service, or third-party shared game-content library. It uses third-party frameworks and SDKs for standard app functions, including Flutter, AdMob, RevenueCat, and Supabase client calls. We used AI coding and image tools as assistance during development; the game is developed and maintained as our own app.
+
+9. No client or partner commissioned this app. Star Settlers is our own concept and branding, developed and maintained in-house by mkideabox Co. Ltd. As noted above, we used AI coding and image assistance during development; the app is not produced or maintained for a client or by an app generation service.
+
+We can provide supporting details for the verified answers if helpful.

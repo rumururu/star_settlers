@@ -411,7 +411,7 @@ class L10nZh extends L10n {
 
   @override
   String u_hudSector(String sector, int dev, String threat, String value) {
-    return '$sector · 发展 $dev%\n⚠ 威胁 $threat  🏛 $value';
+    return '$sector · 稳定 $dev%\n⚠ 威胁 $threat  🏛 $value';
   }
 
   @override
@@ -435,7 +435,7 @@ class L10nZh extends L10n {
 
   @override
   String u_gateLocked(int pct) {
-    return '🔒 发展度100%时开启 ($pct%)';
+    return '🔒 稳定度100%时开启 ($pct%)';
   }
 
   @override
@@ -486,7 +486,7 @@ class L10nZh extends L10n {
   String get u_spkPirate => '海盗';
 
   @override
-  String get u_spkAdvisor => '副官米娜';
+  String get u_spkAdvisor => '太空科学家米娜';
 
   @override
   String get u_spkMerchant => '商人喵喵';
@@ -592,7 +592,7 @@ class L10nZh extends L10n {
 
   @override
   String u_development(int pct) {
-    return '发展度 $pct%';
+    return '稳定度 $pct%';
   }
 
   @override
@@ -602,7 +602,50 @@ class L10nZh extends L10n {
   String get u_opensAt100 => '100%时开启';
 
   @override
-  String get u_devHint => '所有行星升到Lv.3即达100%';
+  String get u_devHint => '相位锚等级总和达到行星数 × 3时为100%';
+
+  @override
+  String u_stabilizerHealth(int hp, int max) {
+    return '耐久度 $hp/$max';
+  }
+
+  @override
+  String g_foeIntro(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'missile': '导弹舰来了！导弹会追踪你，但可以击落。',
+      'laser': '激光舰正在瞄准！看到红色瞄准线就往侧面躲。',
+      'warden': '护盾舰在保护附近的海盗。蓝圈内的敌人伤害减半，先打护盾舰！',
+      'carrier': '无人机母舰！它会不断放出无人机，先打母舰。',
+      'phantom': '幽灵舰会隐身又出现。它现身时集中火力！',
+      'mine': '布雷舰！黄色水雷靠近就会爆炸，但可以射击清除。',
+      'medic': '维修舰在修理海盗。先干掉躲在后面的维修舰！',
+      'juggernaut': '重装突击舰！正面装甲坚固，攻击侧面或后方，并躲开冲撞。',
+      'other': '新的敌人！',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_levelUnlockAtSystem(int level, int system) {
+    return '在第$system个星系解锁$level级';
+  }
+
+  @override
+  String get u_myColonies => '我的殖民地';
+
+  @override
+  String get u_myColoniesHint => '无论身在哪个星系，都能在这里直接升级。';
+
+  @override
+  String get u_noColonies => '还没有殖民地。靠近行星进行殖民吧。';
+
+  @override
+  String get u_currentHere => '当前位置';
+
+  @override
+  String u_anchorEffect(int income, int shield, int regen) {
+    return '收入 +$income% · 共享护盾 $shield · 再生 +$regen%';
+  }
 
   @override
   String get u_conqueredSystems => '已征服星系（持续生产中）';
@@ -620,7 +663,7 @@ class L10nZh extends L10n {
 
   @override
   String u_sectorDev(String name, int pct) {
-    return '$name · 发展 $pct%';
+    return '$name · 稳定 $pct%';
   }
 
   @override
@@ -1203,10 +1246,10 @@ class L10nZh extends L10n {
   String get g_shipAuroraDesc => '能自我修复并展开屏障的高级守护舰';
 
   @override
-  String get g_shipNovaAbility => '贯穿弹：每发子弹最多贯穿2个敌人';
+  String get g_shipNovaAbility => '贯穿弹：每发子弹最多贯穿3个敌人';
 
   @override
-  String get g_shipAuroraAbility => '自我修复：3秒未受伤后每秒恢复3%生命\n守护膜：每8秒抵挡1次攻击';
+  String get g_shipAuroraAbility => '自我修复：3秒未受伤后每秒恢复5%生命\n守护膜：每5秒抵挡1次攻击';
 
   @override
   String g_crewLegendPerk(int pct) {
@@ -1730,75 +1773,75 @@ class L10nZh extends L10n {
   String get g_storyAsteroidsTitle => '击碎3颗小行星';
 
   @override
-  String get g_storyAsteroidsLine0 => '舰长！先击碎小行星收集矿石吧。';
+  String get g_storyAsteroidsLine0 => '火星补给基地需要矿石。先击碎3颗小行星吧。';
 
   @override
   String get g_storyAsteroidsLine1 => '用摇杆移动，按开火按钮射击就行！';
 
   @override
-  String get g_storyKillsTitle => '击落3艘海盗船';
+  String get g_storyKillsTitle => '击败3艘袭击舰';
 
   @override
-  String get g_storyKillsLine0 => '雷达发现海盗！在红色箭头的方向。';
+  String get g_storyKillsLine0 => '身份不明的飞船正在攻击中继据点。跟随红色箭头，阻止3艘袭击舰。';
 
   @override
-  String get g_storyKillsLine1 => '区区海盗，在我的飞船面前就是废铁！';
+  String get g_storyKillsLine1 => '我们先把路打通，还有人在后面等着出发！';
 
   @override
   String get g_storyColoniesTitle => '在火星定居';
 
   @override
-  String get g_storyColoniesLine0 => '在地球旁边的红色星球——火星上建立第一个殖民地吧。靠近后会出现定居按钮。';
+  String get g_storyColoniesLine0 => '在火星建一个可以回来的地方吧。靠近后点击定居按钮。';
 
   @override
-  String get g_storyColoniesLine1 => '殖民地就算放着不管也会赚信用点哦！';
+  String get g_storyColoniesLine1 => '居民生产的信用点，能帮我们准备下一次航行。';
 
   @override
   String get g_storyShipLevelsTitle => '在空间站改造飞船';
 
   @override
-  String get g_storyShipLevelsLine0 => '回到港湾基地改造飞船吧。在空间站附近还能修理哦。';
+  String get g_storyShipLevelsLine0 => '前往更远的行星前，先回港湾基地升级飞船。';
 
   @override
   String get g_storyCrewTitle => '招募1名船员';
 
   @override
-  String get g_storyCrewLine0 => '一个人很寂寞吧？去空间站菜单的船员页招募伙伴吧！';
+  String get g_storyCrewLine0 => '漫长旅途需要伙伴。在空间站的船员页招募一名同伴吧。';
 
   @override
   String get g_storyMissionsTitle => '完成1个任务';
 
   @override
-  String get g_storyMissionsLine0 => '在空间站的任务板接个委托吧。报酬很丰厚哦。';
+  String get g_storyMissionsLine0 => '航线上的人们也需要帮助。在空间站任务板接一份委托吧。';
 
   @override
   String get g_storyStationsTitle => '建造新的空间站';
 
   @override
-  String get g_storyStationsLine0 => '该扩张领地了！在远离行星的空旷宇宙中建造空间站吧。';
+  String get g_storyStationsLine0 => '让补给船多一个歇脚处。在远离行星的空旷宇宙中建造空间站吧。';
 
   @override
-  String get g_storyDevPercentTitle => '星系发展度100%';
+  String get g_storyDevPercentTitle => '星系稳定度100%';
 
   @override
-  String get g_storyDevPercentLine0 => '把所有行星升到Lv.3就能开启下一个星系。点右上角的星系按钮查看吧！';
+  String get g_storyDevPercentLine0 => '相位锚等级总和达到行星数 × 3后，星系稳定，星门开启。点击星系按钮查看。';
 
   @override
   String get g_storySectorTitle => '通过跃迁门前往下一星系';
 
   @override
-  String get g_storySectorLine0 => '跃迁门打开了！前往小地图上的紫色传送门吧。';
+  String get g_storySectorLine0 => '下一个星系也有裂隙连接点。前往小地图上的紫色星门。';
 
   @override
-  String get g_storySectorLine1 => '全新的宇宙在等着我！';
+  String get g_storySectorLine1 => '在新星系建立殖民地，并建造相位锚。';
 
   @override
   String g_storyDevNTitle(int n) {
-    return '星系$n发展度100%';
+    return '星系$n稳定度100%';
   }
 
   @override
-  String get g_storyDevNLine => '把新星系的所有行星都升到Lv.3吧！';
+  String get g_storyDevNLine => '相位锚等级总和达到行星数 × 3后，下一道星门开启。';
 
   @override
   String g_systemN(int n) {
@@ -1811,7 +1854,7 @@ class L10nZh extends L10n {
   }
 
   @override
-  String get g_storyWarpNLine => '传送门打开了。要去更深的宇宙看看吗？';
+  String get g_storyWarpNLine => '航线已连通。继续在下一个星系扩展稳定网络。';
 
   @override
   String get g_powerUpRapid => '连射';
@@ -1856,6 +1899,9 @@ class L10nZh extends L10n {
   String get g_colonyBldShieldGen => '护盾发生器';
 
   @override
+  String get g_colonyBldStabilizer => '相位锚';
+
+  @override
   String get g_colonyBldBlurbTurret => '自动拦截殖民地附近的海盗。防御袭击必备！';
 
   @override
@@ -1869,6 +1915,14 @@ class L10nZh extends L10n {
 
   @override
   String get g_colonyBldBlurbShieldGen => '提升护盾容量和充能速度。';
+
+  @override
+  String get g_colonyBldBlurbStabilizer => '星系稳定 · 共享护盾\n每级殖民地收入 +10%';
+
+  @override
+  String g_stabilizerDamaged(String planet, int level) {
+    return '$planet的相位锚受损，等级降至$level。';
+  }
 
   @override
   String get g_stationRoleHome => '大本营';
@@ -2015,7 +2069,7 @@ class L10nZh extends L10n {
   }
 
   @override
-  String get g_dlgWelcome => '欢迎你，舰长！我是副官米娜。';
+  String get g_dlgWelcome => '欢迎，舰长。我是太空科学家米娜。';
 
   @override
   String get g_dlgMissionsCancelled => '上一星系的运输和通缉任务已取消。';
@@ -2081,7 +2135,7 @@ class L10nZh extends L10n {
   String get g_merchantBye => '那下次再见啦~ 喵！';
 
   @override
-  String get g_pirateRaidTaunt => '这个殖民地现在归我们了！哇哈哈！';
+  String get g_pirateRaidTaunt => '先摧毁相位锚。';
 
   @override
   String get g_dlgMeteor => '发现流星雨！里面混着大量水晶。赚矿石的好机会！';
@@ -2238,7 +2292,7 @@ class L10nZh extends L10n {
 
   @override
   String g_pirateBossArrive(String sector) {
-    return '$sector是本大爷的地盘！放马过来吧，小不点舰长！';
+    return '切断$sector的中继网络。';
   }
 
   @override
@@ -2277,16 +2331,16 @@ class L10nZh extends L10n {
   String get g_captainKill3 => '下一个！';
 
   @override
-  String get g_pirateAmbush0 => '哇哈哈！把货物留下！';
+  String get g_pirateAmbush0 => '确认目标飞船。继续追踪。';
 
   @override
-  String get g_pirateAmbush1 => '这里是我们海盗团的地盘！';
+  String get g_pirateAmbush1 => '拦截远征队。';
 
   @override
-  String get g_pirateAmbush2 => '把那些闪亮亮的信用点交出来！';
+  String get g_pirateAmbush2 => '别让他们靠近传输设施。';
 
   @override
-  String get g_pirateAmbush3 => '今天你运气不好啊，小不点！';
+  String get g_pirateAmbush3 => '锁定目标。开始攻击。';
 
   @override
   String get cat_sysSol => '太阳系';
@@ -2985,4 +3039,304 @@ class L10nZh extends L10n {
 
   @override
   String get m_cloudOverwriteOk => '覆盖';
+
+  @override
+  String get n_title => '港湾计划';
+
+  @override
+  String get n_signal => '太阳系外的访客';
+
+  @override
+  String get n_haven => '争取到的时间';
+
+  @override
+  String get n_departure => '港湾远征队';
+
+  @override
+  String get n_mars => '准备输能';
+
+  @override
+  String get n_transmission => '首次输能';
+
+  @override
+  String get n_gate => '通往下一星系';
+
+  @override
+  String get n_signalSpeaker => '太空科学家米娜';
+
+  @override
+  String get n_settler => '殖民地居民';
+
+  @override
+  String get n_earthReport => '地球报告';
+
+  @override
+  String get n_open0 => '反物质粒子的检出量持续上升。\n照此趋势，反物质地球将进入太阳系。';
+
+  @override
+  String get n_open1 => '我设计的相位锚首次接入避风港的古代核心引擎进行试验。人类仍不知道谁建造了核心，但它成功减缓了反物质地球。';
+
+  @override
+  String get n_open2 => '相位锚由我来安装。\n建立殖民地，把输能网络连到港湾。';
+
+  @override
+  String get n_open3 => '避风港启动了。追踪远征队。';
+
+  @override
+  String get n_enemyCommander => '不明来源的通讯';
+
+  @override
+  String get n_mars0 => '殖民地准备好了。现在能支援地球了吗？';
+
+  @override
+  String get n_mars1 => '还不行。建造相位锚后才能开始输能，也要保护好护盾。';
+
+  @override
+  String get n_mars2 => '不明袭击者正瞄准相位锚。保护设备和护盾。';
+
+  @override
+  String get n_transmission0 => '相位锚已启动。避风港已确认收到首次输能。\n\n我们收集的能量已抵达地球。';
+
+  @override
+  String get n_transmission1 =>
+      '因限电而停课的学校重新开门了。孩子们回到了教室。\n\n请继续输能。保护设备和护盾，并扩展网络。';
+
+  @override
+  String get n_warp0 => '太阳系输能网已稳定，但地球和太阳系的能量仍不够。要进一步减缓反物质地球，必须前往其他星系。';
+
+  @override
+  String get n_warp1 => '保持这里的输能，在其他星系建立殖民地和相位锚。船长，前往半人马座阿尔法星。';
+
+  @override
+  String get n_next => '下一页';
+
+  @override
+  String get n_skip => '跳过场景';
+
+  @override
+  String get n_launch => '启航';
+
+  @override
+  String get g_antimatterEarth => '反物质地球';
+
+  @override
+  String get u_antimatterHint => '它仍在行星轨道之外。增加相位锚可以减缓它的接近。';
+
+  @override
+  String get c_endingTitle => '地球安全了';
+
+  @override
+  String get c_endingBody => '反物质地球已被送走。所有殖民地都为保卫地球出力，开拓仍将继续。';
+
+  @override
+  String get c_finalTitle => '最终行动';
+
+  @override
+  String get c_stabilize => '当地相位锚网达到100%';
+
+  @override
+  String get c_syncReady => '前往避风港中继站同步';
+
+  @override
+  String c_syncProgress(int percent) {
+    return '同步 $percent%';
+  }
+
+  @override
+  String get c_guardian => '击败核心守卫';
+
+  @override
+  String get c_counterattack => '返回中继站逆转输能';
+
+  @override
+  String get c_complete => '任务完成';
+
+  @override
+  String get c_syncButton => '同步飞船';
+
+  @override
+  String get c_fireButton => '执行逆向输能';
+
+  @override
+  String get c_guardianName => '核心守卫';
+
+  @override
+  String c_title(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': '半人马座阿尔法中继站',
+      '5': '天狼星遇袭',
+      '8': '鲸鱼座τ星的差额',
+      '12': '隐秘通道',
+      '16': '截获的命令',
+      '20': '被放置的核心',
+      '22': '银河外的线索',
+      '25': '手动相位控制',
+      '26': '三角座星系 M33 X-7',
+      'other': '扩建输能网',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_body(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': '来自太阳系外的首次传输已抵达避风港。其他恒星系的相位锚也能为地球防御提供力量。',
+      '5': '扩建后的输能网正加强地球防御。不明袭击者正蓄意攻击中继站。',
+      '8': '避风港收到的能量略低于鲸鱼座τ星的输出。继续防御，同时调查原因。',
+      '12': '分析积累的输能记录后，我们发现避风港核心有一条未记录的对外通道。相位锚本身运作正常。',
+      '16': '远征途中截获了敌方指令记录。袭击者是断绝团，受外星主使指挥。',
+      '20': '开普勒90的外星档案中有相同的核心设计。地球上发现的古代神秘造物是被刻意放置的。',
+      '22': '对照开普勒90的记录与能量轨迹，发现能量流向银河系外。外星人送来反物质地球迫使人类收集能量；防御确实必要，但核心窃取了其中一部分。',
+      '25': '我找到了隔离外星自动控制器的方法。我们将用船长的飞船直接控制避风港的相位。',
+      '26': '这里是外星人的起源地：三角座星系M33 X-7。完成当地相位锚网，在避风港中继站同步飞船，击败核心守卫，再返回中继站逆转输能。',
+      'other': '建立殖民地，保持相位锚输能。地球仍需要这些能量。',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_task(String task) {
+    String _temp0 = intl.Intl.selectLogic(task, {
+      'anchor': '建造或修复相位锚',
+      's1_0': '在相位锚测试传输',
+      's5': '击败袭击部队',
+      's5_0': '确认传输恢复',
+      's8_0': '测量相位锚输出',
+      's8_1': '在避风港比对接收记录',
+      's12_0': '调查核心隐藏电路',
+      's16': '击败敌方指挥舰',
+      's16_0': '从残骸回收命令记录',
+      's20_0': '调查外星遗迹的核心设计',
+      's22_0': '观测能量泄漏路径',
+      's22_1': '在避风港比对外星记录',
+      's25_0': '在避风港测试自动控制隔离',
+      'other': '扩展中继网络',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get c_operate => '开始调查或操作';
+
+  @override
+  String get c_finishOperation => '请完成区域行动';
+
+  @override
+  String get c_reverseResult => '飞船与避风港保持同步。殖民地的能量沿网络反向传输，将反物质地球推离。';
+
+  @override
+  String get c_severanceName => '断绝团';
+
+  @override
+  String get u_sharedShield => '共享护盾';
+
+  @override
+  String get u_supportOffline => '避风港支援中断';
+
+  @override
+  String u_systemTrait(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest': '海盗巢穴 · 刷新间隔 ×0.7，赏金 ×1.5',
+      'richVeins': '富饶矿脉 · 殖民地矿石 ×2，采矿矿石 ×1.5',
+      'solarFlare': '恒星耀斑 · 殖民地信用点 ×1.25，护盾恢复 ×0.5',
+      'ionNebula': '离子星云 · 技能冷却 ×0.7，殖民地及空间站炮塔伤害 ×0.7',
+      'gravityWell': '引力井 · 最高速度 ×0.85，战斗及任务奖励 ×1.3',
+      'tradeLane': '贸易航道 · 矿石售价 ×1.3，殖民地袭击频率 ×1.3',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_traitIntro(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest': '这里是海盗巢穴！海盗出现更频繁，赏金也更高。准备狩猎吧！',
+      'richVeins': '这里有富饶矿脉！殖民地产矿翻倍，小行星采矿产出为1.5倍。开始采矿吧！',
+      'solarFlare': '恒星耀斑很强！殖民地信用点增加，但护盾恢复减半。注意防御！',
+      'ionNebula': '这里是离子星云！技能冷却和殖民地、空间站炮塔伤害均为0.7倍。用技能支援吧！',
+      'gravityWell': '进入引力井了！最高速度为0.85倍，战斗和任务奖励为1.3倍。挑选任务吧！',
+      'tradeLane': '这是贸易航道！矿石售价和殖民地袭击频率均为1.3倍。交易时留意殖民地警报！',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get u_specTitle => '专精';
+
+  @override
+  String u_specName(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': '工业专精',
+      'mining': '采矿专精',
+      'fortress': '要塞专精',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specEffect(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': '信用点产量 ×1.5',
+      'mining': '矿石产量 ×2.5',
+      'fortress': '护盾 ×2 · 炮塔伤害 ×1.5 · 遇袭不掉级',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specLocked(int level) {
+    return '$level级解锁专精';
+  }
+
+  @override
+  String u_specInactive(int level) {
+    return '仅在$level级及以上生效';
+  }
+
+  @override
+  String get u_specFree => '免费';
+
+  @override
+  String get u_specChoose => '选择专精';
+
+  @override
+  String g_dlgSpecUnlocked(String planet) {
+    return '$planet升到5级了！现在可以选择专精：工业负责信用点，采矿负责矿石，要塞负责防御。第一次选择免费！';
+  }
+
+  @override
+  String g_dlgRaidFortress(String planet) {
+    return '$planet要塞顶住了袭击，等级保住了！';
+  }
+
+  @override
+  String u_bossName(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '☠ 海盗舰队长',
+      'devourer': '☠ 矿脉吞噬者',
+      'flare': '☠ 耀斑炮击舰',
+      'wraith': '☠ 离子幽灵',
+      'gravity': '☠ 引力君主',
+      'plunder': '☠ 掠夺商船',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_dlgBossArchetype(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '警告！海盗舰队长会不断召唤袭击舰护卫。在护卫变多之前集中攻击首领！',
+      'devourer': '警告！矿脉吞噬者会在周围撒布水雷。边战斗边击毁水雷！',
+      'flare': '警告！耀斑炮击舰：出现瞄准线后会射出三向激光。向侧面躲开！',
+      'wraith': '警告！离子幽灵每4秒隐身一次。趁它现身时猛攻！',
+      'gravity': '警告！引力君主会把靠近的你拉过去。用冲刺挣脱！',
+      'plunder': '警告！掠夺商船速度很快，每次命中都会抢走信用点。击败它就能全部夺回！',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 }

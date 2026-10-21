@@ -1,0 +1,8 @@
+두 UI 결함을 수정하고 결과 파일을 작성했습니다.
+
+- `dart analyze lib test`: 통과
+- `flutter test --no-pub`: **379개 전체 통과**
+- 기존 테스트 기대값 유지, 48dp 버튼·헤더 위치 검증 보강
+- 기기 실행·커밋 없음
+
+[RESULT_001_REWORK_CODEX.md](/Volumes/home_extension/AndroidStudioProjects/star_settlers/docs/agent-collaboration/gameplay-depth/RESULT_001_REWORK_CODEX.md)

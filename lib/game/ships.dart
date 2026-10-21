@@ -118,14 +118,15 @@ const shipTypes = [
       hpMul: 0.9, speedMul: 1.15, crit: 0.25,
       unlockStat: 'sector', unlockTarget: 4, gemPrice: 250,
       wing: 30, length: 50),
+  // 프리미엄: 후반 적(유도탄·레이저·방패선·돌격함)을 상대로도 확실히 앞서게 (2026-10-17 상향)
   ShipType('nova',
-      speedMul: 1.1, fireMul: 0.85,
-      premium: true, pierce: 1, gemPrice: 400, creditMul: 1.5,
+      hpMul: 1.2, speedMul: 1.15, dmgMul: 1.3, fireMul: 0.75,
+      premium: true, pierce: 2, gemPrice: 400, creditMul: 1.5,
       wing: 36, length: 54),
   ShipType('aurora',
-      hpMul: 1.3, fireMul: 0.95,
+      hpMul: 1.6, dmgMul: 1.2, fireMul: 0.9,
       premium: true,
-      regenRate: 0.03, guardInterval: 8, gemPrice: 600, creditMul: 1.75,
+      regenRate: 0.05, guardInterval: 5, gemPrice: 600, creditMul: 1.75,
       wing: 34, length: 48),
 ];
 

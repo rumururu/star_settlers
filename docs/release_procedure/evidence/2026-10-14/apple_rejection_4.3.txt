@@ -1,0 +1,8 @@
+Star Settlers 1.0.0 (7), submission ee05f8ff-27ee-4965-9f06-d1fc3d5d38eb, rejected 2026-10-14 03:27 KST
+Status: 4.3.0 Design: Spam
+Guidelines 4.3 - Spam and 4.2.6 - App Generation Services
+(Full text in App Store Connect > App Review. Apple asks: do not resubmit; reply with answers to 9 questions:
+ 1 what the app does / problem solved, 2 intended user, 3 market gap, 4 beta testing + applied feedback,
+ 5 standalone or suite, 6 could it be an IAP/expansion of another app, 7 shared code/assets with own apps,
+ 8 shared code/SDK/content with third parties, 9 made for a client/partner.)
+IAPs gems_100, gems_550, gems_1200, starter_pack, premium_pass: READY_FOR_REVIEW (held with the version).

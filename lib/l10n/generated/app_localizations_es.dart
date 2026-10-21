@@ -422,7 +422,7 @@ class L10nEs extends L10n {
 
   @override
   String u_hudSector(String sector, int dev, String threat, String value) {
-    return '$sector · Des. $dev%\n⚠ Amenaza $threat  🏛 $value';
+    return '$sector · Estab. $dev%\n⚠ Amenaza $threat  🏛 $value';
   }
 
   @override
@@ -446,7 +446,7 @@ class L10nEs extends L10n {
 
   @override
   String u_gateLocked(int pct) {
-    return '🔒 Se abre al 100% de desarrollo ($pct%)';
+    return '🔒 Se abre al 100% de Estabilización ($pct%)';
   }
 
   @override
@@ -498,7 +498,7 @@ class L10nEs extends L10n {
   String get u_spkPirate => 'Pirata';
 
   @override
-  String get u_spkAdvisor => 'Tte. Mina';
+  String get u_spkAdvisor => 'científica espacial Mina';
 
   @override
   String get u_spkMerchant => 'Nyang, el mercader';
@@ -604,7 +604,7 @@ class L10nEs extends L10n {
 
   @override
   String u_development(int pct) {
-    return 'Desarrollo $pct%';
+    return 'Estabilización $pct%';
   }
 
   @override
@@ -614,7 +614,61 @@ class L10nEs extends L10n {
   String get u_opensAt100 => 'Se abre al 100%';
 
   @override
-  String get u_devHint => 'Sube todos los planetas a Lv.3 para el 100%';
+  String get u_devHint =>
+      'El 100% se alcanza cuando la suma de niveles de Anclas de Fase es planetas × 3';
+
+  @override
+  String u_stabilizerHealth(int hp, int max) {
+    return 'Resistencia $hp/$max';
+  }
+
+  @override
+  String g_foeIntro(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'missile':
+          '¡Un lanzamisiles! Sus misiles te persiguen, pero puedes derribarlos.',
+      'laser':
+          '¡Una nave láser apunta! Cuando veas la línea roja, esquiva hacia un lado.',
+      'warden':
+          'Un guardián protege a los piratas cercanos. Dentro del anillo azul reciben la mitad de daño: ¡a por él primero!',
+      'carrier':
+          '¡Un portadrones! Lanza drones sin parar, ataca primero al portador.',
+      'phantom':
+          'Un fantasma se oculta y reaparece. ¡Concentra el fuego cuando sea visible!',
+      'mine':
+          '¡Un minador! Las minas amarillas explotan si te acercas, pero puedes dispararles.',
+      'medic':
+          'Una nave de reparación cura a los piratas. ¡Elimínala primero en la retaguardia!',
+      'juggernaut':
+          '¡Un coloso! Su blindaje frontal es duro: apunta a los lados o atrás y esquiva su embestida.',
+      'other': '¡Un enemigo nuevo!',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_levelUnlockAtSystem(int level, int system) {
+    return 'Nivel $level disponible en el sistema estelar $system';
+  }
+
+  @override
+  String get u_myColonies => 'Mis colonias';
+
+  @override
+  String get u_myColoniesHint =>
+      'Mejora cualquier colonia desde aquí, estés donde estés.';
+
+  @override
+  String get u_noColonies =>
+      'Aún no tienes colonias. Acércate a un planeta y colonízalo.';
+
+  @override
+  String get u_currentHere => 'Estás aquí';
+
+  @override
+  String u_anchorEffect(int income, int shield, int regen) {
+    return 'Ingresos +$income% · Escudo compartido $shield · Regen. +$regen%';
+  }
 
   @override
   String get u_conqueredSystems => 'Sistemas conquistados (siguen produciendo)';
@@ -632,7 +686,7 @@ class L10nEs extends L10n {
 
   @override
   String u_sectorDev(String name, int pct) {
-    return '$name · Des. $pct%';
+    return '$name · Estab. $pct%';
   }
 
   @override
@@ -1235,11 +1289,11 @@ class L10nEs extends L10n {
 
   @override
   String get g_shipNovaAbility =>
-      'Disparos perforantes: cada disparo atraviesa hasta 2 enemigos';
+      'Disparos perforantes: cada disparo atraviesa hasta 3 enemigos';
 
   @override
   String get g_shipAuroraAbility =>
-      'Autorreparación: recupera 3% de PV/s tras 3 s sin recibir daño\nGuardia: bloquea 1 golpe cada 8 s';
+      'Autorreparación: recupera 5% de PV/s tras 3 s sin recibir daño\nGuardia: bloquea 1 golpe cada 5 s';
 
   @override
   String g_crewLegendPerk(int pct) {
@@ -1765,85 +1819,87 @@ class L10nEs extends L10n {
 
   @override
   String get g_storyAsteroidsLine0 =>
-      '¡Capitán! Primero, destruye asteroides para reunir mineral.';
+      'Necesitamos mineral para la base de Marte. Destruye primero tres asteroides.';
 
   @override
   String get g_storyAsteroidsLine1 =>
       '¡Muévete con el joystick y dispara con el botón de fuego!';
 
   @override
-  String get g_storyKillsTitle => 'Derriba 3 piratas';
+  String get g_storyKillsTitle => 'Derrotar 3 naves atacantes';
 
   @override
-  String get g_storyKillsLine0 => '¡Piratas en el radar! Sigue la flecha roja.';
+  String get g_storyKillsLine0 =>
+      'Naves desconocidas amenazan los puestos de enlace. Sigue las flechas rojas y detén a tres atacantes.';
 
   @override
-  String get g_storyKillsLine1 => '¿Piratas? ¡Son chatarra frente a mi nave!';
+  String get g_storyKillsLine1 => 'Abramos el camino. ¡Otros vendrán detrás!';
 
   @override
   String get g_storyColoniesTitle => 'Coloniza Marte';
 
   @override
   String get g_storyColoniesLine0 =>
-      'Funda tu primera colonia en Marte, el planeta rojo junto a la Tierra. Acércate y aparecerá el botón de colonizar.';
+      'Hagamos un hogar al que volver en Marte. Acércate y toca Colonizar.';
 
   @override
   String get g_storyColoniesLine1 =>
-      '¡Las colonias ganan créditos incluso mientras descansas!';
+      'Los créditos de los colonos nos ayudarán a preparar el próximo viaje.';
 
   @override
   String get g_storyShipLevelsTitle => 'Mejora tu nave en una estación';
 
   @override
   String get g_storyShipLevelsLine0 =>
-      'Vuelve a la Base Haven y mejora tu nave. Cerca de las estaciones también te reparas.';
+      'Mejora la nave para proteger la red de Haven. Vuelve a la base y equípala.';
 
   @override
   String get g_storyCrewTitle => 'Recluta 1 tripulante';
 
   @override
   String get g_storyCrewLine0 =>
-      '¿Te sientes solo? ¡Recluta a un compañero en la pestaña Tripulación del menú de la estación!';
+      'Necesitamos compañía para el largo viaje. Recluta a alguien en la pestaña Tripulación de la estación.';
 
   @override
   String get g_storyMissionsTitle => 'Completa 1 misión';
 
   @override
   String get g_storyMissionsLine0 =>
-      'Acepta un encargo en el tablón de misiones de la estación. ¡La paga es buena!';
+      'La gente de la ruta necesita ayuda. Acepta un encargo en el tablón de la estación.';
 
   @override
   String get g_storyStationsTitle => 'Construye una nueva estación';
 
   @override
   String get g_storyStationsLine0 =>
-      '¡Hora de expandirse! Construye una estación en el espacio abierto, lejos de los planetas.';
+      'Demos otro refugio a las naves de suministros. Construye una estación lejos de los planetas.';
 
   @override
-  String get g_storyDevPercentTitle => 'Desarrollo del sistema 100%';
+  String get g_storyDevPercentTitle => 'Estabilización del sistema 100%';
 
   @override
   String get g_storyDevPercentLine0 =>
-      'Sube todos los planetas a Lv.3 para abrir el siguiente sistema. ¡Mira el botón Sistema arriba a la derecha!';
+      'Alcanza una suma de niveles de Anclas de Fase igual a planetas × 3 para conectar los suministros y abrir la puerta. Consulta el botón Sistema.';
 
   @override
   String get g_storySectorTitle => 'Salta al siguiente sistema';
 
   @override
   String get g_storySectorLine0 =>
-      '¡La puerta de salto está abierta! Ve a la puerta morada del minimapa.';
+      'Hay otro punto de la grieta en el siguiente sistema. Ve a la puerta morada del minimapa.';
 
   @override
-  String get g_storySectorLine1 => '¡Todo un universo nuevo nos espera!';
+  String get g_storySectorLine1 =>
+      'Amplía la red de Anclas de Fase para proteger la Tierra.';
 
   @override
   String g_storyDevNTitle(int n) {
-    return 'Desarrollo del sistema $n 100%';
+    return 'Estabilización del sistema $n 100%';
   }
 
   @override
   String get g_storyDevNLine =>
-      '¡Sube todos los planetas del nuevo sistema a Lv.3!';
+      'Amplía la red aquí. La suma de niveles de Anclas de Fase debe llegar a planetas × 3 para abrir la siguiente puerta.';
 
   @override
   String g_systemN(int n) {
@@ -1857,7 +1913,7 @@ class L10nEs extends L10n {
 
   @override
   String get g_storyWarpNLine =>
-      'La puerta está abierta. ¿Nos adentramos más en el espacio?';
+      'La ruta está abierta. Establezcamos Anclas de Fase en el siguiente sistema.';
 
   @override
   String get g_powerUpRapid => 'Disparo rápido';
@@ -1902,6 +1958,9 @@ class L10nEs extends L10n {
   String get g_colonyBldShieldGen => 'Generador de escudo';
 
   @override
+  String get g_colonyBldStabilizer => 'Ancla de Fase';
+
+  @override
   String get g_colonyBldBlurbTurret =>
       'Dispara solo a los piratas cerca de la colonia. ¡Imprescindible contra asaltos!';
 
@@ -1918,6 +1977,15 @@ class L10nEs extends L10n {
   @override
   String get g_colonyBldBlurbShieldGen =>
       'Aumenta la capacidad del escudo y su velocidad de recarga.';
+
+  @override
+  String get g_colonyBldBlurbStabilizer =>
+      'Estabilización · escudo compartido\n+10 % de ingresos de la colonia por nivel';
+
+  @override
+  String g_stabilizerDamaged(String planet, int level) {
+    return 'El Ancla de Fase de $planet sufrió daños y bajó al nivel $level.';
+  }
 
   @override
   String get g_stationRoleHome => 'Base principal';
@@ -2075,7 +2143,7 @@ class L10nEs extends L10n {
 
   @override
   String get g_dlgWelcome =>
-      '¡Bienvenido, capitán! Soy Mina, tu primera oficial.';
+      'Bienvenido, capitán. Soy la científica espacial Mina.';
 
   @override
   String get g_dlgMissionsCancelled =>
@@ -2145,7 +2213,7 @@ class L10nEs extends L10n {
   String get g_merchantBye => '¡Hasta la próxima~ miau!';
 
   @override
-  String get g_pirateRaidTaunt => '¡Esta colonia ahora es nuestra! ¡Jajaja!';
+  String get g_pirateRaidTaunt => 'Destruyan primero las anclas de fase.';
 
   @override
   String get g_dlgMeteor =>
@@ -2307,7 +2375,7 @@ class L10nEs extends L10n {
 
   @override
   String g_pirateBossArrive(String sector) {
-    return '¡$sector es mío! ¡Ven si te atreves, capitancito!';
+    return 'Corten la red de enlace de $sector.';
   }
 
   @override
@@ -2346,16 +2414,17 @@ class L10nEs extends L10n {
   String get g_captainKill3 => '¡El siguiente!';
 
   @override
-  String get g_pirateAmbush0 => '¡Jajaja! ¡Suelta la carga!';
+  String get g_pirateAmbush0 =>
+      'Nave objetivo confirmada. Continúen la persecución.';
 
   @override
-  String get g_pirateAmbush1 => '¡Este es territorio de nuestra banda!';
+  String get g_pirateAmbush1 => 'Intercepten la expedición.';
 
   @override
-  String get g_pirateAmbush2 => '¡Entrega esos créditos brillantes!';
+  String get g_pirateAmbush2 => 'Aléjenlos de los transmisores.';
 
   @override
-  String get g_pirateAmbush3 => '¡Hoy no es tu día, mocoso!';
+  String get g_pirateAmbush3 => 'Objetivo localizado. Ataquen.';
 
   @override
   String get cat_sysSol => 'Sistema Solar';
@@ -3214,4 +3283,344 @@ class L10nEs extends L10n {
 
   @override
   String get m_cloudOverwriteOk => 'Sobrescribir';
+
+  @override
+  String get n_title => 'El plan Haven';
+
+  @override
+  String get n_signal => 'Visitante exterior';
+
+  @override
+  String get n_haven => 'Tiempo ganado';
+
+  @override
+  String get n_departure => 'Expedición Haven';
+
+  @override
+  String get n_mars => 'Preparar la transmisión';
+
+  @override
+  String get n_transmission => 'Primera transmisión';
+
+  @override
+  String get n_gate => 'Más allá del sistema solar';
+
+  @override
+  String get n_signalSpeaker => 'científica espacial Mina';
+
+  @override
+  String get n_settler => 'Habitante de la colonia';
+
+  @override
+  String get n_earthReport => 'Informe de la Tierra';
+
+  @override
+  String get n_open0 =>
+      'La detección de partículas de antimateria sigue aumentando.\nA este ritmo, una Tierra de antimateria entrará en el sistema solar.';
+
+  @override
+  String get n_open1 =>
+      'Mi Ancla de Fase superó su primera prueba con el antiguo MOTOR CENTRAL de Haven. Aún ignoramos quién lo construyó, pero frenó la Tierra de antimateria.';
+
+  @override
+  String get n_open2 =>
+      'Yo instalaré las anclas.\nFundaremos colonias y conectaremos la red de transmisión con Haven.';
+
+  @override
+  String get n_open3 => 'Haven está activo. Seguid a la expedición.';
+
+  @override
+  String get n_enemyCommander => 'Transmisión sin identificar';
+
+  @override
+  String get n_mars0 =>
+      'El asentamiento está listo, capitán. ¿Ya podemos enviar energía a la Tierra?';
+
+  @override
+  String get n_mars1 =>
+      'Aún no. Primero debemos construir un Ancla de Fase y conectarlo a Haven.';
+
+  @override
+  String get n_mars2 =>
+      'Asaltantes desconocidos atacan el Ancla de Fase. Protege los dispositivos y los escudos.';
+
+  @override
+  String get n_transmission0 =>
+      'Ancla de Fase activa. Haven confirma la recepción de la primera transmisión.\n\nLa energía que reunimos llegó a la Tierra.';
+
+  @override
+  String get n_transmission1 =>
+      'Una escuela cerrada por el racionamiento eléctrico ha reabierto. Los niños vuelven a clase.\n\nSigue transmitiendo. Protege el equipo y los escudos, y amplía la red.';
+
+  @override
+  String get n_warp0 =>
+      'La red solar es estable, pero la energía de la Tierra y del sistema solar no basta. Necesitamos energía de otros sistemas para frenar más la Tierra de antimateria.';
+
+  @override
+  String get n_warp1 =>
+      'Mantén esta red transmitiendo y construye colonias y anclas en otros sistemas. Rumbo a Alfa Centauri, capitán.';
+
+  @override
+  String get n_next => 'Siguiente';
+
+  @override
+  String get n_skip => 'Saltar escena';
+
+  @override
+  String get n_launch => 'Despegar';
+
+  @override
+  String get g_antimatterEarth => 'Tierra de antimateria';
+
+  @override
+  String get u_antimatterHint =>
+      'Aún está fuera de las órbitas planetarias. Más Anclas de Fase frenarán su avance.';
+
+  @override
+  String get c_endingTitle => 'La Tierra está a salvo';
+
+  @override
+  String get c_endingBody =>
+      'La Tierra de antimateria ha sido alejada. Todas las colonias ayudaron a proteger la Tierra y la colonización continúa.';
+
+  @override
+  String get c_finalTitle => 'Operación final';
+
+  @override
+  String get c_stabilize => 'Completa la red local de anclas al 100%';
+
+  @override
+  String get c_syncReady => 'Ve al repetidor de Haven y sincroniza';
+
+  @override
+  String c_syncProgress(int percent) {
+    return 'Sincronización $percent%';
+  }
+
+  @override
+  String get c_guardian => 'Derrota al guardián del núcleo';
+
+  @override
+  String get c_counterattack => 'Vuelve al repetidor e invierte la transmisión';
+
+  @override
+  String get c_complete => 'Misión cumplida';
+
+  @override
+  String get c_syncButton => 'Sincronizar nave';
+
+  @override
+  String get c_fireButton => 'Invertir transmisión';
+
+  @override
+  String get c_guardianName => 'Guardián del núcleo';
+
+  @override
+  String c_title(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': 'Repetidor de Alfa Centauri',
+      '5': 'Ataque en Sirio',
+      '8': 'Diferencia en Tau Ceti',
+      '12': 'Canal oculto',
+      '16': 'Órdenes recuperadas',
+      '20': 'El núcleo sembrado',
+      '22': 'Rastro extragaláctico',
+      '25': 'Control manual de fase',
+      '26': 'Triángulo: M33 X-7',
+      'other': 'Ampliar la red',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_body(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1':
+          'La primera transmisión extrasolar ha llegado a Haven. Las anclas de otros sistemas pueden contribuir a la defensa de la Tierra.',
+      '5':
+          'La red ampliada refuerza la defensa de la Tierra. Unos asaltantes desconocidos atacan los repetidores a propósito.',
+      '8':
+          'Haven recibe algo menos de energía de la que emite Tau Ceti. Mantengan la defensa mientras investigamos.',
+      '12':
+          'El análisis de los registros de transmisión acumulados revela un canal saliente no documentado en el núcleo de Haven. Las Anclas de Fase funcionan bien.',
+      '16':
+          'Interceptamos registros de órdenes enemigas durante el viaje. Los asaltantes son la Secesión y obedecen a amos alienígenas.',
+      '20':
+          'Los archivos alienígenas de Kepler-90 muestran el mismo diseño de núcleo. El antiguo artefacto hallado en la Tierra fue colocado allí a propósito.',
+      '22':
+          'Al comparar los registros de Kepler-90 con el rastro de energía, descubrimos una ruta fuera de la galaxia. Los alienígenas enviaron la Tierra de antimateria para obligarnos a reunir energía; el núcleo roba una parte de la defensa necesaria.',
+      '25':
+          'He encontrado cómo aislar el control automático alienígena. Usaremos tu nave como punto de control directo de Haven.',
+      '26':
+          'Esta es la región de origen alienígena, Triángulo M33 X-7. Completa la red local de anclas, sincroniza tu nave en el repetidor de Haven, vence al guardián del núcleo y vuelve al repetidor para invertir la transmisión.',
+      'other':
+          'Funda colonias y mantén las Anclas de Fase transmitiendo. La Tierra aún necesita su energía.',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_task(String task) {
+    String _temp0 = intl.Intl.selectLogic(task, {
+      'anchor': 'Construir o reparar un ancla',
+      's1_0': 'Probar la transmisión del ancla',
+      's5': 'Derrotar a los asaltantes',
+      's5_0': 'Verificar la transmisión restaurada',
+      's8_0': 'Medir la potencia del ancla',
+      's8_1': 'Comparar registros en Haven',
+      's12_0': 'Examinar el circuito oculto del núcleo',
+      's16': 'Derrotar la nave de mando',
+      's16_0': 'Recuperar órdenes de los restos',
+      's20_0': 'Investigar el núcleo en las ruinas',
+      's22_0': 'Observar la fuga de energía',
+      's22_1': 'Comparar archivos alienígenas en Haven',
+      's25_0': 'Aislar el control automático en Haven',
+      'other': 'Ampliar la red',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get c_operate => 'Iniciar operación';
+
+  @override
+  String get c_finishOperation => 'Completar la operación regional';
+
+  @override
+  String get c_reverseResult =>
+      'La nave y Haven siguen sincronizados. La energía de las colonias se transmite en sentido inverso y aleja la Tierra de antimateria.';
+
+  @override
+  String get c_severanceName => 'Severance';
+
+  @override
+  String get u_sharedShield => 'Escudo compartido';
+
+  @override
+  String get u_supportOffline => 'Apoyo de Haven inactivo';
+
+  @override
+  String u_systemTrait(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest':
+          'Nido pirata · Intervalo de aparición ×0.7, recompensas por bajas ×1.5',
+      'richVeins': 'Vetas ricas · Mineral colonial ×2, mineral extraído ×1.5',
+      'solarFlare':
+          'Erupción estelar · Créditos coloniales ×1.25, regeneración de escudos ×0.5',
+      'ionNebula':
+          'Nebulosa iónica · Recarga de habilidades ×0.7, daño de torretas coloniales/estaciones ×0.7',
+      'gravityWell':
+          'Pozo gravitatorio · Velocidad máxima ×0.85, recompensas de combate/misiones ×1.3',
+      'tradeLane':
+          'Ruta comercial · Precio de venta del mineral ×1.3, frecuencia de asaltos coloniales ×1.3',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_traitIntro(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest':
+          '¡Un nido pirata! Llegan más piratas, pero pagan más por sus bajas. ¡Prepárate para cazar!',
+      'richVeins':
+          '¡Vetas ricas! Las colonias producen el doble de mineral y los asteroides dan 1,5 veces más. ¡A minar!',
+      'solarFlare':
+          '¡Fuertes erupciones! Más créditos coloniales, pero los escudos se regeneran a la mitad. ¡Cuida las defensas!',
+      'ionNebula':
+          '¡Una nebulosa iónica! Recarga de habilidades y daño de torretas de colonias y estaciones: ×0.7. ¡Apoya con tus habilidades!',
+      'gravityWell':
+          '¡Un pozo gravitatorio! Velocidad máxima ×0.85 y recompensas de combate y misiones ×1.3. ¡Elige una misión!',
+      'tradeLane':
+          '¡Una ruta comercial! Precio del mineral y frecuencia de asaltos coloniales: ×1.3. ¡Comercia sin perder de vista las alertas!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get u_specTitle => 'Especialización';
+
+  @override
+  String u_specName(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': 'Industria',
+      'mining': 'Minería',
+      'fortress': 'Fortaleza',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specEffect(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': 'Producción de créditos ×1.5',
+      'mining': 'Producción de mineral ×2.5',
+      'fortress':
+          'Escudo ×2 · daño de torretas ×1.5 · no pierde nivel en asaltos',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specLocked(int level) {
+    return 'Especialización disponible en el nivel $level';
+  }
+
+  @override
+  String u_specInactive(int level) {
+    return 'Solo activa desde el nivel $level';
+  }
+
+  @override
+  String get u_specFree => 'Gratis';
+
+  @override
+  String get u_specChoose => 'Especializar';
+
+  @override
+  String g_dlgSpecUnlocked(String planet) {
+    return '¡$planet llegó al nivel 5! Ya puedes elegir una especialización: Industria para créditos, Minería para mineral y Fortaleza para defensa. ¡La primera elección es gratis!';
+  }
+
+  @override
+  String g_dlgRaidFortress(String planet) {
+    return 'La fortaleza de $planet resistió el asalto. ¡Conserva su nivel!';
+  }
+
+  @override
+  String u_bossName(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '☠ Almirante pirata',
+      'devourer': '☠ Devorador de vetas',
+      'flare': '☠ Cañonero de erupción',
+      'wraith': '☠ Espectro iónico',
+      'gravity': '☠ Señor gravitatorio',
+      'plunder': '☠ Mercante saqueador',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_dlgBossArchetype(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet':
+          '¡Alerta! El Almirante pirata no deja de llamar escoltas asaltantes. ¡Ataca al jefe antes de que se acumulen!',
+      'devourer':
+          '¡Alerta! El Devorador de vetas siembra minas a su alrededor. ¡Destrúyelas mientras luchas!',
+      'flare':
+          '¡Alerta! El Cañonero de erupción: cuando veas las líneas de mira, llega un láser triple. ¡Esquiva de lado!',
+      'wraith':
+          '¡Alerta! El Espectro iónico desaparece cada 4 segundos. ¡Ataca cuando sea visible!',
+      'gravity':
+          '¡Alerta! El Señor gravitatorio te atrae si te acercas. ¡Usa el impulso para escapar!',
+      'plunder':
+          '¡Alerta! El Mercante saqueador es rápido y roba créditos con cada impacto. ¡Derríbalo para recuperarlos todos!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 }

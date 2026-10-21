@@ -422,7 +422,7 @@ class L10nRu extends L10n {
 
   @override
   String u_hudSector(String sector, int dev, String threat, String value) {
-    return '$sector · Разв. $dev%\n⚠ Угроза $threat  🏛 $value';
+    return '$sector · Стаб. $dev%\n⚠ Угроза $threat  🏛 $value';
   }
 
   @override
@@ -446,7 +446,7 @@ class L10nRu extends L10n {
 
   @override
   String u_gateLocked(int pct) {
-    return '🔒 Откроется при 100% развития ($pct%)';
+    return '🔒 Откроется при 100% Стабилизация ($pct%)';
   }
 
   @override
@@ -498,7 +498,7 @@ class L10nRu extends L10n {
   String get u_spkPirate => 'Пират';
 
   @override
-  String get u_spkAdvisor => 'Лейт. Мина';
+  String get u_spkAdvisor => 'космический учёный Мина';
 
   @override
   String get u_spkMerchant => 'Торговка Нян';
@@ -604,7 +604,7 @@ class L10nRu extends L10n {
 
   @override
   String u_development(int pct) {
-    return 'Развитие $pct%';
+    return 'Стабилизация $pct%';
   }
 
   @override
@@ -614,7 +614,58 @@ class L10nRu extends L10n {
   String get u_opensAt100 => 'Откроется при 100%';
 
   @override
-  String get u_devHint => 'Прокачайте каждую планету до Lv.3 для 100%';
+  String get u_devHint =>
+      '100% при сумме уровней Фазовый якорьов, равной числу планет × 3';
+
+  @override
+  String u_stabilizerHealth(int hp, int max) {
+    return 'Прочность $hp/$max';
+  }
+
+  @override
+  String g_foeIntro(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'missile': 'Ракетоносец! Его ракеты наводятся на вас, но их можно сбить.',
+      'laser':
+          'Лазерный корабль целится! Увидите красную линию — уходите в сторону.',
+      'warden':
+          'Страж щита защищает пиратов рядом. В синем кольце враги получают вдвое меньше урона — бейте стража первым!',
+      'carrier':
+          'Авианосец дронов! Он постоянно выпускает дронов, атакуйте носитель первым.',
+      'phantom': 'Фантом исчезает и появляется. Стреляйте, пока он виден!',
+      'mine':
+          'Минный заградитель! Жёлтые мины взрываются вблизи, но их можно расстрелять.',
+      'medic': 'Ремонтник чинит пиратов. Уничтожьте его в тылу первым!',
+      'juggernaut':
+          'Джаггернаут! Лобовая броня крепкая — цельтесь в борта или корму и уклоняйтесь от тарана.',
+      'other': 'Новый враг!',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_levelUnlockAtSystem(int level, int system) {
+    return 'Ур.$level откроется в звёздной системе $system';
+  }
+
+  @override
+  String get u_myColonies => 'Мои колонии';
+
+  @override
+  String get u_myColoniesHint =>
+      'Улучшайте любую колонию отсюда, где бы вы ни были.';
+
+  @override
+  String get u_noColonies =>
+      'Колоний пока нет. Подлетите к планете и заселите её.';
+
+  @override
+  String get u_currentHere => 'Вы здесь';
+
+  @override
+  String u_anchorEffect(int income, int shield, int regen) {
+    return 'Доход +$income% · Общий щит $shield · Восст. +$regen%';
+  }
 
   @override
   String get u_conqueredSystems => 'Захваченные системы (продолжают добычу)';
@@ -632,7 +683,7 @@ class L10nRu extends L10n {
 
   @override
   String u_sectorDev(String name, int pct) {
-    return '$name · Разв. $pct%';
+    return '$name · Стаб. $pct%';
   }
 
   @override
@@ -1232,11 +1283,11 @@ class L10nRu extends L10n {
 
   @override
   String get g_shipNovaAbility =>
-      'Пробивные снаряды: каждый пробивает до 2 врагов';
+      'Пробивные снаряды: каждый пробивает до 3 врагов';
 
   @override
   String get g_shipAuroraAbility =>
-      'Самопочинка: 3% ОЗ/с, если 3с без урона\nЗащита: блокирует 1 удар каждые 8с';
+      'Самопочинка: 5% ОЗ/с, если 3с без урона\nЗащита: блокирует 1 удар каждые 5с';
 
   @override
   String g_crewLegendPerk(int pct) {
@@ -1764,86 +1815,87 @@ class L10nRu extends L10n {
 
   @override
   String get g_storyAsteroidsLine0 =>
-      'Капитан! Для начала разбейте астероиды и соберите руду.';
+      'Для базы на Марсе нужна руда. Сначала разбейте три астероида.';
 
   @override
   String get g_storyAsteroidsLine1 =>
       'Двигайтесь джойстиком и стреляйте кнопкой огня!';
 
   @override
-  String get g_storyKillsTitle => 'Сбейте 3 пиратов';
+  String get g_storyKillsTitle => 'Уничтожить 3 атакующих корабля';
 
   @override
   String get g_storyKillsLine0 =>
-      'Пираты на радаре! Следуйте за красной стрелкой.';
+      'Неизвестные корабли атакуют ретрансляторы. Следуйте красным стрелкам и остановите три корабля.';
 
   @override
-  String get g_storyKillsLine1 =>
-      'Пираты? Перед моим кораблём они просто металлолом!';
+  String get g_storyKillsLine1 => 'Освободим путь. За нами придут другие!';
 
   @override
   String get g_storyColoniesTitle => 'Освойте Марс';
 
   @override
   String get g_storyColoniesLine0 =>
-      'Основайте первую колонию на Марсе — красной планете рядом с Землёй. Подлетите ближе, и появится кнопка заселения.';
+      'Создадим на Марсе место для возвращения. Подлетите и нажмите кнопку заселения.';
 
   @override
   String get g_storyColoniesLine1 =>
-      'Колонии приносят кредиты, даже пока вы отдыхаете!';
+      'Кредиты жителей помогут нам подготовить следующий полёт.';
 
   @override
   String get g_storyShipLevelsTitle => 'Улучшите корабль на станции';
 
   @override
   String get g_storyShipLevelsLine0 =>
-      'Вернитесь на базу «Приют» и улучшите корабль. Рядом со станциями корабль ещё и чинится.';
+      'Улучшите корабль, чтобы защищать сеть Хейвена. Вернитесь на базу для переоснащения.';
 
   @override
   String get g_storyCrewTitle => 'Наймите 1 члена экипажа';
 
   @override
   String get g_storyCrewLine0 =>
-      'Одному скучно? Наймите товарища во вкладке «Экипаж» в меню станции!';
+      'Для долгого пути нужны товарищи. Наймите одного во вкладке экипажа на станции.';
 
   @override
   String get g_storyMissionsTitle => 'Выполните 1 задание';
 
   @override
   String get g_storyMissionsLine0 =>
-      'Возьмите заказ на доске заданий станции. Награда приятная.';
+      'Людям на маршруте тоже нужна помощь. Возьмите заказ на доске заданий станции.';
 
   @override
   String get g_storyStationsTitle => 'Постройте новую станцию';
 
   @override
   String get g_storyStationsLine0 =>
-      'Пора расширяться! Постройте станцию в открытом космосе подальше от планет.';
+      'Пусть у кораблей снабжения будет ещё одна остановка. Постройте станцию вдали от планет.';
 
   @override
-  String get g_storyDevPercentTitle => 'Развитие системы 100%';
+  String get g_storyDevPercentTitle => 'Стабилизация системы 100%';
 
   @override
   String get g_storyDevPercentLine0 =>
-      'Прокачайте все планеты до Lv.3, и откроется следующая система. Смотрите кнопку «Система» справа вверху!';
+      'Доведите сумму уровней Фазовый якорьов до числа планет × 3, чтобы соединить снабжение и открыть врата. Проверьте кнопку системы.';
 
   @override
   String get g_storySectorTitle => 'Варп в следующую систему';
 
   @override
   String get g_storySectorLine0 =>
-      'Варп-врата открыты! Летите к фиолетовым вратам на миникарте.';
+      'В следующей системе есть ещё один узел разлома. Летите к фиолетовым вратам на мини-карте.';
 
   @override
-  String get g_storySectorLine1 => 'Впереди целая новая вселенная!';
+  String get g_storySectorLine1 =>
+      'Расширяйте сеть Фазовый якорьов, чтобы защитить Землю.';
 
   @override
   String g_storyDevNTitle(int n) {
-    return 'Развитие системы $n: 100%';
+    return 'Стабилизация системы $n: 100%';
   }
 
   @override
-  String get g_storyDevNLine => 'Прокачайте все планеты новой системы до Lv.3!';
+  String get g_storyDevNLine =>
+      'Расширяйте сеть здесь. Для открытия следующих врат сумма уровней Фазовый якорьов должна достичь числа планет × 3.';
 
   @override
   String g_systemN(int n) {
@@ -1856,7 +1908,8 @@ class L10nRu extends L10n {
   }
 
   @override
-  String get g_storyWarpNLine => 'Врата открыты. Отправимся глубже в космос?';
+  String get g_storyWarpNLine =>
+      'Путь открыт. Построим Фазовые якоря в следующей системе.';
 
   @override
   String get g_powerUpRapid => 'Скорострел';
@@ -1901,6 +1954,9 @@ class L10nRu extends L10n {
   String get g_colonyBldShieldGen => 'Генератор щита';
 
   @override
+  String get g_colonyBldStabilizer => 'Фазовый якорь';
+
+  @override
   String get g_colonyBldBlurbTurret =>
       'Сама сбивает пиратов возле колонии. Без неё от налётов не отбиться!';
 
@@ -1918,6 +1974,15 @@ class L10nRu extends L10n {
   @override
   String get g_colonyBldBlurbShieldGen =>
       'Увеличивает запас щита и скорость перезарядки.';
+
+  @override
+  String get g_colonyBldBlurbStabilizer =>
+      'Стабилизация · общий щит\n+10% дохода колонии за уровень';
+
+  @override
+  String g_stabilizerDamaged(String planet, int level) {
+    return 'Фазовый якорь на $planet повреждён и опустился до уровня $level.';
+  }
 
   @override
   String get g_stationRoleHome => 'Главная база';
@@ -2072,7 +2137,8 @@ class L10nRu extends L10n {
   }
 
   @override
-  String get g_dlgWelcome => 'Добро пожаловать, капитан! Я Мина, ваш старпом.';
+  String get g_dlgWelcome =>
+      'Добро пожаловать, капитан. Я космический учёный Мина.';
 
   @override
   String get g_dlgMissionsCancelled =>
@@ -2140,7 +2206,7 @@ class L10nRu extends L10n {
   String get g_merchantBye => 'До новых встреч~ мяу!';
 
   @override
-  String get g_pirateRaidTaunt => 'Теперь эта колония наша! Ха-ха-ха!';
+  String get g_pirateRaidTaunt => 'Сначала уничтожить фазовые якоря.';
 
   @override
   String get g_dlgMeteor =>
@@ -2302,7 +2368,7 @@ class L10nRu extends L10n {
 
   @override
   String g_pirateBossArrive(String sector) {
-    return '$sector — мои владения! Ну давай, капитан-малявка!';
+    return 'Отключить сеть ретрансляторов в $sector.';
   }
 
   @override
@@ -2341,16 +2407,16 @@ class L10nRu extends L10n {
   String get g_captainKill3 => 'Следующий!';
 
   @override
-  String get g_pirateAmbush0 => 'Ха-ха-ха! Груз на бочку!';
+  String get g_pirateAmbush0 => 'Цель подтверждена. Продолжить преследование.';
 
   @override
-  String get g_pirateAmbush1 => 'Это территория нашей банды!';
+  String get g_pirateAmbush1 => 'Перехватить экспедицию.';
 
   @override
-  String get g_pirateAmbush2 => 'Гони блестящие кредиты!';
+  String get g_pirateAmbush2 => 'Не подпускать их к передатчикам.';
 
   @override
-  String get g_pirateAmbush3 => 'Не твой сегодня день, малыш!';
+  String get g_pirateAmbush3 => 'Цель захвачена. Начать атаку.';
 
   @override
   String get cat_sysSol => 'Солнечная система';
@@ -3293,4 +3359,344 @@ class L10nRu extends L10n {
 
   @override
   String get m_cloudOverwriteOk => 'Перезаписать';
+
+  @override
+  String get n_title => 'План «Хейвен»';
+
+  @override
+  String get n_signal => 'Гость извне';
+
+  @override
+  String get n_haven => 'Выигранное время';
+
+  @override
+  String get n_departure => 'Экспедиция «Хейвен»';
+
+  @override
+  String get n_mars => 'Подготовка передачи';
+
+  @override
+  String get n_transmission => 'Первая передача';
+
+  @override
+  String get n_gate => 'За пределы Солнечной системы';
+
+  @override
+  String get n_signalSpeaker => 'космический учёный Мина';
+
+  @override
+  String get n_settler => 'Житель колонии';
+
+  @override
+  String get n_earthReport => 'Сводка с Земли';
+
+  @override
+  String get n_open0 =>
+      'Мы регистрируем всё больше частиц антиматерии.\nТакими темпами антиматериальная Земля войдёт в Солнечную систему.';
+
+  @override
+  String get n_open1 =>
+      'Мой Фазовый якорь прошёл первое испытание с древним ЯДЕРНЫМ ДВИГАТЕЛЕМ «Хейвена». Мы не знаем, кто создал ядро, но оно замедлило антиматериальную Землю.';
+
+  @override
+  String get n_open2 =>
+      'Я установлю якоря.\nМы основаем колонии и свяжем передающую сеть с «Хейвеном».';
+
+  @override
+  String get n_open3 => '«Хейвен» заработал. Следите за экспедицией.';
+
+  @override
+  String get n_enemyCommander => 'Неизвестный источник';
+
+  @override
+  String get n_mars0 =>
+      'Поселение готово, капитан. Мы уже можем передавать энергию на Землю?';
+
+  @override
+  String get n_mars1 =>
+      'Пока нет. Сначала нужно построить Фазовый якорь и подключить его к «Хейвену».';
+
+  @override
+  String get n_mars2 =>
+      'Неизвестные налётчики атакуют Фазовый якорь. Защитите устройства и щиты.';
+
+  @override
+  String get n_transmission0 =>
+      'Фазовый якорь включён. «Хейвен» подтверждает получение первой передачи.\n\nСобранная энергия достигла Земли.';
+
+  @override
+  String get n_transmission1 =>
+      'Школа, закрытая из-за ограничения подачи энергии, снова открылась. Дети вернулись на занятия.\n\nПродолжайте передачу. Защищайте оборудование и щиты, расширяйте сеть.';
+
+  @override
+  String get n_warp0 =>
+      'Сеть Солнечной системы устойчива, но энергии Земли и Солнца недостаточно. Чтобы ещё замедлить антиматериальную Землю, нужны другие звёздные системы.';
+
+  @override
+  String get n_warp1 =>
+      'Сохраняйте передачу и стройте колонии с якорями в других системах. Курс на Альфу Центавра, капитан.';
+
+  @override
+  String get n_next => 'Далее';
+
+  @override
+  String get n_skip => 'Пропустить сцену';
+
+  @override
+  String get n_launch => 'Вылет';
+
+  @override
+  String get g_antimatterEarth => 'Антиматериальная Земля';
+
+  @override
+  String get u_antimatterHint =>
+      'Она ещё за пределами планетных орбит. Больше Фазовый якорьов замедлит её приближение.';
+
+  @override
+  String get c_endingTitle => 'Земля в безопасности';
+
+  @override
+  String get c_endingBody =>
+      'Антиматериальная Земля отправлена прочь. Каждая колония помогла защитить Землю, и освоение продолжается.';
+
+  @override
+  String get c_finalTitle => 'Последняя операция';
+
+  @override
+  String get c_stabilize => 'Довести местную сеть якорей до 100%';
+
+  @override
+  String get c_syncReady =>
+      'Лететь к ретранслятору «Хейвена» для синхронизации';
+
+  @override
+  String c_syncProgress(int percent) {
+    return 'Синхронизация $percent%';
+  }
+
+  @override
+  String get c_guardian => 'Победить стража ядра';
+
+  @override
+  String get c_counterattack => 'Вернуться к ретранслятору и обратить передачу';
+
+  @override
+  String get c_complete => 'Задание выполнено';
+
+  @override
+  String get c_syncButton => 'Синхронизировать корабль';
+
+  @override
+  String get c_fireButton => 'Запустить обратную передачу';
+
+  @override
+  String get c_guardianName => 'Страж ядра';
+
+  @override
+  String c_title(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': 'Ретранслятор Альфы Центавра',
+      '5': 'Нападение у Сириуса',
+      '8': 'Недостача у Тау Кита',
+      '12': 'Скрытый канал',
+      '16': 'Перехваченные приказы',
+      '20': 'Подброшенное ядро',
+      '22': 'След за пределами галактики',
+      '25': 'Ручное управление фазой',
+      '26': 'Треугольник: M33 X-7',
+      'other': 'Расширить сеть',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_body(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1':
+          'Первая передача из-за пределов Солнечной системы достигла Хейвена. Якоря других систем могут участвовать в защите Земли.',
+      '5':
+          'Расширенная сеть усиливает защиту Земли. Неизвестные налётчики намеренно атакуют ретрансляторы.',
+      '8':
+          '«Хейвен» получает немного меньше энергии, чем выдаёт Тау Кита. Продолжайте защиту, пока мы выясняем причину.',
+      '12':
+          'Анализ накопленных записей передачи выявил неописанный выходной канал в ядре «Хейвена». Фазовые якоря работают исправно.',
+      '16':
+          'Во время полёта мы перехватили записи вражеских приказов. Налётчики принадлежат группировке «Разрыв» и подчиняются инопланетным хозяевам.',
+      '20':
+          'В инопланетных архивах Кеплера-90 найден тот же проект ядра. Древний артефакт на Земле был оставлен там намеренно.',
+      '22':
+          'Сопоставление записей Кеплера-90 с энергетическим следом выявило путь за пределы галактики. Инопланетяне послали антиматериальную Землю, чтобы заставить нас собирать энергию; ядро крадёт часть необходимой защиты.',
+      '25':
+          'Я нашла способ изолировать инопланетное автоматическое управление. Ваш корабль станет пунктом прямого управления «Хейвеном».',
+      '26':
+          'Это область происхождения инопланетян — галактика Треугольника M33 X-7. Завершите местную сеть якорей, синхронизируйте корабль у ретранслятора «Хейвена», победите стража ядра и вернитесь к ретранслятору, чтобы обратить передачу.',
+      'other':
+          'Основывайте колонии и поддерживайте передачу Фазовых якорей. Земле всё ещё нужна их энергия.',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_task(String task) {
+    String _temp0 = intl.Intl.selectLogic(task, {
+      'anchor': 'Построить или починить якорь',
+      's1_0': 'Испытать передачу у якоря',
+      's5': 'Уничтожить налётчиков',
+      's5_0': 'Проверить восстановление передачи',
+      's8_0': 'Измерить мощность якоря',
+      's8_1': 'Сравнить журналы в Хейвене',
+      's12_0': 'Исследовать скрытую цепь ядра',
+      's16': 'Уничтожить командный корабль',
+      's16_0': 'Забрать приказы из обломков',
+      's20_0': 'Изучить ядро в руинах',
+      's22_0': 'Исследовать утечку энергии',
+      's22_1': 'Сравнить записи пришельцев в Хейвене',
+      's25_0': 'Изолировать автоматику в Хейвене',
+      'other': 'Расширить сеть',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get c_operate => 'Начать операцию';
+
+  @override
+  String get c_finishOperation => 'Завершите операцию региона';
+
+  @override
+  String get c_reverseResult =>
+      'Корабль и Хейвен синхронизированы. Энергия колоний идёт по сети в обратном направлении и отталкивает антиматериальную Землю.';
+
+  @override
+  String get c_severanceName => 'Северанс';
+
+  @override
+  String get u_sharedShield => 'Общий щит';
+
+  @override
+  String get u_supportOffline => 'Поддержка Хейвена недоступна';
+
+  @override
+  String u_systemTrait(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest':
+          'Пиратское гнездо · Интервал появления ×0.7, награда за пиратов ×1.5',
+      'richVeins': 'Богатые жилы · Руда колоний ×2, добытая руда ×1.5',
+      'solarFlare':
+          'Звёздная вспышка · Кредиты колоний ×1.25, восстановление щитов ×0.5',
+      'ionNebula':
+          'Ионная туманность · Перезарядка навыков ×0.7, урон турелей колоний/станций ×0.7',
+      'gravityWell':
+          'Гравитационный колодец · Макс. скорость ×0.85, награды за бои/задания ×1.3',
+      'tradeLane':
+          'Торговый путь · Цена продажи руды ×1.3, частота набегов на колонии ×1.3',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_traitIntro(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest':
+          'Пиратское гнездо! Пираты появляются чаще, зато награды выше. Готовьтесь к охоте!',
+      'richVeins':
+          'Богатые жилы! Колонии дают вдвое больше руды, астероиды — в полтора раза. Начнём добычу!',
+      'solarFlare':
+          'Сильные вспышки! Колонии приносят больше кредитов, но щиты восстанавливаются вдвое медленнее. Позаботьтесь о защите!',
+      'ionNebula':
+          'Ионная туманность! Перезарядка навыков и урон турелей колоний и станций — ×0.7. Поддержите их навыками!',
+      'gravityWell':
+          'Гравитационный колодец! Макс. скорость ×0.85, награды за бои и задания ×1.3. Выберите задание!',
+      'tradeLane':
+          'Торговый путь! Цена руды и частота набегов на колонии — ×1.3. Торгуйте, следя за тревогами!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get u_specTitle => 'Специализация';
+
+  @override
+  String u_specName(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': 'Промышленность',
+      'mining': 'Добыча',
+      'fortress': 'Крепость',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specEffect(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': 'Доход кредитов ×1.5',
+      'mining': 'Добыча руды ×2.5',
+      'fortress': 'Щит ×2 · урон турелей ×1.5 · набеги не снижают уровень',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specLocked(int level) {
+    return 'Специализация откроется на ур.$level';
+  }
+
+  @override
+  String u_specInactive(int level) {
+    return 'Действует только с ур.$level';
+  }
+
+  @override
+  String get u_specFree => 'Бесплатно';
+
+  @override
+  String get u_specChoose => 'Выбрать специализацию';
+
+  @override
+  String g_dlgSpecUnlocked(String planet) {
+    return '$planet: колония достигла ур.5! Теперь можно выбрать специализацию: промышленность даёт кредиты, добыча — руду, крепость — защиту. Первый выбор бесплатный!';
+  }
+
+  @override
+  String g_dlgRaidFortress(String planet) {
+    return '$planet: крепость выдержала набег. Уровень сохранён!';
+  }
+
+  @override
+  String u_bossName(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '☠ Пиратский адмирал',
+      'devourer': '☠ Пожиратель жил',
+      'flare': '☠ Канонерка вспышек',
+      'wraith': '☠ Ионный призрак',
+      'gravity': '☠ Гравитационный владыка',
+      'plunder': '☠ Торговец-грабитель',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_dlgBossArchetype(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet':
+          'Внимание! Пиратский адмирал постоянно вызывает эскорт налётчиков. Бейте босса, пока их не стало много!',
+      'devourer':
+          'Внимание! Пожиратель жил разбрасывает вокруг мины. Сбивайте их в бою!',
+      'flare':
+          'Внимание! Канонерка вспышек: когда появятся линии прицела, последует тройной лазер. Уходите в сторону!',
+      'wraith':
+          'Внимание! Ионный призрак исчезает каждые 4 секунды. Атакуйте, пока он виден!',
+      'gravity':
+          'Внимание! Гравитационный владыка притягивает вас вблизи. Вырывайтесь ускорением!',
+      'plunder':
+          'Внимание! Торговец-грабитель быстр и крадёт кредиты при каждом попадании. Уничтожьте его, чтобы вернуть всё!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 }

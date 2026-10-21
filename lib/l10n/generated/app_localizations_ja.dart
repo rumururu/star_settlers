@@ -411,7 +411,7 @@ class L10nJa extends L10n {
 
   @override
   String u_hudSector(String sector, int dev, String threat, String value) {
-    return '$sector · 発展 $dev%\n⚠ 脅威 $threat  🏛 $value';
+    return '$sector · 安定化 $dev%\n⚠ 脅威 $threat  🏛 $value';
   }
 
   @override
@@ -435,7 +435,7 @@ class L10nJa extends L10n {
 
   @override
   String u_gateLocked(int pct) {
-    return '🔒 発展度100%で開きます ($pct%)';
+    return '🔒 安定化100%で開きます ($pct%)';
   }
 
   @override
@@ -486,7 +486,7 @@ class L10nJa extends L10n {
   String get u_spkPirate => '海賊';
 
   @override
-  String get u_spkAdvisor => '副官ミナ';
+  String get u_spkAdvisor => '宇宙科学者ミナ';
 
   @override
   String get u_spkMerchant => '商人ニャンニャン';
@@ -592,7 +592,7 @@ class L10nJa extends L10n {
 
   @override
   String u_development(int pct) {
-    return '発展度 $pct%';
+    return '安定化 $pct%';
   }
 
   @override
@@ -602,7 +602,50 @@ class L10nJa extends L10n {
   String get u_opensAt100 => '100%で開放';
 
   @override
-  String get u_devHint => 'すべての惑星をLv.3にすると100%';
+  String get u_devHint => '位相アンカーのレベル合計が惑星数 × 3で100%';
+
+  @override
+  String u_stabilizerHealth(int hp, int max) {
+    return '耐久度 $hp/$max';
+  }
+
+  @override
+  String g_foeIntro(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'missile': '誘導弾艦です！ミサイルが追ってきますが、撃ち落とせます。',
+      'laser': 'レーザー艦が狙っています！赤い照準線が見えたら横へ避けて。',
+      'warden': 'シールド艦が近くの海賊を守っています。青い輪の中の敵はダメージ半減、先にシールド艦を！',
+      'carrier': 'ドローン母艦です！ドローンを出し続けるので母艦を先に狙って。',
+      'phantom': 'ファントムが消えては現れます。姿を見せた瞬間に集中砲火を！',
+      'mine': '機雷敷設艦です！黄色い機雷は近づくと爆発しますが、撃てば消せます。',
+      'medic': '修理艦が海賊を直しています。後ろに隠れた修理艦から倒して！',
+      'juggernaut': '重装突撃艦！正面装甲が硬いので横か後ろを狙い、突進はかわして。',
+      'other': '新しい敵です！',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_levelUnlockAtSystem(int level, int system) {
+    return '星系$systemでLv.$level解放';
+  }
+
+  @override
+  String get u_myColonies => 'わたしの植民地';
+
+  @override
+  String get u_myColoniesHint => 'どの星系にいても、ここからすぐレベルアップできます。';
+
+  @override
+  String get u_noColonies => 'まだ植民地がありません。惑星に近づいて入植しましょう。';
+
+  @override
+  String get u_currentHere => '現在地';
+
+  @override
+  String u_anchorEffect(int income, int shield, int regen) {
+    return '収入 +$income% · 共有シールド $shield · 再生 +$regen%';
+  }
 
   @override
   String get u_conqueredSystems => '制圧した星系（生産継続中）';
@@ -620,7 +663,7 @@ class L10nJa extends L10n {
 
   @override
   String u_sectorDev(String name, int pct) {
-    return '$name · 発展 $pct%';
+    return '$name · 安定化 $pct%';
   }
 
   @override
@@ -1205,11 +1248,11 @@ class L10nJa extends L10n {
   String get g_shipAuroraDesc => '自己修復とバリアを備えたプレミアム守護艦';
 
   @override
-  String get g_shipNovaAbility => '貫通弾: 1発で敵2機まで貫通';
+  String get g_shipNovaAbility => '貫通弾: 1発で敵3機まで貫通';
 
   @override
   String get g_shipAuroraAbility =>
-      '自己修復: 3秒間被弾しないと毎秒HP3%回復\n守護膜: 8秒ごとに被弾を1回防ぐ';
+      '自己修復: 3秒間被弾しないと毎秒HP5%回復\n守護膜: 5秒ごとに被弾を1回防ぐ';
 
   @override
   String g_crewLegendPerk(int pct) {
@@ -1733,78 +1776,76 @@ class L10nJa extends L10n {
   String get g_storyAsteroidsTitle => '小惑星を3個壊す';
 
   @override
-  String get g_storyAsteroidsLine0 => '艦長！まずは小惑星を壊して鉱石を集めてみましょう。';
+  String get g_storyAsteroidsLine0 => '火星の補給基地に使う鉱石が必要です。まず小惑星を3個壊しましょう。';
 
   @override
   String get g_storyAsteroidsLine1 => 'ジョイスティックで移動して、発射ボタンで撃てばOKです！';
 
   @override
-  String get g_storyKillsTitle => '海賊を3隻撃墜';
+  String get g_storyKillsTitle => '襲撃艦3隻を撃破';
 
   @override
-  String get g_storyKillsLine0 => 'レーダーに海賊が映っています！赤い矢印の方向です。';
+  String get g_storyKillsLine0 => '正体不明の艦が中継拠点を狙っています。赤い矢印を追って3隻を阻止してください。';
 
   @override
-  String get g_storyKillsLine1 => '海賊なんか、この艦の前じゃただの鉄くずさ！';
+  String get g_storyKillsLine1 => '先に道を開こう。後から来る人たちのために！';
 
   @override
   String get g_storyColoniesTitle => '火星に入植しよう';
 
   @override
-  String get g_storyColoniesLine0 =>
-      '地球のすぐ隣の赤い惑星、火星に最初の植民地を作りましょう。近づくと入植ボタンが出ます。';
+  String get g_storyColoniesLine0 => '火星に帰れる場所を作りましょう。近づいて入植ボタンを押してください。';
 
   @override
-  String get g_storyColoniesLine1 => '植民地は放っておいてもクレジットを稼いでくれますよ！';
+  String get g_storyColoniesLine1 => '住民が生み出すクレジットで、次の航海を準備できます。';
 
   @override
   String get g_storyShipLevelsTitle => 'ステーションで艦船を改造';
 
   @override
-  String get g_storyShipLevelsLine0 =>
-      'ヘイヴン基地に戻って艦船を改造しましょう。ステーションの近くでは修理もできますよ。';
+  String get g_storyShipLevelsLine0 => '遠くの惑星へ向かう前に、ヘイヴン基地で船を改造しましょう。';
 
   @override
   String get g_storyCrewTitle => 'クルーを1人スカウト';
 
   @override
-  String get g_storyCrewLine0 => 'ひとりじゃ寂しいですよね？ステーションメニューのクルータブで仲間をスカウトしましょう！';
+  String get g_storyCrewLine0 => '長い旅を共にする仲間が必要です。基地の乗組員タブで1人雇いましょう。';
 
   @override
   String get g_storyMissionsTitle => '任務を1件完了';
 
   @override
-  String get g_storyMissionsLine0 => 'ステーションの任務掲示板で依頼を受けてみてください。報酬がおいしいですよ。';
+  String get g_storyMissionsLine0 => '航路の人たちにも助けが必要です。基地の掲示板で依頼を1つ受けましょう。';
 
   @override
   String get g_storyStationsTitle => '新しいステーションを建設';
 
   @override
-  String get g_storyStationsLine0 => 'そろそろ領域を広げましょう！惑星から離れた宇宙空間にステーションを建てましょう。';
+  String get g_storyStationsLine0 => '補給船が休める場所を増やしましょう。惑星から離れた宇宙に基地を建ててください。';
 
   @override
-  String get g_storyDevPercentTitle => '星系の発展度100%';
+  String get g_storyDevPercentTitle => '星系の安定化100%';
 
   @override
   String get g_storyDevPercentLine0 =>
-      'すべての惑星をLv.3まで育てると次の星系が開きます。右上の星系ボタンで確認してくださいね！';
+      '位相アンカーのレベル合計が惑星数 × 3になると星系が安定し、ゲートが開きます。星系ボタンで確認しましょう。';
 
   @override
   String get g_storySectorTitle => 'ワープゲートで次の星系へ';
 
   @override
-  String get g_storySectorLine0 => 'ワープゲートが開きました！ミニマップの紫色のゲートへ向かいましょう。';
+  String get g_storySectorLine0 => '次の星系にも亀裂の接続点があります。ミニマップの紫のゲートへ向かいましょう。';
 
   @override
-  String get g_storySectorLine1 => '新しい宇宙が待ってるぞ！';
+  String get g_storySectorLine1 => '新しい星系でも入植地を作り、位相アンカーを建てましょう。';
 
   @override
   String g_storyDevNTitle(int n) {
-    return '星系$nの発展度100%';
+    return '星系$nの安定化100%';
   }
 
   @override
-  String get g_storyDevNLine => '新しい星系の惑星をすべてLv.3まで育てましょう！';
+  String get g_storyDevNLine => '位相アンカーのレベル合計が惑星数 × 3になると次のゲートが開きます。';
 
   @override
   String g_systemN(int n) {
@@ -1817,7 +1858,7 @@ class L10nJa extends L10n {
   }
 
   @override
-  String get g_storyWarpNLine => 'ゲートが開きました。もっと深い宇宙へ行ってみましょうか？';
+  String get g_storyWarpNLine => '航路がつながりました。次の星系にも安定化網を広げましょう。';
 
   @override
   String get g_powerUpRapid => '連射';
@@ -1862,6 +1903,9 @@ class L10nJa extends L10n {
   String get g_colonyBldShieldGen => 'シールド発生装置';
 
   @override
+  String get g_colonyBldStabilizer => '位相アンカー';
+
+  @override
   String get g_colonyBldBlurbTurret => '植民地の近くの海賊を自動で迎撃します。襲撃対策に必須！';
 
   @override
@@ -1875,6 +1919,14 @@ class L10nJa extends L10n {
 
   @override
   String get g_colonyBldBlurbShieldGen => 'シールドの容量と再充電速度をアップ。';
+
+  @override
+  String get g_colonyBldBlurbStabilizer => '星系安定化・共有シールド\nレベルごとに植民地収入 +10%';
+
+  @override
+  String g_stabilizerDamaged(String planet, int level) {
+    return '$planetの位相アンカーが損傷し、レベルが$levelに下がりました。';
+  }
 
   @override
   String get g_stationRoleHome => '本拠地';
@@ -2023,7 +2075,7 @@ class L10nJa extends L10n {
   }
 
   @override
-  String get g_dlgWelcome => 'ようこそ、艦長！私は副官のミナです。';
+  String get g_dlgWelcome => 'ようこそ、艦長。宇宙科学者のミナです。';
 
   @override
   String get g_dlgMissionsCancelled => '前の星系の輸送・指名手配任務はキャンセルされました。';
@@ -2089,7 +2141,7 @@ class L10nJa extends L10n {
   String get g_merchantBye => 'じゃあ、またね〜 ニャ！';
 
   @override
-  String get g_pirateRaidTaunt => 'この植民地はもうオレたちのものだ！ガハハ！';
+  String get g_pirateRaidTaunt => '位相アンカーを先に破壊しろ。';
 
   @override
   String get g_dlgMeteor => '流星群を発見！クリスタルがたっぷり混ざっています。鉱石を稼ぐチャンス！';
@@ -2248,7 +2300,7 @@ class L10nJa extends L10n {
 
   @override
   String g_pirateBossArrive(String sector) {
-    return '$sectorの支配者はこのオレ様だ！かかってこい、ちびっこ艦長！';
+    return '$sectorの中継網を遮断しろ。';
   }
 
   @override
@@ -2287,16 +2339,16 @@ class L10nJa extends L10n {
   String get g_captainKill3 => '次！';
 
   @override
-  String get g_pirateAmbush0 => 'ガハハ！積み荷を置いていきな！';
+  String get g_pirateAmbush0 => '目標艦を確認。追跡を続行。';
 
   @override
-  String get g_pirateAmbush1 => 'ここはオレたち海賊団のシマだ！';
+  String get g_pirateAmbush1 => '遠征隊を阻止しろ。';
 
   @override
-  String get g_pirateAmbush2 => 'そのピカピカのクレジットをよこしな！';
+  String get g_pirateAmbush2 => '送信設備に近づけるな。';
 
   @override
-  String get g_pirateAmbush3 => '今日はツイてないな、ちびっこ！';
+  String get g_pirateAmbush3 => '目標捕捉。攻撃開始。';
 
   @override
   String get cat_sysSol => '太陽系';
@@ -2996,4 +3048,309 @@ class L10nJa extends L10n {
 
   @override
   String get m_cloudOverwriteOk => '上書き';
+
+  @override
+  String get n_title => 'ヘイヴン計画';
+
+  @override
+  String get n_signal => '外からの訪問者';
+
+  @override
+  String get n_haven => '稼いだ時間';
+
+  @override
+  String get n_departure => 'ヘイヴン遠征隊';
+
+  @override
+  String get n_mars => '送信準備';
+
+  @override
+  String get n_transmission => '初送信';
+
+  @override
+  String get n_gate => '次の星系へ';
+
+  @override
+  String get n_signalSpeaker => '宇宙科学者ミナ';
+
+  @override
+  String get n_settler => 'コロニー住民';
+
+  @override
+  String get n_earthReport => '地球からの報告';
+
+  @override
+  String get n_open0 => '反物質粒子の検出量が増え続けています。\nこのままでは、反物質地球が太陽系に進入します。';
+
+  @override
+  String get n_open1 =>
+      '私が考案した位相アンカーを、ヘイヴンの古代コアエンジンで初めて試しました。製作者は不明ですが、反物質の地球を減速できました。';
+
+  @override
+  String get n_open2 => 'アンカーは私が設置する。\n植民地を築き、ヘイヴンまで送信網をつなぐ。';
+
+  @override
+  String get n_open3 => 'ヘイヴンが起動した。遠征隊を追え。';
+
+  @override
+  String get n_enemyCommander => '発信者不明';
+
+  @override
+  String get n_mars0 => '入植地の準備はできました。ここから地球を支えられますか？';
+
+  @override
+  String get n_mars1 => 'まだです。位相アンカーを建てれば送電が始まります。防護シールドも守りましょう。';
+
+  @override
+  String get n_mars2 => '正体不明の襲撃者が位相アンカーを狙っています。装置とシールドを守ってください。';
+
+  @override
+  String get n_transmission0 =>
+      '位相アンカーが稼働。ヘイヴンで初送信の受信を確認しました。\n\n集めたエネルギーが地球に届きました。';
+
+  @override
+  String get n_transmission1 =>
+      '電力制限で休校していた学校が再開しました。子どもたちが教室に戻っています。\n\n送信を続けてください。設備とシールドを守り、送信網を広げてください。';
+
+  @override
+  String get n_warp0 =>
+      '太陽系の送信網は安定しましたが、地球と太陽系のエネルギーでは足りません。反物質の地球をさらに減速させるには他の星系が必要です。';
+
+  @override
+  String get n_warp1 => 'ここの送信を続け、他の星系にも植民地とアンカーを築きましょう。アルファ・ケンタウリへ、船長。';
+
+  @override
+  String get n_next => '次へ';
+
+  @override
+  String get n_skip => 'シーンをスキップ';
+
+  @override
+  String get n_launch => '出航';
+
+  @override
+  String get g_antimatterEarth => '反物質の地球';
+
+  @override
+  String get u_antimatterHint => 'まだ惑星の軌道より外にいます。位相アンカーを増やせば接近は遅くなります。';
+
+  @override
+  String get c_endingTitle => '地球は安全です';
+
+  @override
+  String get c_endingBody => '反物質の地球を送り返しました。すべての植民地が地球を守り、開拓は続きます。';
+
+  @override
+  String get c_finalTitle => '最終作戦';
+
+  @override
+  String get c_stabilize => '現地のアンカー網を100%完成';
+
+  @override
+  String get c_syncReady => 'ヘイヴン中継所へ移動して同期';
+
+  @override
+  String c_syncProgress(int percent) {
+    return '同期 $percent%';
+  }
+
+  @override
+  String get c_guardian => 'コアの守護者を倒す';
+
+  @override
+  String get c_counterattack => '中継所へ戻り逆送信';
+
+  @override
+  String get c_complete => '任務完了';
+
+  @override
+  String get c_syncButton => '船を同期';
+
+  @override
+  String get c_fireButton => '逆送信を実行';
+
+  @override
+  String get c_guardianName => 'コアの守護者';
+
+  @override
+  String c_title(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': 'アルファ・ケンタウリ中継所',
+      '5': 'シリウス襲撃',
+      '8': 'タウ・セティの差',
+      '12': '隠された経路',
+      '16': '奪取した命令',
+      '20': '仕込まれたコア',
+      '22': '銀河外への痕跡',
+      '25': '手動位相制御',
+      '26': 'さんかく座銀河 M33 X-7',
+      'other': '送信網を拡大',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_body(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': '太陽系外からの初送信がヘイヴンに届きました。他の恒星系のアンカーも地球防衛に力を貸せます。',
+      '5': '拡大した送信網が地球の防衛を強めています。正体不明の襲撃者が中継所を狙っています。',
+      '8': 'ヘイヴンの受信量はタウ・セティの出力をわずかに下回ります。防衛を続けながら原因を調べます。',
+      '12': '蓄積した送信記録を調べると、ヘイヴンのコアに記録のない外部送信経路が見つかりました。位相アンカー自体は正常です。',
+      '16': '遠征中に敵の命令記録を傍受しました。襲撃者は断絶団で、異星の黒幕の指示を受けています。',
+      '20': 'ケプラー90の異星記録に同じコアの設計があります。地球で見つかった古代のオーパーツは意図的に置かれたものでした。',
+      '22':
+          'ケプラー90の記録とエネルギーの流れを照合し、銀河外への経路が判明しました。異星人はエネルギーを集めさせるため反物質の地球を送り、必要な防衛からコアが一部を奪っていました。',
+      '25': '異星の自動制御を切り離す方法が見つかりました。船長の船をヘイヴンの直接制御点に使います。',
+      '26':
+          'ここは異星人の起源地、さんかく座銀河M33 X-7です。現地のアンカー網を完成させ、ヘイヴン中継所で船を同期し、コアの守護者を倒して中継所へ戻り、送信を反転してください。',
+      'other': '植民地を築き、位相アンカーの送信を続けてください。地球にはまだエネルギーが必要です。',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_task(String task) {
+    String _temp0 = intl.Intl.selectLogic(task, {
+      'anchor': '位相アンカーを建設・修復',
+      's1_0': 'アンカーで送信試験',
+      's5': '襲撃部隊を撃破',
+      's5_0': '送信復旧を確認',
+      's8_0': 'アンカー出力を測定',
+      's8_1': 'ヘイヴンで受信記録を照合',
+      's12_0': 'コアの隠し回路を調査',
+      's16': '敵指揮艦を撃破',
+      's16_0': '残骸から命令記録を回収',
+      's20_0': '異星遺跡でコア設計を調査',
+      's22_0': 'エネルギー流出経路を観測',
+      's22_1': 'ヘイヴンで異星記録を照合',
+      's25_0': 'ヘイヴンで自動制御の分離試験',
+      'other': '中継網を拡張',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get c_operate => '調査・作業開始';
+
+  @override
+  String get c_finishOperation => '地域作戦を完了してください';
+
+  @override
+  String get c_reverseResult => '艦とヘイヴンの同期を維持。植民地のエネルギーを逆送信し、反物質地球を押し戻します。';
+
+  @override
+  String get c_severanceName => '断絶団';
+
+  @override
+  String get u_sharedShield => '共有シールド';
+
+  @override
+  String get u_supportOffline => 'ヘイヴン支援停止';
+
+  @override
+  String u_systemTrait(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest': '海賊の巣 · 出現間隔 ×0.7、賞金 ×1.5',
+      'richVeins': '豊かな鉱脈 · 植民地の鉱石 ×2、採掘鉱石 ×1.5',
+      'solarFlare': '恒星フレア · 植民地クレジット ×1.25、シールド回復 ×0.5',
+      'ionNebula': 'イオン星雲 · スキル待機時間 ×0.7、植民地・基地の砲塔ダメージ ×0.7',
+      'gravityWell': '重力井戸 · 最高速度 ×0.85、戦闘・任務報酬 ×1.3',
+      'tradeLane': '交易路 · 鉱石売価 ×1.3、植民地襲撃頻度 ×1.3',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_traitIntro(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest': '海賊の巣です！出現は増えますが賞金も高め。狩りの準備を！',
+      'richVeins': '豊かな鉱脈です！植民地の鉱石生産は2倍、小惑星の採掘は1.5倍。採掘を始めましょう！',
+      'solarFlare': '強い恒星フレアです！植民地クレジットは増えますがシールド回復は半分。防衛を固めて！',
+      'ionNebula': 'イオン星雲です！スキル待機時間も植民地・基地の砲塔ダメージも0.7倍。スキルで援護を！',
+      'gravityWell': '重力井戸です！最高速度は0.85倍、戦闘・任務報酬は1.3倍。任務を選びましょう！',
+      'tradeLane': '交易路です！鉱石売価と植民地襲撃頻度は1.3倍。警報に注意して交易しましょう！',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get u_specTitle => '特化';
+
+  @override
+  String u_specName(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': '産業特化',
+      'mining': '採掘特化',
+      'fortress': '要塞特化',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specEffect(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': 'クレジット生産 ×1.5',
+      'mining': '鉱石生産 ×2.5',
+      'fortress': 'シールド ×2・砲台ダメージ ×1.5・襲撃でもLv維持',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specLocked(int level) {
+    return 'Lv.$levelで特化解放';
+  }
+
+  @override
+  String u_specInactive(int level) {
+    return 'Lv.$level以上でのみ有効';
+  }
+
+  @override
+  String get u_specFree => '無料';
+
+  @override
+  String get u_specChoose => '特化を選ぶ';
+
+  @override
+  String g_dlgSpecUnlocked(String planet) {
+    return '$planetがLv.5になりました！特化を選べます。産業はクレジット、採掘は鉱石、要塞は防衛を担当します。最初の選択は無料です！';
+  }
+
+  @override
+  String g_dlgRaidFortress(String planet) {
+    return '$planetの要塞が襲撃を耐え抜きました。レベルはそのままです！';
+  }
+
+  @override
+  String u_bossName(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '☠ 海賊艦隊長',
+      'devourer': '☠ 鉱脈喰らい',
+      'flare': '☠ フレア砲撃艦',
+      'wraith': '☠ イオンの亡霊',
+      'gravity': '☠ 重力の君主',
+      'plunder': '☠ 略奪商船',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_dlgBossArchetype(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '警告！海賊艦隊長です。護衛の襲撃船を次々に呼びます。増える前にボスを狙って！',
+      'devourer': '警告！鉱脈喰らいです。周りに機雷をまきます。撃ち落としながら戦って！',
+      'flare': '警告！フレア砲撃艦です。照準線が見えたら3方向レーザーが来ます。横によけて！',
+      'wraith': '警告！イオンの亡霊です。4秒ごとに姿を消します。見えている間に攻めて！',
+      'gravity': '警告！重力の君主です。近づくと引き寄せられます。ブーストで振り切って！',
+      'plunder': '警告！略奪商船です。速く、弾が当たるたびにクレジットを奪います。倒せば全部取り戻せます！',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 }

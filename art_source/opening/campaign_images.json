@@ -1,0 +1,94 @@
+{
+  "generator": "built-in image_gen",
+  "references": [
+    "/Volumes/home_extension/AndroidStudioProjects/star_settlers/assets/cinematics/haven_conference.png",
+    "/Volumes/home_extension/AndroidStudioProjects/star_settlers/assets/cinematics/haven_captain.png",
+    "/Volumes/home_extension/AndroidStudioProjects/star_settlers/assets/cinematics/haven_defense.png"
+  ],
+  "images": [
+    {
+      "id": "colony",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: A first frontier colony on a rust-red rocky planet. A helmeted brown-haired captain in white/navy spacesuit helps two settlers unfold a three-white-pylon cyan Phase Anchor beside modest habitat modules. Close grounded human-scale construction moment, warm sunrise, parked small white red-striped blue-wing scout in distance. No battle.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-00ea47ab-04f4-4a2f-bdf8-0e6b7e8fc7fe.png",
+      "runtime": "assets/cinematics/story_colony.webp"
+    },
+    {
+      "id": "transmission",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: The first successful energy transmission from a lonely planetary colony: three white pylons surround a brilliant cyan coil, a slender cyan energy stream rises into a starry sky toward a distant orbital relay. Settlers in pressure suits look up in relief, intimate low viewpoint, blue dusk.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-96e0b0b5-6fa8-4fdd-ba81-3bc20c43476a.png",
+      "runtime": "assets/cinematics/story_transmission.webp"
+    },
+    {
+      "id": "warp",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: A small white scout with red stripes and blue wings seen from rear three-quarter flies through a vast activated circular jump gate leaving the solar system, luminous cyan passage opens toward unfamiliar stars. Sol and small planet behind, determined expedition, no battle, dynamic forward movement.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-8cb6494f-ab40-4dfa-a814-88e846c2512a.png",
+      "runtime": "assets/cinematics/story_warp.webp"
+    },
+    {
+      "id": "sector_01",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Arrival at Alpha Centauri: small white red-striped blue-wing scout emerges above an untouched ochre terrestrial planet, two distinct warm suns on distant horizon, folded white three-pylon anchor visible through cargo window foreground. Wide sense of beginning an extrasolar settlement; NO completed colony yet.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-547df2a5-5485-425c-8408-8badcab99f5d.png",
+      "runtime": "assets/cinematics/story_sector_01.webp"
+    },
+    {
+      "id": "sector_05",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Sirius relay ambush in progress. Black angular red-lit pirate craft attack a small white cyan orbital relay above blue-gray planet; hero white red-striped blue-wing scout banks between attackers and relay, cyan shield absorbs red laser impact. Fierce cinematic space action, bright blue-white star far background, no giant planet collision.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-f9cbee40-12fc-455d-a7de-8f16b828fb81.png",
+      "runtime": "assets/cinematics/story_sector_05.webp"
+    },
+    {
+      "id": "sector_08",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Inside a ship engineering bay, scientist Mina (short coral pink bob hair, round glasses, white laboratory coat over dark clothes) frowns comparing two luminous cyan energy gauges of clearly different heights, with gloved captain beside her. Physical energized coil and receiver cables, Tau Ceti planet outside viewport. Silent discovery of missing power; no readable text, no infographic layout.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-227dc4e5-17be-4a37-9e38-306293835033.png",
+      "runtime": "assets/cinematics/story_sector_08.webp"
+    },
+    {
+      "id": "sector_12",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Mina short coral pink bob round glasses white lab coat in Haven engineering chamber discovers a concealed violet conduit behind an opened panel of the ancient core. Ordinary cyan incoming energy splits: bright cyan main path still works, small violet stream slips into hidden dark channel. She shines handheld inspection light, mechanical close-up cinematic mystery, no labels.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-cefcebfd-795f-4382-af79-08303217aca0.png",
+      "runtime": "assets/cinematics/story_sector_12.webp"
+    },
+    {
+      "id": "sector_16",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Captain in white navy suit recovering a physical enemy command data cartridge from damaged black red-lit pirate communications console inside deserted boarded raider. A small hologram shows an indistinct imposing alien silhouette issuing orders, no readable text. Sparks and cold emergency light, active retrieval rather than a briefing. No Mina.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-4aa6abc5-f302-4336-9fdc-f47e8c96b542.png",
+      "runtime": "assets/cinematics/story_sector_16.webp"
+    },
+    {
+      "id": "sector_20",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: In an ancient alien archive on a Kepler-90 world, helmeted brown-haired captain stands before a huge weathered circular core engine embedded in stone-metal ruins. Its distinctive concentric rings and three dark spokes exactly resemble Haven core, a small handheld cyan hologram of Haven core held next to it demonstrates match visually. Quiet alarming discovery, dust and shaft of light, no text.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-1d49c6bd-a62f-4690-9108-db05216035a8.png",
+      "runtime": "assets/cinematics/story_sector_20.webp"
+    },
+    {
+      "id": "sector_22",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: In Haven observatory, Mina pink bob glasses white lab coat traces a narrow violet energy trail continuing beyond a luminous spiral galaxy hologram toward a distant alien installation; a small violet Earth-like globe appears along same route while incoming cyan colony streams remain bright. Captain watches, realization of energy theft and trap. Cinematic physical room, no charts, labels or paragraphs.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-8ed9eec7-1d38-4fc3-84ce-02c4b417f49d.png",
+      "runtime": "assets/cinematics/story_sector_22.webp"
+    },
+    {
+      "id": "sector_25",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Mina short pink bob glasses white lab coat physically disconnects a violet alien control cable from Haven ancient ring core as captain plugs a thick cyan manual control cable into his white red-striped scout cockpit docking port. Two characters working together, grounded hands-on engineering action, white cyan hangar, violet circuit going dark. No text.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-4ab24dad-a12e-4a67-b9b7-1032eb4ddb81.png",
+      "runtime": "assets/cinematics/story_sector_25.webp"
+    },
+    {
+      "id": "sector_26",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Arrival at enemy origin region M33 X-7: small white red-striped blue-wing hero scout approaches a forbidding alien orbital citadel and colossal angular black red-lit guardian vessel, safe distant luminous accretion disk background, rocky planet edge and modest white human relay in foreground. Epic scale but clear single hero ship, no Earth here.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-2f963054-5626-4acc-97f1-cdfa5e1fbf44.png",
+      "runtime": "assets/cinematics/story_sector_26.webp"
+    },
+    {
+      "id": "counterattack",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Final counterattack: white red-striped blue-wing hero scout synchronized with a white circular Haven relay by a brilliant cyan tether, both emit a sweeping expanding cyan phase wave into deep space. Broken black-red guardian wreckage in distance, energy redirected along violet corridor away from the protected worlds. Dramatic triumphant action, no collision with Earth, no faces.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-207f6096-5592-4717-a0fb-43e92b3143d7.png",
+      "runtime": "assets/cinematics/story_counterattack.webp"
+    },
+    {
+      "id": "ending",
+      "prompt": "Use case illustration-story. Create one NEW unique cinematic still for the existing anime science-fiction strategy game. Landscape 16:9, polished hand-painted anime film background, crisp cel shaded characters, restrained dramatic lighting. Consistent with provided reference designs, NOT a remake of their compositions. White/red/blue compact scout, white circular cyan Haven relay, white three-pylon cyan Phase Anchor. Characters normal anatomy, equipment coherent. Full bleed scene, key action centered to survive side-panel crop. NO text, captions, panels, collage, logos or watermark. Scene: Peace after victory, viewed from an Earth hilltop overlooking a living futuristic coastal city at sunrise. Brown-haired captain in white navy flight suit and scientist Mina short coral pink bob round glasses white lab coat stand side by side seen three-quarter from behind, looking up at a tiny white orbital Haven ring in clear blue sky. Children and families stroll far below, soft hopeful light, no violet threat, no giant explosions.",
+      "path": "/Users/mankil/.codex/generated_images/01a137b0-4804-7490-af0b-d0fd97cbf932/exec-43a00fd0-4bd6-41e3-a055-15ba9679ff6d.png",
+      "runtime": "assets/cinematics/story_ending.webp"
+    }
+  ]
+}

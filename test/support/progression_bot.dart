@@ -16,7 +16,10 @@ import 'package:star_settlers/game/world.dart';
 double freeGemsPerDay() {
   final login = loginRewards.reduce((a, b) => a + b) / loginRewards.length;
   const ads = Profile.adGemsPerDay * Profile.adGemAmount;
-  final quest = dailyPool.map((q) => q.gems).reduce((a, b) => a + b) / dailyPool.length * 3 +
+  final quest =
+      dailyPool.map((q) => q.gems).reduce((a, b) => a + b) /
+          dailyPool.length *
+          3 +
       dailyBonusGems;
   const harvest = 24 / 8 * 1;
   return login + ads + quest + harvest;
@@ -65,7 +68,9 @@ class SectorLog {
       '${goalTime.map((k, v) => MapEntry(k, (v / 60).toStringAsFixed(1)))}';
 }
 
-String _k(double v) => v >= 1e6 ? '${(v / 1e6).toStringAsFixed(1)}M' : '${(v / 1e3).toStringAsFixed(0)}k';
+String _k(double v) => v >= 1e6
+    ? '${(v / 1e6).toStringAsFixed(1)}M'
+    : '${(v / 1e3).toStringAsFixed(0)}k';
 
 class BotRun {
   BotRun(this.seed, this.logs, this.world);
@@ -77,7 +82,7 @@ class BotRun {
 /// 현실적인 플레이어 봇.
 /// - 하루 [sessionsPerDay]번, 한 번에 [sessionMinutes]분 플레이
 /// - 세션 사이에는 오프라인 수입 (광고 2배를 본다고 가정), 내 행성 선물, 하루치 무료 젬
-/// - 크레딧은 발전도(모든 행성 Lv.3) → 함선 강화 → 본거지 강화 순으로 저렴한 것부터
+/// - 크레딧은 발전도(안정화 장치 총 레벨) → 함선 강화 → 본거지 강화 순으로 저렴한 것부터
 /// - 무료 젬은 막혔을 때 크레딧 팩으로 바꾼다
 /// - [paying]이면 [payAtSector] 항성계에 도착하자마자 ⭐[payGems]를 사서
 ///   프리미엄 함선·전설 승무원·배치 슬롯에 쓴다
@@ -192,7 +197,9 @@ class ProgressionBot {
       if (session % sessionsPerDay == 0) {
         day++;
         now = now.add(const Duration(days: 1));
-        if (dailyGems) w.profile.gems += (freeGemsPerDay() - 3).round(); // 선물 젬은 위에서
+        if (dailyGems) {
+          w.profile.gems += (freeGemsPerDay() - 3).round(); // 선물 젬은 위에서
+        }
       }
     }
     if (!_log.done) {
@@ -261,7 +268,7 @@ class ProgressionBot {
       if (lv1 < lv0) _log.raidLosses += lv0 - lv1;
     }
     _act();
-    return w.development >= 1;
+    return w.gateOpen(w.gates.firstWhere((g) => g.forward));
   }
 
   /// 항성 쪽으로 곧장 날아가면 막히니 옆으로 비켜 간다
@@ -274,7 +281,9 @@ class ProgressionBot {
     if (tProj <= 0 || tProj >= len) return to;
     final closest = from + u * tProj;
     if (closest.distance > GameWorld.starRadius + 120) return to;
-    final side = closest.distance < 1 ? Offset(-u.dy, u.dx) : closest.normalized();
+    final side = closest.distance < 1
+        ? Offset(-u.dy, u.dx)
+        : closest.normalized();
     return closest + side * (GameWorld.starRadius + 300);
   }
 
@@ -284,33 +293,80 @@ class ProgressionBot {
   /// 다음에 살 것: (비용, 어디서, 무엇, 실행)
   (Cost, Offset, String, bool Function())? _nextBuy() {
     final options = <(Cost, Offset, String, bool Function())>[];
-    final todo = w.planets.where((pl) => pl.colonyLevel < GameWorld.devLevelCap).toList();
+    final todo = w.planets
+        .where(
+          (pl) =>
+              pl.building(ColonyBuilding.stabilizer) < GameWorld.devLevelCap,
+        )
+        .toList();
     for (final pl in todo) {
-      options.add((w.planetCost(pl), pl.pos, 'planet', () => w.upgradePlanet(pl)));
+      if (pl.colonyLevel <= pl.building(ColonyBuilding.stabilizer) &&
+          pl.colonyLevel < w.colonyLevelCap) {
+        options.add((
+          w.planetCost(pl),
+          pl.pos,
+          'planet',
+          () => w.upgradePlanet(pl),
+        ));
+      } else if (pl.building(ColonyBuilding.stabilizer) < pl.buildingCap) {
+        options.add((
+          w.colonyBuildingCost(pl, ColonyBuilding.stabilizer),
+          pl.pos,
+          'planet',
+          () => w.buildColony(pl, ColonyBuilding.stabilizer),
+        ));
+      }
     }
     final home = w.homeBase.pos;
     for (final k in [UpgradeKind.weapon, UpgradeKind.hull]) {
-      if (w.level(k) < _shipTarget) {
+      if (w.level(k) < min(_shipTarget, w.upgradeCap(k))) {
         options.add((w.upgradeCost(k), home, 'ship', () => w.upgradeShip(k)));
       }
     }
-    if (w.level(UpgradeKind.engine) < min(5, 1 + w.sector)) {
-      options.add((w.upgradeCost(UpgradeKind.engine), home, 'ship',
-          () => w.upgradeShip(UpgradeKind.engine)));
+    if (w.level(UpgradeKind.engine) <
+        min(min(5, 1 + w.sector), w.upgradeCap(UpgradeKind.engine))) {
+      options.add((
+        w.upgradeCost(UpgradeKind.engine),
+        home,
+        'ship',
+        () => w.upgradeShip(UpgradeKind.engine),
+      ));
     }
-    if (w.sector >= 1 && w.level(UpgradeKind.missile) < min(5, w.sector)) {
-      options.add((w.upgradeCost(UpgradeKind.missile), home, 'ship',
-          () => w.upgradeShip(UpgradeKind.missile)));
+    if (w.sector >= 1 &&
+        w.level(UpgradeKind.missile) <
+            min(w.sector, w.upgradeCap(UpgradeKind.missile))) {
+      options.add((
+        w.upgradeCost(UpgradeKind.missile),
+        home,
+        'ship',
+        () => w.upgradeShip(UpgradeKind.missile),
+      ));
     }
-    if (w.sector >= 1 && w.level(UpgradeKind.drone) < min(5, w.sector)) {
-      options.add((w.upgradeCost(UpgradeKind.drone), home, 'ship',
-          () => w.upgradeShip(UpgradeKind.drone)));
+    if (w.sector >= 1 &&
+        w.level(UpgradeKind.drone) <
+            min(w.sector, w.upgradeCap(UpgradeKind.drone))) {
+      options.add((
+        w.upgradeCost(UpgradeKind.drone),
+        home,
+        'ship',
+        () => w.upgradeShip(UpgradeKind.drone),
+      ));
     }
     if (w.homeBase.baseLevel < 1 + w.sector) {
-      options.add((w.baseUpgradeCost(w.homeBase), home, 'base', () => w.upgradeBase(w.homeBase)));
+      options.add((
+        w.baseUpgradeCost(w.homeBase),
+        home,
+        'base',
+        () => w.upgradeBase(w.homeBase),
+      ));
     }
     if (w.roster.length < w.crewSlots && w.roster.length < 3) {
-      options.add(((w.recruitCost, 0), home, 'crew', () => w.recruitWithCredits() != null));
+      options.add((
+        (w.recruitCost, 0),
+        home,
+        'crew',
+        () => w.recruitWithCredits() != null,
+      ));
     }
     if (options.isEmpty) return null;
     // 크레딧+광석을 같이 따진 '부족분'이 가장 작은 것부터
@@ -325,10 +381,16 @@ class ProgressionBot {
     if (_retreating || p.hp < w.playerMaxHp * 0.35) {
       _retreating = p.hp < w.playerMaxHp * 0.9;
       final st = w.stations.reduce(
-          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b);
+        (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+      );
       _goal = st.pos;
       _goalWhy = 'repair';
       if (_retreating) return;
+    }
+    if (w.development >= 1 && w.campaignMissionActive) {
+      _goal = w.campaignTarget;
+      _goalWhy = 'campaign';
+      return;
     }
     // 발전 완료 → 앞 게이트
     if (w.development >= 1) {
@@ -337,11 +399,14 @@ class ProgressionBot {
       return;
     }
     // 습격 받은 식민지 지키기
-    final raid = w.events.where((e) => e.kind == EventKind.raid && e.planet != null).firstOrNull;
+    final raid = w.events
+        .where((e) => e.kind == EventKind.raid && e.planet != null)
+        .firstOrNull;
     if (raid != null && w.pirates.any((e) => e.eventId == raid.id)) {
       final attackers = w.pirates.where((e) => e.eventId == raid.id).toList();
       final e = attackers.reduce(
-          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b);
+        (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+      );
       final d = (e.pos - p.pos).distance;
       _goal = d > 300 ? e.pos : p.pos + (p.pos - e.pos);
       _goalWhy = 'raid';
@@ -383,7 +448,8 @@ class ProgressionBot {
         .toList();
     if (near.isNotEmpty) {
       final e = near.reduce(
-          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b);
+        (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+      );
       final d = (e.pos - p.pos).distance;
       _goal = d > 300 ? e.pos : p.pos + (p.pos - e.pos);
       _goalWhy = 'fight';
@@ -392,7 +458,8 @@ class ProgressionBot {
     // 가까운 아이템
     if (w.pickups.isNotEmpty) {
       final k = w.pickups.reduce(
-          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b);
+        (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+      );
       if ((k.pos - p.pos).distance < 450) {
         _goal = k.pos;
         _goalWhy = 'pickup';
@@ -405,7 +472,9 @@ class ProgressionBot {
       return;
     }
     // 보급 기지 하나 (스토리·생산 보너스)
-    if (w.stations.length < 2 && w.colonyCount >= 3 && w.canAfford(w.stationBuildCost)) {
+    if (w.stations.length < 2 &&
+        w.colonyCount >= 3 &&
+        w.canAfford(w.stationBuildCost)) {
       _goal = _stationSpot();
       _goalWhy = 'station';
       return;
@@ -414,7 +483,8 @@ class ProgressionBot {
     final far = w.pirates.where((e) => e.isPirate).toList();
     if (far.isNotEmpty) {
       final e = far.reduce(
-          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b);
+        (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+      );
       if ((e.pos - p.pos).distance < 1800) {
         _goal = e.pos;
         _goalWhy = 'hunt';
@@ -429,7 +499,9 @@ class ProgressionBot {
     final p = w.player;
     if (w.asteroids.isEmpty) return p.pos;
     return w.asteroids
-        .reduce((a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b)
+        .reduce(
+          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+        )
         .pos;
   }
 
@@ -446,20 +518,25 @@ class ProgressionBot {
 
   /// 목표 근처에 오면 실제로 산다
   void _act() {
+    if (w.canWorkCampaign && !w.campaignWorking) w.startCampaignWork();
     final p = w.player;
     if (!p.alive) return;
     // 정거장: 임무 수락 (처치·채굴), 강화
     final st = w.nearbyStation;
     if (st != null) {
       for (final m in [...w.missionOffers]) {
-        if (m.type == MissionType.kill || m.type == MissionType.mine) w.acceptMission(m);
+        if (m.type == MissionType.kill || m.type == MissionType.mine) {
+          w.acceptMission(m);
+        }
       }
     }
     if (_goalWhy == 'station' && w.canBuildStationHere) {
       if (w.buildStation(StationRole.support)) _boughtThisSession++;
       return;
     }
-    if (_goalWhy == 'station' && _goal != null && (p.pos - _goal!).distance < 60) {
+    if (_goalWhy == 'station' &&
+        _goal != null &&
+        (p.pos - _goal!).distance < 60) {
       // 이 자리가 안 되면 다음 후보
       for (var i = 0; i < 8; i++) {
         final c = GameWorld.homePos + OffsetX.fromAngle(i * pi / 4, 1050);
@@ -477,7 +554,8 @@ class ProgressionBot {
       final buy = _nextBuy();
       if (buy == null || !w.canAfford(buy.$1)) return;
       final near = buy.$3 == 'planet'
-          ? w.nearbyPlanet != null && (w.nearbyPlanet!.pos - buy.$2).distance < 1
+          ? w.nearbyPlanet != null &&
+                (w.nearbyPlanet!.pos - buy.$2).distance < 1
           : st != null;
       if (!near) return;
       if (!buy.$4()) return;
@@ -505,23 +583,34 @@ class ProgressionBot {
     // 전설 승무원 배치 (슬롯이 꽉 찼으면 가장 약한 승무원을 뺀다)
     final legend = w.roster.where((c) => c.rarity == 4).firstOrNull;
     if (legend != null && !legend.assigned) {
-      final weakest = w.roster.where((c) => c.assigned).fold<CrewMember?>(
-          null, (a, c) => a == null || c.bonusPct < a.bonusPct ? c : a);
+      final weakest = w.roster
+          .where((c) => c.assigned)
+          .fold<CrewMember?>(
+            null,
+            (a, c) => a == null || c.bonusPct < a.bonusPct ? c : a,
+          );
       if (weakest != null) w.toggleAssign(weakest);
       w.toggleAssign(legend);
     }
   }
 }
 
-/// [sector] 항성계로 바로 보낸 월드 (모든 행성 Lv.3, 위협도 최대)
+/// [sector] 항성계로 바로 보낸 월드 (모든 행성·안정화 장치 Lv.3, 위협도 최대)
 GameWorld worldAtSector(int seed, int sector, {int weapon = 8, int hull = 8}) {
   final w = GameWorld(seed: seed);
   w.counters['maxSector'] = 99;
+  // This fixture measures ambient combat in an already cleared region.
+  // ProgressionBot above and campaign_gameplay_test cover active operations.
+  for (final chapter in [1, 5, 8, 12, 16, 20, 22, 25]) {
+    w.counters['campaignDone_$chapter'] = 1;
+  }
   for (var i = 0; i < sector; i++) {
     w.warp(w.gates.firstWhere((g) => g.forward));
   }
   for (final p in w.planets) {
     p.colonyLevel = GameWorld.devLevelCap;
+    p.buildings[ColonyBuilding.stabilizer] = GameWorld.devLevelCap;
+    p.stabilizerHp = p.stabilizerMaxHp(w.sectorMul);
     p.shieldHp = p.shieldMax(w.sectorMul);
   }
   w.levels[UpgradeKind.weapon] = weapon;
@@ -533,7 +622,12 @@ GameWorld worldAtSector(int seed, int sector, {int weapon = 8, int hull = 8}) {
 
 /// 본거지 안전 구역에서 버티며 레이저가 잡은 해적 현상금만 줍는 '파밍'.
 /// 반환: 분당 현상금 크레딧(생산 수입 제외), 사망, 본거지 정지 횟수
-Map<String, double> baseFarm(GameWorld w, double minutes, {double dt = 1 / 20, bool shoot = true}) {
+Map<String, double> baseFarm(
+  GameWorld w,
+  double minutes, {
+  double dt = 1 / 20,
+  bool shoot = true,
+}) {
   final input = InputState()
     ..fire = shoot
     ..autoAim = true;
@@ -551,9 +645,16 @@ Map<String, double> baseFarm(GameWorld w, double minutes, {double dt = 1 / 20, b
     // 안전 구역 안에서 가장 가까운 아이템만 줍고, 없으면 본거지 옆에 머문다
     final p = w.player;
     var goal = home + const Offset(0, 100);
-    final items = w.pickups.where((k) => (k.pos - home).distance < w.homeBase.safeRadius - 40).toList();
+    final items = w.pickups
+        .where((k) => (k.pos - home).distance < w.homeBase.safeRadius - 40)
+        .toList();
     if (items.isNotEmpty) {
-      goal = items.reduce((a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b).pos;
+      goal = items
+          .reduce(
+            (a, b) =>
+                (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+          )
+          .pos;
     }
     final to = goal - p.pos;
     input.move = to.distance > 20 ? to.normalized() : Offset.zero;
@@ -564,13 +665,23 @@ Map<String, double> baseFarm(GameWorld w, double minutes, {double dt = 1 / 20, b
     final gain = w.credits - c0 - w.creditIncome * dt;
     if (gain > 0) bounty += gain;
   }
-  return {'bountyPerMin': bounty / minutes, 'colonyLevelsLost': (lv0 - w.planets.fold<int>(0, (a, p) => a + p.colonyLevel)).toDouble(), 'deaths': deaths.toDouble(), 'disables': disables.toDouble(),
-    'incomePerMin': w.creditIncome * 60};
+  return {
+    'bountyPerMin': bounty / minutes,
+    'colonyLevelsLost':
+        (lv0 - w.planets.fold<int>(0, (a, p) => a + p.colonyLevel)).toDouble(),
+    'deaths': deaths.toDouble(),
+    'disables': disables.toDouble(),
+    'incomePerMin': w.creditIncome * 60,
+  };
 }
 
 /// 전투만 재는 봇: 가까운 해적을 쫓아 자동 사격하고 체력 35% 아래면 본거지로 물러나 수리한다.
 /// 반환: 사망, 받은 피해(최대 체력 대비 배수), 처치 수, 직접 번 크레딧/분
-Map<String, double> huntFight(GameWorld w, double minutes, {double dt = 1 / 20}) {
+Map<String, double> huntFight(
+  GameWorld w,
+  double minutes, {
+  double dt = 1 / 20,
+}) {
   final input = InputState()
     ..fire = true
     ..autoAim = true;
@@ -591,7 +702,9 @@ Map<String, double> huntFight(GameWorld w, double minutes, {double dt = 1 / 20})
     if (!retreat) {
       final foes = w.pirates.where((e) => e.isPirate).toList();
       if (foes.isNotEmpty) {
-        final e = foes.reduce((a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b);
+        final e = foes.reduce(
+          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+        );
         final d = (e.pos - p.pos).distance;
         goal = d > 300 ? e.pos : p.pos + (p.pos - e.pos);
       }

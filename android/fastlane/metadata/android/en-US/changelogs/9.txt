@@ -1,0 +1,1 @@
+Added a new story and star-system missions. Energy links now connect Phase Anchors to Haven, providing shared shields and improved anchor protection and repairs after combat.

@@ -416,7 +416,7 @@ class L10nId extends L10n {
 
   @override
   String u_hudSector(String sector, int dev, String threat, String value) {
-    return '$sector · Perkemb. $dev%\n⚠ Ancaman $threat  🏛 $value';
+    return '$sector · Stab. $dev%\n⚠ Ancaman $threat  🏛 $value';
   }
 
   @override
@@ -440,7 +440,7 @@ class L10nId extends L10n {
 
   @override
   String u_gateLocked(int pct) {
-    return '🔒 Terbuka di perkembangan 100% ($pct%)';
+    return '🔒 Terbuka di Stabilisasi 100% ($pct%)';
   }
 
   @override
@@ -491,7 +491,7 @@ class L10nId extends L10n {
   String get u_spkPirate => 'Bajak Laut';
 
   @override
-  String get u_spkAdvisor => 'Letnan Mina';
+  String get u_spkAdvisor => 'Ilmuwan Antariksa Mina';
 
   @override
   String get u_spkMerchant => 'Pedagang Nyang';
@@ -597,7 +597,7 @@ class L10nId extends L10n {
 
   @override
   String u_development(int pct) {
-    return 'Perkembangan $pct%';
+    return 'Stabilisasi $pct%';
   }
 
   @override
@@ -607,7 +607,60 @@ class L10nId extends L10n {
   String get u_opensAt100 => 'Terbuka di 100%';
 
   @override
-  String get u_devHint => 'Naikkan semua planet ke Lv.3 untuk 100%';
+  String get u_devHint =>
+      '100% saat total level Jangkar Fase mencapai jumlah planet × 3';
+
+  @override
+  String u_stabilizerHealth(int hp, int max) {
+    return 'Ketahanan $hp/$max';
+  }
+
+  @override
+  String g_foeIntro(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'missile': 'Kapal rudal! Rudalnya mengejar, tapi bisa kamu tembak jatuh.',
+      'laser':
+          'Kapal laser sedang membidik! Saat garis merah muncul, menghindar ke samping.',
+      'warden':
+          'Kapal perisai melindungi bajak laut di dekatnya. Musuh di cincin biru hanya kena separuh damage, kalahkan perisai dulu!',
+      'carrier':
+          'Kapal induk drone! Ia terus meluncurkan drone, serang induknya dulu.',
+      'phantom':
+          'Kapal hantu menghilang lalu muncul. Tembak terus saat ia terlihat!',
+      'mine':
+          'Kapal penebar ranjau! Ranjau kuning meledak jika didekati, tapi bisa ditembak.',
+      'medic':
+          'Kapal reparasi memperbaiki bajak laut. Kalahkan yang bersembunyi di belakang dulu!',
+      'juggernaut':
+          'Juggernaut! Lapis depannya keras, serang sisi atau belakang dan hindari terjangannya.',
+      'other': 'Musuh baru!',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_levelUnlockAtSystem(int level, int system) {
+    return 'Lv.$level terbuka di sistem bintang $system';
+  }
+
+  @override
+  String get u_myColonies => 'Koloniku';
+
+  @override
+  String get u_myColoniesHint =>
+      'Naikkan level koloni mana pun dari sini, di mana pun kamu berada.';
+
+  @override
+  String get u_noColonies =>
+      'Belum ada koloni. Dekati planet dan dirikan koloni.';
+
+  @override
+  String get u_currentHere => 'Lokasimu';
+
+  @override
+  String u_anchorEffect(int income, int shield, int regen) {
+    return 'Pendapatan +$income% · Perisai bersama $shield · Regen +$regen%';
+  }
 
   @override
   String get u_conqueredSystems => 'Sistem Taklukan (tetap berproduksi)';
@@ -625,7 +678,7 @@ class L10nId extends L10n {
 
   @override
   String u_sectorDev(String name, int pct) {
-    return '$name · Perkemb. $pct%';
+    return '$name · Stab. $pct%';
   }
 
   @override
@@ -1223,11 +1276,11 @@ class L10nId extends L10n {
 
   @override
   String get g_shipNovaAbility =>
-      'Peluru tembus: tiap peluru menembus hingga 2 musuh';
+      'Peluru tembus: tiap peluru menembus hingga 3 musuh';
 
   @override
   String get g_shipAuroraAbility =>
-      'Perbaikan diri: pulih 3% HP/detik setelah 3 detik tanpa terkena serangan\nPerisai Penjaga: menahan 1 serangan tiap 8 detik';
+      'Perbaikan diri: pulih 5% HP/detik setelah 3 detik tanpa terkena serangan\nPerisai Penjaga: menahan 1 serangan tiap 5 detik';
 
   @override
   String g_crewLegendPerk(int pct) {
@@ -1752,85 +1805,88 @@ class L10nId extends L10n {
 
   @override
   String get g_storyAsteroidsLine0 =>
-      'Kapten! Pertama, hancurkan asteroid untuk mengumpulkan bijih.';
+      'Kita butuh bijih untuk pangkalan Mars. Hancurkan tiga asteroid dulu.';
 
   @override
   String get g_storyAsteroidsLine1 =>
       'Gerak dengan joystick dan tembak dengan tombol tembak!';
 
   @override
-  String get g_storyKillsTitle => 'Jatuhkan 3 bajak laut';
+  String get g_storyKillsTitle => 'Kalahkan 3 kapal penyerang';
 
   @override
-  String get g_storyKillsLine0 => 'Ada bajak laut di radar! Ikuti panah merah.';
+  String get g_storyKillsLine0 =>
+      'Kapal tak dikenal mengincar pos relai. Ikuti panah merah dan hentikan tiga penyerang.';
 
   @override
   String get g_storyKillsLine1 =>
-      'Bajak laut? Di depan kapalku mereka cuma rongsokan!';
+      'Mari buka jalannya. Yang lain akan menyusul kita!';
 
   @override
   String get g_storyColoniesTitle => 'Huni Mars';
 
   @override
   String get g_storyColoniesLine0 =>
-      'Bangun koloni pertama di Mars, planet merah di sebelah Bumi. Dekati planetnya dan tombol huni akan muncul.';
+      'Mari buat tempat untuk kembali di Mars. Dekati planet lalu ketuk tombol menetap.';
 
   @override
   String get g_storyColoniesLine1 =>
-      'Koloni menghasilkan kredit bahkan saat kamu santai!';
+      'Kredit dari warga akan membantu menyiapkan perjalanan berikutnya.';
 
   @override
   String get g_storyShipLevelsTitle => 'Upgrade kapal di stasiun';
 
   @override
   String get g_storyShipLevelsLine0 =>
-      'Kembali ke Markas Haven dan upgrade kapalmu. Di dekat stasiun, kapalmu juga diperbaiki.';
+      'Tingkatkan kapal untuk melindungi jaringan Haven. Kembali ke pangkalan untuk memasang perlengkapan.';
 
   @override
   String get g_storyCrewTitle => 'Rekrut 1 kru';
 
   @override
   String get g_storyCrewLine0 =>
-      'Sepi sendirian? Rekrut teman dari tab Kru di menu stasiun!';
+      'Kita butuh teman untuk perjalanan jauh. Rekrut seseorang di tab Awak stasiun.';
 
   @override
   String get g_storyMissionsTitle => 'Selesaikan 1 misi';
 
   @override
   String get g_storyMissionsLine0 =>
-      'Ambil tugas dari papan misi stasiun. Hadiahnya lumayan, lho.';
+      'Orang-orang di rute ini juga butuh bantuan. Ambil tugas dari papan misi stasiun.';
 
   @override
   String get g_storyStationsTitle => 'Bangun stasiun baru';
 
   @override
   String get g_storyStationsLine0 =>
-      'Saatnya memperluas wilayah! Bangun stasiun di ruang kosong jauh dari planet.';
+      'Buat tempat singgah untuk kapal pasokan. Bangun stasiun di ruang kosong jauh dari planet.';
 
   @override
-  String get g_storyDevPercentTitle => 'Perkembangan sistem 100%';
+  String get g_storyDevPercentTitle => 'Stabilisasi sistem 100%';
 
   @override
   String get g_storyDevPercentLine0 =>
-      'Naikkan semua planet ke Lv.3 untuk membuka sistem berikutnya. Cek tombol Sistem di kanan atas!';
+      'Capai total level Jangkar Fase sebesar jumlah planet × 3 untuk menghubungkan pasokan dan membuka gerbang. Periksa tombol Sistem.';
 
   @override
   String get g_storySectorTitle => 'Warp ke sistem berikutnya';
 
   @override
   String get g_storySectorLine0 =>
-      'Gerbang warp terbuka! Pergi ke gerbang ungu di minimap.';
+      'Ada simpul retakan lain di sistem berikutnya. Pergilah ke gerbang ungu di minimap.';
 
   @override
-  String get g_storySectorLine1 => 'Alam semesta yang baru menanti!';
+  String get g_storySectorLine1 =>
+      'Perluas jaringan Jangkar Fase untuk melindungi Bumi.';
 
   @override
   String g_storyDevNTitle(int n) {
-    return 'Perkembangan Sistem $n 100%';
+    return 'Stabilisasi sistem $n 100%';
   }
 
   @override
-  String get g_storyDevNLine => 'Naikkan semua planet di sistem baru ke Lv.3!';
+  String get g_storyDevNLine =>
+      'Perluas jaringan di sini. Jumlah level Jangkar Fase harus mencapai jumlah planet × 3 untuk membuka gerbang berikutnya.';
 
   @override
   String g_systemN(int n) {
@@ -1844,7 +1900,7 @@ class L10nId extends L10n {
 
   @override
   String get g_storyWarpNLine =>
-      'Gerbang sudah terbuka. Mau menjelajah lebih dalam?';
+      'Rute terbuka. Mari bangun Jangkar Fase di sistem berikutnya.';
 
   @override
   String get g_powerUpRapid => 'Tembak Cepat';
@@ -1889,6 +1945,9 @@ class L10nId extends L10n {
   String get g_colonyBldShieldGen => 'Generator Perisai';
 
   @override
+  String get g_colonyBldStabilizer => 'Jangkar Fase';
+
+  @override
   String get g_colonyBldBlurbTurret =>
       'Otomatis menembak bajak laut di dekat koloni. Wajib untuk menahan serbuan!';
 
@@ -1907,6 +1966,15 @@ class L10nId extends L10n {
   @override
   String get g_colonyBldBlurbShieldGen =>
       'Menambah kapasitas perisai dan kecepatan pengisian.';
+
+  @override
+  String get g_colonyBldBlurbStabilizer =>
+      'Stabilisasi sistem · perisai bersama\n+10% pendapatan koloni per level';
+
+  @override
+  String g_stabilizerDamaged(String planet, int level) {
+    return 'Jangkar Fase di $planet rusak dan turun ke level $level.';
+  }
 
   @override
   String get g_stationRoleHome => 'Markas Utama';
@@ -2063,7 +2131,7 @@ class L10nId extends L10n {
 
   @override
   String get g_dlgWelcome =>
-      'Selamat datang, Kapten! Saya Mina, wakil kaptenmu.';
+      'Selamat datang, Kapten. Saya Ilmuwan Antariksa Mina.';
 
   @override
   String get g_dlgMissionsCancelled =>
@@ -2133,7 +2201,7 @@ class L10nId extends L10n {
   String get g_merchantBye => 'Sampai jumpa lagi~ meong!';
 
   @override
-  String get g_pirateRaidTaunt => 'Koloni ini milik kami sekarang! Hahaha!';
+  String get g_pirateRaidTaunt => 'Hancurkan Jangkar Fase terlebih dahulu.';
 
   @override
   String get g_dlgMeteor =>
@@ -2294,7 +2362,7 @@ class L10nId extends L10n {
 
   @override
   String g_pirateBossArrive(String sector) {
-    return 'Akulah penguasa $sector! Maju sini, kapten cilik!';
+    return 'Putuskan jaringan relai di $sector.';
   }
 
   @override
@@ -2333,16 +2401,17 @@ class L10nId extends L10n {
   String get g_captainKill3 => 'Berikutnya!';
 
   @override
-  String get g_pirateAmbush0 => 'Hahaha! Serahkan kargomu!';
+  String get g_pirateAmbush0 =>
+      'Kapal target dikonfirmasi. Lanjutkan pengejaran.';
 
   @override
-  String get g_pirateAmbush1 => 'Ini wilayah geng kami!';
+  String get g_pirateAmbush1 => 'Cegat ekspedisi.';
 
   @override
-  String get g_pirateAmbush2 => 'Serahkan kredit berkilaumu itu!';
+  String get g_pirateAmbush2 => 'Jauhkan mereka dari pemancar.';
 
   @override
-  String get g_pirateAmbush3 => 'Hari sialmu, bocah!';
+  String get g_pirateAmbush3 => 'Target ditemukan. Mulai serangan.';
 
   @override
   String get cat_sysSol => 'Tata Surya';
@@ -3049,4 +3118,344 @@ class L10nId extends L10n {
 
   @override
   String get m_cloudOverwriteOk => 'Timpa';
+
+  @override
+  String get n_title => 'Rencana Haven';
+
+  @override
+  String get n_signal => 'Tamu dari Luar';
+
+  @override
+  String get n_haven => 'Waktu yang Didapat';
+
+  @override
+  String get n_departure => 'Ekspedisi Haven';
+
+  @override
+  String get n_mars => 'Persiapan transmisi';
+
+  @override
+  String get n_transmission => 'Transmisi Pertama';
+
+  @override
+  String get n_gate => 'Melampaui Tata Surya';
+
+  @override
+  String get n_signalSpeaker => 'Ilmuwan Antariksa Mina';
+
+  @override
+  String get n_settler => 'Warga koloni';
+
+  @override
+  String get n_earthReport => 'Laporan Bumi';
+
+  @override
+  String get n_open0 =>
+      'Deteksi partikel antimateri terus meningkat.\nDengan laju ini, Bumi antimateri akan memasuki tata surya.';
+
+  @override
+  String get n_open1 =>
+      'Jangkar Fase ciptaanku lulus uji pertama bersama MESIN INTI kuno Haven. Kita belum tahu siapa pembuatnya, tetapi alat itu memperlambat Bumi antimateri.';
+
+  @override
+  String get n_open2 =>
+      'Aku akan memasang jangkar.\nKita bangun koloni dan sambungkan jaringan transmisi ke Haven.';
+
+  @override
+  String get n_open3 => 'Haven sudah aktif. Ikuti ekspedisinya.';
+
+  @override
+  String get n_enemyCommander => 'Transmisi tak dikenal';
+
+  @override
+  String get n_mars0 =>
+      'Permukiman sudah siap, Kapten. Bisakah kita mengirim energi ke Bumi sekarang?';
+
+  @override
+  String get n_mars1 =>
+      'Belum. Kita harus membangun Jangkar Fase dan menghubungkannya ke Haven dahulu.';
+
+  @override
+  String get n_mars2 =>
+      'Penyerang tak dikenal membidik Jangkar Fase. Lindungi perangkat dan perisai.';
+
+  @override
+  String get n_transmission0 =>
+      'Jangkar Fase aktif. Haven memastikan transmisi pertama telah diterima.\n\nEnergi yang kita kumpulkan telah mencapai Bumi.';
+
+  @override
+  String get n_transmission1 =>
+      'Sekolah yang tutup akibat pembatasan listrik sudah buka lagi. Anak-anak kembali belajar.\n\nTeruslah mengirim energi. Lindungi peralatan dan perisai, lalu perluas jaringan.';
+
+  @override
+  String get n_warp0 =>
+      'Jaringan Tata Surya stabil, tetapi energi Bumi dan Tata Surya belum cukup. Kita memerlukan energi dari sistem bintang lain untuk makin memperlambat Bumi antimateri.';
+
+  @override
+  String get n_warp1 =>
+      'Pertahankan transmisi dan bangun koloni serta jangkar di sistem lain. Berangkat ke Alpha Centauri, Kapten.';
+
+  @override
+  String get n_next => 'Lanjut';
+
+  @override
+  String get n_skip => 'Lewati adegan';
+
+  @override
+  String get n_launch => 'Berangkat';
+
+  @override
+  String get g_antimatterEarth => 'Bumi antimateri';
+
+  @override
+  String get u_antimatterHint =>
+      'Masih di luar orbit planet. Lebih banyak Jangkar Fase akan memperlambat pendekatannya.';
+
+  @override
+  String get c_endingTitle => 'Bumi aman';
+
+  @override
+  String get c_endingBody =>
+      'Bumi antimateri telah dijauhkan. Semua koloni membantu melindungi Bumi, dan pemukiman terus berlanjut.';
+
+  @override
+  String get c_finalTitle => 'Operasi terakhir';
+
+  @override
+  String get c_stabilize => 'Capai 100% jaringan jangkar setempat';
+
+  @override
+  String get c_syncReady => 'Pergi ke relai Haven dan selaraskan';
+
+  @override
+  String c_syncProgress(int percent) {
+    return 'Penyelarasan $percent%';
+  }
+
+  @override
+  String get c_guardian => 'Kalahkan penjaga inti';
+
+  @override
+  String get c_counterattack => 'Kembali ke relai dan balik transmisi';
+
+  @override
+  String get c_complete => 'Misi selesai';
+
+  @override
+  String get c_syncButton => 'Selaraskan kapal';
+
+  @override
+  String get c_fireButton => 'Jalankan transmisi balik';
+
+  @override
+  String get c_guardianName => 'Penjaga inti';
+
+  @override
+  String c_title(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': 'Relai Alpha Centauri',
+      '5': 'Serangan di Sirius',
+      '8': 'Selisih di Tau Ceti',
+      '12': 'Saluran tersembunyi',
+      '16': 'Perintah yang ditemukan',
+      '20': 'Inti yang ditanam',
+      '22': 'Jejak di luar galaksi',
+      '25': 'Kendali fase manual',
+      '26': 'Triangulum: M33 X-7',
+      'other': 'Perluas jaringan',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_body(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1':
+          'Transmisi pertama dari luar Tata Surya telah mencapai Haven. Jangkar di sistem lain dapat membantu pertahanan Bumi.',
+      '5':
+          'Jaringan yang diperluas memperkuat pertahanan Bumi. Penyerang tak dikenal sengaja membidik relai.',
+      '8':
+          'Energi yang diterima Haven sedikit di bawah keluaran Tau Ceti. Teruskan pertahanan sambil kami menyelidiki penyebabnya.',
+      '12':
+          'Analisis catatan transmisi yang terkumpul mengungkap saluran keluar yang tidak tercatat di inti Haven. Jangkar Fase sendiri bekerja normal.',
+      '16':
+          'Dalam perjalanan, kami menyadap catatan perintah musuh. Penyerang itu adalah Severance yang mengikuti perintah penguasa alien.',
+      '20':
+          'Arsip alien di Kepler-90 memuat rancangan inti yang sama. Artefak kuno yang ditemukan di Bumi sengaja ditaruh di sana.',
+      '22':
+          'Perbandingan arsip Kepler-90 dan jejak energi menunjukkan jalur ke luar galaksi. Alien mengirim Bumi antimateri agar kita mengumpulkan energi; inti mencuri sebagian dari pertahanan yang memang diperlukan.',
+      '25':
+          'Aku menemukan cara mengisolasi kendali otomatis alien. Kapalmu akan menjadi titik kendali langsung Haven.',
+      '26':
+          'Ini wilayah asal alien, Triangulum M33 X-7. Selesaikan jaringan jangkar setempat, selaraskan kapal di relai Haven, kalahkan penjaga inti, lalu kembali ke relai untuk membalik transmisi.',
+      'other':
+          'Bangun koloni dan teruskan transmisi Jangkar Fase. Bumi masih membutuhkan energinya.',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_task(String task) {
+    String _temp0 = intl.Intl.selectLogic(task, {
+      'anchor': 'Bangun atau perbaiki jangkar',
+      's1_0': 'Uji transmisi di jangkar',
+      's5': 'Kalahkan penyerang jangkar',
+      's5_0': 'Periksa pemulihan transmisi',
+      's8_0': 'Ukur keluaran jangkar',
+      's8_1': 'Bandingkan catatan di Haven',
+      's12_0': 'Periksa sirkuit inti tersembunyi',
+      's16': 'Kalahkan kapal komando',
+      's16_0': 'Ambil perintah dari bangkai kapal',
+      's20_0': 'Selidiki desain inti di reruntuhan',
+      's22_0': 'Amati jalur kebocoran energi',
+      's22_1': 'Bandingkan arsip alien di Haven',
+      's25_0': 'Uji isolasi kontrol otomatis di Haven',
+      'other': 'Perluas jaringan',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get c_operate => 'Mulai operasi';
+
+  @override
+  String get c_finishOperation => 'Selesaikan operasi wilayah';
+
+  @override
+  String get c_reverseResult =>
+      'Kapal dan Haven tetap tersinkron. Energi koloni dialirkan balik melalui jaringan untuk menjauhkan Bumi antimateri.';
+
+  @override
+  String get c_severanceName => 'Severance';
+
+  @override
+  String get u_sharedShield => 'Perisai bersama';
+
+  @override
+  String get u_supportOffline => 'Dukungan Haven terputus';
+
+  @override
+  String u_systemTrait(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest':
+          'Sarang bajak laut · Jeda kemunculan ×0.7, hadiah buruan ×1.5',
+      'richVeins': 'Urat kaya · Bijih koloni ×2, bijih tambang ×1.5',
+      'solarFlare':
+          'Suar bintang · Kredit koloni ×1.25, regenerasi perisai ×0.5',
+      'ionNebula':
+          'Nebula ion · Jeda skill ×0.7, kerusakan turret koloni/stasiun ×0.7',
+      'gravityWell':
+          'Sumur gravitasi · Kecepatan maksimum ×0.85, hadiah tempur/misi ×1.3',
+      'tradeLane':
+          'Jalur dagang · Harga jual bijih ×1.3, frekuensi serangan koloni ×1.3',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_traitIntro(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest':
+          'Sarang bajak laut! Mereka datang lebih sering, tetapi hadiah buruannya lebih besar. Bersiap berburu!',
+      'richVeins':
+          'Urat kaya! Produksi bijih koloni dua kali lipat dan tambang asteroid 1,5 kali lipat. Ayo menambang!',
+      'solarFlare':
+          'Suar bintang kuat! Kredit koloni naik, tetapi regenerasi perisai berkurang separuh. Jaga pertahanan!',
+      'ionNebula':
+          'Nebula ion! Jeda skill dan kerusakan turret koloni serta stasiun menjadi ×0.7. Bantu dengan skill!',
+      'gravityWell':
+          'Sumur gravitasi! Kecepatan maksimum ×0.85, hadiah tempur dan misi ×1.3. Pilih misi!',
+      'tradeLane':
+          'Jalur dagang! Harga bijih dan frekuensi serangan koloni ×1.3. Berdagang sambil memantau peringatan!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get u_specTitle => 'Spesialisasi';
+
+  @override
+  String u_specName(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': 'Industri',
+      'mining': 'Tambang',
+      'fortress': 'Benteng',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specEffect(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': 'Produksi kredit ×1.5',
+      'mining': 'Produksi bijih ×2.5',
+      'fortress':
+          'Perisai ×2 · kerusakan menara ×1.5 · level aman dari serangan',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specLocked(int level) {
+    return 'Spesialisasi terbuka di Lv.$level';
+  }
+
+  @override
+  String u_specInactive(int level) {
+    return 'Aktif hanya mulai Lv.$level';
+  }
+
+  @override
+  String get u_specFree => 'Gratis';
+
+  @override
+  String get u_specChoose => 'Pilih spesialisasi';
+
+  @override
+  String g_dlgSpecUnlocked(String planet) {
+    return '$planet mencapai Lv.5! Sekarang kamu bisa memilih spesialisasi: Industri untuk kredit, Tambang untuk bijih, Benteng untuk pertahanan. Pilihan pertama gratis!';
+  }
+
+  @override
+  String g_dlgRaidFortress(String planet) {
+    return 'Benteng $planet bertahan dari serangan. Levelnya tetap aman!';
+  }
+
+  @override
+  String u_bossName(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '☠ Laksamana Bajak Laut',
+      'devourer': '☠ Pemangsa Urat',
+      'flare': '☠ Kapal Meriam Suar',
+      'wraith': '☠ Hantu Ion',
+      'gravity': '☠ Penguasa Gravitasi',
+      'plunder': '☠ Kapal Dagang Penjarah',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_dlgBossArchetype(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet':
+          'Peringatan! Laksamana Bajak Laut terus memanggil pengawal perampok. Serang bosnya sebelum pengawal menumpuk!',
+      'devourer':
+          'Peringatan! Pemangsa Urat menebar ranjau di sekitarnya. Tembak ranjaunya sambil bertarung!',
+      'flare':
+          'Peringatan! Kapal Meriam Suar: saat garis bidik muncul, laser tiga arah menyusul. Menghindar ke samping!',
+      'wraith':
+          'Peringatan! Hantu Ion menghilang setiap 4 detik. Serang saat terlihat!',
+      'gravity':
+          'Peringatan! Penguasa Gravitasi menarikmu jika mendekat. Pakai boost untuk lepas!',
+      'plunder':
+          'Peringatan! Kapal Dagang Penjarah cepat dan mencuri kredit setiap kali tembakannya kena. Kalahkan untuk mendapatkan semuanya kembali!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 }

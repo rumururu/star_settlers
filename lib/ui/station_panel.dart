@@ -92,12 +92,10 @@ class StationPanel extends StatelessWidget {
                   Wrap(
                     spacing: 10,
                     children: [
-                      iconValue('credits',
-                          '${compact(world.credits)} +${world.creditIncome.toStringAsFixed(1)}/s',
-                          style: dimStyle),
-                      iconValue('ore', '${compact(world.ore)} +${world.oreIncome.toStringAsFixed(1)}/s',
-                          style: dimStyle),
-                      iconValue('gem', '${world.profile.gems}', style: dimStyle),
+                      _resource('credits',
+                          '${compact(world.credits)} +${world.creditIncome.toStringAsFixed(1)}/s'),
+                      _resource('ore', '${compact(world.ore)} +${world.oreIncome.toStringAsFixed(1)}/s'),
+                      _resource('gem', '${world.profile.gems}'),
                     ],
                   ),
                 ],
@@ -106,6 +104,16 @@ class StationPanel extends StatelessWidget {
             IconButton(icon: const Icon(Icons.close, color: Colors.white), onPressed: onClose),
           ],
         ),
+      );
+
+  // Wrap can move each resource, but its text must also fit the header width.
+  Widget _resource(String icon, String value) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GameIcon(icon, size: 18),
+          const SizedBox(width: 2),
+          Flexible(child: Text(value, style: dimStyle)),
+        ],
       );
 }
 
@@ -166,6 +174,16 @@ class _ShipTab extends StatelessWidget {
     };
   }
 
+  String _upgradeDesc(UpgradeKind k) {
+    final level = world.level(k);
+    if (level >= k.maxLevel || level < world.upgradeCap(k)) return _desc(k);
+    final initialCap = switch (k) {
+      UpgradeKind.weapon || UpgradeKind.hull || UpgradeKind.engine => 4,
+      _ => 2,
+    };
+    return '${_desc(k)}\n${tr.u_levelUnlockAtSystem(level + 1, level + 2 - initialCap)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -174,9 +192,11 @@ class _ShipTab extends StatelessWidget {
         for (final k in UpgradeKind.values)
           _row(
             '${k.label}  Lv.${world.level(k)}${world.level(k) >= k.maxLevel ? ' (MAX)' : ''}',
-            _desc(k),
+            _upgradeDesc(k),
             world.level(k) >= k.maxLevel
                 ? actionBtn('MAX', false, null)
+                : world.level(k) >= world.upgradeCap(k)
+                ? actionBtn('🔒', false, null)
                 : actionBtn(
                     world.level(k) == 0 &&
                             (k == UpgradeKind.missile || k == UpgradeKind.shield || k == UpgradeKind.drone)

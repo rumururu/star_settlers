@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import '../l10n/l.dart';
 import 'star_catalog.dart' show systemName;
+import 'system_traits.dart' show BossArchetype;
 
 extension OffsetX on Offset {
   Offset normalized() {
@@ -58,11 +59,39 @@ class PlayerShip {
   double guardCooldown = 0;
 }
 
-enum PirateKind { scout, raider, bomber, sniper, boss, jelly }
+enum PirateKind {
+  scout,
+  raider,
+  bomber,
+  sniper,
+  boss,
+  jelly,
+  // 후반 항성계 적 ([unlockSector]부터 섞여 나온다)
+  missile,
+  laser,
+  warden,
+  carrier,
+  phantom,
+  mine,
+  medic,
+  juggernaut;
+
+  /// 이 적이 일반 스폰에 섞이기 시작하는 항성계 (0 기반). 기본 6종은 0
+  int get unlockSector => switch (this) {
+    missile || mine => 2,
+    laser || warden => 3,
+    phantom || medic => 4,
+    carrier => 5,
+    juggernaut => 6,
+    _ => 0,
+  };
+
+  bool get isLate => unlockSector > 0;
+}
 
 class Pirate {
   Pirate(this.kind, this.pos, this.hp, {this.bountyId, this.dmgScale = 1})
-      : maxHp = hp;
+    : maxHp = hp;
 
   final PirateKind kind;
   Offset pos;
@@ -83,6 +112,36 @@ class Pirate {
   String? get name => bountyId == null ? null : bountyNameOf(bountyId!);
   bool sectorBoss = false;
 
+  /// 항성계 두목의 원형 (항성계 특성에서 정한다). 태양계·재등장 두목은 null
+  BossArchetype? archetype;
+
+  /// 원형 패턴 타이머: 소환·기뢰·레이저·은신 전환
+  double archetypeTimer = 0;
+
+  /// 약탈 상선이 선장에게서 빼앗아 쌓아 둔 크레딧 (처치하면 돌려받는다)
+  double plundered = 0;
+  bool finalGuardian = false;
+  int? campaignChapter;
+
+  /// 후반 적 능력 타이머: 유도탄 일제사격·레이저 충전·드론 발진·은신 전환·기뢰·수리·돌진
+  double abilityTimer = 3;
+
+  /// 레이저 충전 남은 시간 (0보다 크면 조준선을 그린다)과 조준 방향
+  double charge = 0;
+  double aimAngle = 0;
+
+  /// 유령선 은신 중: 맞지 않고, 조준·포탑의 표적이 되지 않는다
+  bool cloaked = false;
+
+  /// 돌진 남은 시간 (중장갑 돌격함)
+  double dash = 0;
+
+  /// 수리선·방패선 효과 표시용 (0~1, 줄어든다)
+  double pulse = 0;
+
+  /// 드론 모함이 띄운 드론이면 그 모함
+  Pirate? parent;
+
   /// 두목 패턴: 체력 절반 이하 2페이즈, 특수 공격 타이머
   bool enraged = false;
   double specialTimer = 5;
@@ -95,23 +154,42 @@ class Pirate {
   bool get isPirate => kind != PirateKind.jelly;
   bool get isBossLike => kind == PirateKind.boss;
 
-  double get radius => switch (kind) {
+  double get radius =>
+      switch (kind) {
         PirateKind.scout => 18,
         PirateKind.raider => 24,
         PirateKind.bomber => 20,
         PirateKind.sniper => 20,
         PirateKind.boss => 46,
         PirateKind.jelly => 34,
+        PirateKind.missile => 26,
+        PirateKind.laser => 24,
+        PirateKind.warden => 30,
+        PirateKind.carrier => 40,
+        PirateKind.phantom => 22,
+        PirateKind.mine => 26,
+        PirateKind.medic => 26,
+        PirateKind.juggernaut => 52,
       } *
       (name != null && kind != PirateKind.boss ? 1.3 : 1);
 
-  double get speed => switch (kind) {
+  double get speed =>
+      (archetype == BossArchetype.plunder ? BossArchetype.plunderSpeedMul : 1) *
+      switch (kind) {
         PirateKind.scout => 290,
         PirateKind.raider => 210,
         PirateKind.bomber => 330,
         PirateKind.sniper => 190,
         PirateKind.boss => 150,
         PirateKind.jelly => 60,
+        PirateKind.missile => 180,
+        PirateKind.laser => 170,
+        PirateKind.warden => 160,
+        PirateKind.carrier => 110,
+        PirateKind.phantom => 280,
+        PirateKind.mine => 220,
+        PirateKind.medic => 175,
+        PirateKind.juggernaut => 120,
       };
 
   double get damage =>
@@ -123,39 +201,101 @@ class Pirate {
         PirateKind.sniper => 22,
         PirateKind.boss => 16,
         PirateKind.jelly => 9,
+        PirateKind.missile => 13, // 유도탄 한 발
+        PirateKind.laser => 28, // 레이저 한 줄기
+        PirateKind.warden => 8,
+        PirateKind.carrier => 9,
+        PirateKind.phantom => 12,
+        PirateKind.mine => 26, // 기뢰 폭발
+        PirateKind.medic => 6,
+        PirateKind.juggernaut => 30, // 돌진 충돌
       };
 
   double get fireInterval => switch (kind) {
-        PirateKind.scout => 1.1,
-        PirateKind.raider => 1.4,
-        PirateKind.bomber => 99,
-        PirateKind.sniper => 2.6,
-        PirateKind.boss => 0.9,
-        PirateKind.jelly => 99,
-      };
+    PirateKind.scout => 1.1,
+    PirateKind.raider => 1.4,
+    PirateKind.bomber => 99,
+    PirateKind.sniper => 2.6,
+    PirateKind.boss => 0.9,
+    PirateKind.jelly => 99,
+    PirateKind.missile => 99, // 일반 사격 없음, 유도탄만
+    PirateKind.laser => 99, // 레이저만
+    PirateKind.warden => 1.6,
+    PirateKind.carrier => 1.8,
+    PirateKind.phantom => 0.45, // 모습을 드러낸 동안 연사
+    PirateKind.mine => 99, // 기뢰만
+    PirateKind.medic => 1.8,
+    PirateKind.juggernaut => 1.2,
+  };
 
   int get bounty => switch (kind) {
-        PirateKind.scout => 25,
-        PirateKind.raider => 50,
-        PirateKind.bomber => 40,
-        PirateKind.sniper => 60,
-        PirateKind.boss => 400,
-        PirateKind.jelly => 30,
-      };
+    PirateKind.scout => 25,
+    PirateKind.raider => 50,
+    PirateKind.bomber => 40,
+    PirateKind.sniper => 60,
+    PirateKind.boss => 400,
+    PirateKind.jelly => 30,
+    PirateKind.missile => 80,
+    PirateKind.laser => 90,
+    PirateKind.warden => 110,
+    PirateKind.carrier => 160,
+    PirateKind.phantom => 90,
+    PirateKind.mine => 80,
+    PirateKind.medic => 110,
+    PirateKind.juggernaut => 300,
+  };
 
   static double baseHp(PirateKind k) => switch (k) {
-        PirateKind.scout => 30,
-        PirateKind.raider => 70,
-        PirateKind.bomber => 35,
-        PirateKind.sniper => 45,
-        PirateKind.boss => 450,
-        PirateKind.jelly => 120,
-      };
+    PirateKind.scout => 30,
+    PirateKind.raider => 70,
+    PirateKind.bomber => 35,
+    PirateKind.sniper => 45,
+    PirateKind.boss => 450,
+    PirateKind.jelly => 120,
+    PirateKind.missile => 85,
+    PirateKind.laser => 70,
+    PirateKind.warden => 170,
+    PirateKind.carrier => 280,
+    PirateKind.phantom => 55,
+    PirateKind.mine => 90,
+    PirateKind.medic => 110,
+    PirateKind.juggernaut => 650,
+  };
+}
+
+/// 유도탄 포격선의 미사일. 선장을 쫓아 방향을 튼다. 쏘아서 떨어뜨릴 수 있다.
+class EnemyMissile {
+  EnemyMissile(this.pos, this.vel, this.damage);
+  Offset pos;
+  Offset vel;
+  final double damage;
+  double life = 6;
+  static const speed = 250.0;
+  static const turnRate = 2.0; // rad/s
+}
+
+/// 기뢰 부설선이 뿌리는 기뢰. 잠깐 뒤 무장되어 가까이 오면 터진다. 쏘아서 없앨 수 있다.
+class SpaceMine {
+  SpaceMine(this.pos, this.damage);
+  final Offset pos;
+  final double damage;
+  double life = 25;
+  double arm = 0.8;
+  static const trigger = 80.0;
+  static const blast = 120.0;
 }
 
 class Bullet {
-  Bullet(this.pos, this.vel, this.damage, this.fromPlayer,
-      {this.life = 1.2, this.big = false, this.pierce = 0});
+  Bullet(
+    this.pos,
+    this.vel,
+    this.damage,
+    this.fromPlayer, {
+    this.life = 1.2,
+    this.big = false,
+    this.pierce = 0,
+    this.source,
+  });
   Offset pos;
   final Offset vel;
   final double damage;
@@ -166,6 +306,9 @@ class Bullet {
   /// 남은 관통 횟수. 관통한 적은 [hits]에 기록해 같은 적을 두 번 맞히지 않는다.
   int pierce;
   Set<Pirate>? hits;
+
+  /// 적 탄을 쏜 함선 (약탈 상선의 크레딧 약탈 판정용). 그 밖에는 null
+  final Pirate? source;
 }
 
 class Missile {
@@ -179,11 +322,13 @@ class Missile {
 
 class Asteroid {
   Asteroid(this.pos, this.radius, int seed, {this.crystal = false})
-      : hp = radius * 1.5,
-        rotation = 0,
-        spin = (Random(seed).nextDouble() - 0.5) * 0.8,
-        shape = List.generate(
-            9, (i) => 0.75 + Random(seed + i * 31).nextDouble() * 0.35);
+    : hp = radius * 1.5,
+      rotation = 0,
+      spin = (Random(seed).nextDouble() - 0.5) * 0.8,
+      shape = List.generate(
+        9,
+        (i) => 0.75 + Random(seed + i * 31).nextDouble() * 0.35,
+      );
   Offset pos;
   Offset drift = Offset.zero;
   final double radius;
@@ -201,23 +346,23 @@ enum PowerUpKind { rapid, shield, magnet, doubleCredits }
 
 extension PowerUpInfo on PowerUpKind {
   String get icon => switch (this) {
-        PowerUpKind.rapid => '⚡',
-        PowerUpKind.shield => '🛡',
-        PowerUpKind.magnet => '🧲',
-        PowerUpKind.doubleCredits => '💰',
-      };
+    PowerUpKind.rapid => '⚡',
+    PowerUpKind.shield => '🛡',
+    PowerUpKind.magnet => '🧲',
+    PowerUpKind.doubleCredits => '💰',
+  };
   String get label => switch (this) {
-        PowerUpKind.rapid => tr.g_powerUpRapid,
-        PowerUpKind.shield => tr.g_powerUpShield,
-        PowerUpKind.magnet => tr.g_powerUpMagnet,
-        PowerUpKind.doubleCredits => tr.g_powerUpDoubleCredits,
-      };
+    PowerUpKind.rapid => tr.g_powerUpRapid,
+    PowerUpKind.shield => tr.g_powerUpShield,
+    PowerUpKind.magnet => tr.g_powerUpMagnet,
+    PowerUpKind.doubleCredits => tr.g_powerUpDoubleCredits,
+  };
   double get duration => switch (this) {
-        PowerUpKind.rapid => 8,
-        PowerUpKind.shield => 6,
-        PowerUpKind.magnet => 15,
-        PowerUpKind.doubleCredits => 20,
-      };
+    PowerUpKind.rapid => 8,
+    PowerUpKind.shield => 6,
+    PowerUpKind.magnet => 15,
+    PowerUpKind.doubleCredits => 20,
+  };
 }
 
 class Pickup {
@@ -236,7 +381,7 @@ class Pickup {
 
 class Particle {
   Particle(this.pos, this.vel, this.life, this.color, this.size)
-      : maxLife = life;
+    : maxLife = life;
   Offset pos;
   Offset vel;
   double life;
@@ -258,11 +403,16 @@ enum PlanetKind { garden, desert, ice, lava, gas }
 
 /// 항성(섹터 중심, 원점)을 도는 행성
 class Planet {
-  Planet(String name, this.radius, this.kind,
-      {required this.orbitRadius, required this.orbitPhase, String Function()? nameOf})
-      : _name = name,
-        _nameOf = nameOf,
-        _nameLocale = Lang.locale;
+  Planet(
+    String name,
+    this.radius,
+    this.kind, {
+    required this.orbitRadius,
+    required this.orbitPhase,
+    String Function()? nameOf,
+  }) : _name = name,
+       _nameOf = nameOf,
+       _nameLocale = Lang.locale;
 
   /// 이름은 언어가 바뀌면 [_nameOf]로 다시 만든다 (만든 때의 언어에 굳지 않게)
   String _name;
@@ -291,9 +441,18 @@ class Planet {
   double get orbitSpeed => 2 * pi / (900 * pow(orbitRadius / 1350, 1.5));
 
   /// 섹터 경과 시간 [t]초일 때 궤도 위치로 옮긴다
-  void placeOnOrbit(double t) => pos = OffsetX.fromAngle(orbitPhase + orbitSpeed * t, orbitRadius);
+  void placeOnOrbit(double t) =>
+      pos = OffsetX.fromAngle(orbitPhase + orbitSpeed * t, orbitRadius);
 
   int colonyLevel = 0;
+
+  /// 누적 내구도. 레벨당 한 층이 파괴될 때 건물 레벨도 감소한다.
+  double stabilizerHp = 0;
+  double relayShieldHp = 0;
+  double relayShieldCooldown = 0;
+  static const stabilizerHpPerLevel = 150.0;
+  double stabilizerMaxHp(double sectorMul) =>
+      building(ColonyBuilding.stabilizer) * stabilizerHpPerLevel * sectorMul;
 
   /// 해적 습격 중이면 생산 중단
   bool raided = false;
@@ -309,7 +468,9 @@ class Planet {
   bool shieldBroken = false;
 
   double shieldMax(double sectorMul) =>
-      (200 + 100 * colonyLevel + 250 * building(ColonyBuilding.shieldGen)) * sectorMul;
+      (200 + 100 * colonyLevel + 250 * building(ColonyBuilding.shieldGen)) *
+      sectorMul *
+      (activeSpec == ColonySpec.fortress ? ColonySpec.fortressShieldMul : 1);
 
   /// 초당 재충전량 (안 맞은 지 [shieldRegenDelay]초 뒤부터)
   double shieldRegen(double sectorMul) =>
@@ -322,24 +483,33 @@ class Planet {
   bool get domeUp => colonyLevel > 0 && !shieldBroken && shieldHp > 0;
   double get domeRadius => radius + 220;
 
-  static const maxLevel = 5;
+  /// 진척에 따른 상한과 별개인 식민지의 절대 최대 레벨.
+  static const maxLevel = 12;
+
+  // ---------- 특화 ----------
+  /// 고른 특화. 레벨이 [ColonySpec.minLevel] 아래로 떨어져도 유지한다.
+  ColonySpec? spec;
+
+  /// 효과가 실제로 적용되는 특화 (Lv.[ColonySpec.minLevel] 이상일 때만)
+  ColonySpec? get activeSpec =>
+      colonyLevel >= ColonySpec.minLevel ? spec : null;
 
   String get kindLabel => switch (kind) {
-        PlanetKind.garden => tr.g_planetKindGarden,
-        PlanetKind.desert => tr.g_planetKindDesert,
-        PlanetKind.ice => tr.g_planetKindIce,
-        PlanetKind.lava => tr.g_planetKindLava,
-        PlanetKind.gas => tr.g_planetKindGas,
-      };
+    PlanetKind.garden => tr.g_planetKindGarden,
+    PlanetKind.desert => tr.g_planetKindDesert,
+    PlanetKind.ice => tr.g_planetKindIce,
+    PlanetKind.lava => tr.g_planetKindLava,
+    PlanetKind.gas => tr.g_planetKindGas,
+  };
 
   /// 레벨당 초당 생산량
   (double credits, double ore) get ratePerLevel => switch (kind) {
-        PlanetKind.garden => (3.0, 0.0),
-        PlanetKind.desert => (2.0, 0.6),
-        PlanetKind.ice => (1.5, 1.0),
-        PlanetKind.lava => (0.5, 2.0),
-        PlanetKind.gas => (4.0, 0.0),
-      };
+    PlanetKind.garden => (3.0, 0.0),
+    PlanetKind.desert => (2.0, 0.6),
+    PlanetKind.ice => (1.5, 1.0),
+    PlanetKind.lava => (0.5, 2.0),
+    PlanetKind.gas => (4.0, 0.0),
+  };
 
   /// 정착(Lv.0→1) 기본 비용. 레벨마다 ×[levelCostGrowth]. 항성계 배율은 GameWorld.costMul
   static const settleCost = 850;
@@ -364,16 +534,28 @@ class Planet {
   int get buildingCap => colonyLevel;
 
   double get turretRange => radius + 320 + building(ColonyBuilding.turret) * 30;
-  double get turretDamage => 5 + building(ColonyBuilding.turret) * 4;
-  double get turretInterval => 1.0 / (1 + building(ColonyBuilding.turret) * 0.2);
+  double get turretDamage =>
+      (5 + building(ColonyBuilding.turret) * 4) *
+      (activeSpec == ColonySpec.fortress ? ColonySpec.fortressTurretMul : 1);
+  double get turretInterval =>
+      1.0 / (1 + building(ColonyBuilding.turret) * 0.2);
   double get dockRange => radius + 240;
   double get dockHealRate => 6 + building(ColonyBuilding.dock) * 6;
 
-  /// 섹터 배율·보너스 적용 전 초당 생산량
+  /// 위상 정박기 레벨당 이 식민지의 크레딧 수입 보너스 (송신망에 연결된 거점)
+  static const anchorIncomePerLevel = 0.10;
+
+  /// 섹터 배율·보너스 적용 전 초당 생산량 (특화 배율은 여기서 한 번만 곱한다.
+  /// 원격 수입 저장값과 "내 식민지" 표시가 모두 이 값을 쓴다)
   double get baseCreditRate =>
-      ratePerLevel.$1 * colonyLevel * (1 + 0.25 * building(ColonyBuilding.trade));
+      ratePerLevel.$1 *
+      colonyLevel *
+      (1 + 0.25 * building(ColonyBuilding.trade)) *
+      (1 + anchorIncomePerLevel * building(ColonyBuilding.stabilizer)) *
+      (activeSpec == ColonySpec.industry ? ColonySpec.industryCreditMul : 1);
   double get baseOreRate =>
-      ratePerLevel.$2 * colonyLevel + 0.8 * building(ColonyBuilding.mine);
+      (ratePerLevel.$2 * colonyLevel + 0.8 * building(ColonyBuilding.mine)) *
+      (activeSpec == ColonySpec.mining ? ColonySpec.miningOreMul : 1);
 
   Cost buildingBaseCost(ColonyBuilding b) {
     final lv = building(b);
@@ -383,36 +565,73 @@ class Planet {
       ColonyBuilding.trade => (200, 40),
       ColonyBuilding.dock => (160, 30),
       ColonyBuilding.shieldGen => (220, 60),
+      ColonyBuilding.stabilizer => (40, 5),
     };
     return ((credits * pow(1.7, lv)).round(), ore * (lv + 1));
   }
 }
 
+/// 식민지 특화: Lv.[minLevel]에서 하나를 고른다. 저장은 이름(name)으로 한다.
+enum ColonySpec {
+  industry,
+  mining,
+  fortress;
+
+  /// 고를 수 있고 효과가 적용되는 최소 식민지 레벨
+  static const minLevel = 5;
+  static const industryCreditMul = 1.5;
+  static const miningOreMul = 2.5;
+  static const fortressShieldMul = 2.0;
+  static const fortressTurretMul = 1.5;
+
+  /// 저장값(이름)을 특화로. 모르는 값·빈 값은 특화 없음
+  static ColonySpec? fromName(Object? name) =>
+      values.where((s) => s.name == name).firstOrNull;
+}
+
+extension ColonySpecInfo on ColonySpec {
+  String get label => tr.u_specName(name);
+  String get effect => tr.u_specEffect(name);
+  String get emoji => switch (this) {
+    ColonySpec.industry => '🏭',
+    ColonySpec.mining => '⛏',
+    ColonySpec.fortress => '🏰',
+  };
+  String get iconAsset => switch (this) {
+    ColonySpec.industry => 'credits',
+    ColonySpec.mining => 'b_mine',
+    ColonySpec.fortress => 'dome',
+  };
+}
+
 /// 저장 형식이 index 순서라 새 건물은 끝에만 추가한다
-enum ColonyBuilding { turret, mine, trade, dock, shieldGen }
+enum ColonyBuilding { turret, mine, trade, dock, shieldGen, stabilizer }
 
 extension ColonyBuildingInfo on ColonyBuilding {
   String get label => switch (this) {
-        ColonyBuilding.turret => tr.g_colonyBldTurret,
-        ColonyBuilding.mine => tr.g_colonyBldMine,
-        ColonyBuilding.trade => tr.g_colonyBldTrade,
-        ColonyBuilding.dock => tr.g_colonyBldDock,
-        ColonyBuilding.shieldGen => tr.g_colonyBldShieldGen,
-      };
+    ColonyBuilding.turret => tr.g_colonyBldTurret,
+    ColonyBuilding.mine => tr.g_colonyBldMine,
+    ColonyBuilding.trade => tr.g_colonyBldTrade,
+    ColonyBuilding.dock => tr.g_colonyBldDock,
+    ColonyBuilding.shieldGen => tr.g_colonyBldShieldGen,
+    ColonyBuilding.stabilizer => tr.g_colonyBldStabilizer,
+  };
   String get icon => switch (this) {
-        ColonyBuilding.turret => '🔫',
-        ColonyBuilding.mine => '⛏',
-        ColonyBuilding.trade => '🏪',
-        ColonyBuilding.dock => '🔧',
-        ColonyBuilding.shieldGen => '🛡',
-      };
+    ColonyBuilding.turret => '🔫',
+    ColonyBuilding.mine => '⛏',
+    ColonyBuilding.trade => '🏪',
+    ColonyBuilding.dock => '🔧',
+    ColonyBuilding.shieldGen => '🛡',
+    ColonyBuilding.stabilizer => '📡',
+  };
   String get blurb => switch (this) {
-        ColonyBuilding.turret => tr.g_colonyBldBlurbTurret,
-        ColonyBuilding.mine => tr.g_colonyBldBlurbMine,
-        ColonyBuilding.trade => tr.g_colonyBldBlurbTrade,
-        ColonyBuilding.dock => tr.g_colonyBldBlurbDock,
-        ColonyBuilding.shieldGen => tr.g_colonyBldBlurbShieldGen,
-      };
+    ColonyBuilding.turret => tr.g_colonyBldBlurbTurret,
+    ColonyBuilding.mine => tr.g_colonyBldBlurbMine,
+    ColonyBuilding.trade => tr.g_colonyBldBlurbTrade,
+    ColonyBuilding.dock => tr.g_colonyBldBlurbDock,
+    ColonyBuilding.shieldGen => tr.g_colonyBldBlurbShieldGen,
+    ColonyBuilding.stabilizer => tr.g_colonyBldBlurbStabilizer,
+  };
 }
 
 /// 정거장 역할. 본거지는 섹터마다 하나(레이저·안전 구역), 나머지는 지을 때 고른다.
@@ -423,23 +642,23 @@ extension StationRoleInfo on StationRole {
 
   /// [t] 언어의 역할 이름 (예전 저장의 정거장 이름을 알아볼 때 쓴다)
   String labelIn(L10n t) => switch (this) {
-        StationRole.home => t.g_stationRoleHome,
-        StationRole.defense => t.g_stationRoleDefense,
-        StationRole.repair => t.g_stationRoleRepair,
-        StationRole.support => t.g_stationRoleSupport,
-      };
+    StationRole.home => t.g_stationRoleHome,
+    StationRole.defense => t.g_stationRoleDefense,
+    StationRole.repair => t.g_stationRoleRepair,
+    StationRole.support => t.g_stationRoleSupport,
+  };
   String get iconAsset => switch (this) {
-        StationRole.home => 'act_station',
-        StationRole.defense => 'st_turret',
-        StationRole.repair => 'b_dock',
-        StationRole.support => 'b_trade',
-      };
+    StationRole.home => 'act_station',
+    StationRole.defense => 'st_turret',
+    StationRole.repair => 'b_dock',
+    StationRole.support => 'b_trade',
+  };
   String get blurb => switch (this) {
-        StationRole.home => tr.g_stationRoleBlurbHome,
-        StationRole.defense => tr.g_stationRoleBlurbDefense,
-        StationRole.repair => tr.g_stationRoleBlurbRepair,
-        StationRole.support => tr.g_stationRoleBlurbSupport,
-      };
+    StationRole.home => tr.g_stationRoleBlurbHome,
+    StationRole.defense => tr.g_stationRoleBlurbDefense,
+    StationRole.repair => tr.g_stationRoleBlurbRepair,
+    StationRole.support => tr.g_stationRoleBlurbSupport,
+  };
 }
 
 /// 지원하는 모든 언어의 번역표 (예전 저장의 현지화된 이름을 키로 되돌릴 때)
@@ -481,13 +700,25 @@ enum StationNameKind { haven, outpost, numbered, custom }
 /// 정거장 이름. 언어 중립 키로 저장하고 표시할 때 현재 언어로 만든다.
 class StationName {
   const StationName.haven()
-      : kind = StationNameKind.haven, sector = 0, role = null, number = 0, custom = null;
+    : kind = StationNameKind.haven,
+      sector = 0,
+      role = null,
+      number = 0,
+      custom = null;
   const StationName.outpost(this.sector)
-      : kind = StationNameKind.outpost, role = null, number = 0, custom = null;
+    : kind = StationNameKind.outpost,
+      role = null,
+      number = 0,
+      custom = null;
   const StationName.numbered(StationRole this.role, this.number)
-      : kind = StationNameKind.numbered, sector = 0, custom = null;
+    : kind = StationNameKind.numbered,
+      sector = 0,
+      custom = null;
   const StationName.custom(String this.custom)
-      : kind = StationNameKind.custom, sector = 0, role = null, number = 0;
+    : kind = StationNameKind.custom,
+      sector = 0,
+      role = null,
+      number = 0;
 
   final StationNameKind kind;
   final int sector;
@@ -497,24 +728,26 @@ class StationName {
 
   /// 현재 언어로 된 이름
   String get text => switch (kind) {
-        StationNameKind.haven => tr.g_stationHaven,
-        StationNameKind.outpost => tr.g_stationOutpost(systemName(sector)),
-        StationNameKind.numbered => tr.g_stationNumbered(role!.label, number),
-        StationNameKind.custom => custom ?? '',
-      };
+    StationNameKind.haven => tr.g_stationHaven,
+    StationNameKind.outpost => tr.g_stationOutpost(systemName(sector)),
+    StationNameKind.numbered => tr.g_stationNumbered(role!.label, number),
+    StationNameKind.custom => custom ?? '',
+  };
 
   Map<String, dynamic> toJson() => {
-        'k': kind.name,
-        if (kind == StationNameKind.outpost) 's': sector,
-        if (kind == StationNameKind.numbered) 'r': role!.name,
-        if (kind == StationNameKind.numbered) 'n': number,
-        if (kind == StationNameKind.custom) 'c': custom,
-      };
+    'k': kind.name,
+    if (kind == StationNameKind.outpost) 's': sector,
+    if (kind == StationNameKind.numbered) 'r': role!.name,
+    if (kind == StationNameKind.numbered) 'n': number,
+    if (kind == StationNameKind.custom) 'c': custom,
+  };
 
   /// 새 형식 키. 알아볼 수 없으면 null
   static StationName? fromJson(Object? j) {
     if (j is! Map) return null;
-    final kind = StationNameKind.values.where((k) => k.name == j['k']).firstOrNull;
+    final kind = StationNameKind.values
+        .where((k) => k.name == j['k'])
+        .firstOrNull;
     switch (kind) {
       case StationNameKind.haven:
         return const StationName.haven();
@@ -536,26 +769,40 @@ class StationName {
   /// 예전 저장(이름이 저장 당시 언어의 문자열)을 키로 되돌린다.
   /// 어느 언어의 기본 이름과도 맞지 않으면 역할로 기본 키를 정한다
   /// (본거지: 태양계면 헤이븐, 아니면 그 항성계 전진기지 / 나머지: 이름 속 번호, 없으면 [fallbackNumber]).
-  static StationName fromLegacy(String? text,
-      {required StationRole role, required int sector, required int fallbackNumber}) {
+  static StationName fromLegacy(
+    String? text, {
+    required StationRole role,
+    required int sector,
+    required int fallbackNumber,
+  }) {
     final name = text ?? '';
-    final digits = RegExp(r'\d+').allMatches(name).map((m) => int.parse(m.group(0)!)).toList();
+    final digits = RegExp(
+      r'\d+',
+    ).allMatches(name).map((m) => int.parse(m.group(0)!)).toList();
     for (final t in allL10n) {
       if (name == t.g_stationHaven) return const StationName.haven();
       for (final n in digits) {
-        if (name == t.g_stationNumbered(role.labelIn(t), n)) return StationName.numbered(role, n);
+        if (name == t.g_stationNumbered(role.labelIn(t), n)) {
+          return StationName.numbered(role, n);
+        }
       }
     }
     if (role == StationRole.home) {
-      return sector == 0 ? const StationName.haven() : StationName.outpost(sector);
+      return sector == 0
+          ? const StationName.haven()
+          : StationName.outpost(sector);
     }
-    return StationName.numbered(role, digits.isNotEmpty ? digits.last : fallbackNumber);
+    return StationName.numbered(
+      role,
+      digits.isNotEmpty ? digits.last : fallbackNumber,
+    );
   }
 }
 
 class Station {
   /// [name]은 사용자가 정한 그대로의 이름. 게임이 짓는 이름은 [Station.named]
-  Station(String name, this.pos, {this.role = StationRole.support}) : label = StationName.custom(name);
+  Station(String name, this.pos, {this.role = StationRole.support})
+    : label = StationName.custom(name);
   Station.named(this.label, this.pos, {this.role = StationRole.support});
 
   /// 언어 중립 이름 키 (저장 키 'nk')
@@ -588,7 +835,8 @@ class Station {
 
   /// 본거지는 기본 +500, 강화 단계마다 +400 (Lv.1 거주1 = 800 → Lv.10 = 4400)
   double get maxHp =>
-      (200 + habitatLevel * 100) * (isDefense ? 2 : 1) + (isHome ? 500 + (baseLevel - 1) * 400 : 0);
+      (200 + habitatLevel * 100) * (isDefense ? 2 : 1) +
+      (isHome ? 500 + (baseLevel - 1) * 400 : 0);
 
   // ---- 본거지 강화 효과 (Lv.1 → Lv.10) ----
   /// 레이저 한 발 피해 150 → 690 (+40%/단계). 섹터 배율이 없어서
@@ -609,8 +857,10 @@ class Station {
   static const regenDelay = 4.0;
 
   /// 강화 비용: 💰1200×1.9^(Lv-1), 광석 200×1.7^(Lv-1) (Lv.9→10 💰≈204k)
-  Cost get baseUpgradeCost =>
-      ((1200 * pow(1.9, baseLevel - 1)).round(), (200 * pow(1.7, baseLevel - 1)).round());
+  Cost get baseUpgradeCost => (
+    (1200 * pow(1.9, baseLevel - 1)).round(),
+    (200 * pow(1.7, baseLevel - 1)).round(),
+  );
 
   void takeHit(double dmg) {
     hp -= dmg;
@@ -620,7 +870,8 @@ class Station {
   double get baseCreditRate => habitatLevel * 2.0;
   double get turretRange => 380 + turretLevel * 30 + (isDefense ? 150 : 0);
   double get turretDamage => (6 + turretLevel * 4) * (isDefense ? 1.6 : 1);
-  double get turretInterval => 0.9 / (1 + turretLevel * 0.2) * (isDefense ? 0.7 : 1);
+  double get turretInterval =>
+      0.9 / (1 + turretLevel * 0.2) * (isDefense ? 0.7 : 1);
 
   /// 방어 기지: 이 반경에 들어온 적 탄환을 없앤다
   double get guardRange => isDefense ? 320 : 0;
@@ -634,7 +885,8 @@ class Station {
 
   /// 보급 기지: 이 반경 안 식민지 생산 보너스
   static const supportRange = 1800.0;
-  double get supportBonus => role == StationRole.support ? 0.25 + 0.05 * (habitatLevel - 1) : 0;
+  double get supportBonus =>
+      role == StationRole.support ? 0.25 + 0.05 * (habitatLevel - 1) : 0;
 
   Cost get habitatCost =>
       ((250 * pow(1.7, habitatLevel - 1)).round(), 60 * habitatLevel);
@@ -644,9 +896,12 @@ class Station {
 
 /// 본거지 레이저 한 줄기 (그리기용)
 class LaserBeam {
-  LaserBeam(this.from, this.to);
+  LaserBeam(this.from, this.to, {this.hostile = false});
   final Offset from;
   final Offset to;
+
+  /// 레이저 함의 적 레이저 (붉게 그린다)
+  final bool hostile;
   double life = LaserBeam.duration;
   static const duration = 0.18;
 }
@@ -669,11 +924,11 @@ class WorldEvent {
   bool finished = false;
 
   String get title => switch (kind) {
-        EventKind.raid => '🏴‍☠️ ${tr.g_eventRaid(planet?.name ?? '')}',
-        EventKind.meteor => '☄ ${tr.g_eventMeteor}',
-        EventKind.merchant => '🛒 ${tr.g_eventMerchant}',
-        EventKind.supply => '📦 ${tr.g_eventSupply}',
-      };
+    EventKind.raid => '🏴‍☠️ ${tr.g_eventRaid(planet?.name ?? '')}',
+    EventKind.meteor => '☄ ${tr.g_eventMeteor}',
+    EventKind.merchant => '🛒 ${tr.g_eventMerchant}',
+    EventKind.supply => '📦 ${tr.g_eventSupply}',
+  };
 }
 
 enum Speaker { captain, pirate, advisor, merchant }
@@ -685,4 +940,19 @@ class DialogLine {
   double time = 4;
 }
 
-enum Sfx { shoot, hit, explode, bigExplode, pickup, coin, gem, upgrade, alarm, warp, missile, shield, boost, hurt }
+enum Sfx {
+  shoot,
+  hit,
+  explode,
+  bigExplode,
+  pickup,
+  coin,
+  gem,
+  upgrade,
+  alarm,
+  warp,
+  missile,
+  shield,
+  boost,
+  hurt,
+}

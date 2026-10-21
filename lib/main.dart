@@ -15,11 +15,10 @@ import 'l10n/l.dart';
 import 'ui/common.dart';
 import 'ui/game_icons.dart';
 import 'ui/game_screen.dart';
-import 'ui/home_screen.dart';
-import 'ui/leaderboard_screen.dart';
 import 'ui/meta_screens.dart';
 import 'ui/shop_screen.dart';
 import 'ui/sprites.dart';
+import 'ui/star_systems.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +36,8 @@ Future<void> main() async {
       for (final k in PirateKind.values) k == PirateKind.jelly ? 'jelly' : 'pirate_${k.name}',
       for (final k in PlanetKind.values) 'planet_${k.name}',
       'station',
-      'sun',
+      for (final f in StarFace.values) f.sprite,
+      'antimatter_earth',
     ]),
   ]);
   AppState.money.confirm = (title, body) async {
@@ -137,6 +137,9 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
   }
 
   Future<void> _dailyLogin() async {
+    // Let a first-time player reach the opening before any retention reward.
+    if (!await SaveService.hasSave() || !mounted) return;
+    if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
     final now = DateTime.now();
     final p = AppState.profile;
     final reward = p.pendingLogin(now);
@@ -184,7 +187,7 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
       if (!ok) return;
       await SaveService.clearWorld();
     }
-    await _start(GameWorld(profile: AppState.profile));
+    await _start(GameWorld(profile: AppState.profile, showOpening: true));
   }
 
   Future<void> _continue() async {
@@ -230,23 +233,6 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                 final wide = box.maxWidth > box.maxHeight && box.maxHeight < Layout.shortHeight;
                 final menuW = wide ? box.maxWidth / 2 : box.maxWidth;
                 final logoW = min(menuW * 0.82, 520.0);
-                // 메뉴 6칸이 좁은 폰에서도 한 줄에 들어가게
-                final tileW = min(76.0, (menuW - Space.l * 2 - Space.s * 5) / 6);
-                final gemBtn = Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(Space.s),
-                    child: GestureDetector(
-                      onTap: () => _open(const ShopScreen()),
-                      // 서버 지갑이 답하면 바로 바뀐다 (시작할 때 서버 잔액으로 맞춰진다)
-                      child: StreamBuilder<int>(
-                        stream: AppState.wallet.changed.stream,
-                        builder: (_, _) => glass(iconValue('gem', '${p.gems}  ＋',
-                            size: IconSz.inline, style: Ts.body.copyWith(color: const Color(0xFFFF80AB)))),
-                      ),
-                    ),
-                  ),
-                );
                 final logo = AnimatedBuilder(
                   animation: _anim,
                   builder: (context, child) =>
@@ -290,19 +276,12 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                   const SizedBox(height: Space.m),
                   _menuButton(tr.m_newGame, _newGame, primary: !_hasSave),
                   const SizedBox(height: Space.l),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: Space.s,
-                    children: [
-                      _iconMenu('menu_home', tr.m_menuHome, () => _open(const HomePlanetScreen()), tileW),
-                      _iconMenu('menu_shop', tr.m_menuShop, () => _open(const ShopScreen()), tileW),
-                      _iconMenu('menu_quest', tr.m_menuQuest, () => _open(const DailyQuestScreen()), tileW,
-                          badge: p.dailyClaimable > 0),
-                      _iconMenu('menu_trophy', tr.m_menuAchievements, () => _open(const AchievementsScreen()), tileW,
-                          badge: p.claimable.isNotEmpty),
-                      _iconMenu('menu_rank', tr.lb_menuShort, () => _open(appLeaderboardScreen()), tileW),
-                      _iconMenu('menu_settings', tr.m_menuSettings, () => _open(const SettingsScreen()), tileW),
-                    ],
+                  Center(
+                    child: TextButton.icon(
+                      onPressed: () => _open(const SettingsScreen()),
+                      icon: const Icon(Icons.settings_outlined),
+                      label: Text(tr.m_menuSettings, style: Ts.body),
+                    ),
                   ),
                   const SizedBox(height: Space.l),
                 ];
@@ -325,7 +304,6 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                       Expanded(
                         child: Column(
                           children: [
-                            gemBtn,
                             const Spacer(),
                             ...menu,
                           ],
@@ -336,9 +314,8 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                 }
                 return Column(
                   children: [
-                    gemBtn,
                     const Spacer(flex: 2),
-                    logo,
+                    Flexible(flex: 5, child: logo),
                     ...titleLines,
                     const Spacer(flex: 3),
                     chibis,
@@ -366,27 +343,4 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
         leadingIcon: leading,
       );
 
-  Widget _iconMenu(String icon, String label, VoidCallback onTap, double width, {bool badge = false}) =>
-      InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Badge(
-          isLabelVisible: badge,
-          smallSize: 12,
-          child: Container(
-            width: width,
-            padding: const EdgeInsets.symmetric(vertical: Space.s),
-            decoration: BoxDecoration(
-              color: const Color(0x991E1A4A),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0x557E57C2)),
-            ),
-            child: Column(children: [
-              GameIcon(icon, size: 40),
-              const SizedBox(height: Space.xs),
-              FittedBox(child: Text(label, style: Ts.body)),
-            ]),
-          ),
-        ),
-      );
 }

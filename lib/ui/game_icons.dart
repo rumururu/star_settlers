@@ -53,6 +53,7 @@ extension ColonyBuildingIcon on ColonyBuilding {
         ColonyBuilding.trade => 'b_trade',
         ColonyBuilding.dock => 'b_dock',
         ColonyBuilding.shieldGen => 'dome',
+        ColonyBuilding.stabilizer => 'up_shield',
       };
 }
 

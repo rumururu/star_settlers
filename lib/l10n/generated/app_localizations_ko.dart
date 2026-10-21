@@ -406,7 +406,7 @@ class L10nKo extends L10n {
 
   @override
   String u_hudSector(String sector, int dev, String threat, String value) {
-    return '$sector · 발전 $dev%\n⚠ 위협 $threat  🏛 $value';
+    return '$sector · 안정화 $dev%\n⚠ 위협 $threat  🏛 $value';
   }
 
   @override
@@ -430,7 +430,7 @@ class L10nKo extends L10n {
 
   @override
   String u_gateLocked(int pct) {
-    return '🔒 발전도 100%에서 열려요 ($pct%)';
+    return '🔒 안정화 100%에서 열려요 ($pct%)';
   }
 
   @override
@@ -481,7 +481,7 @@ class L10nKo extends L10n {
   String get u_spkPirate => '해적';
 
   @override
-  String get u_spkAdvisor => '부관 미나';
+  String get u_spkAdvisor => '우주과학자 미나';
 
   @override
   String get u_spkMerchant => '상인 냥냥';
@@ -587,7 +587,7 @@ class L10nKo extends L10n {
 
   @override
   String u_development(int pct) {
-    return '발전도 $pct%';
+    return '안정화 $pct%';
   }
 
   @override
@@ -597,7 +597,50 @@ class L10nKo extends L10n {
   String get u_opensAt100 => '100%에서 열림';
 
   @override
-  String get u_devHint => '모든 행성을 Lv.3까지 키우면 100%';
+  String get u_devHint => '위상 정박기 레벨 합계가 행성 수 × 3이면 100%';
+
+  @override
+  String u_stabilizerHealth(int hp, int max) {
+    return '내구도 $hp/$max';
+  }
+
+  @override
+  String g_foeIntro(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'missile': '유도탄 포격선이에요! 미사일이 쫓아오지만 쏘면 떨어뜨릴 수 있어요.',
+      'laser': '레이저 함이 조준 중이에요! 붉은 조준선이 보이면 옆으로 피하세요.',
+      'warden': '방패선이 근처 해적을 지켜요. 파란 고리 안 적은 피해가 절반이니 방패선부터!',
+      'carrier': '드론 모함이에요! 계속 드론을 띄우니 모함을 먼저 노리세요.',
+      'phantom': '유령선이 숨었다 나타나요. 모습을 드러낼 때 집중 사격하세요!',
+      'mine': '기뢰 부설선이에요! 노란 기뢰는 가까이 가면 터지지만 쏘면 없앨 수 있어요.',
+      'medic': '수리선이 해적들을 고쳐요. 뒤에 숨은 수리선부터 잡으세요!',
+      'juggernaut': '중장갑 돌격함! 정면 장갑이 단단하니 옆이나 뒤를 노리고, 돌진은 피하세요.',
+      'other': '새로운 적이에요!',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_levelUnlockAtSystem(int level, int system) {
+    return '항성계 $system에서 Lv.$level 해금';
+  }
+
+  @override
+  String get u_myColonies => '내 식민지';
+
+  @override
+  String get u_myColoniesHint => '어느 항성계에 있든 여기서 바로 레벨업할 수 있어요.';
+
+  @override
+  String get u_noColonies => '아직 식민지가 없어요. 행성에 다가가 정착해 보세요.';
+
+  @override
+  String get u_currentHere => '현재 위치';
+
+  @override
+  String u_anchorEffect(int income, int shield, int regen) {
+    return '수입 +$income% · 공유 방어막 $shield · 재생 +$regen%';
+  }
 
   @override
   String get u_conqueredSystems => '점령한 항성계 (계속 생산 중)';
@@ -615,7 +658,7 @@ class L10nKo extends L10n {
 
   @override
   String u_sectorDev(String name, int pct) {
-    return '$name · 발전 $pct%';
+    return '$name · 안정화 $pct%';
   }
 
   @override
@@ -1196,11 +1239,11 @@ class L10nKo extends L10n {
   String get g_shipAuroraDesc => '스스로 고치고 보호막을 두르는 프리미엄 수호선';
 
   @override
-  String get g_shipNovaAbility => '관통탄: 탄환 하나가 적 2기까지 꿰뚫어요';
+  String get g_shipNovaAbility => '관통탄: 탄환 하나가 적 3기까지 꿰뚫어요';
 
   @override
   String get g_shipAuroraAbility =>
-      '자가 수리: 3초간 피격이 없으면 초당 체력 3% 회복\n수호막: 8초마다 피격 1회 방어';
+      '자가 수리: 3초간 피격이 없으면 초당 체력 5% 회복\n수호막: 5초마다 피격 1회 방어';
 
   @override
   String g_crewLegendPerk(int pct) {
@@ -1719,78 +1762,81 @@ class L10nKo extends L10n {
   String get g_storyAsteroidsTitle => '소행성 3개 부수기';
 
   @override
-  String get g_storyAsteroidsLine0 => '선장님! 먼저 소행성을 부숴서 광석을 모아봐요.';
+  String get g_storyAsteroidsLine0 => '화성 보급 거점에 쓸 광석이 필요해요. 먼저 소행성 3개를 부숴봐요.';
 
   @override
   String get g_storyAsteroidsLine1 => '조이스틱으로 이동하고, 발사 버튼으로 쏘면 돼요!';
 
   @override
-  String get g_storyKillsTitle => '해적 3척 격추';
+  String get g_storyKillsTitle => '습격 함선 3척 격파';
 
   @override
-  String get g_storyKillsLine0 => '레이더에 해적이 잡혀요! 빨간 화살표 방향이에요.';
+  String get g_storyKillsLine0 =>
+      '정체불명의 함선들이 송신 거점을 노리고 있어요. 빨간 화살표를 따라 습격 함선 3척을 막아주세요.';
 
   @override
-  String get g_storyKillsLine1 => '해적 따위, 내 함선 앞에선 고철이지!';
+  String get g_storyKillsLine1 => '우리가 먼저 길을 열자. 뒤따라올 사람들이 있으니까!';
 
   @override
   String get g_storyColoniesTitle => '화성에 정착하기';
 
   @override
-  String get g_storyColoniesLine0 =>
-      '지구 바로 옆 붉은 행성, 화성에 첫 식민지를 세워봐요. 가까이 가면 정착 버튼이 떠요.';
+  String get g_storyColoniesLine0 => '이제 화성에 돌아올 곳을 만들어요. 가까이 가서 정착 버튼을 눌러주세요.';
 
   @override
-  String get g_storyColoniesLine1 => '식민지는 가만히 있어도 크레딧을 벌어줘요!';
+  String get g_storyColoniesLine1 => '주민들이 생산한 크레딧으로 다음 항해를 준비할 수 있어요.';
 
   @override
   String get g_storyShipLevelsTitle => '정거장에서 함선 개조';
 
   @override
   String get g_storyShipLevelsLine0 =>
-      '헤이븐 기지로 돌아가서 함선을 개조해봐요. 정거장 근처에선 수리도 돼요.';
+      '송신망을 넓히려면 함선도 더 튼튼해야 해요. 헤이븐 기지에서 함선을 개조해요.';
 
   @override
   String get g_storyCrewTitle => '승무원 1명 영입';
 
   @override
-  String get g_storyCrewLine0 => '혼자는 외롭잖아요? 정거장 메뉴의 승무원 탭에서 동료를 영입해봐요!';
+  String get g_storyCrewLine0 => '먼 길을 함께할 동료가 필요해요. 정거장 승무원 탭에서 한 명을 영입해요.';
 
   @override
   String get g_storyMissionsTitle => '임무 1개 완료';
 
   @override
-  String get g_storyMissionsLine0 => '정거장 임무 게시판에서 의뢰를 받아보세요. 보상이 짭짤해요.';
+  String get g_storyMissionsLine0 =>
+      '항로의 사람들에게도 도움이 필요해요. 정거장 게시판의 의뢰를 하나 맡아봐요.';
 
   @override
   String get g_storyStationsTitle => '새 정거장 건설';
 
   @override
-  String get g_storyStationsLine0 => '이제 영역을 넓힐 때예요! 행성에서 떨어진 빈 우주에 정거장을 지어봐요.';
+  String get g_storyStationsLine0 =>
+      '보급선이 쉬어갈 곳을 늘려요. 행성에서 떨어진 빈 우주에 새 정거장을 지어요.';
 
   @override
-  String get g_storyDevPercentTitle => '항성계 발전도 100%';
+  String get g_storyDevPercentTitle => '항성계 안정화 100%';
 
   @override
   String get g_storyDevPercentLine0 =>
-      '모든 행성을 Lv.3까지 키우면 다음 항성계가 열려요. 오른쪽 위 항성계 버튼에서 확인해요!';
+      '위상 정박기 레벨 합계가 행성 수 × 3이면 보급망이 이어지고 게이트가 열려요. 항성계 버튼에서 확인해요.';
 
   @override
   String get g_storySectorTitle => '워프 게이트로 다음 항성계 이동';
 
   @override
-  String get g_storySectorLine0 => '워프 게이트가 열렸어요! 미니맵의 보라색 게이트로 가봐요.';
+  String get g_storySectorLine0 => '다음 항성계에도 송신 거점이 필요해요. 미니맵의 보라색 게이트로 가요.';
 
   @override
-  String get g_storySectorLine1 => '새로운 우주가 기다리고 있어!';
+  String get g_storySectorLine1 => '우리가 간다는 걸 알려주자. 누구도 혼자 기다리지 않게.';
 
   @override
   String g_storyDevNTitle(int n) {
-    return '항성계 $n 발전도 100%';
+    return '항성계 $n 안정화 100%';
   }
 
   @override
-  String get g_storyDevNLine => '새 항성계의 행성들을 모두 Lv.3까지 키워요!';
+  String get g_storyDevNLine =>
+      '이곳에도 돌아올 길을 만들어요. 위상 정박기 레벨 합계가 행성 수 × 3이면 다음 게이트가 열려요.';
 
   @override
   String g_systemN(int n) {
@@ -1803,7 +1849,7 @@ class L10nKo extends L10n {
   }
 
   @override
-  String get g_storyWarpNLine => '게이트가 열렸어요. 더 깊은 우주로 가볼까요?';
+  String get g_storyWarpNLine => '항로가 이어졌어요. 새 항성계에 헤이븐 송신망을 넓혀요.';
 
   @override
   String get g_powerUpRapid => '연사';
@@ -1848,6 +1894,9 @@ class L10nKo extends L10n {
   String get g_colonyBldShieldGen => '방어막 발생기';
 
   @override
+  String get g_colonyBldStabilizer => '위상 정박기';
+
+  @override
   String get g_colonyBldBlurbTurret => '식민지 근처 해적을 자동으로 요격해요. 습격 방어에 필수!';
 
   @override
@@ -1861,6 +1910,14 @@ class L10nKo extends L10n {
 
   @override
   String get g_colonyBldBlurbShieldGen => '방어막 용량과 충전 속도를 늘려요.';
+
+  @override
+  String get g_colonyBldBlurbStabilizer => '항성계 안정화 · 공유 방어막\n레벨마다 식민지 수입 +10%';
+
+  @override
+  String g_stabilizerDamaged(String planet, int level) {
+    return '위상 정박기 손상: $planet · Lv.$level';
+  }
 
   @override
   String get g_stationRoleHome => '본거지';
@@ -2009,7 +2066,7 @@ class L10nKo extends L10n {
   }
 
   @override
-  String get g_dlgWelcome => '선장님, 환영합니다! 저는 부관 미나예요.';
+  String get g_dlgWelcome => '선장님, 환영해요. 저는 우주과학자 미나예요.';
 
   @override
   String get g_dlgMissionsCancelled => '이전 항성계의 운송·현상수배 임무는 취소됐어요.';
@@ -2075,7 +2132,7 @@ class L10nKo extends L10n {
   String get g_merchantBye => '그럼 다음에 또 봐요~ 냥!';
 
   @override
-  String get g_pirateRaidTaunt => '이 식민지는 이제 우리 거다! 크하하!';
+  String get g_pirateRaidTaunt => '위상 정박기부터 파괴해라.';
 
   @override
   String get g_dlgMeteor => '유성우 발견! 크리스탈이 잔뜩 섞여 있어요. 광석 대박 기회!';
@@ -2233,7 +2290,7 @@ class L10nKo extends L10n {
 
   @override
   String g_pirateBossArrive(String sector) {
-    return '$sector의 주인은 나다! 덤벼라, 꼬마 선장!';
+    return '$sector 중계망을 차단하라.';
   }
 
   @override
@@ -2272,16 +2329,16 @@ class L10nKo extends L10n {
   String get g_captainKill3 => '다음!';
 
   @override
-  String get g_pirateAmbush0 => '크하하! 짐 내려놔!';
+  String get g_pirateAmbush0 => '목표 함선 확인. 추적을 계속한다.';
 
   @override
-  String get g_pirateAmbush1 => '여긴 우리 해적단 구역이다!';
+  String get g_pirateAmbush1 => '원정대를 차단해라.';
 
   @override
-  String get g_pirateAmbush2 => '그 반짝이는 크레딧 내놔!';
+  String get g_pirateAmbush2 => '송신 설비에 접근하지 못하게 해라.';
 
   @override
-  String get g_pirateAmbush3 => '오늘 운이 나쁘구나, 꼬마!';
+  String get g_pirateAmbush3 => '목표 포착. 공격을 시작한다.';
 
   @override
   String get cat_sysSol => '태양계';
@@ -2981,4 +3038,315 @@ class L10nKo extends L10n {
 
   @override
   String get m_cloudOverwriteOk => '덮어쓰기';
+
+  @override
+  String get n_title => '헤이븐 계획';
+
+  @override
+  String get n_signal => '외곽의 방문자';
+
+  @override
+  String get n_haven => '벌어낸 시간';
+
+  @override
+  String get n_departure => '헤이븐 원정대';
+
+  @override
+  String get n_mars => '송신 준비';
+
+  @override
+  String get n_transmission => '첫 송신';
+
+  @override
+  String get n_gate => '태양계 너머';
+
+  @override
+  String get n_signalSpeaker => '우주과학자 미나';
+
+  @override
+  String get n_settler => '식민지 주민';
+
+  @override
+  String get n_earthReport => '지구 보고';
+
+  @override
+  String get n_open0 =>
+      '반물질 입자 검출량이 계속 증가하고 있습니다.\n이 추세라면, 반물질 지구가 태양계에 진입하게 됩니다.';
+
+  @override
+  String get n_open1 =>
+      '제가 고안한 위상 정박기를 헤이븐의 고대 코어 엔진으로 처음 시험했어요. 누가 코어를 만들었는지는 모르지만 반물질 지구의 접근을 늦추는 데 성공했습니다.';
+
+  @override
+  String get n_open2 => '정박기는 내가 설치하겠다.\n식민지를 세우고, 헤이븐까지 송신망을 잇는다.';
+
+  @override
+  String get n_open3 => '헤이븐이 가동됐다. 원정대를 추적해라.';
+
+  @override
+  String get n_enemyCommander => '발신자 불명';
+
+  @override
+  String get n_mars0 => '정착 준비가 끝났어요, 선장님. 위상 정박기를 세울 자리도 마련했습니다.';
+
+  @override
+  String get n_mars1 =>
+      '위상 정박기를 세우면 헤이븐으로 에너지를 보낼 수 있어요.\n\n기기 레벨을 높이고 거점을 늘려 태양계 송신망을 완성해요.';
+
+  @override
+  String get n_mars2 => '정체 모를 습격자들이 위상 정박기를 노립니다. 장치와 방어막을 지켜 주세요.';
+
+  @override
+  String get n_transmission0 =>
+      '위상 정박기 가동. 헤이븐에서 첫 송신 수신을 확인했어요.\n\n우리가 모은 에너지가 지구에 닿았습니다.';
+
+  @override
+  String get n_transmission1 =>
+      '전력 배급으로 쉬던 학교가 다시 문을 열었습니다. 아이들이 교실로 돌아왔어요.\n\n송신을 계속 부탁드립니다. 이곳의 하루를 지켜 주세요.';
+
+  @override
+  String get n_warp0 =>
+      '태양계 송신망은 안정됐지만 지구와 태양계의 에너지만으로는 부족해요. 반물질 지구를 더 늦추려면 다른 항성계의 에너지가 필요합니다.';
+
+  @override
+  String get n_warp1 =>
+      '이곳의 송신을 유지하고 다른 항성계에도 식민지와 정박기를 세워요. 알파 센타우리로 출발하죠, 선장님.';
+
+  @override
+  String get n_next => '다음';
+
+  @override
+  String get n_skip => '장면 건너뛰기';
+
+  @override
+  String get n_launch => '출항';
+
+  @override
+  String get g_antimatterEarth => '반물질 지구';
+
+  @override
+  String get u_antimatterHint => '아직 행성 궤도 밖에 있습니다. 위상 정박기를 늘리면 접근이 느려집니다.';
+
+  @override
+  String get c_endingTitle => '지구의 안전';
+
+  @override
+  String get c_endingBody => '반물질 지구를 돌려보냈습니다. 모든 식민지의 노력이 지구를 지켰고, 정착은 계속됩니다.';
+
+  @override
+  String get c_finalTitle => '최종 작전';
+
+  @override
+  String get c_stabilize => '현지 정박기망 100% 달성';
+
+  @override
+  String get c_syncReady => '헤이븐 중계기로 이동해 동기화';
+
+  @override
+  String c_syncProgress(int percent) {
+    return '동기화 $percent%';
+  }
+
+  @override
+  String get c_guardian => '코어 수호자 격파';
+
+  @override
+  String get c_counterattack => '중계기로 돌아가 역송신';
+
+  @override
+  String get c_complete => '임무 완료';
+
+  @override
+  String get c_syncButton => '함선 동기화';
+
+  @override
+  String get c_fireButton => '역송신 실행';
+
+  @override
+  String get c_guardianName => '코어 수호자';
+
+  @override
+  String c_title(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': '알파 센타우리 중계소',
+      '5': '시리우스의 습격',
+      '8': '타우 세티의 차이',
+      '12': '숨겨진 통로',
+      '16': '되찾은 명령',
+      '20': '심어진 코어',
+      '22': '은하 밖의 흔적',
+      '25': '수동 위상 제어',
+      '26': '삼각형자리 은하 M33 X-7',
+      'other': '송신망 확장',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_body(String sector) {
+    String _temp0 = intl.Intl.selectLogic(sector, {
+      '1': '태양계 밖에서 보낸 첫 송신이 헤이븐에 도착했어요. 다른 항성계의 정박기도 지구 방어에 힘을 보탤 수 있습니다.',
+      '5': '확장된 송신망이 지구 방어를 강화하고 있어요. 정체 모를 습격자들이 중계소를 노립니다.',
+      '8': '헤이븐이 받는 에너지가 타우 세티의 출력보다 조금 적어요. 방어를 유지하면서 원인을 조사하겠습니다.',
+      '12':
+          '지금까지 쌓인 송신 기록에서 헤이븐 코어의 미기록 외부 송신 통로가 드러났어요. 위상 정박기 자체에는 문제가 없습니다.',
+      '16': '원정 중 적의 명령 기록을 가로챘어요. 습격자들은 단절단이며 외계 세력의 지시를 받고 있습니다.',
+      '20':
+          '케플러-90의 외계 기록에 같은 코어 설계가 나옵니다. 지구에서 발견한 고대 오파츠는 누군가 일부러 심어 둔 것이었어요.',
+      '22':
+          '케플러-90의 기록과 에너지 흐름을 대조하니 은하 밖으로 빠져나가는 경로가 드러났어요. 외계인들은 에너지를 모으게 하려고 반물질 지구를 보냈고, 필요한 방어에서 코어가 일부를 빼돌렸습니다.',
+      '25': '외계 자동 제어를 분리할 방법을 찾았어요. 선장님의 함선을 헤이븐의 직접 제어점으로 쓰겠습니다.',
+      '26':
+          '이곳은 외계인들의 기원지인 삼각형자리 은하 M33 X-7입니다. 현지 정박기망을 완성하고 헤이븐 중계소에서 함선을 동기화한 뒤, 코어 수호자를 격파하고 중계소로 돌아와 역송신하세요.',
+      'other': '식민지를 세우고 위상 정박기 송신을 이어가세요. 지구에는 아직 에너지가 필요합니다.',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String c_task(String task) {
+    String _temp0 = intl.Intl.selectLogic(task, {
+      'anchor': '위상 정박기 설치·복구',
+      's1_0': '정박기에서 첫 송신 시험',
+      's5': '정박기 습격대 격파',
+      's5_0': '정박기에서 송신 복구 확인',
+      's8_0': '정박기 출력 측정',
+      's8_1': '헤이븐에서 수신 기록 대조',
+      's12_0': '헤이븐 코어의 숨은 회로 조사',
+      's16': '적 지휘선 격파',
+      's16_0': '지휘선 잔해에서 명령 기록 회수',
+      's20_0': '외계 유적에서 코어 설계 조사',
+      's22_0': '유출 경로 관측 지점 조사',
+      's22_1': '헤이븐에서 외계 기록과 대조',
+      's25_0': '헤이븐에서 자동제어 분리 시험',
+      'other': '송신망 확장',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get c_operate => '조사·작업 시작';
+
+  @override
+  String get c_finishOperation => '지역 작전 완료 필요';
+
+  @override
+  String get c_reverseResult =>
+      '함선과 헤이븐의 동기화가 유지되고 있습니다. 식민지들이 보낸 에너지를 역송신해 반물질 지구를 밀어냅니다.';
+
+  @override
+  String get c_severanceName => '단절단';
+
+  @override
+  String get u_sharedShield => '공유 방어막';
+
+  @override
+  String get u_supportOffline => '헤이븐 지원 중단';
+
+  @override
+  String u_systemTrait(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest': '해적 소굴 · 해적 출현 간격 ×0.7, 현상금 ×1.5',
+      'richVeins': '풍부한 광맥 · 식민지 광석 ×2, 채굴 광석 ×1.5',
+      'solarFlare': '항성 플레어 · 식민지 크레딧 ×1.25, 방어막 재생 ×0.5',
+      'ionNebula': '이온 성운 · 스킬 쿨타임 ×0.7, 식민지·정거장 포탑 피해 ×0.7',
+      'gravityWell': '중력 우물 · 최고 속도 ×0.85, 전투·임무 보상 ×1.3',
+      'tradeLane': '교역로 · 광석 판매가 ×1.3, 식민지 습격 빈도 ×1.3',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_traitIntro(String trait) {
+    String _temp0 = intl.Intl.selectLogic(trait, {
+      'pirateNest': '해적 소굴이에요. 해적이 더 자주 나타나지만 현상금도 높아요. 사냥을 준비하세요!',
+      'richVeins': '풍부한 광맥이에요. 식민지 광석 생산은 두 배, 소행성 채굴은 1.5배예요. 채굴부터 시작해요!',
+      'solarFlare': '항성 플레어가 강해요. 식민지 크레딧은 늘지만 방어막 재생은 절반이에요. 방어를 챙기세요!',
+      'ionNebula': '이온 성운이에요. 스킬 쿨타임과 식민지·정거장 포탑 피해가 0.7배예요. 스킬로 직접 지원하세요!',
+      'gravityWell': '중력 우물이에요. 최고 속도는 0.85배지만 전투·임무 보상은 1.3배예요. 임무를 골라볼까요?',
+      'tradeLane': '교역로예요. 광석 판매가와 식민지 습격 빈도가 1.3배예요. 교역하되 식민지 경보를 살펴보세요!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get u_specTitle => '특화';
+
+  @override
+  String u_specName(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': '산업 특화',
+      'mining': '채굴 특화',
+      'fortress': '요새 특화',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specEffect(String spec) {
+    String _temp0 = intl.Intl.selectLogic(spec, {
+      'industry': '크레딧 생산 ×1.5',
+      'mining': '광석 생산 ×2.5',
+      'fortress': '방어막 ×2 · 포탑 피해 ×1.5 · 습격에도 레벨 유지',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String u_specLocked(int level) {
+    return 'Lv.$level에서 특화 해금';
+  }
+
+  @override
+  String u_specInactive(int level) {
+    return 'Lv.$level 이상에서만 효과';
+  }
+
+  @override
+  String get u_specFree => '무료';
+
+  @override
+  String get u_specChoose => '특화 선택';
+
+  @override
+  String g_dlgSpecUnlocked(String planet) {
+    return '$planet 식민지가 Lv.5에 올랐어요! 이제 특화를 고를 수 있어요. 산업은 크레딧, 채굴은 광석, 요새는 방어를 맡아요. 처음 고르기는 무료예요!';
+  }
+
+  @override
+  String g_dlgRaidFortress(String planet) {
+    return '$planet 요새가 습격을 버텨 냈어요. 레벨은 그대로예요!';
+  }
+
+  @override
+  String u_bossName(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '☠ 해적 함대장',
+      'devourer': '☠ 광맥 포식자',
+      'flare': '☠ 플레어 포격함',
+      'wraith': '☠ 이온 유령',
+      'gravity': '☠ 중력 군주',
+      'plunder': '☠ 약탈 상선',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String g_dlgBossArchetype(String archetype) {
+    String _temp0 = intl.Intl.selectLogic(archetype, {
+      'fleet': '경고! 해적 함대장이에요. 호위 습격선을 계속 불러내요. 호위가 늘기 전에 두목을 노리세요!',
+      'devourer': '경고! 광맥 포식자예요. 주위에 기뢰를 뿌려요. 기뢰를 쏘아 없애며 싸우세요!',
+      'flare': '경고! 플레어 포격함이에요. 조준선이 보이면 세 갈래 레이저가 와요. 옆으로 피하세요!',
+      'wraith': '경고! 이온 유령이에요. 4초마다 모습을 감춰요. 드러났을 때 몰아치세요!',
+      'gravity': '경고! 중력 군주예요. 가까이 가면 끌려가요. 부스트로 벗어나세요!',
+      'plunder': '경고! 약탈 상선이에요. 빠르고, 탄에 맞을 때마다 크레딧을 빼앗아요. 잡으면 모두 돌려받아요!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 }

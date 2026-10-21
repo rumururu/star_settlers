@@ -1,0 +1,15 @@
+{
+  "package": "com.mkideabox.starsettlers",
+  "version": "1.0.2",
+  "versionCode": 9,
+  "track": "production",
+  "releaseStatus": "completed",
+  "submittedAtKST": "2026-10-16 00:38:40",
+  "changes_not_sent_for_review": false,
+  "metadataLocalesVerified": 10,
+  "releaseNotesLocalesVerified": 10,
+  "aabSha256": "6fed4c2cc508cde0c4460a8c990e20864d31d0a0effaaff6d40e34812c0f3b81",
+  "sourceBaseCommit": "d81e054",
+  "sourceContainsUncommittedChanges": true,
+  "publicAvailabilityVerified": false
+}

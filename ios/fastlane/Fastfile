@@ -46,6 +46,7 @@ platform :ios do
 
   desc "IPA 빌드"
   lane :build do
+    build_started_at = Time.now
     project_root = File.expand_path('../..', __dir__)
     extra = ""
     extra += " --build-number=#{ENV['BUILD_NUMBER']}" unless ENV["BUILD_NUMBER"].to_s.empty?
@@ -53,6 +54,8 @@ platform :ios do
     extra += " --dart-define=REVENUECAT_API_KEY_IOS=#{ENV['REVENUECAT_API_KEY_IOS']}"
     clean_env = "env -u GEM_HOME -u GEM_PATH -u GEM_ROOT -u RUBYLIB -u RUBYOPT -u BUNDLE_BIN_PATH -u BUNDLE_GEMFILE"
     sh("cd #{project_root} && #{clean_env} PATH=/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:$PATH flutter build ipa --release --export-options-plist=ios/ExportOptions.plist#{extra}")
+    ipa = Dir[IPA_GLOB].find { |path| File.mtime(path) >= build_started_at && File.size(path) > 0 }
+    UI.user_error!("IPA export failed: no new IPA was produced; inspect provisioning/exportArchive errors") unless ipa
   end
 
   desc "TestFlight 업로드"

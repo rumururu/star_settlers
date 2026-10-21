@@ -213,10 +213,14 @@ void main() {
       expect(w.warp(gate), isFalse);
       for (final p in w.planets.skip(1)) {
         p.colonyLevel = 3;
+        p.buildings[ColonyBuilding.stabilizer] = 3;
+        p.stabilizerHp = p.stabilizerMaxHp(w.sectorMul);
       }
       expect(w.development, lessThan(1));
       expect(w.warp(gate), isFalse);
       w.planets.first.colonyLevel = 3;
+      w.planets.first.buildings[ColonyBuilding.stabilizer] = 3;
+      w.planets.first.stabilizerHp = w.planets.first.stabilizerMaxHp(w.sectorMul);
       expect(w.warp(gate), isTrue);
       expect(w.sector, 1);
       expect(w.gates.any((g) => !g.forward), isTrue);
@@ -227,8 +231,12 @@ void main() {
       w.upgradePlanet(w.planets.first);
       for (final p in w.planets.skip(1)) {
         p.colonyLevel = 3;
+        p.buildings[ColonyBuilding.stabilizer] = 3;
+        p.stabilizerHp = p.stabilizerMaxHp(w.sectorMul);
       }
       w.planets.first.colonyLevel = 3;
+      w.planets.first.buildings[ColonyBuilding.stabilizer] = 3;
+      w.planets.first.stabilizerHp = w.planets.first.stabilizerMaxHp(w.sectorMul);
       w.warp(w.gates.firstWhere((g) => g.forward));
       expect(w.otherSectorCredits, greaterThan(0));
       w.warp(w.gates.firstWhere((g) => !g.forward));
@@ -268,6 +276,8 @@ void main() {
       w.recruitWithCredits();
       for (final p in w.planets) {
         p.colonyLevel = 3; // 발전도 100%
+        p.buildings[ColonyBuilding.stabilizer] = 3;
+        p.stabilizerHp = p.stabilizerMaxHp(w.sectorMul);
       }
       w.warp(w.gates.firstWhere((g) => g.forward));
       final w2 = GameWorld.fromJson(w.toJson(), w.profile);
@@ -489,6 +499,8 @@ void main() {
       final w = rich(seed: 44);
       for (final p in w.planets) {
         p.colonyLevel = 3; // 발전도 100%
+        p.buildings[ColonyBuilding.stabilizer] = 3;
+        p.stabilizerHp = p.stabilizerMaxHp(w.sectorMul);
       }
       w.warp(w.gates.firstWhere((g) => g.forward));
       w.storyIndex = storySteps.length; // 항성계 2 발전도 단계
@@ -709,6 +721,8 @@ void main() {
       expect(w2.planets.first.building(ColonyBuilding.turret), 1);
       for (final p in w2.planets) {
         if (p.colonyLevel < 3) p.colonyLevel = 3;
+        p.buildings[ColonyBuilding.stabilizer] = 3;
+        p.stabilizerHp = p.stabilizerMaxHp(w2.sectorMul);
       }
       w2.warp(w2.gates.firstWhere((g) => g.forward));
       w2.warp(w2.gates.firstWhere((g) => !g.forward));
@@ -874,13 +888,17 @@ void main() {
       expect(w2.stations.last.role, StationRole.support);
     });
 
-    test('발전도: 행성마다 Lv.3까지 계산, 100%면 게이트 열림 알림', () {
+    test('발전도: 안정화 장치 총 레벨을 계산, 100%면 게이트 열림 알림', () {
       final w = rich(seed: 76);
       expect(w.development, 0);
       w.planets.first.colonyLevel = 5;
-      expect(w.development, closeTo(1 / w.planets.length, 1e-9));
+      w.planets.first.buildings[ColonyBuilding.stabilizer] = 5;
+      w.planets.first.stabilizerHp = w.planets.first.stabilizerMaxHp(w.sectorMul);
+      expect(w.development, closeTo(5 / (w.planets.length * 3), 1e-9));
       for (final p in w.planets) {
         p.colonyLevel = 3;
+        p.buildings[ColonyBuilding.stabilizer] = 3;
+        p.stabilizerHp = p.stabilizerMaxHp(w.sectorMul);
       }
       runFor(w, 1);
       expect(w.dialogs.any((d) => d.text.contains('다음 항성계')), isTrue);
@@ -935,7 +953,7 @@ void main() {
     }
 
     test('노바 드래곤: 탄 하나가 일렬의 적 둘을 꿰뚫는다', () {
-      expect(shipTypeById('nova').pierce, 1);
+      expect(shipTypeById('nova').pierce, 2); // 2026-10-17 상향: 적 셋까지
       final w = farWorld(82);
       final (a, b) = lineUp(w, 1);
       expect(a.hp, lessThan(a.maxHp));
@@ -953,7 +971,7 @@ void main() {
       final w = farWorld(84)..profile.ownedShips.add('nova');
       expect(w.switchShip(shipTypeById('nova')), isTrue);
       runFor(w, 0.1, InputState()..fire = true);
-      expect(w.bullets.where((b) => b.fromPlayer && b.pierce == 1), isNotEmpty);
+      expect(w.bullets.where((b) => b.fromPlayer && b.pierce == 2), isNotEmpty);
     });
 
     test('오로라: 수호막이 피격 1회를 막고 재충전된다', () {
