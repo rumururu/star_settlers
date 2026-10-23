@@ -3581,6 +3581,9 @@ class L10nEs extends L10n {
   String get u_specChoose => 'Especializar';
 
   @override
+  String get u_specSwitch => 'Cambiar';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '¡$planet llegó al nivel 5! Ya puedes elegir una especialización: Industria para créditos, Minería para mineral y Fortaleza para defensa. ¡La primera elección es gratis!';
   }

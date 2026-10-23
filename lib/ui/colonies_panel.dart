@@ -37,6 +37,9 @@ class _ColoniesPanelState extends State<ColoniesPanel> {
   /// 특화 선택을 펼친 행 ('항성계:행성번호'), 없으면 null
   String? _picking;
 
+  /// [전환]을 눌러 다른 특화(유료)까지 펼친 행. 이미 고른 뒤엔 실수로 눌러 크레딧을 쓰지 않게 숨겨 둔다
+  String? _switching;
+
   @override
   Widget build(BuildContext context) => OverlayPanel(
     onClose: widget.onClose,
@@ -204,52 +207,58 @@ class _ColoniesPanelState extends State<ColoniesPanel> {
       ];
     }
     if (_picking != key) return const [];
+    final switching = _switching == key;
     return [
       for (final s in ColonySpec.values)
-        Container(
-          margin: const EdgeInsets.only(top: Space.xs),
-          padding: const EdgeInsets.symmetric(horizontal: Space.s),
-          decoration: BoxDecoration(
-            color: s == current ? const Color(0x337CFFB2) : null,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: s == current ? const Color(0xFF7CFFB2) : Colors.white24,
+        if (current == null || s == current || switching)
+          Container(
+            margin: const EdgeInsets.only(top: Space.xs),
+            padding: const EdgeInsets.symmetric(horizontal: Space.s),
+            decoration: BoxDecoration(
+              color: s == current ? const Color(0x337CFFB2) : null,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: s == current ? const Color(0xFF7CFFB2) : Colors.white24,
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        keepAll('${s.emoji} ${s.label}'),
+                        style: Ts.body.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text(keepAll(s.effect), style: Ts.caption),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: Space.s),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 140),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: s == current
+                        ? actionBtn(
+                            switching ? tr.u_cancel : '✓ ${tr.u_specSwitch}',
+                            true,
+                            () => setState(
+                              () => _switching = switching ? null : key,
+                            ),
+                          )
+                        : current == null
+                        ? actionBtn(tr.u_specFree, true, () => onSpec(s))
+                        : actionBtn('', world.canAfford(cost), () {
+                            onSpec(s);
+                            setState(() => _switching = null);
+                          }, cost: cost),
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      keepAll('${s.emoji} ${s.label}'),
-                      style: Ts.body.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    Text(keepAll(s.effect), style: Ts.caption),
-                  ],
-                ),
-              ),
-              const SizedBox(width: Space.s),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 140),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: s == current
-                      ? actionBtn('✓', false, null)
-                      : current == null
-                      ? actionBtn(tr.u_specFree, true, () => onSpec(s))
-                      : actionBtn(
-                          '',
-                          world.canAfford(cost),
-                          () => onSpec(s),
-                          cost: cost,
-                        ),
-                ),
-              ),
-            ],
-          ),
-        ),
     ];
   }
 
@@ -314,7 +323,10 @@ class _ColoniesPanelState extends State<ColoniesPanel> {
     return InkWell(
       borderRadius: BorderRadius.circular(14),
       onTap: canSpec
-          ? () => setState(() => _picking = open ? null : key)
+          ? () => setState(() {
+              _picking = open ? null : key;
+              _switching = null;
+            })
           : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: Space.xs),

@@ -3317,6 +3317,9 @@ class L10nJa extends L10n {
   String get u_specChoose => '特化を選ぶ';
 
   @override
+  String get u_specSwitch => '切り替え';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '$planetがLv.5になりました！特化を選べます。産業はクレジット、採掘は鉱石、要塞は防衛を担当します。最初の選択は無料です！';
   }

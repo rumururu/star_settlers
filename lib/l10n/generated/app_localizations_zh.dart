@@ -3303,6 +3303,9 @@ class L10nZh extends L10n {
   String get u_specChoose => '选择专精';
 
   @override
+  String get u_specSwitch => '切换';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '$planet升到5级了！现在可以选择专精：工业负责信用点，采矿负责矿石，要塞负责防御。第一次选择免费！';
   }

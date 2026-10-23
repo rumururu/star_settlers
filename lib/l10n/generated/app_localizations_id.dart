@@ -3416,6 +3416,9 @@ class L10nId extends L10n {
   String get u_specChoose => 'Pilih spesialisasi';
 
   @override
+  String get u_specSwitch => 'Ganti';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '$planet mencapai Lv.5! Sekarang kamu bisa memilih spesialisasi: Industri untuk kredit, Tambang untuk bijih, Benteng untuk pertahanan. Pilihan pertama gratis!';
   }

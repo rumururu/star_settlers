@@ -921,6 +921,7 @@
   "u_specInactive": "Wirkt erst ab Lv.{level}",
   "u_specFree": "Gratis",
   "u_specChoose": "Spezialisieren",
+  "u_specSwitch": "Wechseln",
   "g_dlgSpecUnlocked": "{planet} hat Lv.5 erreicht! Jetzt kannst du eine Spezialisierung wählen: Industrie für Credits, Bergbau für Erz, Festung für die Abwehr. Die erste Wahl ist gratis!",
   "g_dlgRaidFortress": "Die Festung {planet} hat dem Überfall standgehalten. Das Level bleibt!",
   "u_bossName": "{archetype, select, fleet{☠ Piratenadmiral} devourer{☠ Adernfresser} flare{☠ Eruptionskanonenboot} wraith{☠ Ionenphantom} gravity{☠ Gravitationsfürst} plunder{☠ Plünderfrachter} other{}}",

@@ -921,6 +921,7 @@
   "u_specInactive": "仅在{level}级及以上生效",
   "u_specFree": "免费",
   "u_specChoose": "选择专精",
+  "u_specSwitch": "切换",
   "g_dlgSpecUnlocked": "{planet}升到5级了！现在可以选择专精：工业负责信用点，采矿负责矿石，要塞负责防御。第一次选择免费！",
   "g_dlgRaidFortress": "{planet}要塞顶住了袭击，等级保住了！",
   "u_bossName": "{archetype, select, fleet{☠ 海盗舰队长} devourer{☠ 矿脉吞噬者} flare{☠ 耀斑炮击舰} wraith{☠ 离子幽灵} gravity{☠ 引力君主} plunder{☠ 掠夺商船} other{}}",

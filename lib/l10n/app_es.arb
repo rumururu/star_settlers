@@ -921,6 +921,7 @@
   "u_specInactive": "Solo activa desde el nivel {level}",
   "u_specFree": "Gratis",
   "u_specChoose": "Especializar",
+  "u_specSwitch": "Cambiar",
   "g_dlgSpecUnlocked": "¡{planet} llegó al nivel 5! Ya puedes elegir una especialización: Industria para créditos, Minería para mineral y Fortaleza para defensa. ¡La primera elección es gratis!",
   "g_dlgRaidFortress": "La fortaleza de {planet} resistió el asalto. ¡Conserva su nivel!",
   "u_bossName": "{archetype, select, fleet{☠ Almirante pirata} devourer{☠ Devorador de vetas} flare{☠ Cañonero de erupción} wraith{☠ Espectro iónico} gravity{☠ Señor gravitatorio} plunder{☠ Mercante saqueador} other{}}",

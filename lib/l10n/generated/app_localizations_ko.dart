@@ -3313,6 +3313,9 @@ class L10nKo extends L10n {
   String get u_specChoose => '특화 선택';
 
   @override
+  String get u_specSwitch => '전환';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '$planet 식민지가 Lv.5에 올랐어요! 이제 특화를 고를 수 있어요. 산업은 크레딧, 채굴은 광석, 요새는 방어를 맡아요. 처음 고르기는 무료예요!';
   }

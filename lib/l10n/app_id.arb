@@ -921,6 +921,7 @@
   "u_specInactive": "Aktif hanya mulai Lv.{level}",
   "u_specFree": "Gratis",
   "u_specChoose": "Pilih spesialisasi",
+  "u_specSwitch": "Ganti",
   "g_dlgSpecUnlocked": "{planet} mencapai Lv.5! Sekarang kamu bisa memilih spesialisasi: Industri untuk kredit, Tambang untuk bijih, Benteng untuk pertahanan. Pilihan pertama gratis!",
   "g_dlgRaidFortress": "Benteng {planet} bertahan dari serangan. Levelnya tetap aman!",
   "u_bossName": "{archetype, select, fleet{☠ Laksamana Bajak Laut} devourer{☠ Pemangsa Urat} flare{☠ Kapal Meriam Suar} wraith{☠ Hantu Ion} gravity{☠ Penguasa Gravitasi} plunder{☠ Kapal Dagang Penjarah} other{}}",

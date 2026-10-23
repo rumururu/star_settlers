@@ -3602,6 +3602,9 @@ class L10nFr extends L10n {
   String get u_specChoose => 'Spécialiser';
 
   @override
+  String get u_specSwitch => 'Changer';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '$planet a atteint le Niv. 5 ! Vous pouvez choisir une spécialisation : Industrie pour les crédits, Extraction pour le minerai, Forteresse pour la défense. Le premier choix est gratuit !';
   }

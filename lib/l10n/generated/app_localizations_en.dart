@@ -3405,6 +3405,9 @@ class L10nEn extends L10n {
   String get u_specChoose => 'Specialize';
 
   @override
+  String get u_specSwitch => 'Switch';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '$planet reached Lv.5! You can now choose a specialization: Industry for credits, Mining for ore, Fortress for defense. Your first pick is free!';
   }

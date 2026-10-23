@@ -921,6 +921,7 @@
   "u_specInactive": "Active only at Lv.{level}+",
   "u_specFree": "Free",
   "u_specChoose": "Specialize",
+  "u_specSwitch": "Switch",
   "g_dlgSpecUnlocked": "{planet} reached Lv.5! You can now choose a specialization: Industry for credits, Mining for ore, Fortress for defense. Your first pick is free!",
   "g_dlgRaidFortress": "The {planet} fortress held off the raid. Its level is safe!",
   "u_bossName": "{archetype, select, fleet{☠ Pirate Admiral} devourer{☠ Vein Devourer} flare{☠ Flare Gunship} wraith{☠ Ion Wraith} gravity{☠ Gravity Lord} plunder{☠ Plunder Freighter} other{}}",

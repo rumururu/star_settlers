@@ -431,8 +431,48 @@ void main() {
           expect(p.spec, ColonySpec.mining);
           expect(tester.takeException(), isNull, reason: '$size picked');
           expect(find.text(keepAll(tr.u_specFree)), findsNothing);
-          // 현재 특화는 ✓, 나머지 두 개는 비용 버튼
-          expect(find.text(keepAll('✓')), findsOneWidget);
+          // 고른 뒤에는 현재 특화와 [✓ 전환]만 보이고 다른 특화(유료)는 숨긴다
+          final switchBtn = find.text(keepAll('✓ ${tr.u_specSwitch}'));
+          // 특화 칸이 세 줄에서 한 줄로 줄어 위로 밀려났을 수 있다
+          await tester.scrollUntilVisible(
+            switchBtn,
+            -100,
+            scrollable: find.byType(Scrollable).last,
+          );
+          expect(switchBtn, findsOneWidget);
+          expect(find.text(keepAll(ColonySpec.mining.effect)), findsOneWidget);
+          expect(find.text(keepAll(ColonySpec.industry.effect)), findsNothing);
+          expect(find.text(keepAll(ColonySpec.fortress.effect)), findsNothing);
+          // [전환]을 눌러야 나머지 두 개가 비용 버튼과 함께 펼쳐진다
+          await tester.ensureVisible(switchBtn);
+          await tester.pump();
+          await tester.tap(switchBtn);
+          await tester.pump();
+          expect(tester.takeException(), isNull, reason: '$size switching');
+          for (final s in ColonySpec.values) {
+            expect(find.text(keepAll(s.effect)), findsOneWidget);
+          }
+          expect(p.spec, ColonySpec.mining, reason: '펼치기만으로는 안 바뀐다');
+          final cancel = find.text(keepAll(tr.u_cancel));
+          expect(cancel, findsOneWidget);
+          await tester.tap(cancel);
+          await tester.pump();
+          expect(find.text(keepAll(ColonySpec.industry.effect)), findsNothing);
+          // 다시 펼쳐서 유료로 바꾸면 접히고 크레딧이 한 번만 나간다
+          await tester.tap(switchBtn);
+          await tester.pump();
+          final credits0 = w.credits;
+          final cost = w.specCost(p);
+          final industry = specButton(ColonySpec.industry);
+          await tester.ensureVisible(industry);
+          await tester.pump();
+          await tester.tap(industry);
+          await tester.pump();
+          expect(p.spec, ColonySpec.industry);
+          expect(w.credits, closeTo(credits0 - cost.$1, 1));
+          expect(find.text(keepAll(ColonySpec.mining.effect)), findsNothing);
+          expect(find.text(keepAll(ColonySpec.fortress.effect)), findsNothing);
+          expect(switchBtn, findsOneWidget);
         }
       });
 
@@ -520,6 +560,21 @@ void main() {
             findsAtLeastNWidgets(2),
             reason: '행 표시 + 펼친 선택',
           );
+          // 고른 뒤에는 다른 특화를 숨기고 [✓ 전환]만 남긴다
+          expect(free, findsNothing);
+          expect(find.text(keepAll(ColonySpec.mining.effect)), findsNothing);
+          final switchBtn = find.text(keepAll('✓ ${tr.u_specSwitch}'));
+          expect(switchBtn, findsOneWidget);
+          await tester.ensureVisible(switchBtn);
+          await tester.pump();
+          await tester.tap(switchBtn);
+          await tester.pump();
+          expect(tester.takeException(), isNull, reason: '$size switching');
+          expect(find.text(keepAll(ColonySpec.mining.effect)), findsOneWidget);
+          expect(w.remotePlanet(0, 0).spec, ColonySpec.industry);
+          await tester.tap(find.text(keepAll(tr.u_cancel)));
+          await tester.pump();
+          expect(find.text(keepAll(ColonySpec.mining.effect)), findsNothing);
           // 다시 누르면 접힌다
           final picked = find.textContaining(
             keepAll('${industry.emoji} ${industry.label} ▴'),
@@ -529,7 +584,7 @@ void main() {
           await tester.tap(picked);
           await tester.pump();
           expect(free, findsNothing);
-          expect(find.text(keepAll('✓')), findsNothing);
+          expect(find.text(keepAll('✓ ${tr.u_specSwitch}')), findsNothing);
         }
       });
     }

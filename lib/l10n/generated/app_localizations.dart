@@ -5599,6 +5599,12 @@ abstract class L10n {
   /// **'특화 선택'**
   String get u_specChoose;
 
+  /// 이미 특화를 고른 식민지에서 다른 특화(유료) 목록을 펼치는 버튼
+  ///
+  /// In ko, this message translates to:
+  /// **'전환'**
+  String get u_specSwitch;
+
   /// 처음으로 식민지가 Lv.5가 됐을 때 미나 안내 (1회). planet = 행성 이름
   ///
   /// In ko, this message translates to:

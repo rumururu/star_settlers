@@ -3657,6 +3657,9 @@ class L10nRu extends L10n {
   String get u_specChoose => 'Выбрать специализацию';
 
   @override
+  String get u_specSwitch => 'Сменить';
+
+  @override
   String g_dlgSpecUnlocked(String planet) {
     return '$planet: колония достигла ур.5! Теперь можно выбрать специализацию: промышленность даёт кредиты, добыча — руду, крепость — защиту. Первый выбор бесплатный!';
   }

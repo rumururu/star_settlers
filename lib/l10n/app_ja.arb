@@ -921,6 +921,7 @@
   "u_specInactive": "Lv.{level}以上でのみ有効",
   "u_specFree": "無料",
   "u_specChoose": "特化を選ぶ",
+  "u_specSwitch": "切り替え",
   "g_dlgSpecUnlocked": "{planet}がLv.5になりました！特化を選べます。産業はクレジット、採掘は鉱石、要塞は防衛を担当します。最初の選択は無料です！",
   "g_dlgRaidFortress": "{planet}の要塞が襲撃を耐え抜きました。レベルはそのままです！",
   "u_bossName": "{archetype, select, fleet{☠ 海賊艦隊長} devourer{☠ 鉱脈喰らい} flare{☠ フレア砲撃艦} wraith{☠ イオンの亡霊} gravity{☠ 重力の君主} plunder{☠ 略奪商船} other{}}",

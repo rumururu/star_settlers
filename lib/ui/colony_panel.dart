@@ -42,7 +42,7 @@ class ColonyPanel extends StatelessWidget {
                   if (!world.profile.colonyTutorialSeen) _tutorial(),
                   _levelRow(),
                   const Divider(color: Colors.white24, height: 20),
-                  ..._specSection(),
+                  _SpecSection(world: world, planet: planet, act: act),
                   const Divider(color: Colors.white24, height: 20),
                   for (final b in ColonyBuilding.values) _buildingRow(b),
                 ],
@@ -219,66 +219,6 @@ class ColonyPanel extends StatelessWidget {
     );
   }
 
-  /// 특화: Lv.5 미만이면 해금 안내 한 줄, 이상이면 세 가지 중 하나를 고른다
-  List<Widget> _specSection() {
-    final p = planet;
-    final unlocked = GameWorld.canSpecialize(p);
-    final current = p.spec;
-    final title = Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Text(tr.u_specTitle, style: sectionStyle),
-    );
-    if (!unlocked) {
-      return [
-        title,
-        Text(
-          keepAll(
-            current == null
-                ? '🔒 ${tr.u_specLocked(ColonySpec.minLevel)}'
-                : '${current.emoji} ${current.label} · '
-                      '${tr.u_specInactive(ColonySpec.minLevel)}',
-          ),
-          style: dimStyle,
-        ),
-      ];
-    }
-    final cost = world.specCost(p);
-    return [
-      title,
-      for (final s in ColonySpec.values)
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 2),
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          decoration: s == current
-              ? BoxDecoration(
-                  color: const Color(0x337CFFB2),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: const Color(0xFF7CFFB2)),
-                )
-              : null,
-          child: _row(
-            s.iconAsset,
-            keepAll('${s.emoji} ${s.label}'),
-            Text(keepAll(s.effect), style: dimStyle),
-            s == current
-                ? actionBtn('✓', false, null)
-                : current == null
-                ? actionBtn(
-                    tr.u_specFree,
-                    true,
-                    () => act(() => world.setColonySpec(p, s)),
-                  )
-                : actionBtn(
-                    '',
-                    world.canAfford(cost),
-                    () => act(() => world.setColonySpec(p, s)),
-                    cost: cost,
-                  ),
-          ),
-        ),
-    ];
-  }
-
   Widget _buildingRow(ColonyBuilding b) {
     final p = planet;
     final lv = p.building(b);
@@ -386,3 +326,95 @@ Widget _row(String icon, String title, Widget sub, Widget trailing) => Padding(
     ],
   ),
 );
+
+/// 특화: Lv.5 미만이면 해금 안내 한 줄, 이상이면 세 가지 중 하나를 고른다.
+/// 이미 고른 뒤에는 현재 특화만 보이고, [전환]을 눌러야 다른 특화(유료)가 펼쳐진다
+/// (이것저것 눌러 보다 크레딧을 다 쓰지 않게).
+class _SpecSection extends StatefulWidget {
+  const _SpecSection({
+    required this.world,
+    required this.planet,
+    required this.act,
+  });
+
+  final GameWorld world;
+  final Planet planet;
+  final ActFn act;
+
+  @override
+  State<_SpecSection> createState() => _SpecSectionState();
+}
+
+class _SpecSectionState extends State<_SpecSection> {
+  bool _switching = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final world = widget.world;
+    final p = widget.planet;
+    final unlocked = GameWorld.canSpecialize(p);
+    final current = p.spec;
+    final title = Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Text(tr.u_specTitle, style: sectionStyle),
+    );
+    if (!unlocked) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          title,
+          Text(
+            keepAll(
+              current == null
+                  ? '🔒 ${tr.u_specLocked(ColonySpec.minLevel)}'
+                  : '${current.emoji} ${current.label} · '
+                        '${tr.u_specInactive(ColonySpec.minLevel)}',
+            ),
+            style: dimStyle,
+          ),
+        ],
+      );
+    }
+    final cost = world.specCost(p);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        title,
+        for (final s in ColonySpec.values)
+          if (current == null || s == current || _switching)
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              decoration: s == current
+                  ? BoxDecoration(
+                      color: const Color(0x337CFFB2),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: const Color(0xFF7CFFB2)),
+                    )
+                  : null,
+              child: _row(
+                s.iconAsset,
+                keepAll('${s.emoji} ${s.label}'),
+                Text(keepAll(s.effect), style: dimStyle),
+                s == current
+                    ? actionBtn(
+                        _switching ? tr.u_cancel : '✓ ${tr.u_specSwitch}',
+                        true,
+                        () => setState(() => _switching = !_switching),
+                      )
+                    : current == null
+                    ? actionBtn(
+                        tr.u_specFree,
+                        true,
+                        () => widget.act(() => world.setColonySpec(p, s)),
+                      )
+                    : actionBtn('', world.canAfford(cost), () {
+                        widget.act(() => world.setColonySpec(p, s));
+                        setState(() => _switching = false);
+                      }, cost: cost),
+              ),
+            ),
+      ],
+    );
+  }
+}
