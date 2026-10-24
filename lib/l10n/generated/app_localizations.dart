@@ -767,6 +767,30 @@ abstract class L10n {
   /// **'본거지 {pct}%'**
   String u_baseHp(int pct);
 
+  /// HUD banner: seconds until a large invasion starts
+  ///
+  /// In ko, this message translates to:
+  /// **'대규모 침공까지 {sec}초'**
+  String u_invasionCountdown(int sec);
+
+  /// HUD banner during an invasion; wave = current wave, total = wave count, left = invaders remaining
+  ///
+  /// In ko, this message translates to:
+  /// **'침공 {wave}/{total} · 남은 적 {left}'**
+  String u_invasionWave(int wave, int total, int left);
+
+  /// HUD one-line result: invasion repelled; credits reward (+5 gems)
+  ///
+  /// In ko, this message translates to:
+  /// **'침공 격퇴! 💰{credits} ⭐5'**
+  String u_invasionWon(int credits);
+
+  /// HUD one-line result: invasion timed out and invaders withdrew; pct = share destroyed, credits = partial reward
+  ///
+  /// In ko, this message translates to:
+  /// **'침공 퇴각 · 격추 {pct}% 💰{credits}'**
+  String u_invasionRetreat(int pct, int credits);
+
   /// Interact button: merchant
   ///
   /// In ko, this message translates to:
@@ -3996,6 +4020,30 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'긴급! 해적이 {planet} 습격하고 있어요! 생산이 멈췄어요!'**
   String g_dlgRaidAlert(String planet);
+
+  /// advisor alert when a large invasion is announced; sec = countdown seconds
+  ///
+  /// In ko, this message translates to:
+  /// **'대규모 침공 경보! {sec}초 뒤 해적 함대가 몰려와요. 본거지를 지켜 주세요!'**
+  String g_dlgInvasionWarning(int sec);
+
+  /// advisor line after repelling an invasion; credits reward (+5 gems)
+  ///
+  /// In ko, this message translates to:
+  /// **'대규모 침공을 막아 냈어요! 보상 💰{credits} ⭐5'**
+  String g_dlgInvasionWon(int credits);
+
+  /// advisor line when the invasion time ran out; pct = share destroyed, credits = partial reward
+  ///
+  /// In ko, this message translates to:
+  /// **'침공 함대가 물러갔어요. 격추 {pct}% · 보상 💰{credits}'**
+  String g_dlgInvasionRetreat(int pct, int credits);
+
+  /// name tag of the elite flagship in the last invasion wave
+  ///
+  /// In ko, this message translates to:
+  /// **'침공 지휘함'**
+  String get g_invasionCommander;
 
   /// sector boss arrival line; sector = sector name
   ///

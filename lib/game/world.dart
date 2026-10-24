@@ -230,6 +230,12 @@ class GameWorld {
   double finalCounterattackSeconds = 0;
   double spawnTimer = 25;
   double eventTimer = 70;
+
+  /// 다음 대규모 침공까지 (항성계에 들어오면 [invasionFirstDelay]부터 새로 센다)
+  double invasionTimer = invasionFirstDelay;
+
+  /// 진행 중이거나 결과를 보여 주는 대규모 침공. 저장하지 않는다.
+  Invasion? invasion;
   double jellyTimer = 20;
   double _secondTimer = 0;
   double _playAcc = 0;
@@ -576,6 +582,9 @@ class GameWorld {
     mines.clear();
     pickups.clear();
     events.clear();
+    // 항성계를 옮기면 진행 중 침공은 보상 없이 취소, 타이머는 새로 시작
+    invasion = null;
+    invasionTimer = invasionFirstDelay;
     merchantCrew = null;
     _supplyCapsule = null;
 
@@ -2466,6 +2475,7 @@ class GameWorld {
     _updatePickups(dt);
     _updateParticles(dt);
     _updateEvents(dt);
+    _updateInvasion(dt);
     _updateSpawning(dt);
     _updateMissions(dt);
 
@@ -2717,6 +2727,12 @@ class GameWorld {
         target = raid.planet!.pos;
         targetDist = (target - e.pos).distance;
       }
+      // 침공 적은 선장이 가까이 없으면 본거지로 곧장 온다 (가는 길의 정거장은 아래에서 고른다)
+      final invader = invasion != null && e.eventId == invasion!.id;
+      if (invader && targetDist > 450) {
+        target = homeBase.pos;
+        targetDist = (target - e.pos).distance;
+      }
       if (e.campaignChapter == 5 &&
           campaignAnchor != null &&
           targetDist > 450) {
@@ -2733,12 +2749,12 @@ class GameWorld {
 
       Offset desired;
       if (target == null ||
-          (targetDist > 1600 && raid == null && e.name == null)) {
+          (targetDist > 1600 && raid == null && !invader && e.name == null)) {
         e.wanderAngle += randRange(_rng, -1, 1) * dt;
         desired = OffsetX.fromAngle(e.wanderAngle, e.speed * 0.4);
       } else {
         final to = (target - e.pos).normalized();
-        if (e.name != null && targetDist > 1100) {
+        if (e.name != null && !invader && targetDist > 1100) {
           // 현상수배범은 멀리서는 배회
           e.wanderAngle += randRange(_rng, -1, 1) * dt;
           desired = OffsetX.fromAngle(e.wanderAngle, e.speed * 0.3);
@@ -3651,7 +3667,7 @@ class GameWorld {
       } else {
         say(Speaker.pirate, tr.g_pirateBossFlee);
       }
-    } else if (e.name != null) {
+    } else if (e.name != null && !e.invasionCommander) {
       say(Speaker.captain, tr.g_dlgBountyCaught(e.name ?? ''));
     } else if (_rng.nextDouble() < 0.12) {
       say(
@@ -3882,7 +3898,9 @@ class GameWorld {
       EventKind.meteor,
       EventKind.supply,
       if (!events.any((e) => e.kind == EventKind.merchant)) EventKind.merchant,
+      // 대규모 침공 중(경보 포함)엔 습격을 새로 시작하지 않는다
       if (colonies.isNotEmpty &&
+          !invasionActive &&
           !events.any((e) => e.kind == EventKind.raid)) ...[
         EventKind.raid,
         EventKind.raid,
@@ -4026,6 +4044,158 @@ class GameWorld {
     return true;
   }
 
+  // ---------- 대규모 침공 ----------
+  /// 해금: 현재 항성계 식민지 수
+  static const invasionColonies = 3;
+
+  /// 항성계에 들어와 첫 침공까지 / 끝난 뒤 다음 침공까지 (초)
+  static const invasionFirstDelay = 300.0;
+  static const invasionGapMin = 360.0;
+  static const invasionGapMax = 480.0;
+  static const invasionWarning = 20.0;
+  static const invasionWaves = 3;
+  static const invasionWaveGap = 25.0;
+
+  /// 마지막 파도 등장 뒤 전멸시켜야 하는 시간
+  static const invasionJudge = 90.0;
+
+  /// 결과 한 줄을 HUD에 보여 주는 시간
+  static const invasionResultTime = 8.0;
+  static const invasionReward = 600.0;
+  static const invasionGems = 5;
+
+  /// 침공 함대가 나타나는 거리 (본거지 기준, 맵 가장자리 쪽)
+  static const invasionMinDist = 1600.0;
+  static const invasionMaxDist = 2000.0;
+
+  /// 파도 크기: min(18, round(6 + 위협도×1.5)), 태양계는 ×0.6, 최소 4
+  static int invasionWaveSize(double threat, int sector) {
+    final n = min(18, (6 + threat * 1.5).round());
+    return max(4, sector == 0 ? (n * 0.6).round() : n);
+  }
+
+  /// 경보 또는 파도 진행 중 (결과 표시만 남았으면 false)
+  bool get invasionActive =>
+      invasion != null && invasion!.phase != InvasionPhase.done;
+
+  /// 맵에 남은 침공 적
+  int get invasionEnemiesLeft {
+    final inv = invasion;
+    if (inv == null) return 0;
+    return pirates.where((e) => e.eventId == inv.id).length;
+  }
+
+  /// 승리 크레딧 (퇴각은 여기에 처치 비율을 곱한다)
+  int get invasionVictoryCredits =>
+      (invasionReward * rewardMul * shipCreditMul).round();
+
+  void _updateInvasion(double dt) {
+    final inv = invasion;
+    if (inv != null) {
+      inv.timer -= dt;
+      switch (inv.phase) {
+        case InvasionPhase.warning:
+          if (inv.timer <= 0) {
+            inv.phase = InvasionPhase.waves;
+            _spawnInvasionWave(inv);
+          }
+        case InvasionPhase.waves:
+          if (inv.wave < invasionWaves) {
+            if (inv.timer <= 0) _spawnInvasionWave(inv);
+          } else if (invasionEnemiesLeft == 0) {
+            _endInvasion(inv, won: true);
+          } else if (inv.timer <= 0) {
+            _endInvasion(inv, won: false);
+          }
+        case InvasionPhase.done:
+          if (inv.timer <= 0) invasion = null;
+      }
+    }
+    // 다음 침공 타이머는 끝난 시점부터 센다 (결과 표시 중에도)
+    if (invasionActive) return;
+    invasionTimer -= dt;
+    // 선장이 격추돼 있으면 살아날 때까지 미룬다
+    if (invasionTimer <= 0 && colonyCount >= invasionColonies && player.alive) {
+      startInvasion();
+    }
+  }
+
+  /// 경보를 울리고 20초 카운트다운을 시작한다. 테스트/디버그용으로도 사용
+  Invasion startInvasion() {
+    final a = _rng.nextDouble() * 2 * pi;
+    final from = _clampWorld(
+      homeBase.pos +
+          OffsetX.fromAngle(a, (invasionMinDist + invasionMaxDist) / 2),
+      (_) {},
+    );
+    final inv = Invasion(_nextId++, from, invasionWarning);
+    invasion = inv;
+    sfx.add(Sfx.alarm);
+    say(Speaker.advisor, tr.g_dlgInvasionWarning(invasionWarning.round()));
+    return inv;
+  }
+
+  void _spawnInvasionWave(Invasion inv) {
+    inv.wave++;
+    final last = inv.wave >= invasionWaves;
+    inv.timer = last ? invasionJudge : invasionWaveGap;
+    final t = threat;
+    final dir = (inv.from - homeBase.pos).direction;
+    Offset spot() => _clampWorld(
+      homeBase.pos +
+          OffsetX.fromAngle(
+            dir + randRange(_rng, -0.35, 0.35),
+            randRange(_rng, invasionMinDist, invasionMaxDist),
+          ),
+      (_) {},
+    );
+    final n = invasionWaveSize(t, sector);
+    for (var i = 0; i < n; i++) {
+      final e = _makePirate(_randomKind(t), spot())..eventId = inv.id;
+      pirates.add(e);
+    }
+    inv.spawned += n;
+    if (last) {
+      // 침공 지휘함: 습격선 기반 엘리트 (체력 ×6, 공격 ×1.5). 두목 원형은 붙이지 않는다
+      final boss = _makePirate(PirateKind.raider, spot(), hpMul: 6, dmgMul: 1.5)
+        ..invasionCommander = true
+        ..eventId = inv.id;
+      pirates.add(boss);
+      inv.spawned++;
+    }
+    sfx.add(Sfx.alarm);
+  }
+
+  void _endInvasion(Invasion inv, {required bool won}) {
+    inv.phase = InvasionPhase.done;
+    inv.timer = invasionResultTime;
+    inv.won = won;
+    invasionTimer = randRange(_rng, invasionGapMin, invasionGapMax);
+    final full = invasionVictoryCredits;
+    if (won) {
+      inv.killRatio = 1;
+      inv.reward = full;
+      credits += full;
+      profile.earnGems('play', '', invasionGems);
+      profile.addStat('invasions');
+      sfx.add(Sfx.coin);
+      say(Speaker.advisor, tr.g_dlgInvasionWon(full));
+    } else {
+      // 퇴각: 남은 침공 적은 물러난다. 식민지 레벨은 잃지 않는다
+      final left = invasionEnemiesLeft;
+      pirates.removeWhere((e) => e.eventId == inv.id);
+      inv.killRatio = inv.spawned == 0
+          ? 0
+          : ((inv.spawned - left) / inv.spawned).clamp(0.0, 1.0);
+      inv.reward = (full * inv.killRatio).round();
+      credits += inv.reward;
+      say(
+        Speaker.advisor,
+        tr.g_dlgInvasionRetreat((inv.killRatio * 100).round(), inv.reward),
+      );
+    }
+  }
+
   // ---------- 스폰 ----------
   void _updateSpawning(double dt) {
     spawnTimer -= dt;
@@ -4081,7 +4251,11 @@ class GameWorld {
       say(Speaker.pirate, tr.g_pirateRevenge);
     }
 
-    if (spawnTimer <= 0 && normal < maxPirates && player.alive) {
+    // 대규모 침공 중(경보 포함)엔 일반 스폰을 멈춘다 (맵 위 과부하 방지)
+    if (spawnTimer <= 0 &&
+        normal < maxPirates &&
+        player.alive &&
+        !invasionActive) {
       spawnTimer = max(3.0, 13 - (t - sector) * 1.2) * trait.spawnIntervalMul;
       final group = 1 + _rng.nextInt(min(4, max(1, t.floor())));
       for (var i = 0; i < group; i++) {
@@ -4146,7 +4320,12 @@ class GameWorld {
       if (k.isLate && sector >= k.unlockSector) k,
   ];
 
-  Pirate _makePirate(PirateKind kind, Offset pos, {double hpMul = 1}) {
+  Pirate _makePirate(
+    PirateKind kind,
+    Offset pos, {
+    double hpMul = 1,
+    double dmgMul = 1,
+  }) {
     if (kind.isLate && counter('foeSeen_${kind.name}') == 0) {
       // 처음 만나는 후반 적은 미나가 특징과 공략을 알려 준다
       counters['foeSeen_${kind.name}'] = 1;
@@ -4157,7 +4336,7 @@ class GameWorld {
       kind,
       pos,
       Pirate.baseHp(kind) * scale,
-      dmgScale: enemyDamageMul,
+      dmgScale: enemyDamageMul * dmgMul,
     )..wanderAngle = _rng.nextDouble() * 2 * pi;
   }
 

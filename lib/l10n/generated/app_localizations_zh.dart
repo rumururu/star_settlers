@@ -425,6 +425,26 @@ class L10nZh extends L10n {
   }
 
   @override
+  String u_invasionCountdown(int sec) {
+    return '大规模入侵还有$sec秒';
+  }
+
+  @override
+  String u_invasionWave(int wave, int total, int left) {
+    return '入侵 $wave/$total · 剩余$left';
+  }
+
+  @override
+  String u_invasionWon(int credits) {
+    return '入侵已击退！💰$credits ⭐5';
+  }
+
+  @override
+  String u_invasionRetreat(int pct, int credits) {
+    return '入侵军撤退 · 击落$pct% 💰$credits';
+  }
+
+  @override
   String get u_merchantE => '商人 (E)';
 
   @override
@@ -2289,6 +2309,24 @@ class L10nZh extends L10n {
   String g_dlgRaidAlert(String planet) {
     return '紧急！海盗正在袭击$planet！生产已停止！';
   }
+
+  @override
+  String g_dlgInvasionWarning(int sec) {
+    return '大规模入侵警报！$sec秒后海盗舰队来袭。请守住基地！';
+  }
+
+  @override
+  String g_dlgInvasionWon(int credits) {
+    return '成功挡住了大规模入侵！奖励 💰$credits ⭐5';
+  }
+
+  @override
+  String g_dlgInvasionRetreat(int pct, int credits) {
+    return '入侵舰队撤退了。击落$pct% · 奖励 💰$credits';
+  }
+
+  @override
+  String get g_invasionCommander => '入侵指挥舰';
 
   @override
   String g_pirateBossArrive(String sector) {

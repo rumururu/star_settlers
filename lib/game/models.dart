@@ -108,9 +108,16 @@ class Pirate {
   /// 현상수배범 이름표 번호 ([bountyNameOf]). 이름은 표시할 때 현재 언어로 만든다.
   final int? bountyId;
 
-  /// 현상수배범 이름 (현재 언어). 일반 해적은 null
-  String? get name => bountyId == null ? null : bountyNameOf(bountyId!);
+  /// 현상수배범 이름 (현재 언어). 침공 지휘함은 "침공 지휘함". 일반 해적은 null
+  String? get name => bountyId != null
+      ? bountyNameOf(bountyId!)
+      : invasionCommander
+      ? tr.g_invasionCommander
+      : null;
   bool sectorBoss = false;
+
+  /// 대규모 침공 3파의 지휘함 (이름 붙은 엘리트: 현상금 ×4, 크기 ×1.4)
+  bool invasionCommander = false;
 
   /// 항성계 두목의 원형 (항성계 특성에서 정한다). 태양계·재등장 두목은 null
   BossArchetype? archetype;
@@ -171,7 +178,11 @@ class Pirate {
         PirateKind.medic => 26,
         PirateKind.juggernaut => 52,
       } *
-      (name != null && kind != PirateKind.boss ? 1.3 : 1);
+      (invasionCommander
+          ? 1.4
+          : name != null && kind != PirateKind.boss
+          ? 1.3
+          : 1);
 
   double get speed =>
       (archetype == BossArchetype.plunder ? BossArchetype.plunderSpeedMul : 1) *
@@ -929,6 +940,34 @@ class WorldEvent {
     EventKind.merchant => '🛒 ${tr.g_eventMerchant}',
     EventKind.supply => '📦 ${tr.g_eventSupply}',
   };
+}
+
+/// 대규모 침공 단계: 경보(카운트다운) → 파도 → 결과 표시
+enum InvasionPhase { warning, waves, done }
+
+/// 예고된 대규모 침공 하나. 침공 적은 습격처럼 [Pirate.eventId] = [id]로 소속을 표시한다.
+/// 저장하지 않는다 (불러오면 침공 타이머가 새로 시작된다).
+class Invasion {
+  Invasion(this.id, this.from, this.timer);
+  final int id;
+
+  /// 침공 함대가 들어오는 맵 가장자리 쪽 지점 (방향 표시·등장 위치 중심)
+  final Offset from;
+  InvasionPhase phase = InvasionPhase.warning;
+
+  /// 경보: 1파까지 남은 시간 / 파도: 다음 파도까지, 마지막 파도 뒤엔 판정까지 / 결과: 표시 남은 시간
+  double timer;
+
+  /// 지금까지 등장한 파도 수 (1~3)
+  int wave = 0;
+
+  /// 등장시킨 침공 적 수 (처치 비율 계산용)
+  int spawned = 0;
+  bool won = false;
+  int reward = 0;
+
+  /// 퇴각 때 처치 비율 (0~1)
+  double killRatio = 0;
 }
 
 enum Speaker { captain, pirate, advisor, merchant }

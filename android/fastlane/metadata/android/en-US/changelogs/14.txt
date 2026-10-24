@@ -1,0 +1,1 @@
+Large invasions are here! With 3 or more colonies, an alarm sounds every few minutes and a pirate fleet attacks in three waves. Defeat them all, including the Invasion Commander in the last wave, for a big reward and gems. If they get away, your colonies keep their levels. Also fixed button text overflowing in landscape for some languages.

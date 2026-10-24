@@ -810,7 +810,8 @@ class _GameScreenState extends State<GameScreen>
           ),
           if (w.dialogs.isNotEmpty)
             Positioned(
-              top: narrow ? 230 : 70,
+              // 좁은 화면: 미니맵 아래 침공 배너(여러 줄)를 가리지 않게 조금 내린다
+              top: narrow ? (w.invasion != null ? 300 : 230) : 70,
               left: narrow ? 8 : 240,
               right: narrow ? 8 : 150,
               child: Center(
@@ -997,8 +998,73 @@ class _GameScreenState extends State<GameScreen>
   static const _minimapSizeShort = 100.0;
 
   /// [short]: 가로 HUD. 이벤트·본거지 경보를 미니맵 아래가 아니라 왼쪽에 쌓아 높이를 아낀다.
+  /// 대규모 침공 배너: 경보 카운트다운 → 파도 진행 → 결과 한 줄.
+  /// 이벤트 목록 맨 위에 붙어서 미니맵 열 안에 머문다 (폭을 묶어 줄바꿈 — 왼쪽 카드·버튼을 덮지 않게).
+  Widget? _invasionBanner({required bool short}) {
+    final inv = w.invasion;
+    if (inv == null) return null;
+    final text = switch (inv.phase) {
+      InvasionPhase.warning => tr.u_invasionCountdown(max(0, inv.timer.ceil())),
+      InvasionPhase.waves => tr.u_invasionWave(
+        inv.wave,
+        GameWorld.invasionWaves,
+        w.invasionEnemiesLeft,
+      ),
+      InvasionPhase.done =>
+        inv.won
+            ? tr.u_invasionWon(inv.reward)
+            : tr.u_invasionRetreat((inv.killRatio * 100).round(), inv.reward),
+    };
+    final color = switch (inv.phase) {
+      InvasionPhase.done =>
+        inv.won ? const Color(0xFF7CFFB2) : const Color(0xFFFFD740),
+      _ => const Color(0xFFFF5252),
+    };
+    return Padding(
+      key: const ValueKey('hud-invasion'),
+      padding: const EdgeInsets.only(top: 4),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: short
+              ? _rightZoneWidth - _minimapSizeShort - Space.xs
+              : _invasionBannerWidth,
+        ),
+        child: glass(
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const GameIcon('raid', size: 20),
+              const SizedBox(width: 2),
+              Flexible(
+                child: Text(
+                  keepAll(text),
+                  style: Ts.caption.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        ),
+      ),
+    );
+  }
+
+  /// 세로 HUD 배너 폭: 왼쪽 임무 카드(최대 230)와 겹치지 않는 만큼만. 넘치면 줄을 바꾼다.
+  /// 넓은 화면(대사 상자가 오른쪽 150 앞에서 끝난다)은 140으로 묶어 대사와도 겹치지 않게.
+  double get _invasionBannerWidth {
+    final mq = MediaQuery.of(context);
+    if (mq.size.width >= 720) return 140;
+    final free = mq.size.width - mq.padding.horizontal - 8 - 8 - 230 - 4;
+    return free.clamp(96.0, 170.0);
+  }
+
   Widget _rightColumn({bool short = false}) {
+    final invasionBanner = _invasionBanner(short: short);
     final alerts = <Widget>[
+      ?invasionBanner,
       // 본거지 위기: 내구도 30% 미만 또는 기능 정지
       if (w.homeBase.disabled || w.homeBase.hp < w.homeBase.maxHp * 0.3)
         Padding(

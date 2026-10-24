@@ -772,6 +772,51 @@
       }
     }
   },
+  "u_invasionCountdown": "대규모 침공까지 {sec}초",
+  "@u_invasionCountdown": {
+    "description": "HUD banner: seconds until a large invasion starts",
+    "placeholders": {
+      "sec": {
+        "type": "int"
+      }
+    }
+  },
+  "u_invasionWave": "침공 {wave}/{total} · 남은 적 {left}",
+  "@u_invasionWave": {
+    "description": "HUD banner during an invasion; wave = current wave, total = wave count, left = invaders remaining",
+    "placeholders": {
+      "wave": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "u_invasionWon": "침공 격퇴! 💰{credits} ⭐5",
+  "@u_invasionWon": {
+    "description": "HUD one-line result: invasion repelled; credits reward (+5 gems)",
+    "placeholders": {
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
+  "u_invasionRetreat": "침공 퇴각 · 격추 {pct}% 💰{credits}",
+  "@u_invasionRetreat": {
+    "description": "HUD one-line result: invasion timed out and invaders withdrew; pct = share destroyed, credits = partial reward",
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      },
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
   "u_merchantE": "상인 (E)",
   "@u_merchantE": {
     "description": "Interact button: merchant"
@@ -3645,6 +3690,40 @@
         "type": "String"
       }
     }
+  },
+  "g_dlgInvasionWarning": "대규모 침공 경보! {sec}초 뒤 해적 함대가 몰려와요. 본거지를 지켜 주세요!",
+  "@g_dlgInvasionWarning": {
+    "description": "advisor alert when a large invasion is announced; sec = countdown seconds",
+    "placeholders": {
+      "sec": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgInvasionWon": "대규모 침공을 막아 냈어요! 보상 💰{credits} ⭐5",
+  "@g_dlgInvasionWon": {
+    "description": "advisor line after repelling an invasion; credits reward (+5 gems)",
+    "placeholders": {
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
+  "g_dlgInvasionRetreat": "침공 함대가 물러갔어요. 격추 {pct}% · 보상 💰{credits}",
+  "@g_dlgInvasionRetreat": {
+    "description": "advisor line when the invasion time ran out; pct = share destroyed, credits = partial reward",
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      },
+      "credits": {
+        "type": "int"
+      }
+    }
+  },
+  "g_invasionCommander": "침공 지휘함",
+  "@g_invasionCommander": {
+    "description": "name tag of the elite flagship in the last invasion wave"
   },
   "g_pirateBossArrive": "{sector} 중계망을 차단하라.",
   "@g_pirateBossArrive": {

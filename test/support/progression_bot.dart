@@ -39,6 +39,10 @@ class SectorLog {
   /// 습격으로 잃은 식민지 레벨
   int raidLosses = 0;
 
+  /// 대규모 침공 승리·퇴각 횟수
+  int invasionsWon = 0;
+  int invasionsLost = 0;
+
   /// 생산 말고 직접 번 크레딧 (현상금·임무·보상), 오프라인 수입, 생산 수입
   double activeCredits = 0;
   double offlineCredits = 0;
@@ -61,7 +65,7 @@ class SectorLog {
   @override
   String toString() =>
       'S${sector + 1}: ${done ? '' : '(미완) '}${playMinutes.toStringAsFixed(1)}분 '
-      '세션$sessions ${days.toStringAsFixed(1)}일 사망$deaths(기지$baseRespawns) 본거지정지$baseDisables 약탈$raidLosses '
+      '세션$sessions ${days.toStringAsFixed(1)}일 사망$deaths(기지$baseRespawns) 본거지정지$baseDisables 약탈$raidLosses 침공$invasionsWon승$invasionsLost퇴 '
       '젬$gemsAtEnd(소비$gemsSpent) 정체세션$stallSessions 병목$bottleneck '
       '벌이(생산${_k(incomeCredits)} 직접${_k(activeCredits)} 오프${_k(offlineCredits)} 팩${_k(packCredits)}) '
       '수입${incomeAtEnd.toStringAsFixed(0)}/s 함선Lv$shipLevels 본거지Lv$baseLevel '
@@ -256,7 +260,15 @@ class ProgressionBot {
     }
     final c0 = w.credits;
     final inc = w.creditIncome * dt;
+    final invading = w.invasionActive;
     w.update(dt, input);
+    if (invading && w.invasion?.phase == InvasionPhase.done) {
+      if (w.invasion!.won) {
+        _log.invasionsWon++;
+      } else {
+        _log.invasionsLost++;
+      }
+    }
     final gain = w.credits - c0 - inc;
     _log.incomeCredits += inc;
     if (gain > 0) _log.activeCredits += gain;
@@ -432,6 +444,29 @@ class ProgressionBot {
         _gemsSpent += GameWorld.creditPackGems;
         _log.packCredits += w.creditPackAmount;
         _decide = 0;
+        return;
+      }
+    }
+    // 대규모 침공: 본거지로 몰려오는 침공 적은 본거지 근처(또는 내 옆)에서 맞는다.
+    // 살 수 있는 것은 먼저 사고(위), 멀리 있는 적을 쫓아가지는 않는다
+    final inv = w.invasion;
+    if (inv != null && w.invasionActive) {
+      final home = w.homeBase.pos;
+      final foes = w.pirates
+          .where(
+            (e) =>
+                e.eventId == inv.id &&
+                ((e.pos - home).distance < 1300 ||
+                    (e.pos - p.pos).distance < 700),
+          )
+          .toList();
+      if (foes.isNotEmpty) {
+        final e = foes.reduce(
+          (a, b) => (a.pos - p.pos).distance < (b.pos - p.pos).distance ? a : b,
+        );
+        final d = (e.pos - p.pos).distance;
+        _goal = d > 300 ? e.pos : p.pos + (p.pos - e.pos);
+        _goalWhy = 'invasion';
         return;
       }
     }

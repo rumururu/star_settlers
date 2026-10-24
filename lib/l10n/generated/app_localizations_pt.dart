@@ -432,6 +432,26 @@ class L10nPt extends L10n {
   }
 
   @override
+  String u_invasionCountdown(int sec) {
+    return 'Invasão em ${sec}s';
+  }
+
+  @override
+  String u_invasionWave(int wave, int total, int left) {
+    return 'Invasão $wave/$total · restam $left';
+  }
+
+  @override
+  String u_invasionWon(int credits) {
+    return 'Repelida! 💰$credits ⭐5';
+  }
+
+  @override
+  String u_invasionRetreat(int pct, int credits) {
+    return 'Recuaram · $pct% · 💰$credits';
+  }
+
+  @override
   String get u_merchantE => 'Mercador (E)';
 
   @override
@@ -2368,6 +2388,24 @@ class L10nPt extends L10n {
   String g_dlgRaidAlert(String planet) {
     return 'Emergência! Piratas estão atacando $planet! A produção parou!';
   }
+
+  @override
+  String g_dlgInvasionWarning(int sec) {
+    return 'Alerta de invasão! Uma frota pirata chega em ${sec}s. Defenda a base!';
+  }
+
+  @override
+  String g_dlgInvasionWon(int credits) {
+    return 'Detivemos a invasão! Recompensa 💰$credits ⭐5';
+  }
+
+  @override
+  String g_dlgInvasionRetreat(int pct, int credits) {
+    return 'A frota invasora recuou. $pct% abatidos · recompensa 💰$credits';
+  }
+
+  @override
+  String get g_invasionCommander => 'Comandante invasor';
 
   @override
   String g_pirateBossArrive(String sector) {

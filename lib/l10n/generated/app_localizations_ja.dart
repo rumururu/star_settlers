@@ -425,6 +425,26 @@ class L10nJa extends L10n {
   }
 
   @override
+  String u_invasionCountdown(int sec) {
+    return '大規模侵攻まで$sec秒';
+  }
+
+  @override
+  String u_invasionWave(int wave, int total, int left) {
+    return '侵攻 $wave/$total · 残り$left';
+  }
+
+  @override
+  String u_invasionWon(int credits) {
+    return '侵攻撃退！💰$credits ⭐5';
+  }
+
+  @override
+  String u_invasionRetreat(int pct, int credits) {
+    return '侵攻軍撤退 · 撃墜$pct% 💰$credits';
+  }
+
+  @override
   String get u_merchantE => '商人 (E)';
 
   @override
@@ -2297,6 +2317,24 @@ class L10nJa extends L10n {
   String g_dlgRaidAlert(String planet) {
     return '緊急事態！海賊が$planetを襲撃しています！生産が止まりました！';
   }
+
+  @override
+  String g_dlgInvasionWarning(int sec) {
+    return '大規模侵攻警報！$sec秒後に海賊艦隊が押し寄せます。本拠地を守ってください！';
+  }
+
+  @override
+  String g_dlgInvasionWon(int credits) {
+    return '大規模侵攻を食い止めました！報酬 💰$credits ⭐5';
+  }
+
+  @override
+  String g_dlgInvasionRetreat(int pct, int credits) {
+    return '侵攻艦隊が撤退しました。撃墜$pct% · 報酬 💰$credits';
+  }
+
+  @override
+  String get g_invasionCommander => '侵攻指揮艦';
 
   @override
   String g_pirateBossArrive(String sector) {

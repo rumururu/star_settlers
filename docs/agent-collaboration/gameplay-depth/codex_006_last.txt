@@ -1,0 +1,7 @@
+수정 완료했습니다. `actionBtn` 라벨에 `Flexible`을 적용해 러시아어 가로 화면의 38px 넘침을 해결했습니다.
+
+- `dart analyze lib test`: 이슈 없음
+- `flutter test --no-pub`: **481개 전체 통과**
+- 게이트 파일 수정 없음
+
+[RESULT_006_CODEX.md](/Volumes/home_extension/AndroidStudioProjects/star_settlers/docs/agent-collaboration/gameplay-depth/RESULT_006_CODEX.md)에 원인·수정·검증 결과와 별도로 발견한 기존 세로 HUD 겹침을 기록했습니다.

@@ -140,6 +140,18 @@ class WorldPainter extends CustomPainter {
         _paintMerchant(canvas, ev, t);
       }
     }
+    // 대규모 침공이 들어올 자리: 붉게 깜박이는 고리
+    final inv = world.invasion;
+    if (world.invasionActive && view.inflate(260).contains(inv!.from)) {
+      canvas.drawCircle(
+        inv.from,
+        220 + 12 * sin(t * 4),
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 5
+          ..color = Color.fromRGBO(255, 23, 68, 0.45 + 0.3 * sin(t * 6).abs()),
+      );
+    }
     final campaignPoint = world.campaignTarget;
     if (campaignPoint != null && view.contains(campaignPoint)) {
       final color = world.campaignCombat
@@ -1860,6 +1872,13 @@ class WorldPainter extends CustomPainter {
         tr.u_pirateBoss,
         const Color(0xFFFF8A80),
       );
+    } else if (e.invasionCommander) {
+      _label(
+        canvas,
+        e.pos + Offset(0, e.radius + 16),
+        '⚔ ${e.name}',
+        const Color(0xFFFF8A80),
+      );
     } else if (e.name != null) {
       _label(
         canvas,
@@ -1992,6 +2011,10 @@ class WorldPainter extends CustomPainter {
     for (final ev in world.events) {
       arrow(ev.pos, const Color(0xEEFFD740), 9000, scale: 1.3);
     }
+    // 대규모 침공 방향 (경보·진행 중)
+    if (world.invasionActive) {
+      arrow(world.invasion!.from, const Color(0xF0FF1744), 9000, scale: 1.8);
+    }
     for (final pos in world.missionTargets) {
       arrow(pos, const Color(0xEEFFAB00), 9000, scale: 1.2);
     }
@@ -2118,6 +2141,16 @@ class MinimapPainter extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2,
       );
+    }
+    // 대규모 침공 방향: 본거지에서 들어올 자리까지 붉은 선
+    final inv = world.invasion;
+    if (world.invasionActive) {
+      final red = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.6
+        ..color = const Color(0xFFFF1744);
+      canvas.drawLine(m(world.homeBase.pos), m(inv!.from), red);
+      canvas.drawCircle(m(inv.from), 7, red);
     }
     for (final pos in world.missionTargets) {
       canvas.drawCircle(

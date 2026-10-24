@@ -230,7 +230,10 @@ Widget _actionBtn(String label, bool enabled, VoidCallback? onTap,
                   if (leadingIcon != null) Icon(leadingIcon, size: iconSize),
                   if (icon != null) GameIcon(icon, size: iconSize),
                   if ((icon != null || leadingIcon != null) && label.isNotEmpty) const SizedBox(width: Space.s),
-                  if (label.isNotEmpty) gemText(keepAll(label), style: Ts.label.copyWith(color: null)),
+                  if (label.isNotEmpty)
+                    Flexible(
+                      child: gemText(keepAll(label), style: Ts.label.copyWith(color: null)),
+                    ),
                   if (cost != null) ...[
                     if (label.isNotEmpty || icon != null) const SizedBox(width: Space.s),
                     // 모자란 크레딧·광석 숫자를 빨갛게 (누르면 환전 창이 젬 수를 알려 준다)
