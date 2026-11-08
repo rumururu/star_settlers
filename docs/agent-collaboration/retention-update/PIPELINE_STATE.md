@@ -3,7 +3,9 @@ slug: retention-update-pipeline-state
 status: progress
 ---
 
-# retention-update — 상태 (1.0.8 목표)
+# retention-update — 상태 (1.0.8 출시: COMMITTED)
+
+**COMMITTED** — `522c443` + 버전 커밋, Play 프로덕션 1.0.8(15) 업로드 2026-11-08 23:03 KST.
 
 목표: 첫날 이탈을 줄이고 다시 올 이유를 만든다. 동시에 어디서 그만두는지 측정한다.
 결정(2026-11-08, 사용자): 이번 업데이트 = 측정 · 첫 5분 · 복귀 동기 · 균열 런 · 도감 · 건물 외형.
