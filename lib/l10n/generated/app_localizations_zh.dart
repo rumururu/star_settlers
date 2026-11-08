@@ -3380,4 +3380,529 @@ class L10nZh extends L10n {
     });
     return '$_temp0';
   }
+
+  @override
+  String get codex_title => '图鉴';
+
+  @override
+  String codex_tab(String tab) {
+    String _temp0 = intl.Intl.selectLogic(tab, {
+      'enemies': '敌人',
+      'planets': '行星',
+      'systems': '星系',
+      'crew': '船员',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_progress(int found, int total, int pct) {
+    return '已发现 $found/$total · $pct%';
+  }
+
+  @override
+  String codex_enemy(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'scout': '侦察艇',
+      'raider': '突袭艇',
+      'bomber': '轰炸艇',
+      'sniper': '狙击艇',
+      'jelly': '太空水母',
+      'boss': '海盗头目',
+      'commander': '入侵指挥舰',
+      'missile': '导弹舰',
+      'mine': '布雷舰',
+      'laser': '激光舰',
+      'warden': '护盾舰',
+      'phantom': '幽灵舰',
+      'medic': '维修舰',
+      'carrier': '无人机母舰',
+      'juggernaut': '重装突击舰',
+      'arch_fleet': '海盗舰队长',
+      'arch_devourer': '矿脉吞噬者',
+      'arch_flare': '耀斑炮击舰',
+      'arch_wraith': '离子幽灵',
+      'arch_gravity': '引力君主',
+      'arch_plunder': '掠夺商船',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_kills(int n) {
+    return '击败 $n';
+  }
+
+  @override
+  String codex_fromSystem(int n) {
+    return '星系 $n 起出现';
+  }
+
+  @override
+  String codex_planetKind(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'garden': '花园行星',
+      'desert': '沙漠行星',
+      'ice': '冰冻行星',
+      'lava': '熔岩行星',
+      'gas': '气态巨行星',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get codex_planetHint => '在这类行星定居即可解锁';
+
+  @override
+  String codex_settled(int n) {
+    return '已定居行星 $n';
+  }
+
+  @override
+  String get codex_settledNone => '还没有定居的行星';
+
+  @override
+  String get codex_home => '大本营 · 无特殊环境';
+
+  @override
+  String get codex_unreached => '通过跃迁门抵达即可解锁';
+
+  @override
+  String get codex_crewHint => '招募即可解锁';
+
+  @override
+  String get codex_rewards => '收集奖励';
+
+  @override
+  String codex_rewardCrew(String stars) {
+    return '$stars 船员';
+  }
+
+  @override
+  String get codex_outfitName => '星图探险家';
+
+  @override
+  String codex_newEntry(String name) {
+    return '图鉴新条目：$name';
+  }
+
+  @override
+  String get codex_claimedLater => '奖励将在开始游戏时发放';
+
+  @override
+  String codex_pendingCrew(int n) {
+    return '船员已满：$n 人等待空位';
+  }
+
+  @override
+  String r3_goalSettle(String planet) {
+    return '在$planet定居';
+  }
+
+  @override
+  String r3_goalSettleNeed(String planet, int n) {
+    return '距离在$planet定居还差 💰$n';
+  }
+
+  @override
+  String r3_goalColonyUp(String planet, int level) {
+    return '$planet殖民地升到Lv.$level';
+  }
+
+  @override
+  String r3_goalBuild(String planet, String building) {
+    return '$planet：建造$building';
+  }
+
+  @override
+  String get r3_goalAssignCrew => '在空间站安排船员';
+
+  @override
+  String get r3_goalWarp => '穿越跃迁门前往下一星系';
+
+  @override
+  String r3_goalDevelop(String sector) {
+    return '稳定$sector';
+  }
+
+  @override
+  String get r3_goalMiniBoss => '击败海盗副头目';
+
+  @override
+  String get r3_miniBossName => '海盗副头目';
+
+  @override
+  String get r3_miniBossArrive => '副头目驾到！菜鸟舰长，你的船归我了！';
+
+  @override
+  String get r3_miniBossHint => '是海盗副头目！现在的飞船也能打赢。持续开火，血量低了就先后撤！';
+
+  @override
+  String get r3_miniBossLose => '怎、怎么可能……我要告诉老大！';
+
+  @override
+  String get r3_miniBossDown => '击败副头目了！我用掉落的零件免费强化了武器！';
+
+  @override
+  String r3_weaponUp(int level) {
+    return '武器 Lv.$level！';
+  }
+
+  @override
+  String r3_star3Line(String name) {
+    return '身手不错！总部派来了一位★3老兵。欢迎$name！';
+  }
+
+  @override
+  String get r3_crewAssigned => '已自动安排 — 加成立即生效';
+
+  @override
+  String get rift_title => '裂隙冲刺';
+
+  @override
+  String get rift_menuSub => '今日裂隙 · 3~5分钟';
+
+  @override
+  String rift_locked(String step) {
+    return '完成“$step”后解锁';
+  }
+
+  @override
+  String get rift_rules =>
+      '撑过10波攻势并击败第10波的裂隙首领。每过一波可选一张卡牌强化。主游戏的强化不生效——所有人驾驶同样的飞船挑战同一个今日裂隙。';
+
+  @override
+  String rift_bestLine(String score, int wave) {
+    return '个人最佳 $score分 · 第$wave波';
+  }
+
+  @override
+  String get rift_noBest => '暂无记录';
+
+  @override
+  String rift_fullLeft(int n) {
+    return '今日全额奖励剩余$n次';
+  }
+
+  @override
+  String get rift_fullUsed => '今日全额奖励已领完（之后为1/4）';
+
+  @override
+  String get rift_start => '出击';
+
+  @override
+  String rift_wave(int n, int total) {
+    return '第$n/$total波';
+  }
+
+  @override
+  String rift_score(String score) {
+    return '得分 $score';
+  }
+
+  @override
+  String rift_incoming(int n, int s) {
+    return '第$n波 $s秒后来袭';
+  }
+
+  @override
+  String rift_bossIncoming(int s) {
+    return '裂隙首领 $s秒后出现';
+  }
+
+  @override
+  String rift_enemiesLeft(int n) {
+    return '剩余敌人 $n';
+  }
+
+  @override
+  String get rift_collapse => '裂隙正在崩塌！';
+
+  @override
+  String rift_pickTitle(int n) {
+    return '突破第$n波！选择一张卡牌';
+  }
+
+  @override
+  String rift_cardLevel(int lv, int max) {
+    return 'Lv $lv/$max';
+  }
+
+  @override
+  String get rift_rarityCommon => '普通';
+
+  @override
+  String get rift_rarityRare => '稀有';
+
+  @override
+  String get rift_rarityEpic => '史诗';
+
+  @override
+  String get rift_cardDamage => '火力强化';
+
+  @override
+  String get rift_cardDamageDesc => '子弹伤害+25%';
+
+  @override
+  String get rift_cardRapid => '连射';
+
+  @override
+  String get rift_cardRapidDesc => '射击间隔−15%';
+
+  @override
+  String get rift_cardMultishot => '多重射击';
+
+  @override
+  String get rift_cardMultishotDesc => '每次多发射1发子弹';
+
+  @override
+  String get rift_cardPierce => '穿透弹';
+
+  @override
+  String get rift_cardPierceDesc => '子弹可多穿透1个敌人';
+
+  @override
+  String get rift_cardHoming => '追踪导弹';
+
+  @override
+  String get rift_cardHomingDesc => '每隔几秒自动发射追踪导弹';
+
+  @override
+  String get rift_cardRegen => '护盾再生';
+
+  @override
+  String get rift_cardRegenDesc => '每秒恢复2点生命';
+
+  @override
+  String get rift_cardDrone => '战斗无人机';
+
+  @override
+  String get rift_cardDroneDesc => '无人机射击附近敌人，叠加更强';
+
+  @override
+  String get rift_cardMagnet => '磁铁';
+
+  @override
+  String get rift_cardMagnetDesc => '从更远处吸取裂隙碎片';
+
+  @override
+  String get rift_cardCrit => '暴击';
+
+  @override
+  String get rift_cardCritDesc => '12%几率造成2.5倍伤害';
+
+  @override
+  String get rift_cardBlades => '旋转刀刃';
+
+  @override
+  String get rift_cardBladesDesc => '绕飞船旋转的刀刃+1';
+
+  @override
+  String get rift_cardHull => '强化船体';
+
+  @override
+  String get rift_cardHullDesc => '最大生命+35并立即回满';
+
+  @override
+  String get rift_cardEngine => '推进器';
+
+  @override
+  String get rift_cardEngineDesc => '移动速度+12%';
+
+  @override
+  String get rift_cardShockwave => '冲击波';
+
+  @override
+  String get rift_cardShockwaveDesc => '定期对周围所有敌人造成伤害';
+
+  @override
+  String get rift_cardGuard => '屏障';
+
+  @override
+  String get rift_cardGuardDesc => '每隔几秒抵挡一次攻击';
+
+  @override
+  String get rift_cardVampire => '汲取';
+
+  @override
+  String get rift_cardVampireDesc => '每击毁一个敌人恢复3点生命';
+
+  @override
+  String get rift_resultWin => '裂隙征服！';
+
+  @override
+  String get rift_resultLose => '在裂隙中被击落';
+
+  @override
+  String get rift_resultGaveUp => '已从裂隙撤退';
+
+  @override
+  String rift_reached(int n) {
+    return '到达第$n波';
+  }
+
+  @override
+  String get rift_newBest => '刷新个人最佳！';
+
+  @override
+  String get rift_rewardTitle => '带回主游戏的奖励';
+
+  @override
+  String get rift_rewardReduced => '今日第4局起奖励为1/4';
+
+  @override
+  String get rift_noSave => '没有主游戏存档，未能获得信用点和矿石';
+
+  @override
+  String get rift_again => '再次挑战';
+
+  @override
+  String get rift_exit => '退出';
+
+  @override
+  String get rift_giveUp => '放弃并退出';
+
+  @override
+  String get rift_giveUpNote => '退出则本局结束，保留到达波次前的得分与奖励。';
+
+  @override
+  String get rift_tabPioneer => '开拓积分';
+
+  @override
+  String get rift_tabRift => '裂隙';
+
+  @override
+  String get rift_boardHow => '按本周裂隙冲刺最高分排名。所有人用同样的飞船挑战同一个今日裂隙。';
+
+  @override
+  String rift_myWeek(String score, int wave) {
+    return '本周最佳 $score分 · 第$wave波';
+  }
+
+  @override
+  String get rift_noWeekRun => '本周暂无裂隙记录';
+
+  @override
+  String rift_waveShort(int n) {
+    return '$n波';
+  }
+
+  @override
+  String get r4_calendarTitle => '7日签到日历';
+
+  @override
+  String r4_calendarStreak(int n) {
+    return '连续第$n天';
+  }
+
+  @override
+  String get r4_calendarHint => '断签一天就从第1天重新开始。第7天可得签到专属飞船涂装！';
+
+  @override
+  String get r4_calendarToday => '今天';
+
+  @override
+  String get r4_calendarClaim => '领取今日奖励';
+
+  @override
+  String get r4_calendarClaimed => '今日奖励已领取！';
+
+  @override
+  String get r4_rewardOre => '矿石箱';
+
+  @override
+  String get r4_rewardCredits => '信用点礼包';
+
+  @override
+  String get r4_rewardCrew2 => '★2船员';
+
+  @override
+  String get r4_rewardCrew3 => '★3船员';
+
+  @override
+  String get r4_rewardSkin => '专属飞船涂装';
+
+  @override
+  String r4_tomorrow(String reward) {
+    return '明日登录：$reward';
+  }
+
+  @override
+  String get r4_skinName => '全勤星光';
+
+  @override
+  String get r4_attendanceOnly => '7日签到奖励';
+
+  @override
+  String get r4_notifCalendarTitle => '签到奖励等你来领';
+
+  @override
+  String r4_notifCalendarBody(String reward) {
+    return '今日签到奖励：$reward';
+  }
+
+  @override
+  String get r4_notifExpeditionTitle => '远征队归来！';
+
+  @override
+  String get r4_notifExpeditionBody => '船员带着奖励回来了，去空间站领取吧。';
+
+  @override
+  String get r4_expTitle => '船员远征';
+
+  @override
+  String r4_expSlots(int n, int max) {
+    return '$n/$max队';
+  }
+
+  @override
+  String get r4_expHint => '派出未安排的船员。关闭应用时间也会流逝。';
+
+  @override
+  String get r4_expPassSlot => '指挥官通行证：远征+1队';
+
+  @override
+  String get r4_expNoIdle => '没有可派出的船员。取消安排或招募新船员吧。';
+
+  @override
+  String r4_expHours(int h) {
+    return '$h小时';
+  }
+
+  @override
+  String get r4_expLuck => '⭐/★3 幸运';
+
+  @override
+  String r4_expLeft(String time) {
+    return '剩余$time';
+  }
+
+  @override
+  String get r4_expClaim => '归来！领取';
+
+  @override
+  String get r4_expAway => '远征中';
+
+  @override
+  String r4_expGot(String rewards) {
+    return '远征奖励：$rewards';
+  }
+
+  @override
+  String r4_timeHm(int h, int m) {
+    return '$h小时$m分';
+  }
+
+  @override
+  String r4_timeM(int m) {
+    return '$m分钟';
+  }
+
+  @override
+  String r4_ascendExpWarn(int n) {
+    return '远征中的$n名船员也会离开，不会获得奖励。';
+  }
 }

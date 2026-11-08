@@ -125,6 +125,9 @@ class ProgressionBot {
   final bool useOffline;
   final bool dailyGems;
 
+  /// 매 틱 [GameWorld.update] 직후에 불린다 (첫 5분 측정 등)
+  void Function(GameWorld w)? onTick;
+
   late final GameWorld w = GameWorld(seed: seed);
   final input = InputState()
     ..fire = true
@@ -262,6 +265,7 @@ class ProgressionBot {
     final inc = w.creditIncome * dt;
     final invading = w.invasionActive;
     w.update(dt, input);
+    onTick?.call(w);
     if (invading && w.invasion?.phase == InvasionPhase.done) {
       if (w.invasion!.won) {
         _log.invasionsWon++;

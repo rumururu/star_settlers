@@ -250,7 +250,8 @@ void main() {
     await tester.pumpWidget(app(const TitleScreen()));
     await tester.pump(const Duration(milliseconds: 100));
     await tester.pump(const Duration(milliseconds: 400));
-    expect(find.text(tr.m_loginTitle), findsOneWidget);
+    // TASK 004: 출석 보상은 7일 출석 달력으로 보여 준다
+    expect(find.byKey(const ValueKey('calendar-panel')), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 

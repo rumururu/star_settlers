@@ -113,8 +113,13 @@ class Pirate {
       ? bountyNameOf(bountyId!)
       : invasionCommander
       ? tr.g_invasionCommander
+      : miniBoss
+      ? tr.r3_miniBossName
       : null;
   bool sectorBoss = false;
+
+  /// 첫 항성계 미니 두목 '해적 부두목' (한 번만 나온다, [GameWorld.miniBossKey])
+  bool miniBoss = false;
 
   /// 대규모 침공 3파의 지휘함 (이름 붙은 엘리트: 현상금 ×4, 크기 ×1.4)
   bool invasionCommander = false;

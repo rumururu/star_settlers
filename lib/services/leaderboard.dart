@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import '../game/rift.dart';
 import '../game/weekly_score.dart';
 import '../l10n/l.dart';
 import 'rpc.dart';
@@ -220,17 +221,21 @@ enum LeaderboardStatus {
 }
 
 class LeaderboardEntry {
-  const LeaderboardEntry({required this.rank, required this.nicknameCode, required this.score, required this.me});
+  const LeaderboardEntry(
+      {required this.rank, required this.nicknameCode, required this.score, required this.me, this.waves});
   final int rank;
   final String nicknameCode;
   final int score;
   final bool me;
 
+  /// 균열 순위표의 도달 파도 (개척 점수 순위표는 null)
+  final int? waves;
+
   static LeaderboardEntry? fromJson(Object? j) {
     if (j is! Map) return null;
-    final rank = j['rank'], nick = j['nickname'], score = j['score'], me = j['me'];
+    final rank = j['rank'], nick = j['nickname'], score = j['score'], me = j['me'], waves = j['waves'];
     if (rank is! int || nick is! String || score is! int) return null;
-    return LeaderboardEntry(rank: rank, nicknameCode: nick, score: score, me: me == true);
+    return LeaderboardEntry(rank: rank, nicknameCode: nick, score: score, me: me == true, waves: waves is int ? waves : null);
   }
 }
 
@@ -362,6 +367,58 @@ class LeaderboardService {
     if (j is! List) return const BoardResult(LeaderboardStatus.serverError);
     final entries = [for (final e in j) ?LeaderboardEntry.fromJson(e)];
     return BoardResult(LeaderboardStatus.ok, entries: entries);
+  }
+
+  // ---------- 주간 균열 순위 (supabase/migrations/20261108020000_starset_rift.sql) ----------
+
+  /// 균열 점수 제출. 서버는 같은 주의 최고 점수만 남긴다. 예외를 던지지 않는다.
+  Future<SubmitResult> submitRift(int week, int score, int waves) async {
+    if (!configured) return const SubmitResult(LeaderboardStatus.notConfigured);
+    if (!optedIn) return const SubmitResult(LeaderboardStatus.optedOut);
+    final w = waves.clamp(1, RiftPlan.waveCount);
+    final r = await _call('starset_submit_rift', {
+      'p_install_id': installId,
+      'p_nickname': nicknameCode,
+      'p_week': week,
+      'p_score': score.clamp(0, RiftScore.maxForWave(w)),
+      'p_waves': w,
+    });
+    if (r.$1 != LeaderboardStatus.ok) return SubmitResult(r.$1);
+    final j = r.$2;
+    if (j is Map && j['rank'] is int && j['total'] is int) {
+      return SubmitResult(LeaderboardStatus.ok, rank: j['rank'] as int, total: j['total'] as int);
+    }
+    return const SubmitResult(LeaderboardStatus.serverError);
+  }
+
+  /// 지난주에 못 보낸 균열 기록이 있으면 먼저, 그다음 이번 주 최고 기록을 (아직 안 보냈으면) 보낸다.
+  /// 보낼 것이 없으면 null.
+  Future<SubmitResult?> submitRiftWeekly(RiftRecords rec) async {
+    if (!configured || !optedIn) return null;
+    final now = _clock();
+    rec.rollover(now);
+    if (rec.lastWeek != 0 && rec.lastBest > 0) {
+      final r = await submitRift(rec.lastWeek, rec.lastBest, rec.lastWaves);
+      if (r.status == LeaderboardStatus.ok || r.status == LeaderboardStatus.rejected) rec.clearLastWeek();
+    }
+    final best = rec.weekBest(now);
+    if (best <= 0 || rec.weekSent) return null;
+    final r = await submitRift(rec.week, best, rec.weekWaves(now));
+    if (r.status == LeaderboardStatus.ok || r.status == LeaderboardStatus.rejected) rec.markWeekSent(best);
+    return r;
+  }
+
+  /// 균열 상위 50 + 내 줄
+  Future<BoardResult> fetchRift(int week) async {
+    if (!configured) return const BoardResult(LeaderboardStatus.notConfigured);
+    final r = await _call('starset_rift_board', {
+      'p_week': week,
+      'p_install_id': optedIn ? installId : null,
+    });
+    if (r.$1 != LeaderboardStatus.ok) return BoardResult(r.$1);
+    final j = r.$2;
+    if (j is! List) return const BoardResult(LeaderboardStatus.serverError);
+    return BoardResult(LeaderboardStatus.ok, entries: [for (final e in j) ?LeaderboardEntry.fromJson(e)]);
   }
 
   /// 이 설치의 서버 기록(별명·점수)을 지운다 ("모든 데이터 초기화"). 동의 여부와 무관하게 [installId]로 부른다.

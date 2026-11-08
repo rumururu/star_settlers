@@ -3499,4 +3499,540 @@ class L10nId extends L10n {
     });
     return '$_temp0';
   }
+
+  @override
+  String get codex_title => 'Ensiklopedia';
+
+  @override
+  String codex_tab(String tab) {
+    String _temp0 = intl.Intl.selectLogic(tab, {
+      'enemies': 'Musuh',
+      'planets': 'Planet',
+      'systems': 'Sistem',
+      'crew': 'Kru',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_progress(int found, int total, int pct) {
+    return '$found/$total ditemukan · $pct%';
+  }
+
+  @override
+  String codex_enemy(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'scout': 'Pengintai',
+      'raider': 'Perampok',
+      'bomber': 'Pengebom',
+      'sniper': 'Penembak Jitu',
+      'jelly': 'Ubur-ubur Antariksa',
+      'boss': 'Bos Bajak Laut',
+      'commander': 'Komandan Invasi',
+      'missile': 'Kapal Rudal',
+      'mine': 'Penebar Ranjau',
+      'laser': 'Kapal Laser',
+      'warden': 'Kapal Perisai',
+      'phantom': 'Kapal Hantu',
+      'medic': 'Kapal Reparasi',
+      'carrier': 'Induk Drone',
+      'juggernaut': 'Juggernaut',
+      'arch_fleet': 'Laksamana Bajak Laut',
+      'arch_devourer': 'Pemangsa Urat',
+      'arch_flare': 'Kapal Meriam Suar',
+      'arch_wraith': 'Hantu Ion',
+      'arch_gravity': 'Penguasa Gravitasi',
+      'arch_plunder': 'Kapal Dagang Penjarah',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_kills(int n) {
+    return 'Dikalahkan $n';
+  }
+
+  @override
+  String codex_fromSystem(int n) {
+    return 'Mulai sistem $n';
+  }
+
+  @override
+  String codex_planetKind(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'garden': 'Planet Taman',
+      'desert': 'Planet Gurun',
+      'ice': 'Planet Es',
+      'lava': 'Planet Lava',
+      'gas': 'Raksasa Gas',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get codex_planetHint => 'Huni planet jenis ini untuk mengisinya';
+
+  @override
+  String codex_settled(int n) {
+    return 'Planet dihuni: $n';
+  }
+
+  @override
+  String get codex_settledNone => 'Belum ada planet yang dihuni';
+
+  @override
+  String get codex_home => 'Sistem asal · tanpa kondisi khusus';
+
+  @override
+  String get codex_unreached => 'Capai lewat gerbang warp';
+
+  @override
+  String get codex_crewHint => 'Rekrut untuk mengisi';
+
+  @override
+  String get codex_rewards => 'Hadiah koleksi';
+
+  @override
+  String codex_rewardCrew(String stars) {
+    return 'Kru $stars';
+  }
+
+  @override
+  String get codex_outfitName => 'Penjelajah Peta Bintang';
+
+  @override
+  String codex_newEntry(String name) {
+    return 'Entri baru ensiklopedia: $name';
+  }
+
+  @override
+  String get codex_claimedLater => 'Hadiah masuk saat kamu mulai bermain';
+
+  @override
+  String codex_pendingCrew(int n) {
+    return 'Kru penuh: $n menunggu tempat';
+  }
+
+  @override
+  String r3_goalSettle(String planet) {
+    return 'Huni $planet';
+  }
+
+  @override
+  String r3_goalSettleNeed(String planet, int n) {
+    return 'Kurang 💰$n untuk $planet';
+  }
+
+  @override
+  String r3_goalColonyUp(String planet, int level) {
+    return 'Koloni $planet ke Lv.$level';
+  }
+
+  @override
+  String r3_goalBuild(String planet, String building) {
+    return '$planet: bangun $building';
+  }
+
+  @override
+  String get r3_goalAssignCrew => 'Tugaskan kru di stasiun';
+
+  @override
+  String get r3_goalWarp => 'Warp ke sistem berikutnya';
+
+  @override
+  String r3_goalDevelop(String sector) {
+    return 'Stabilkan $sector';
+  }
+
+  @override
+  String get r3_goalMiniBoss => 'Kalahkan Letnan Bajak Laut';
+
+  @override
+  String get r3_miniBossName => 'Letnan Bajak Laut';
+
+  @override
+  String get r3_miniBossArrive =>
+      'Letnan datang! Kapten pemula, kapalmu milikku!';
+
+  @override
+  String get r3_miniBossHint =>
+      'Itu Letnan Bajak Laut! Kapalmu sekarang sanggup. Terus tembak, mundur dulu kalau lambung menipis!';
+
+  @override
+  String get r3_miniBossLose => 'T-tidak mungkin… Akan kulaporkan ke bos!';
+
+  @override
+  String get r3_miniBossDown =>
+      'Letnan tumbang! Kupakai suku cadangnya untuk upgrade senjatamu gratis!';
+
+  @override
+  String r3_weaponUp(int level) {
+    return 'Senjata Lv.$level!';
+  }
+
+  @override
+  String r3_star3Line(String name) {
+    return 'Terbang yang hebat! Markas mengirim veteran ★3. Sambut $name!';
+  }
+
+  @override
+  String get r3_crewAssigned => 'Ditugaskan otomatis — bonus langsung aktif';
+
+  @override
+  String get rift_title => 'Lari Celah';
+
+  @override
+  String get rift_menuSub => 'Celah hari ini · 3–5 mnt';
+
+  @override
+  String rift_locked(String step) {
+    return 'Terbuka setelah “$step”';
+  }
+
+  @override
+  String get rift_rules =>
+      'Bertahanlah 10 gelombang dan kalahkan Bos Celah di gelombang 10. Setiap gelombang selesai, pilih satu kartu untuk jadi lebih kuat. Peningkatan dari game utama tidak berlaku — semua pemain memakai kapal yang sama di Celah hari ini yang sama.';
+
+  @override
+  String rift_bestLine(String score, int wave) {
+    return 'Rekor $score poin · Gelombang $wave';
+  }
+
+  @override
+  String get rift_noBest => 'Belum ada rekor';
+
+  @override
+  String rift_fullLeft(int n) {
+    return 'Hadiah penuh: sisa $n kali hari ini';
+  }
+
+  @override
+  String get rift_fullUsed => 'Hadiah penuh hari ini habis (kini 1/4)';
+
+  @override
+  String get rift_start => 'Luncurkan';
+
+  @override
+  String rift_wave(int n, int total) {
+    return 'Gelombang $n/$total';
+  }
+
+  @override
+  String rift_score(String score) {
+    return 'Skor $score';
+  }
+
+  @override
+  String rift_incoming(int n, int s) {
+    return 'Gelombang $n dalam $s dtk';
+  }
+
+  @override
+  String rift_bossIncoming(int s) {
+    return 'Bos Celah muncul dalam $s dtk';
+  }
+
+  @override
+  String rift_enemiesLeft(int n) {
+    return 'Sisa musuh $n';
+  }
+
+  @override
+  String get rift_collapse => 'Celah runtuh!';
+
+  @override
+  String rift_pickTitle(int n) {
+    return 'Gelombang $n lolos! Pilih satu kartu';
+  }
+
+  @override
+  String rift_cardLevel(int lv, int max) {
+    return 'Lv $lv/$max';
+  }
+
+  @override
+  String get rift_rarityCommon => 'Biasa';
+
+  @override
+  String get rift_rarityRare => 'Langka';
+
+  @override
+  String get rift_rarityEpic => 'Epik';
+
+  @override
+  String get rift_cardDamage => 'Daya Tembak';
+
+  @override
+  String get rift_cardDamageDesc => 'Damage peluru +25%';
+
+  @override
+  String get rift_cardRapid => 'Tembak Cepat';
+
+  @override
+  String get rift_cardRapidDesc => 'Jeda tembakan −15%';
+
+  @override
+  String get rift_cardMultishot => 'Tembakan Ganda';
+
+  @override
+  String get rift_cardMultishotDesc => 'Tambah 1 peluru tiap tembakan';
+
+  @override
+  String get rift_cardPierce => 'Peluru Tembus';
+
+  @override
+  String get rift_cardPierceDesc => 'Peluru menembus 1 musuh lagi';
+
+  @override
+  String get rift_cardHoming => 'Rudal Pelacak';
+
+  @override
+  String get rift_cardHomingDesc =>
+      'Rudal pelacak meluncur otomatis tiap beberapa detik';
+
+  @override
+  String get rift_cardRegen => 'Regen Perisai';
+
+  @override
+  String get rift_cardRegenDesc => 'Pulihkan 2 HP per detik';
+
+  @override
+  String get rift_cardDrone => 'Drone Tempur';
+
+  @override
+  String get rift_cardDroneDesc =>
+      'Drone menembak musuh terdekat. Makin kuat bila ditumpuk';
+
+  @override
+  String get rift_cardMagnet => 'Magnet';
+
+  @override
+  String get rift_cardMagnetDesc => 'Tarik pecahan Celah dari jarak lebih jauh';
+
+  @override
+  String get rift_cardCrit => 'Serangan Kritis';
+
+  @override
+  String get rift_cardCritDesc => 'Peluang 12% memberi damage 2,5×';
+
+  @override
+  String get rift_cardBlades => 'Bilah Berputar';
+
+  @override
+  String get rift_cardBladesDesc => '+1 bilah yang mengitari kapal';
+
+  @override
+  String get rift_cardHull => 'Lambung Diperkuat';
+
+  @override
+  String get rift_cardHullDesc => 'HP maks +35, langsung pulih penuh';
+
+  @override
+  String get rift_cardEngine => 'Pendorong';
+
+  @override
+  String get rift_cardEngineDesc => 'Kecepatan +12%';
+
+  @override
+  String get rift_cardShockwave => 'Gelombang Kejut';
+
+  @override
+  String get rift_cardShockwaveDesc => 'Berkala melukai semua musuh di sekitar';
+
+  @override
+  String get rift_cardGuard => 'Penghalang';
+
+  @override
+  String get rift_cardGuardDesc => 'Menahan satu serangan tiap beberapa detik';
+
+  @override
+  String get rift_cardVampire => 'Serap';
+
+  @override
+  String get rift_cardVampireDesc => 'Pulihkan 3 HP tiap musuh hancur';
+
+  @override
+  String get rift_resultWin => 'Celah Ditaklukkan!';
+
+  @override
+  String get rift_resultLose => 'Tertembak jatuh di Celah';
+
+  @override
+  String get rift_resultGaveUp => 'Mundur dari Celah';
+
+  @override
+  String rift_reached(int n) {
+    return 'Mencapai gelombang $n';
+  }
+
+  @override
+  String get rift_newBest => 'Rekor baru!';
+
+  @override
+  String get rift_rewardTitle => 'Hadiah untuk game utama';
+
+  @override
+  String get rift_rewardReduced => 'Mulai lari ke-4 hari ini, hadiah jadi 1/4';
+
+  @override
+  String get rift_noSave =>
+      'Tidak ada simpanan game utama, jadi kredit dan bijih tidak ditambahkan';
+
+  @override
+  String get rift_again => 'Coba Lagi';
+
+  @override
+  String get rift_exit => 'Keluar';
+
+  @override
+  String get rift_giveUp => 'Menyerah dan keluar';
+
+  @override
+  String get rift_giveUpNote =>
+      'Keluar mengakhiri lari ini. Skor dan hadiah sampai gelombang yang dicapai tetap didapat.';
+
+  @override
+  String get rift_tabPioneer => 'Skor Perintis';
+
+  @override
+  String get rift_tabRift => 'Celah';
+
+  @override
+  String get rift_boardHow =>
+      'Peringkat berdasarkan skor Lari Celah terbaik minggu ini. Semua memakai kapal yang sama di Celah hari ini yang sama.';
+
+  @override
+  String rift_myWeek(String score, int wave) {
+    return 'Terbaik minggu ini: $score poin · Gelombang $wave';
+  }
+
+  @override
+  String get rift_noWeekRun => 'Belum ada Lari Celah minggu ini';
+
+  @override
+  String rift_waveShort(int n) {
+    return 'G$n';
+  }
+
+  @override
+  String get r4_calendarTitle => 'Kalender Masuk 7 Hari';
+
+  @override
+  String r4_calendarStreak(int n) {
+    return 'Hari ke-$n berturut-turut';
+  }
+
+  @override
+  String get r4_calendarHint =>
+      'Lewat sehari, mulai lagi dari hari 1. Hari 7: skin kapal eksklusif!';
+
+  @override
+  String get r4_calendarToday => 'Hari ini';
+
+  @override
+  String get r4_calendarClaim => 'Ambil hadiah hari ini';
+
+  @override
+  String get r4_calendarClaimed => 'Hadiah hari ini sudah diambil!';
+
+  @override
+  String get r4_rewardOre => 'Peti bijih';
+
+  @override
+  String get r4_rewardCredits => 'Paket kredit';
+
+  @override
+  String get r4_rewardCrew2 => 'Kru ★2';
+
+  @override
+  String get r4_rewardCrew3 => 'Kru ★3';
+
+  @override
+  String get r4_rewardSkin => 'Skin eksklusif';
+
+  @override
+  String r4_tomorrow(String reward) {
+    return 'Besok: $reward';
+  }
+
+  @override
+  String get r4_skinName => 'Cahaya Bintang Rajin';
+
+  @override
+  String get r4_attendanceOnly => 'Hadiah masuk 7 hari';
+
+  @override
+  String get r4_notifCalendarTitle => 'Hadiah masuk menunggumu';
+
+  @override
+  String r4_notifCalendarBody(String reward) {
+    return 'Hari ini: $reward';
+  }
+
+  @override
+  String get r4_notifExpeditionTitle => 'Ekspedisi kembali!';
+
+  @override
+  String get r4_notifExpeditionBody =>
+      'Krumu membawa hadiah. Ambil di stasiun.';
+
+  @override
+  String get r4_expTitle => 'Ekspedisi Kru';
+
+  @override
+  String r4_expSlots(int n, int max) {
+    return '$n/$max tim';
+  }
+
+  @override
+  String get r4_expHint =>
+      'Kirim kru yang tidak bertugas. Waktu tetap jalan walau aplikasi ditutup.';
+
+  @override
+  String get r4_expPassSlot => 'Pass Komandan: +1 tim';
+
+  @override
+  String get r4_expNoIdle => 'Tak ada kru bebas. Lepas tugas atau rekrut.';
+
+  @override
+  String r4_expHours(int h) {
+    return '$h jam';
+  }
+
+  @override
+  String get r4_expLuck => 'Hoki ⭐/★3';
+
+  @override
+  String r4_expLeft(String time) {
+    return 'sisa $time';
+  }
+
+  @override
+  String get r4_expClaim => 'Kembali! Ambil';
+
+  @override
+  String get r4_expAway => 'Sedang ekspedisi';
+
+  @override
+  String r4_expGot(String rewards) {
+    return 'Hasil ekspedisi: $rewards';
+  }
+
+  @override
+  String r4_timeHm(int h, int m) {
+    return '$h jam $m mnt';
+  }
+
+  @override
+  String r4_timeM(int m) {
+    return '$m mnt';
+  }
+
+  @override
+  String r4_ascendExpWarn(int n) {
+    return '$n kru yang sedang ekspedisi juga pergi tanpa hadiah.';
+  }
 }

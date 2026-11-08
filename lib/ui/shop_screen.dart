@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../game/cosmetics.dart';
+import '../game/game_telemetry.dart';
 import '../game/crew.dart';
 import '../game/models.dart';
 import '../game/profile.dart';
@@ -13,7 +14,9 @@ import '../l10n/l.dart';
 import '../services/app_state.dart';
 import '../services/monetization.dart';
 import 'chibi.dart';
+import 'calendar_panel.dart';
 import 'common.dart';
+import 'skin_image.dart';
 import 'game_icons.dart';
 import 'hangar_screen.dart';
 
@@ -37,6 +40,7 @@ class _ShopScreenState extends State<ShopScreen> {
       if (mounted) setState(() {});
     });
     AppState.syncWallet(refresh: true);
+    GameTelemetry.emit(TelemetryEvent.shopOpen);
   }
 
   @override
@@ -51,6 +55,7 @@ class _ShopScreenState extends State<ShopScreen> {
     if (_busy) return;
     setState(() => _busy = true);
     final before = _p.walletPurchases;
+    GameTelemetry.emit(TelemetryEvent.iapStart);
     final r = await AppState.money.buy(id);
     if (!mounted) return;
     if (r == PurchaseResult.success && AppState.money.serverGrants) {
@@ -401,11 +406,8 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget _skinPreview(ShipSkin s, {double size = 48}) => SizedBox(
         width: size,
         height: size,
-        child: Image.asset(
-          'assets/sprites/ship_${AppState.profile.shipType}_${s.id}.png',
-          filterQuality: FilterQuality.medium,
-          errorBuilder: (_, _, _) => CustomPaint(painter: _ShipPreviewPainter(s)),
-        ),
+        child: shipSkinImage(AppState.profile.shipType, s,
+            errorBuilder: (_, _, _) => CustomPaint(painter: _ShipPreviewPainter(s))),
       );
 
   Widget _skins() {
@@ -417,7 +419,7 @@ class _ShopScreenState extends State<ShopScreen> {
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
       children: [
-        for (final s in shipSkins)
+        for (final s in allShipSkins)
           _cosmeticCard(
             preview: _skinPreview(s, size: 80),
             name: s.name,
@@ -479,8 +481,14 @@ class _ShopScreenState extends State<ShopScreen> {
     } else if (owned) {
       button = actionBtn(tr.m_equip, true, onEquip);
     } else if (exclusive != null) {
-      button = Text(exclusive == 'premium_pass' ? tr.m_passOnly : tr.m_starterOnly,
-          style: dimStyle, textAlign: TextAlign.center);
+      button = Text(
+          switch (exclusive) {
+            'premium_pass' => tr.m_passOnly,
+            'attendance' => tr.r4_attendanceOnly,
+            _ => tr.m_starterOnly,
+          },
+          style: dimStyle,
+          textAlign: TextAlign.center);
     } else {
       button = actionBtn('$price', true, onBuy,
           icon: 'gem', iconSize: IconSz.inline, color: const Color(0xFFAD1457));
@@ -520,27 +528,8 @@ class _ShopScreenState extends State<ShopScreen> {
         const SizedBox(height: 6),
         Text(tr.m_loginStreak(p.loginStreak), style: bodyStyle),
         const SizedBox(height: 6),
-        Wrap(
-          spacing: 6,
-          runSpacing: 6,
-          children: [
-            for (var i = 0; i < 7; i++)
-              Container(
-                width: 64,
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: i < ((p.loginStreak - 1) % 7 + 1) && p.loginStreak > 0
-                      ? const Color(0xFF4527A0)
-                      : const Color(0xFF1E1A4A),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(children: [
-                  Text(tr.m_dayN(i + 1), style: dimStyle),
-                  iconValue('gem', '${[5, 5, 10, 10, 15, 20, 50][i]}', size: IconSz.inline, style: bodyStyle),
-                ]),
-              ),
-          ],
-        ),
+        // 7일 출석 달력(TASK 004)과 같은 보상표에서 내일 받을 것. 받기는 타이틀·게임 안 달력에서.
+        TomorrowCard(profile: p),
       ],
     );
   }

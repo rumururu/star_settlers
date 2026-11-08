@@ -9,6 +9,7 @@ import '../game/system_traits.dart';
 import '../game/world.dart';
 import '../l10n/l.dart';
 import 'chibi.dart';
+import 'colony_buildings.dart';
 import 'sprites.dart';
 import 'star_systems.dart';
 
@@ -495,33 +496,21 @@ class WorldPainter extends CustomPainter {
       }
     }
 
-    for (var i = 0; i < p.colonyLevel; i++) {
-      final a = -pi / 2 + (i - (p.colonyLevel - 1) / 2) * 0.35;
-      final base = p.pos + OffsetX.fromAngle(a, p.radius);
-      canvas.save();
-      canvas.translate(base.dx, base.dy);
-      canvas.rotate(a + pi / 2);
-      canvas.drawArc(
-        Rect.fromCircle(center: Offset.zero, radius: 14),
-        pi,
-        pi,
-        true,
-        Paint()..color = const Color(0xCCB3E5FC),
-      );
-      canvas.drawRect(
-        const Rect.fromLTWH(-3, -22, 6, 10),
-        Paint()..color = const Color(0xFFFFD54F),
-      );
-      final on = sin(t * 3 + i) > 0;
-      canvas.drawCircle(
-        const Offset(0, -6),
-        3,
-        Paint()..color = on ? const Color(0xFFFFF59D) : const Color(0xFF90A4AE),
-      );
-      canvas.restore();
-    }
     if (p.colonyLevel > 0) {
-      final top = p.pos + Offset(0, -p.radius - 26);
+      // 거주 돔(1~3) + 건물: 행성 표면에 선 구조물 (colony_buildings.dart)
+      final (domeColor, domeOn) = domeState(p);
+      ColonyBuildingArt.paint(
+        canvas,
+        world,
+        p,
+        t,
+        zoom,
+        domeColor: domeColor,
+        domeOn: domeOn,
+      );
+      // 깃발은 가운데 거주 돔 꼭대기에 꽂는다
+      final hab = ColonyBuildingArt.habitatPlacement(p, 0, zoom);
+      final top = p.pos + Offset(0, -p.radius - hab.size * 0.42);
       canvas.drawLine(
         top,
         top + const Offset(0, -26),
@@ -567,7 +556,7 @@ class WorldPainter extends CustomPainter {
 
     if (p.colonyLevel > 0) _paintDome(canvas, p, t);
 
-    // 식민지 건물: 포탑 사거리 + 건물 아이콘
+    // 포탑 사거리 (건물 레벨은 구조물 위 점으로 표시한다)
     if (p.building(ColonyBuilding.turret) > 0) {
       canvas.drawCircle(
         p.pos,
@@ -576,18 +565,6 @@ class WorldPainter extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.5
           ..color = const Color(0x2242A5F5),
-      );
-    }
-    final built = [
-      for (final b in ColonyBuilding.values)
-        if (p.building(b) > 0) '${b.icon}${p.building(b)}',
-    ];
-    if (built.isNotEmpty) {
-      _label(
-        canvas,
-        p.pos + Offset(0, p.radius + 42),
-        built.join(' '),
-        const Color(0xFFB3E5FC),
       );
     }
     if (p.building(ColonyBuilding.stabilizer) > 0) {
@@ -628,16 +605,18 @@ class WorldPainter extends CustomPainter {
           : const Color(0xFF78909C);
       final width =
           1.2 + (home.baseLevel + p.building(ColonyBuilding.stabilizer)) * .12;
+      // 에너지선은 안정기 접시의 초점에서 시작한다
+      final dish = ColonyBuildingArt.dishFocus(world, p, zoom);
       canvas.drawLine(
         home.pos,
-        p.pos,
+        dish,
         Paint()
           ..color = color.withValues(alpha: connected ? .25 : .12)
           ..strokeWidth = width,
       );
       if (!connected) continue;
-      final from = support ? home.pos : p.pos;
-      final to = support ? p.pos : home.pos;
+      final from = support ? home.pos : dish;
+      final to = support ? dish : home.pos;
       for (var i = 0; i < 4; i++) {
         final fraction = (t * .18 + i / 4) % 1;
         canvas.drawCircle(
@@ -647,6 +626,32 @@ class WorldPainter extends CustomPainter {
         );
       }
     }
+  }
+
+  /// 방어막 돔의 지금 색과 켜짐 여부 (돔 그리기와 방어막 발생기 발광이 같이 쓴다)
+  (Color, bool) domeState(Planet p) {
+    final shared = world.relayShieldActive(p);
+    if (!p.domeUp && !shared) return (const Color(0xFFFF5252), false);
+    if (shared) return (const Color(0xFF64FFDA), true);
+    final cap = p.shieldMax(world.sectorMul);
+    return (
+      shieldColor(cap <= 0 ? 0.0 : (p.shieldHp / cap).clamp(0.0, 1.0)),
+      true,
+    );
+  }
+
+  /// 행성 이름표가 차지하는 사각형 (월드 좌표). 건물 배치 검사용.
+  static Rect planetLabelRect(Planet p) {
+    final tp = _text(
+      p.colonyLevel > 0 ? '${p.name}  Lv.${p.colonyLevel}' : p.name,
+      p.colonyLevel > 0 ? const Color(0xFF7CFFB2) : Colors.white70,
+      14,
+    );
+    return Rect.fromCenter(
+      center: p.pos + Offset(0, p.radius + 22),
+      width: tp.width,
+      height: tp.height,
+    );
   }
 
   void _paintDome(Canvas canvas, Planet p, double t) {
@@ -1226,10 +1231,14 @@ class WorldPainter extends CustomPainter {
     // 무지개 스킨은 색이 계속 돌아간다.
     final drawn = Sprites.draw(
       canvas,
-      'ship_${ship.id}_${skin.id}',
+      'ship_${ship.id}_${skin.sprite}',
       Offset.zero,
       62 * ship.length / 46,
-      filter: skin.rainbow ? ColorFilter.matrix(_hueRotate(t * 90)) : null,
+      filter: skin.rainbow
+          ? ColorFilter.matrix(_hueRotate(t * 90))
+          : skin.hue != null
+          ? ColorFilter.matrix(_hueRotate(skin.hue!))
+          : null,
     );
     if (!drawn) {
       // 함선 종류별 실루엣: 날개 폭/동체 길이 배율

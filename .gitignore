@@ -62,3 +62,4 @@ ios/.env.local
 # Supabase 로컬 스택 임시 파일
 supabase/.branches
 supabase/.temp
+lib/l10n/.arb.lock

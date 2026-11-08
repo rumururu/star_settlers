@@ -5071,5 +5071,781 @@
   "u_bossName": "{archetype, select, fleet{☠ 해적 함대장} devourer{☠ 광맥 포식자} flare{☠ 플레어 포격함} wraith{☠ 이온 유령} gravity{☠ 중력 군주} plunder{☠ 약탈 상선} other{}}",
   "@u_bossName": {"description": "항성계 두목 원형 이름표 (월드 라벨). archetype = fleet/devourer/flare/wraith/gravity/plunder", "placeholders": {"archetype": {"type": "String"}}},
   "g_dlgBossArchetype": "{archetype, select, fleet{경고! 해적 함대장이에요. 호위 습격선을 계속 불러내요. 호위가 늘기 전에 두목을 노리세요!} devourer{경고! 광맥 포식자예요. 주위에 기뢰를 뿌려요. 기뢰를 쏘아 없애며 싸우세요!} flare{경고! 플레어 포격함이에요. 조준선이 보이면 세 갈래 레이저가 와요. 옆으로 피하세요!} wraith{경고! 이온 유령이에요. 4초마다 모습을 감춰요. 드러났을 때 몰아치세요!} gravity{경고! 중력 군주예요. 가까이 가면 끌려가요. 부스트로 벗어나세요!} plunder{경고! 약탈 상선이에요. 빠르고, 탄에 맞을 때마다 크레딧을 빼앗아요. 잡으면 모두 돌려받아요!} other{}}",
-  "@g_dlgBossArchetype": {"description": "항성계 두목 등장 시 미나 경고 (두목 이름 + 공략 한 줄). archetype = 원형 키", "placeholders": {"archetype": {"type": "String"}}}
+  "@g_dlgBossArchetype": {"description": "항성계 두목 등장 시 미나 경고 (두목 이름 + 공략 한 줄). archetype = 원형 키", "placeholders": {"archetype": {"type": "String"}}},
+  "codex_title": "도감",
+  "@codex_title": {
+    "description": "도감 화면 제목·메뉴 이름"
+  },
+  "codex_tab": "{tab, select, enemies{적} planets{행성} systems{항성계} crew{승무원} other{}}",
+  "@codex_tab": {
+    "description": "도감 탭 이름. tab = enemies/planets/systems/crew",
+    "placeholders": {
+      "tab": {
+        "type": "String"
+      }
+    }
+  },
+  "codex_progress": "{found}/{total} 발견 · {pct}%",
+  "@codex_progress": {
+    "description": "탭 진행도: 찾은 수/전체 · 퍼센트",
+    "placeholders": {
+      "found": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "codex_enemy": "{id, select, scout{정찰선} raider{습격선} bomber{폭격선} sniper{저격선} jelly{우주 해파리} boss{해적 두목} commander{침공 지휘함} missile{유도탄 포격선} mine{기뢰 부설선} laser{레이저 함} warden{방패선} phantom{유령선} medic{수리선} carrier{드론 모함} juggernaut{중장갑 돌격함} arch_fleet{해적 함대장} arch_devourer{광맥 포식자} arch_flare{플레어 포격함} arch_wraith{이온 유령} arch_gravity{중력 군주} arch_plunder{약탈 상선} other{}}",
+  "@codex_enemy": {
+    "description": "도감 적 이름. id = scout/raider/…/arch_fleet 등 (lib/game/codex.dart codexEnemyIds)",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "codex_kills": "처치 {n}",
+  "@codex_kills": {
+    "description": "적 처치 수",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "codex_fromSystem": "항성계 {n}부터",
+  "@codex_fromSystem": {
+    "description": "아직 못 만난 적 힌트: 몇 번째 항성계부터 나오는지",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "codex_planetKind": "{kind, select, garden{정원 행성} desert{사막 행성} ice{얼음 행성} lava{용암 행성} gas{가스 행성} other{}}",
+  "@codex_planetKind": {
+    "description": "행성 종류 이름. kind = garden/desert/ice/lava/gas",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "codex_planetHint": "이 종류 행성에 정착하면 채워져요",
+  "@codex_planetHint": {
+    "description": "행성 종류 발견 조건"
+  },
+  "codex_settled": "정착한 행성 {n}",
+  "@codex_settled": {
+    "description": "정착한 행성 목록 제목",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "codex_settledNone": "아직 정착한 행성이 없어요",
+  "@codex_settledNone": {
+    "description": "정착한 행성이 없을 때"
+  },
+  "codex_home": "본거지 · 특별한 환경 없음",
+  "@codex_home": {
+    "description": "태양계(특성 없음) 항목 설명"
+  },
+  "codex_unreached": "워프 게이트로 도달하면 채워져요",
+  "@codex_unreached": {
+    "description": "아직 못 간 항성계 힌트"
+  },
+  "codex_crewHint": "모집하면 채워져요",
+  "@codex_crewHint": {
+    "description": "아직 못 얻은 승무원 조합 힌트"
+  },
+  "codex_rewards": "수집 보상",
+  "@codex_rewards": {
+    "description": "마일스톤 보상 줄 제목"
+  },
+  "codex_rewardCrew": "{stars} 승무원",
+  "@codex_rewardCrew": {
+    "description": "보상: ★ 승무원 1명. stars = ★★ 등",
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "codex_outfitName": "별지도 탐험가",
+  "@codex_outfitName": {
+    "description": "도감 100% 보상 선장 의상 이름"
+  },
+  "codex_newEntry": "도감에 새 항목: {name}",
+  "@codex_newEntry": {
+    "description": "HUD 토스트: 도감에 새 항목",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "codex_claimedLater": "보상은 게임을 시작하면 들어와요",
+  "@codex_claimedLater": {
+    "description": "타이틀에서 받은 보상: 다음 게임에 들어감"
+  },
+  "codex_pendingCrew": "정원이 차서 승무원 {n}명이 자리를 기다려요",
+  "@codex_pendingCrew": {
+    "description": "정원이 차서 기다리는 보상 승무원",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "r3_goalSettle": "{planet}에 정착하기",
+  "@r3_goalSettle": {
+    "description": "Next-goal chip: settle this planet",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "r3_goalSettleNeed": "{planet} 정착까지 💰{n}",
+  "@r3_goalSettleNeed": {
+    "description": "Next-goal chip: credits still missing to settle the planet",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "r3_goalColonyUp": "{planet} 식민지 Lv.{level}",
+  "@r3_goalColonyUp": {
+    "description": "Next-goal chip: raise the colony level",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "r3_goalBuild": "{planet}: {building} 짓기",
+  "@r3_goalBuild": {
+    "description": "Next-goal chip: build this building on the planet",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "building": {
+        "type": "String"
+      }
+    }
+  },
+  "r3_goalAssignCrew": "정거장에서 승무원 배치하기",
+  "@r3_goalAssignCrew": {
+    "description": "Next-goal chip: assign an idle crew member at a station"
+  },
+  "r3_goalWarp": "워프 게이트로 다음 항성계",
+  "@r3_goalWarp": {
+    "description": "Next-goal chip: system fully stabilized, go through the gate"
+  },
+  "r3_goalDevelop": "{sector} 안정화 올리기",
+  "@r3_goalDevelop": {
+    "description": "Next-goal chip: raise this system's stabilization",
+    "placeholders": {
+      "sector": {
+        "type": "String"
+      }
+    }
+  },
+  "r3_goalMiniBoss": "해적 부두목 격파",
+  "@r3_goalMiniBoss": {
+    "description": "Next-goal chip: defeat the pirate lieutenant mini boss"
+  },
+  "r3_miniBossName": "해적 부두목",
+  "@r3_miniBossName": {
+    "description": "Name tag of the first-system mini boss"
+  },
+  "r3_miniBossArrive": "부두목 납신다! 신참 함장, 네 배는 내가 접수하지!",
+  "@r3_miniBossArrive": {
+    "description": "Pirate line when the mini boss appears"
+  },
+  "r3_miniBossHint": "해적 부두목이에요! 지금 함선으로도 잡을 수 있어요. 계속 쏘면서 체력이 줄면 물러났다가 다시 붙어요!",
+  "@r3_miniBossHint": {
+    "description": "Mina's tip when the mini boss appears"
+  },
+  "r3_miniBossLose": "이, 이럴 수가… 두목님께 이를 거야!",
+  "@r3_miniBossLose": {
+    "description": "Pirate line when the mini boss is destroyed"
+  },
+  "r3_miniBossDown": "부두목을 잡았어요! 떨어뜨린 부품으로 무기를 공짜로 강화했어요!",
+  "@r3_miniBossDown": {
+    "description": "Mina after the mini boss is destroyed (free weapon upgrade)"
+  },
+  "r3_weaponUp": "무기 Lv.{level}!",
+  "@r3_weaponUp": {
+    "description": "Big floating text after the free weapon upgrade",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "r3_star3Line": "실력이 좋은데요? 본부에서 ★3 베테랑을 보내 줬어요. 반겨 주세요, {name}!",
+  "@r3_star3Line": {
+    "description": "Mina when HQ sends the guaranteed 3-star crew member after the pirate tutorial",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3_crewAssigned": "자동 배치 완료 — 효과가 바로 적용돼요",
+  "@r3_crewAssigned": {
+    "description": "Crew reveal card: the new crew member was already assigned and the bonus is active"
+  },
+  "rift_title": "균열 런",
+  "@rift_title": {
+    "description": "Rift Run: mode name (title button, screen title)"
+  },
+  "rift_menuSub": "오늘의 균열 · 3~5분",
+  "@rift_menuSub": {
+    "description": "Rift Run: subtitle under the title-screen button"
+  },
+  "rift_locked": "‘{step}’ 단계를 마치면 열려요",
+  "@rift_locked": {
+    "description": "Rift Run: locked hint. step = tutorial step title",
+    "placeholders": {
+      "step": {
+        "type": "String"
+      }
+    }
+  },
+  "rift_rules": "파도 10개를 버티고 10파의 균열 두목을 쓰러뜨리세요. 파도를 넘길 때마다 카드 한 장으로 강해져요. 메인 게임 강화는 적용되지 않아요 — 모두 같은 함선으로 같은 오늘의 균열을 달려요.",
+  "@rift_rules": {
+    "description": "Rift Run: rules shown before launching"
+  },
+  "rift_bestLine": "개인 최고 {score}점 · 파도 {wave}",
+  "@rift_bestLine": {
+    "description": "Rift Run: personal best line. score = formatted number, wave = wave reached",
+    "placeholders": {
+      "score": {
+        "type": "String"
+      },
+      "wave": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_noBest": "아직 기록이 없어요",
+  "@rift_noBest": {
+    "description": "Rift Run: no personal record yet"
+  },
+  "rift_fullLeft": "오늘 전액 보상 {n}판 남음",
+  "@rift_fullLeft": {
+    "description": "Rift Run: how many full-reward runs remain today",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_fullUsed": "오늘 전액 보상을 다 받았어요 (이후 1/4)",
+  "@rift_fullUsed": {
+    "description": "Rift Run: today's full rewards are used up"
+  },
+  "rift_start": "출격",
+  "@rift_start": {
+    "description": "Rift Run: launch button"
+  },
+  "rift_wave": "파도 {n}/{total}",
+  "@rift_wave": {
+    "description": "Rift Run HUD: current wave",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_score": "점수 {score}",
+  "@rift_score": {
+    "description": "Rift Run HUD: score. score = formatted number",
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "rift_incoming": "파도 {n} · {s}초 뒤 접근",
+  "@rift_incoming": {
+    "description": "Rift Run HUD: countdown to the next wave",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "s": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_bossIncoming": "균열 두목 · {s}초 뒤 출현",
+  "@rift_bossIncoming": {
+    "description": "Rift Run HUD: countdown to the boss wave",
+    "placeholders": {
+      "s": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_enemiesLeft": "남은 적 {n}",
+  "@rift_enemiesLeft": {
+    "description": "Rift Run HUD: enemies left in this wave",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_collapse": "균열 붕괴 중!",
+  "@rift_collapse": {
+    "description": "Rift Run HUD: the wave is taking long, remaining enemies are being drained"
+  },
+  "rift_pickTitle": "파도 {n} 돌파! 카드를 한 장 고르세요",
+  "@rift_pickTitle": {
+    "description": "Rift Run: card choice title after clearing wave n",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_cardLevel": "Lv {lv}/{max}",
+  "@rift_cardLevel": {
+    "description": "Rift Run: card stack level after picking (lv of max)",
+    "placeholders": {
+      "lv": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_rarityCommon": "일반",
+  "@rift_rarityCommon": {
+    "description": "Rift Run: card rarity"
+  },
+  "rift_rarityRare": "희귀",
+  "@rift_rarityRare": {
+    "description": "Rift Run: card rarity"
+  },
+  "rift_rarityEpic": "영웅",
+  "@rift_rarityEpic": {
+    "description": "Rift Run: card rarity"
+  },
+  "rift_cardDamage": "화력 강화",
+  "@rift_cardDamage": {
+    "description": "Rift Run card name (Damage)"
+  },
+  "rift_cardDamageDesc": "탄 피해 +25%",
+  "@rift_cardDamageDesc": {
+    "description": "Rift Run card effect (Damage), one short line"
+  },
+  "rift_cardRapid": "연사",
+  "@rift_cardRapid": {
+    "description": "Rift Run card name (Rapid)"
+  },
+  "rift_cardRapidDesc": "발사 간격 −15%",
+  "@rift_cardRapidDesc": {
+    "description": "Rift Run card effect (Rapid), one short line"
+  },
+  "rift_cardMultishot": "다중 사격",
+  "@rift_cardMultishot": {
+    "description": "Rift Run card name (Multishot)"
+  },
+  "rift_cardMultishotDesc": "한 번에 1발 더 쏩니다",
+  "@rift_cardMultishotDesc": {
+    "description": "Rift Run card effect (Multishot), one short line"
+  },
+  "rift_cardPierce": "관통탄",
+  "@rift_cardPierce": {
+    "description": "Rift Run card name (Pierce)"
+  },
+  "rift_cardPierceDesc": "탄이 적을 1척 더 뚫고 나가요",
+  "@rift_cardPierceDesc": {
+    "description": "Rift Run card effect (Pierce), one short line"
+  },
+  "rift_cardHoming": "유도 미사일",
+  "@rift_cardHoming": {
+    "description": "Rift Run card name (Homing)"
+  },
+  "rift_cardHomingDesc": "몇 초마다 유도 미사일이 자동으로 날아가요",
+  "@rift_cardHomingDesc": {
+    "description": "Rift Run card effect (Homing), one short line"
+  },
+  "rift_cardRegen": "실드 재생",
+  "@rift_cardRegen": {
+    "description": "Rift Run card name (Regen)"
+  },
+  "rift_cardRegenDesc": "초당 체력 2 회복",
+  "@rift_cardRegenDesc": {
+    "description": "Rift Run card effect (Regen), one short line"
+  },
+  "rift_cardDrone": "전투 드론",
+  "@rift_cardDrone": {
+    "description": "Rift Run card name (Drone)"
+  },
+  "rift_cardDroneDesc": "드론이 근처 적을 쏴요. 겹칠수록 강해져요",
+  "@rift_cardDroneDesc": {
+    "description": "Rift Run card effect (Drone), one short line"
+  },
+  "rift_cardMagnet": "자석",
+  "@rift_cardMagnet": {
+    "description": "Rift Run card name (Magnet)"
+  },
+  "rift_cardMagnetDesc": "균열 조각을 더 멀리서 끌어와요",
+  "@rift_cardMagnetDesc": {
+    "description": "Rift Run card effect (Magnet), one short line"
+  },
+  "rift_cardCrit": "치명타",
+  "@rift_cardCrit": {
+    "description": "Rift Run card name (Crit)"
+  },
+  "rift_cardCritDesc": "12% 확률로 2.5배 피해",
+  "@rift_cardCritDesc": {
+    "description": "Rift Run card effect (Crit), one short line"
+  },
+  "rift_cardBlades": "회전 칼날",
+  "@rift_cardBlades": {
+    "description": "Rift Run card name (Blades)"
+  },
+  "rift_cardBladesDesc": "함선 주위를 도는 칼날 +1",
+  "@rift_cardBladesDesc": {
+    "description": "Rift Run card effect (Blades), one short line"
+  },
+  "rift_cardHull": "강화 선체",
+  "@rift_cardHull": {
+    "description": "Rift Run card name (Hull)"
+  },
+  "rift_cardHullDesc": "최대 체력 +35, 즉시 전부 회복",
+  "@rift_cardHullDesc": {
+    "description": "Rift Run card effect (Hull), one short line"
+  },
+  "rift_cardEngine": "추진기",
+  "@rift_cardEngine": {
+    "description": "Rift Run card name (Engine)"
+  },
+  "rift_cardEngineDesc": "이동 속도 +12%",
+  "@rift_cardEngineDesc": {
+    "description": "Rift Run card effect (Engine), one short line"
+  },
+  "rift_cardShockwave": "충격파",
+  "@rift_cardShockwave": {
+    "description": "Rift Run card name (Shockwave)"
+  },
+  "rift_cardShockwaveDesc": "주기적으로 주변 적 모두에게 피해",
+  "@rift_cardShockwaveDesc": {
+    "description": "Rift Run card effect (Shockwave), one short line"
+  },
+  "rift_cardGuard": "보호막",
+  "@rift_cardGuard": {
+    "description": "Rift Run card name (Guard)"
+  },
+  "rift_cardGuardDesc": "몇 초마다 피격 1회를 막아요",
+  "@rift_cardGuardDesc": {
+    "description": "Rift Run card effect (Guard), one short line"
+  },
+  "rift_cardVampire": "흡수",
+  "@rift_cardVampire": {
+    "description": "Rift Run card name (Vampire)"
+  },
+  "rift_cardVampireDesc": "적을 격추할 때마다 체력 3 회복",
+  "@rift_cardVampireDesc": {
+    "description": "Rift Run card effect (Vampire), one short line"
+  },
+  "rift_resultWin": "균열 정복!",
+  "@rift_resultWin": {
+    "description": "Rift Run result title: all 10 waves cleared"
+  },
+  "rift_resultLose": "균열에서 격추됐어요",
+  "@rift_resultLose": {
+    "description": "Rift Run result title: shot down"
+  },
+  "rift_resultGaveUp": "균열에서 철수했어요",
+  "@rift_resultGaveUp": {
+    "description": "Rift Run result title: player quit mid-run"
+  },
+  "rift_reached": "도달 파도 {n}",
+  "@rift_reached": {
+    "description": "Rift Run result: wave reached",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_newBest": "개인 최고 기록!",
+  "@rift_newBest": {
+    "description": "Rift Run result: new personal best"
+  },
+  "rift_rewardTitle": "메인 게임으로 가져가는 보상",
+  "@rift_rewardTitle": {
+    "description": "Rift Run result: section title for rewards carried into the main game"
+  },
+  "rift_rewardReduced": "오늘 4판째부터는 보상이 1/4이에요",
+  "@rift_rewardReduced": {
+    "description": "Rift Run result: reduced rewards after 3 runs a day"
+  },
+  "rift_noSave": "메인 게임 저장이 없어 크레딧·광석은 받지 못했어요",
+  "@rift_noSave": {
+    "description": "Rift Run result: no main-game save exists, so credits/ore could not be added"
+  },
+  "rift_again": "다시 도전",
+  "@rift_again": {
+    "description": "Rift Run result: play again"
+  },
+  "rift_exit": "나가기",
+  "@rift_exit": {
+    "description": "Rift Run: leave the rift screen"
+  },
+  "rift_giveUp": "포기하고 나가기",
+  "@rift_giveUp": {
+    "description": "Rift Run pause: give up the run and leave"
+  },
+  "rift_giveUpNote": "나가면 이번 판은 포기로 끝나요. 도달한 파도까지의 점수와 보상은 받아요.",
+  "@rift_giveUpNote": {
+    "description": "Rift Run pause: what happens when leaving mid-run"
+  },
+  "rift_tabPioneer": "개척 점수",
+  "@rift_tabPioneer": {
+    "description": "Leaderboard tab: the existing weekly pioneer score"
+  },
+  "rift_tabRift": "균열",
+  "@rift_tabRift": {
+    "description": "Leaderboard tab: weekly Rift Run ranking"
+  },
+  "rift_boardHow": "이번 주 균열 런 최고 점수로 순위를 매겨요. 모두 같은 오늘의 균열과 같은 함선으로 겨뤄요.",
+  "@rift_boardHow": {
+    "description": "Leaderboard rift tab: how ranking works"
+  },
+  "rift_myWeek": "이번 주 최고 {score}점 · 파도 {wave}",
+  "@rift_myWeek": {
+    "description": "Leaderboard rift tab: my best this week. score = formatted number",
+    "placeholders": {
+      "score": {
+        "type": "String"
+      },
+      "wave": {
+        "type": "int"
+      }
+    }
+  },
+  "rift_noWeekRun": "이번 주 균열 기록이 아직 없어요",
+  "@rift_noWeekRun": {
+    "description": "Leaderboard rift tab: no run this week"
+  },
+  "rift_waveShort": "{n}파",
+  "@rift_waveShort": {
+    "description": "Leaderboard rift row: wave reached, very short",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "r4_calendarTitle": "7일 출석 달력",
+  "@r4_calendarTitle": {
+    "description": "7-day attendance calendar title"
+  },
+  "r4_calendarStreak": "연속 {n}일째 접속",
+  "@r4_calendarStreak": {
+    "description": "Calendar subtitle: consecutive days",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "r4_calendarHint": "하루라도 빠지면 1일째부터 다시 시작해요. 7일째에는 출석 전용 함선 스킨!",
+  "@r4_calendarHint": {
+    "description": "Calendar explanation"
+  },
+  "r4_calendarToday": "오늘",
+  "@r4_calendarToday": {
+    "description": "Calendar cell tag: today"
+  },
+  "r4_calendarClaim": "오늘 보상 받기",
+  "@r4_calendarClaim": {
+    "description": "Calendar button: claim today's reward"
+  },
+  "r4_calendarClaimed": "오늘 보상을 받았어요!",
+  "@r4_calendarClaimed": {
+    "description": "Calendar: today's reward already claimed"
+  },
+  "r4_rewardOre": "광석 상자",
+  "@r4_rewardOre": {
+    "description": "Calendar client reward: ore crate"
+  },
+  "r4_rewardCredits": "크레딧 묶음",
+  "@r4_rewardCredits": {
+    "description": "Calendar client reward: credit bundle"
+  },
+  "r4_rewardCrew2": "★2 승무원",
+  "@r4_rewardCrew2": {
+    "description": "Calendar client reward: 2-star crew member"
+  },
+  "r4_rewardCrew3": "★3 승무원",
+  "@r4_rewardCrew3": {
+    "description": "Calendar client reward: 3-star crew member"
+  },
+  "r4_rewardSkin": "전용 함선 스킨",
+  "@r4_rewardSkin": {
+    "description": "Calendar client reward: check-in exclusive ship skin"
+  },
+  "r4_tomorrow": "내일 접속: {reward}",
+  "@r4_tomorrow": {
+    "description": "Small card: what you get by playing tomorrow",
+    "placeholders": {
+      "reward": {
+        "type": "String"
+      }
+    }
+  },
+  "r4_skinName": "개근 별빛",
+  "@r4_skinName": {
+    "description": "Name of the check-in exclusive ship skin"
+  },
+  "r4_attendanceOnly": "7일 출석 보상",
+  "@r4_attendanceOnly": {
+    "description": "Shop label: skin only from day-7 check-in"
+  },
+  "r4_notifCalendarTitle": "출석 보상이 기다려요",
+  "@r4_notifCalendarTitle": {
+    "description": "Notification title: check-in reward waiting"
+  },
+  "r4_notifCalendarBody": "오늘 접속 보상: {reward}",
+  "@r4_notifCalendarBody": {
+    "description": "Notification body: today's check-in reward",
+    "placeholders": {
+      "reward": {
+        "type": "String"
+      }
+    }
+  },
+  "r4_notifExpeditionTitle": "원정대 귀환!",
+  "@r4_notifExpeditionTitle": {
+    "description": "Notification title: expedition returned"
+  },
+  "r4_notifExpeditionBody": "승무원이 보상을 들고 돌아왔어요. 정거장에서 받아요.",
+  "@r4_notifExpeditionBody": {
+    "description": "Notification body: expedition returned with rewards"
+  },
+  "r4_expTitle": "승무원 원정",
+  "@r4_expTitle": {
+    "description": "Crew expedition section title"
+  },
+  "r4_expSlots": "{n}/{max}팀",
+  "@r4_expSlots": {
+    "description": "Expedition slots used",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "r4_expHint": "배치하지 않은 승무원을 보내요. 앱을 꺼도 시간이 흘러요.",
+  "@r4_expHint": {
+    "description": "Expedition explanation"
+  },
+  "r4_expPassSlot": "사령관 패스: 원정 +1팀",
+  "@r4_expPassSlot": {
+    "description": "Expedition: commander pass gives one more slot"
+  },
+  "r4_expNoIdle": "보낼 승무원이 없어요. 배치를 풀거나 새로 영입해요.",
+  "@r4_expNoIdle": {
+    "description": "Expedition: no crew available to send"
+  },
+  "r4_expHours": "{h}시간",
+  "@r4_expHours": {
+    "description": "Expedition duration button",
+    "placeholders": {
+      "h": {
+        "type": "int"
+      }
+    }
+  },
+  "r4_expLuck": "⭐·★3 행운",
+  "@r4_expLuck": {
+    "description": "8h expedition: chance of gems and 3-star crew"
+  },
+  "r4_expLeft": "{time} 남음",
+  "@r4_expLeft": {
+    "description": "Expedition remaining time",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "r4_expClaim": "귀환! 보상 받기",
+  "@r4_expClaim": {
+    "description": "Expedition: claim rewards button"
+  },
+  "r4_expAway": "원정 중",
+  "@r4_expAway": {
+    "description": "Crew list badge: crew member is on an expedition"
+  },
+  "r4_expGot": "원정 보상: {rewards}",
+  "@r4_expGot": {
+    "description": "Expedition reward summary line",
+    "placeholders": {
+      "rewards": {
+        "type": "String"
+      }
+    }
+  },
+  "r4_timeHm": "{h}시간 {m}분",
+  "@r4_timeHm": {
+    "description": "Duration hours and minutes",
+    "placeholders": {
+      "h": {
+        "type": "int"
+      },
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "r4_timeM": "{m}분",
+  "@r4_timeM": {
+    "description": "Duration minutes",
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "r4_ascendExpWarn": "원정 중인 승무원 {n}명도 보상 없이 함께 떠나요.",
+  "@r4_ascendExpWarn": {
+    "description": "Ascension confirm: crews on expedition are lost too",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  }
 }

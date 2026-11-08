@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import '../l10n/l.dart';
+import 'codex.dart';
+import 'game_telemetry.dart';
 import 'home.dart';
 import 'ships.dart';
 import 'weekly_score.dart';
@@ -200,6 +202,11 @@ class Profile {
   /// 결제로 받았지만 아직 월드에 지급하지 않은 ★3 승무원 수
   int pendingStarCrew = 0;
 
+  /// 출석 달력 보상 중 아직 월드에 넣지 않은 것 (타이틀에서 받으면 다음 게임 진입 때 지급, TASK 004)
+  int pendingCrew2 = 0;
+  int pendingCredits = 0;
+  int pendingOre = 0;
+
   // 격납고
   String shipType = 'scout';
   final ownedShips = <String>{};
@@ -224,6 +231,9 @@ class Profile {
 
   // 내 행성
   HomePlanet home = HomePlanet();
+
+  /// 도감 (TASK 006, 계정 단위)
+  late final Codex codex = Codex(() => dirty = true);
 
   // 주간 순위표 (services/leaderboard.dart). 참여는 기본 꺼짐.
   /// 순위표용 무작위 설치 ID (UUID v4). 참여할 때 처음 만든다.
@@ -295,6 +305,7 @@ class Profile {
     loginStreak = _nextStreak(now);
     lastLoginDay = dayKey(now);
     earnGems('login', '', r);
+    GameTelemetry.emit(TelemetryEvent.loginClaim, loginStreak);
     return r;
   }
 
@@ -403,6 +414,7 @@ class Profile {
     }
     dailyClaimed.add(id);
     dirty = true;
+    GameTelemetry.emit(TelemetryEvent.dailyQuestClaim);
     return true;
   }
 
@@ -458,6 +470,9 @@ class Profile {
         'cruiseTip': cruiseTipShown,
         'colonyTut': colonyTutorialSeen,
         'pendingCrew': pendingStarCrew,
+        'pendingCrew2': pendingCrew2,
+        'pendingCredits': pendingCredits,
+        'pendingOre': pendingOre,
         'ship': shipType,
         'ships': ownedShips.toList(),
         'honor': honor,
@@ -477,6 +492,7 @@ class Profile {
         'weekly': weeklyScore.toJson(),
         'cloud': cloudLinked,
         'cloudAt': cloudBackupAt?.toUtc().toIso8601String(),
+        'codex': codex.toJson(),
       };
 
   static Profile fromJson(Map<String, dynamic> j) {
@@ -507,6 +523,9 @@ class Profile {
       ..cruiseTipShown = j['cruiseTip'] as bool? ?? false
       ..colonyTutorialSeen = j['colonyTut'] as bool? ?? false
       ..pendingStarCrew = j['pendingCrew'] as int? ?? 0
+      ..pendingCrew2 = j['pendingCrew2'] as int? ?? 0
+      ..pendingCredits = j['pendingCredits'] as int? ?? 0
+      ..pendingOre = j['pendingOre'] as int? ?? 0
       ..shipType = j['ship'] as String? ?? 'scout'
       ..honor = j['honor'] as int? ?? 0
       ..ascensions = j['ascensions'] as int? ?? 0
@@ -521,6 +540,7 @@ class Profile {
       ..weeklyScore = WeeklyScore.fromJson(j['weekly'] is Map ? (j['weekly'] as Map).cast<String, dynamic>() : null)
       ..cloudLinked = j['cloud'] as bool? ?? false
       ..cloudBackupAt = DateTime.tryParse(j['cloudAt'] as String? ?? '')?.toLocal();
+    p.codex.load(j['codex']);
     if (j['home'] is Map) {
       p.home = HomePlanet.fromJson((j['home'] as Map).cast<String, dynamic>());
     }

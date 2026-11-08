@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'game/attendance.dart';
 import 'game/cosmetics.dart';
 import 'game/models.dart';
 import 'game/save.dart';
@@ -10,12 +11,14 @@ import 'game/world.dart';
 import 'game/profile.dart' show ScreenOrient;
 import 'services/app_state.dart';
 import 'services/orientation.dart';
+import 'ui/calendar_panel.dart';
 import 'ui/chibi.dart';
 import 'l10n/l.dart';
+import 'ui/codex_screen.dart';
 import 'ui/common.dart';
-import 'ui/game_icons.dart';
 import 'ui/game_screen.dart';
 import 'ui/meta_screens.dart';
+import 'ui/rift_screen.dart';
 import 'ui/shop_screen.dart';
 import 'ui/sprites.dart';
 import 'ui/star_systems.dart';
@@ -138,41 +141,30 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
 
   Future<void> _dailyLogin() async {
     // Let a first-time player reach the opening before any retention reward.
+    // (처음 하는 사람은 게임 안에서 첫 튜토리얼을 마친 뒤 달력이 뜬다 — game_screen)
     if (!await SaveService.hasSave() || !mounted) return;
     if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
-    final now = DateTime.now();
-    final p = AppState.profile;
-    final reward = p.pendingLogin(now);
-    if (reward == null || !mounted) return;
-    final first = p.lastLoginDay == 0;
+    if (!Attendance.claimable(AppState.profile, DateTime.now())) return;
+    await _openCalendar();
+  }
+
+  /// 7일 출석 달력 (TASK 004). 월드 보상(광석·크레딧·승무원)은 프로필에 쌓였다가 게임 진입 때 들어간다
+  Future<void> _openCalendar() async {
     await showDialog<void>(
       context: context,
-      builder: (c) => AlertDialog(
-        scrollable: true,
-        backgroundColor: kPanelColor,
-        title: Text(tr.m_loginTitle, textAlign: TextAlign.center),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const ChibiPortrait(style: ChibiStyle.advisor, size: 90),
-            // 처음 받는 출석 보상이면 '오늘도 와주셨네요' 대신 첫 인사
-            Text(keepAll(first ? tr.m_loginFirst : tr.m_loginWelcome), style: bodyStyle, textAlign: TextAlign.center),
-            const SizedBox(height: 8),
-            iconValue('gem', '$reward', size: 28, style: Ts.title.copyWith(color: const Color(0xFFFF80AB))),
-            gemText(keepAll(tr.m_loginStreakHint), style: dimStyle, textAlign: TextAlign.center),
-          ],
+      barrierColor: Colors.transparent,
+      builder: (c) => Material(
+        type: MaterialType.transparency,
+        child: CalendarPanel(
+          profile: AppState.profile,
+          onClose: () => Navigator.pop(c),
+          onClaimed: () {
+            AppState.play(Sfx.gem);
+            SaveService.saveProfile(AppState.profile);
+          },
         ),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.pop(c),
-            child: Text(tr.m_claim),
-          ),
-        ],
       ),
     );
-    p.claimLogin(now);
-    AppState.play(Sfx.gem);
-    await SaveService.saveProfile(p);
     if (mounted) setState(() {});
   }
 
@@ -271,17 +263,27 @@ class _TitleScreenState extends State<TitleScreen> with SingleTickerProviderStat
                   },
                 );
                 final menu = <Widget>[
+                  // 내일 출석 보상 미리보기 (누르면 달력, TASK 004)
+                  if (_hasSave) ...[
+                    TomorrowCard(profile: p, onTap: _openCalendar),
+                    const SizedBox(height: Space.s),
+                  ],
                   _menuButton(tr.m_continue, _hasSave ? _continue : null,
                       primary: _hasSave, leading: Icons.play_arrow_rounded),
                   const SizedBox(height: Space.m),
                   _menuButton(tr.m_newGame, _newGame, primary: !_hasSave),
                   const SizedBox(height: Space.l),
-                  Center(
-                    child: TextButton.icon(
-                      onPressed: () => _open(const SettingsScreen()),
-                      icon: const Icon(Icons.settings_outlined),
-                      label: Text(tr.m_menuSettings, style: Ts.body),
-                    ),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      RiftTitleButton(open: _open), // 균열 런 (TASK 005)
+                      CodexTitleButton(open: _open), // 도감 (TASK 006)
+                      TextButton.icon(
+                        onPressed: () => _open(const SettingsScreen()),
+                        icon: const Icon(Icons.settings_outlined),
+                        label: Text(tr.m_menuSettings, style: Ts.body),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: Space.l),
                 ];

@@ -5676,6 +5676,816 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'{archetype, select, fleet{경고! 해적 함대장이에요. 호위 습격선을 계속 불러내요. 호위가 늘기 전에 두목을 노리세요!} devourer{경고! 광맥 포식자예요. 주위에 기뢰를 뿌려요. 기뢰를 쏘아 없애며 싸우세요!} flare{경고! 플레어 포격함이에요. 조준선이 보이면 세 갈래 레이저가 와요. 옆으로 피하세요!} wraith{경고! 이온 유령이에요. 4초마다 모습을 감춰요. 드러났을 때 몰아치세요!} gravity{경고! 중력 군주예요. 가까이 가면 끌려가요. 부스트로 벗어나세요!} plunder{경고! 약탈 상선이에요. 빠르고, 탄에 맞을 때마다 크레딧을 빼앗아요. 잡으면 모두 돌려받아요!} other{}}'**
   String g_dlgBossArchetype(String archetype);
+
+  /// 도감 화면 제목·메뉴 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'도감'**
+  String get codex_title;
+
+  /// 도감 탭 이름. tab = enemies/planets/systems/crew
+  ///
+  /// In ko, this message translates to:
+  /// **'{tab, select, enemies{적} planets{행성} systems{항성계} crew{승무원} other{}}'**
+  String codex_tab(String tab);
+
+  /// 탭 진행도: 찾은 수/전체 · 퍼센트
+  ///
+  /// In ko, this message translates to:
+  /// **'{found}/{total} 발견 · {pct}%'**
+  String codex_progress(int found, int total, int pct);
+
+  /// 도감 적 이름. id = scout/raider/…/arch_fleet 등 (lib/game/codex.dart codexEnemyIds)
+  ///
+  /// In ko, this message translates to:
+  /// **'{id, select, scout{정찰선} raider{습격선} bomber{폭격선} sniper{저격선} jelly{우주 해파리} boss{해적 두목} commander{침공 지휘함} missile{유도탄 포격선} mine{기뢰 부설선} laser{레이저 함} warden{방패선} phantom{유령선} medic{수리선} carrier{드론 모함} juggernaut{중장갑 돌격함} arch_fleet{해적 함대장} arch_devourer{광맥 포식자} arch_flare{플레어 포격함} arch_wraith{이온 유령} arch_gravity{중력 군주} arch_plunder{약탈 상선} other{}}'**
+  String codex_enemy(String id);
+
+  /// 적 처치 수
+  ///
+  /// In ko, this message translates to:
+  /// **'처치 {n}'**
+  String codex_kills(int n);
+
+  /// 아직 못 만난 적 힌트: 몇 번째 항성계부터 나오는지
+  ///
+  /// In ko, this message translates to:
+  /// **'항성계 {n}부터'**
+  String codex_fromSystem(int n);
+
+  /// 행성 종류 이름. kind = garden/desert/ice/lava/gas
+  ///
+  /// In ko, this message translates to:
+  /// **'{kind, select, garden{정원 행성} desert{사막 행성} ice{얼음 행성} lava{용암 행성} gas{가스 행성} other{}}'**
+  String codex_planetKind(String kind);
+
+  /// 행성 종류 발견 조건
+  ///
+  /// In ko, this message translates to:
+  /// **'이 종류 행성에 정착하면 채워져요'**
+  String get codex_planetHint;
+
+  /// 정착한 행성 목록 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'정착한 행성 {n}'**
+  String codex_settled(int n);
+
+  /// 정착한 행성이 없을 때
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 정착한 행성이 없어요'**
+  String get codex_settledNone;
+
+  /// 태양계(특성 없음) 항목 설명
+  ///
+  /// In ko, this message translates to:
+  /// **'본거지 · 특별한 환경 없음'**
+  String get codex_home;
+
+  /// 아직 못 간 항성계 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'워프 게이트로 도달하면 채워져요'**
+  String get codex_unreached;
+
+  /// 아직 못 얻은 승무원 조합 힌트
+  ///
+  /// In ko, this message translates to:
+  /// **'모집하면 채워져요'**
+  String get codex_crewHint;
+
+  /// 마일스톤 보상 줄 제목
+  ///
+  /// In ko, this message translates to:
+  /// **'수집 보상'**
+  String get codex_rewards;
+
+  /// 보상: ★ 승무원 1명. stars = ★★ 등
+  ///
+  /// In ko, this message translates to:
+  /// **'{stars} 승무원'**
+  String codex_rewardCrew(String stars);
+
+  /// 도감 100% 보상 선장 의상 이름
+  ///
+  /// In ko, this message translates to:
+  /// **'별지도 탐험가'**
+  String get codex_outfitName;
+
+  /// HUD 토스트: 도감에 새 항목
+  ///
+  /// In ko, this message translates to:
+  /// **'도감에 새 항목: {name}'**
+  String codex_newEntry(String name);
+
+  /// 타이틀에서 받은 보상: 다음 게임에 들어감
+  ///
+  /// In ko, this message translates to:
+  /// **'보상은 게임을 시작하면 들어와요'**
+  String get codex_claimedLater;
+
+  /// 정원이 차서 기다리는 보상 승무원
+  ///
+  /// In ko, this message translates to:
+  /// **'정원이 차서 승무원 {n}명이 자리를 기다려요'**
+  String codex_pendingCrew(int n);
+
+  /// Next-goal chip: settle this planet
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet}에 정착하기'**
+  String r3_goalSettle(String planet);
+
+  /// Next-goal chip: credits still missing to settle the planet
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet} 정착까지 💰{n}'**
+  String r3_goalSettleNeed(String planet, int n);
+
+  /// Next-goal chip: raise the colony level
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet} 식민지 Lv.{level}'**
+  String r3_goalColonyUp(String planet, int level);
+
+  /// Next-goal chip: build this building on the planet
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet}: {building} 짓기'**
+  String r3_goalBuild(String planet, String building);
+
+  /// Next-goal chip: assign an idle crew member at a station
+  ///
+  /// In ko, this message translates to:
+  /// **'정거장에서 승무원 배치하기'**
+  String get r3_goalAssignCrew;
+
+  /// Next-goal chip: system fully stabilized, go through the gate
+  ///
+  /// In ko, this message translates to:
+  /// **'워프 게이트로 다음 항성계'**
+  String get r3_goalWarp;
+
+  /// Next-goal chip: raise this system's stabilization
+  ///
+  /// In ko, this message translates to:
+  /// **'{sector} 안정화 올리기'**
+  String r3_goalDevelop(String sector);
+
+  /// Next-goal chip: defeat the pirate lieutenant mini boss
+  ///
+  /// In ko, this message translates to:
+  /// **'해적 부두목 격파'**
+  String get r3_goalMiniBoss;
+
+  /// Name tag of the first-system mini boss
+  ///
+  /// In ko, this message translates to:
+  /// **'해적 부두목'**
+  String get r3_miniBossName;
+
+  /// Pirate line when the mini boss appears
+  ///
+  /// In ko, this message translates to:
+  /// **'부두목 납신다! 신참 함장, 네 배는 내가 접수하지!'**
+  String get r3_miniBossArrive;
+
+  /// Mina's tip when the mini boss appears
+  ///
+  /// In ko, this message translates to:
+  /// **'해적 부두목이에요! 지금 함선으로도 잡을 수 있어요. 계속 쏘면서 체력이 줄면 물러났다가 다시 붙어요!'**
+  String get r3_miniBossHint;
+
+  /// Pirate line when the mini boss is destroyed
+  ///
+  /// In ko, this message translates to:
+  /// **'이, 이럴 수가… 두목님께 이를 거야!'**
+  String get r3_miniBossLose;
+
+  /// Mina after the mini boss is destroyed (free weapon upgrade)
+  ///
+  /// In ko, this message translates to:
+  /// **'부두목을 잡았어요! 떨어뜨린 부품으로 무기를 공짜로 강화했어요!'**
+  String get r3_miniBossDown;
+
+  /// Big floating text after the free weapon upgrade
+  ///
+  /// In ko, this message translates to:
+  /// **'무기 Lv.{level}!'**
+  String r3_weaponUp(int level);
+
+  /// Mina when HQ sends the guaranteed 3-star crew member after the pirate tutorial
+  ///
+  /// In ko, this message translates to:
+  /// **'실력이 좋은데요? 본부에서 ★3 베테랑을 보내 줬어요. 반겨 주세요, {name}!'**
+  String r3_star3Line(String name);
+
+  /// Crew reveal card: the new crew member was already assigned and the bonus is active
+  ///
+  /// In ko, this message translates to:
+  /// **'자동 배치 완료 — 효과가 바로 적용돼요'**
+  String get r3_crewAssigned;
+
+  /// Rift Run: mode name (title button, screen title)
+  ///
+  /// In ko, this message translates to:
+  /// **'균열 런'**
+  String get rift_title;
+
+  /// Rift Run: subtitle under the title-screen button
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘의 균열 · 3~5분'**
+  String get rift_menuSub;
+
+  /// Rift Run: locked hint. step = tutorial step title
+  ///
+  /// In ko, this message translates to:
+  /// **'‘{step}’ 단계를 마치면 열려요'**
+  String rift_locked(String step);
+
+  /// Rift Run: rules shown before launching
+  ///
+  /// In ko, this message translates to:
+  /// **'파도 10개를 버티고 10파의 균열 두목을 쓰러뜨리세요. 파도를 넘길 때마다 카드 한 장으로 강해져요. 메인 게임 강화는 적용되지 않아요 — 모두 같은 함선으로 같은 오늘의 균열을 달려요.'**
+  String get rift_rules;
+
+  /// Rift Run: personal best line. score = formatted number, wave = wave reached
+  ///
+  /// In ko, this message translates to:
+  /// **'개인 최고 {score}점 · 파도 {wave}'**
+  String rift_bestLine(String score, int wave);
+
+  /// Rift Run: no personal record yet
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 기록이 없어요'**
+  String get rift_noBest;
+
+  /// Rift Run: how many full-reward runs remain today
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 전액 보상 {n}판 남음'**
+  String rift_fullLeft(int n);
+
+  /// Rift Run: today's full rewards are used up
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 전액 보상을 다 받았어요 (이후 1/4)'**
+  String get rift_fullUsed;
+
+  /// Rift Run: launch button
+  ///
+  /// In ko, this message translates to:
+  /// **'출격'**
+  String get rift_start;
+
+  /// Rift Run HUD: current wave
+  ///
+  /// In ko, this message translates to:
+  /// **'파도 {n}/{total}'**
+  String rift_wave(int n, int total);
+
+  /// Rift Run HUD: score. score = formatted number
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 {score}'**
+  String rift_score(String score);
+
+  /// Rift Run HUD: countdown to the next wave
+  ///
+  /// In ko, this message translates to:
+  /// **'파도 {n} · {s}초 뒤 접근'**
+  String rift_incoming(int n, int s);
+
+  /// Rift Run HUD: countdown to the boss wave
+  ///
+  /// In ko, this message translates to:
+  /// **'균열 두목 · {s}초 뒤 출현'**
+  String rift_bossIncoming(int s);
+
+  /// Rift Run HUD: enemies left in this wave
+  ///
+  /// In ko, this message translates to:
+  /// **'남은 적 {n}'**
+  String rift_enemiesLeft(int n);
+
+  /// Rift Run HUD: the wave is taking long, remaining enemies are being drained
+  ///
+  /// In ko, this message translates to:
+  /// **'균열 붕괴 중!'**
+  String get rift_collapse;
+
+  /// Rift Run: card choice title after clearing wave n
+  ///
+  /// In ko, this message translates to:
+  /// **'파도 {n} 돌파! 카드를 한 장 고르세요'**
+  String rift_pickTitle(int n);
+
+  /// Rift Run: card stack level after picking (lv of max)
+  ///
+  /// In ko, this message translates to:
+  /// **'Lv {lv}/{max}'**
+  String rift_cardLevel(int lv, int max);
+
+  /// Rift Run: card rarity
+  ///
+  /// In ko, this message translates to:
+  /// **'일반'**
+  String get rift_rarityCommon;
+
+  /// Rift Run: card rarity
+  ///
+  /// In ko, this message translates to:
+  /// **'희귀'**
+  String get rift_rarityRare;
+
+  /// Rift Run: card rarity
+  ///
+  /// In ko, this message translates to:
+  /// **'영웅'**
+  String get rift_rarityEpic;
+
+  /// Rift Run card name (Damage)
+  ///
+  /// In ko, this message translates to:
+  /// **'화력 강화'**
+  String get rift_cardDamage;
+
+  /// Rift Run card effect (Damage), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'탄 피해 +25%'**
+  String get rift_cardDamageDesc;
+
+  /// Rift Run card name (Rapid)
+  ///
+  /// In ko, this message translates to:
+  /// **'연사'**
+  String get rift_cardRapid;
+
+  /// Rift Run card effect (Rapid), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'발사 간격 −15%'**
+  String get rift_cardRapidDesc;
+
+  /// Rift Run card name (Multishot)
+  ///
+  /// In ko, this message translates to:
+  /// **'다중 사격'**
+  String get rift_cardMultishot;
+
+  /// Rift Run card effect (Multishot), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'한 번에 1발 더 쏩니다'**
+  String get rift_cardMultishotDesc;
+
+  /// Rift Run card name (Pierce)
+  ///
+  /// In ko, this message translates to:
+  /// **'관통탄'**
+  String get rift_cardPierce;
+
+  /// Rift Run card effect (Pierce), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'탄이 적을 1척 더 뚫고 나가요'**
+  String get rift_cardPierceDesc;
+
+  /// Rift Run card name (Homing)
+  ///
+  /// In ko, this message translates to:
+  /// **'유도 미사일'**
+  String get rift_cardHoming;
+
+  /// Rift Run card effect (Homing), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'몇 초마다 유도 미사일이 자동으로 날아가요'**
+  String get rift_cardHomingDesc;
+
+  /// Rift Run card name (Regen)
+  ///
+  /// In ko, this message translates to:
+  /// **'실드 재생'**
+  String get rift_cardRegen;
+
+  /// Rift Run card effect (Regen), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'초당 체력 2 회복'**
+  String get rift_cardRegenDesc;
+
+  /// Rift Run card name (Drone)
+  ///
+  /// In ko, this message translates to:
+  /// **'전투 드론'**
+  String get rift_cardDrone;
+
+  /// Rift Run card effect (Drone), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'드론이 근처 적을 쏴요. 겹칠수록 강해져요'**
+  String get rift_cardDroneDesc;
+
+  /// Rift Run card name (Magnet)
+  ///
+  /// In ko, this message translates to:
+  /// **'자석'**
+  String get rift_cardMagnet;
+
+  /// Rift Run card effect (Magnet), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'균열 조각을 더 멀리서 끌어와요'**
+  String get rift_cardMagnetDesc;
+
+  /// Rift Run card name (Crit)
+  ///
+  /// In ko, this message translates to:
+  /// **'치명타'**
+  String get rift_cardCrit;
+
+  /// Rift Run card effect (Crit), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'12% 확률로 2.5배 피해'**
+  String get rift_cardCritDesc;
+
+  /// Rift Run card name (Blades)
+  ///
+  /// In ko, this message translates to:
+  /// **'회전 칼날'**
+  String get rift_cardBlades;
+
+  /// Rift Run card effect (Blades), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'함선 주위를 도는 칼날 +1'**
+  String get rift_cardBladesDesc;
+
+  /// Rift Run card name (Hull)
+  ///
+  /// In ko, this message translates to:
+  /// **'강화 선체'**
+  String get rift_cardHull;
+
+  /// Rift Run card effect (Hull), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'최대 체력 +35, 즉시 전부 회복'**
+  String get rift_cardHullDesc;
+
+  /// Rift Run card name (Engine)
+  ///
+  /// In ko, this message translates to:
+  /// **'추진기'**
+  String get rift_cardEngine;
+
+  /// Rift Run card effect (Engine), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'이동 속도 +12%'**
+  String get rift_cardEngineDesc;
+
+  /// Rift Run card name (Shockwave)
+  ///
+  /// In ko, this message translates to:
+  /// **'충격파'**
+  String get rift_cardShockwave;
+
+  /// Rift Run card effect (Shockwave), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'주기적으로 주변 적 모두에게 피해'**
+  String get rift_cardShockwaveDesc;
+
+  /// Rift Run card name (Guard)
+  ///
+  /// In ko, this message translates to:
+  /// **'보호막'**
+  String get rift_cardGuard;
+
+  /// Rift Run card effect (Guard), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'몇 초마다 피격 1회를 막아요'**
+  String get rift_cardGuardDesc;
+
+  /// Rift Run card name (Vampire)
+  ///
+  /// In ko, this message translates to:
+  /// **'흡수'**
+  String get rift_cardVampire;
+
+  /// Rift Run card effect (Vampire), one short line
+  ///
+  /// In ko, this message translates to:
+  /// **'적을 격추할 때마다 체력 3 회복'**
+  String get rift_cardVampireDesc;
+
+  /// Rift Run result title: all 10 waves cleared
+  ///
+  /// In ko, this message translates to:
+  /// **'균열 정복!'**
+  String get rift_resultWin;
+
+  /// Rift Run result title: shot down
+  ///
+  /// In ko, this message translates to:
+  /// **'균열에서 격추됐어요'**
+  String get rift_resultLose;
+
+  /// Rift Run result title: player quit mid-run
+  ///
+  /// In ko, this message translates to:
+  /// **'균열에서 철수했어요'**
+  String get rift_resultGaveUp;
+
+  /// Rift Run result: wave reached
+  ///
+  /// In ko, this message translates to:
+  /// **'도달 파도 {n}'**
+  String rift_reached(int n);
+
+  /// Rift Run result: new personal best
+  ///
+  /// In ko, this message translates to:
+  /// **'개인 최고 기록!'**
+  String get rift_newBest;
+
+  /// Rift Run result: section title for rewards carried into the main game
+  ///
+  /// In ko, this message translates to:
+  /// **'메인 게임으로 가져가는 보상'**
+  String get rift_rewardTitle;
+
+  /// Rift Run result: reduced rewards after 3 runs a day
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 4판째부터는 보상이 1/4이에요'**
+  String get rift_rewardReduced;
+
+  /// Rift Run result: no main-game save exists, so credits/ore could not be added
+  ///
+  /// In ko, this message translates to:
+  /// **'메인 게임 저장이 없어 크레딧·광석은 받지 못했어요'**
+  String get rift_noSave;
+
+  /// Rift Run result: play again
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 도전'**
+  String get rift_again;
+
+  /// Rift Run: leave the rift screen
+  ///
+  /// In ko, this message translates to:
+  /// **'나가기'**
+  String get rift_exit;
+
+  /// Rift Run pause: give up the run and leave
+  ///
+  /// In ko, this message translates to:
+  /// **'포기하고 나가기'**
+  String get rift_giveUp;
+
+  /// Rift Run pause: what happens when leaving mid-run
+  ///
+  /// In ko, this message translates to:
+  /// **'나가면 이번 판은 포기로 끝나요. 도달한 파도까지의 점수와 보상은 받아요.'**
+  String get rift_giveUpNote;
+
+  /// Leaderboard tab: the existing weekly pioneer score
+  ///
+  /// In ko, this message translates to:
+  /// **'개척 점수'**
+  String get rift_tabPioneer;
+
+  /// Leaderboard tab: weekly Rift Run ranking
+  ///
+  /// In ko, this message translates to:
+  /// **'균열'**
+  String get rift_tabRift;
+
+  /// Leaderboard rift tab: how ranking works
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 균열 런 최고 점수로 순위를 매겨요. 모두 같은 오늘의 균열과 같은 함선으로 겨뤄요.'**
+  String get rift_boardHow;
+
+  /// Leaderboard rift tab: my best this week. score = formatted number
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 최고 {score}점 · 파도 {wave}'**
+  String rift_myWeek(String score, int wave);
+
+  /// Leaderboard rift tab: no run this week
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 주 균열 기록이 아직 없어요'**
+  String get rift_noWeekRun;
+
+  /// Leaderboard rift row: wave reached, very short
+  ///
+  /// In ko, this message translates to:
+  /// **'{n}파'**
+  String rift_waveShort(int n);
+
+  /// 7-day attendance calendar title
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 출석 달력'**
+  String get r4_calendarTitle;
+
+  /// Calendar subtitle: consecutive days
+  ///
+  /// In ko, this message translates to:
+  /// **'연속 {n}일째 접속'**
+  String r4_calendarStreak(int n);
+
+  /// Calendar explanation
+  ///
+  /// In ko, this message translates to:
+  /// **'하루라도 빠지면 1일째부터 다시 시작해요. 7일째에는 출석 전용 함선 스킨!'**
+  String get r4_calendarHint;
+
+  /// Calendar cell tag: today
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘'**
+  String get r4_calendarToday;
+
+  /// Calendar button: claim today's reward
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 보상 받기'**
+  String get r4_calendarClaim;
+
+  /// Calendar: today's reward already claimed
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 보상을 받았어요!'**
+  String get r4_calendarClaimed;
+
+  /// Calendar client reward: ore crate
+  ///
+  /// In ko, this message translates to:
+  /// **'광석 상자'**
+  String get r4_rewardOre;
+
+  /// Calendar client reward: credit bundle
+  ///
+  /// In ko, this message translates to:
+  /// **'크레딧 묶음'**
+  String get r4_rewardCredits;
+
+  /// Calendar client reward: 2-star crew member
+  ///
+  /// In ko, this message translates to:
+  /// **'★2 승무원'**
+  String get r4_rewardCrew2;
+
+  /// Calendar client reward: 3-star crew member
+  ///
+  /// In ko, this message translates to:
+  /// **'★3 승무원'**
+  String get r4_rewardCrew3;
+
+  /// Calendar client reward: check-in exclusive ship skin
+  ///
+  /// In ko, this message translates to:
+  /// **'전용 함선 스킨'**
+  String get r4_rewardSkin;
+
+  /// Small card: what you get by playing tomorrow
+  ///
+  /// In ko, this message translates to:
+  /// **'내일 접속: {reward}'**
+  String r4_tomorrow(String reward);
+
+  /// Name of the check-in exclusive ship skin
+  ///
+  /// In ko, this message translates to:
+  /// **'개근 별빛'**
+  String get r4_skinName;
+
+  /// Shop label: skin only from day-7 check-in
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 출석 보상'**
+  String get r4_attendanceOnly;
+
+  /// Notification title: check-in reward waiting
+  ///
+  /// In ko, this message translates to:
+  /// **'출석 보상이 기다려요'**
+  String get r4_notifCalendarTitle;
+
+  /// Notification body: today's check-in reward
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 접속 보상: {reward}'**
+  String r4_notifCalendarBody(String reward);
+
+  /// Notification title: expedition returned
+  ///
+  /// In ko, this message translates to:
+  /// **'원정대 귀환!'**
+  String get r4_notifExpeditionTitle;
+
+  /// Notification body: expedition returned with rewards
+  ///
+  /// In ko, this message translates to:
+  /// **'승무원이 보상을 들고 돌아왔어요. 정거장에서 받아요.'**
+  String get r4_notifExpeditionBody;
+
+  /// Crew expedition section title
+  ///
+  /// In ko, this message translates to:
+  /// **'승무원 원정'**
+  String get r4_expTitle;
+
+  /// Expedition slots used
+  ///
+  /// In ko, this message translates to:
+  /// **'{n}/{max}팀'**
+  String r4_expSlots(int n, int max);
+
+  /// Expedition explanation
+  ///
+  /// In ko, this message translates to:
+  /// **'배치하지 않은 승무원을 보내요. 앱을 꺼도 시간이 흘러요.'**
+  String get r4_expHint;
+
+  /// Expedition: commander pass gives one more slot
+  ///
+  /// In ko, this message translates to:
+  /// **'사령관 패스: 원정 +1팀'**
+  String get r4_expPassSlot;
+
+  /// Expedition: no crew available to send
+  ///
+  /// In ko, this message translates to:
+  /// **'보낼 승무원이 없어요. 배치를 풀거나 새로 영입해요.'**
+  String get r4_expNoIdle;
+
+  /// Expedition duration button
+  ///
+  /// In ko, this message translates to:
+  /// **'{h}시간'**
+  String r4_expHours(int h);
+
+  /// 8h expedition: chance of gems and 3-star crew
+  ///
+  /// In ko, this message translates to:
+  /// **'⭐·★3 행운'**
+  String get r4_expLuck;
+
+  /// Expedition remaining time
+  ///
+  /// In ko, this message translates to:
+  /// **'{time} 남음'**
+  String r4_expLeft(String time);
+
+  /// Expedition: claim rewards button
+  ///
+  /// In ko, this message translates to:
+  /// **'귀환! 보상 받기'**
+  String get r4_expClaim;
+
+  /// Crew list badge: crew member is on an expedition
+  ///
+  /// In ko, this message translates to:
+  /// **'원정 중'**
+  String get r4_expAway;
+
+  /// Expedition reward summary line
+  ///
+  /// In ko, this message translates to:
+  /// **'원정 보상: {rewards}'**
+  String r4_expGot(String rewards);
+
+  /// Duration hours and minutes
+  ///
+  /// In ko, this message translates to:
+  /// **'{h}시간 {m}분'**
+  String r4_timeHm(int h, int m);
+
+  /// Duration minutes
+  ///
+  /// In ko, this message translates to:
+  /// **'{m}분'**
+  String r4_timeM(int m);
+
+  /// Ascension confirm: crews on expedition are lost too
+  ///
+  /// In ko, this message translates to:
+  /// **'원정 중인 승무원 {n}명도 보상 없이 함께 떠나요.'**
+  String r4_ascendExpWarn(int n);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

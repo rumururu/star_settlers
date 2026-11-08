@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../game/rift.dart';
 import '../game/save.dart';
 import '../l10n/l.dart';
 import '../services/app_state.dart';
@@ -14,14 +15,18 @@ Widget appLeaderboardScreen() => LeaderboardScreen(
       score: AppState.profile.weeklyScore,
       onScoreChanged: () => SaveService.saveProfile(AppState.profile),
       onSubmitted: AppState.markSubmitted,
+      rift: RiftRecords(AppState.profile.stats, onChanged: () => AppState.profile.dirty = true),
     );
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen(
-      {super.key, required this.service, required this.score, this.onScoreChanged, this.onSubmitted});
+      {super.key, required this.service, required this.score, this.onScoreChanged, this.onSubmitted, this.rift});
 
   final LeaderboardService service;
   final WeeklyScore score;
+
+  /// 균열 런 기록. 있으면 '개척 점수 | 균열' 탭으로 나눠 주간 균열 순위도 보여 준다 (TASK 005).
+  final RiftRecords? rift;
 
   /// [WeeklyScore]가 바뀌었을 때(주 넘김·지난주 점수 전송) 저장하도록 부른다
   final Future<void> Function()? onScoreChanged;
@@ -81,7 +86,20 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     widget.score.rollover();
-    return Scaffold(
+    final rift = widget.rift;
+    final weekly = contentWidth(RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView(
+        padding: const EdgeInsets.all(Space.m),
+        children: [
+          _optInCard(),
+          const SizedBox(height: Space.m),
+          if (_svc.optedIn) ...[_meCard(), const SizedBox(height: Space.m)],
+          ..._boardSection(),
+        ],
+      ),
+    ));
+    final scaffold = Scaffold(
       backgroundColor: const Color(0xFF0D0B26),
       appBar: AppBar(
         backgroundColor: const Color(0xFF151236),
@@ -95,20 +113,19 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               constraints: const BoxConstraints(minWidth: Tap.min, minHeight: Tap.min),
             ),
         ],
+        bottom: rift == null
+            ? null
+            : TabBar(
+                labelStyle: Ts.label,
+                tabs: [
+                  Tab(key: const ValueKey('lb_tab_weekly'), text: tr.rift_tabPioneer),
+                  Tab(key: const ValueKey('lb_tab_rift'), text: tr.rift_tabRift),
+                ],
+              ),
       ),
-      body: contentWidth(RefreshIndicator(
-        onRefresh: _refresh,
-        child: ListView(
-          padding: const EdgeInsets.all(Space.m),
-          children: [
-            _optInCard(),
-            const SizedBox(height: Space.m),
-            if (_svc.optedIn) ...[_meCard(), const SizedBox(height: Space.m)],
-            ..._boardSection(),
-          ],
-        ),
-      )),
+      body: rift == null ? weekly : TabBarView(children: [weekly, RiftBoardView(service: _svc, records: rift)]),
     );
+    return rift == null ? scaffold : DefaultTabController(length: 2, child: scaffold);
   }
 
   Widget _optInCard() => glass(
@@ -250,6 +267,145 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         LeaderboardStatus.rejected => tr.lb_rejected,
         LeaderboardStatus.serverError => tr.lb_serverError,
       };
+}
+
+/// 주간 균열 순위 탭: 이번 주 내 최고 기록, 상위 50 + 내 줄. 참여 동의·별명은 개척 점수 순위표와 같다.
+class RiftBoardView extends StatefulWidget {
+  const RiftBoardView({super.key, required this.service, required this.records, this.onChanged});
+  final LeaderboardService service;
+  final RiftRecords records;
+
+  /// 기록이 바뀌었을 때(보낸 표시) 저장
+  final Future<void> Function()? onChanged;
+
+  @override
+  State<RiftBoardView> createState() => _RiftBoardViewState();
+}
+
+class _RiftBoardViewState extends State<RiftBoardView> {
+  LeaderboardService get _svc => widget.service;
+  bool _loading = false;
+  BoardResult? _board;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_svc.configured) _refresh();
+  }
+
+  Future<void> _refresh() async {
+    if (_loading) return;
+    setState(() => _loading = true);
+    if (await _svc.submitRiftWeekly(widget.records) != null) {
+      await (widget.onChanged ?? () => SaveService.saveProfile(AppState.profile))();
+    }
+    final board = await _svc.fetchRift(_svc.currentWeek);
+    if (!mounted) return;
+    setState(() {
+      _loading = false;
+      _board = board;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final best = widget.records.weekBest(now);
+    return contentWidth(RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView(
+        key: const ValueKey('rift-board'),
+        padding: const EdgeInsets.all(Space.m),
+        children: [
+          glass(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(tr.rift_title, style: titleStyle),
+                const SizedBox(height: Space.xs),
+                Text(keepAll(tr.rift_boardHow), style: dimStyle),
+                const SizedBox(height: Space.s),
+                Text(
+                  best > 0
+                      ? tr.rift_myWeek(groupDigits(best), widget.records.weekWaves(now))
+                      : keepAll(tr.rift_noWeekRun),
+                  style: Ts.headingBold.copyWith(color: const Color(0xFFFFD54F)),
+                ),
+                if (!_svc.optedIn) ...[
+                  const SizedBox(height: Space.xs),
+                  Text(keepAll(tr.lb_optedOut), style: Ts.caption.copyWith(color: kSky)),
+                ],
+              ],
+            ),
+            padding: const EdgeInsets.all(Space.m),
+          ),
+          const SizedBox(height: Space.m),
+          ..._rows(),
+        ],
+      ),
+    ));
+  }
+
+  List<Widget> _rows() {
+    if (!_svc.configured) return [_message(tr.lb_unavailable)];
+    final board = _board;
+    if (board == null || (_loading && board.entries.isEmpty)) {
+      return [const Padding(padding: EdgeInsets.all(Space.xl), child: Center(child: CircularProgressIndicator()))];
+    }
+    if (board.status != LeaderboardStatus.ok) {
+      return [
+        _message(_LeaderboardScreenState._statusText(board.status)),
+        const SizedBox(height: Space.m),
+        Center(child: actionBtn(tr.lb_retry, !_loading, _refresh)),
+      ];
+    }
+    if (board.entries.isEmpty) return [_message(tr.lb_empty)];
+    return [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: Space.s),
+        child: Text(tr.lb_top50, style: sectionStyle),
+      ),
+      for (final e in board.entries) _row(e),
+    ];
+  }
+
+  Widget _row(LeaderboardEntry e) {
+    final medal = switch (e.rank) { 1 => '🥇', 2 => '🥈', 3 => '🥉', _ => null };
+    return Container(
+      key: e.me ? const ValueKey('rift_my_row') : null,
+      margin: const EdgeInsets.only(bottom: Space.xs),
+      constraints: const BoxConstraints(minHeight: Tap.min),
+      padding: const EdgeInsets.symmetric(horizontal: Space.m, vertical: Space.s),
+      decoration: BoxDecoration(
+        color: e.me ? const Color(0xFF3A2F7A) : const Color(0xFF1E1A4A),
+        borderRadius: BorderRadius.circular(12),
+        border: e.me ? Border.all(color: kSky, width: 2) : null,
+      ),
+      child: Row(
+        children: [
+          SizedBox(width: 48, child: Text(medal ?? '${e.rank}', style: medal != null ? Ts.heading : bodyStyle)),
+          Expanded(
+            child: Text(
+              nicknameText(e.nicknameCode, tr),
+              style: e.me ? Ts.headingBold.copyWith(color: kSky) : bodyStyle,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          if (e.waves != null) ...[
+            const SizedBox(width: Space.s),
+            Text(tr.rift_waveShort(e.waves!), style: Ts.caption.copyWith(color: const Color(0xFFE1BEE7))),
+          ],
+          const SizedBox(width: Space.s),
+          Text(groupDigits(e.score), style: Ts.headingBold.copyWith(color: const Color(0xFFFFD54F))),
+        ],
+      ),
+    );
+  }
+
+  Widget _message(String s) => Padding(
+        padding: const EdgeInsets.all(Space.xl),
+        child: Text(keepAll(s), style: bodyStyle, textAlign: TextAlign.center),
+      );
 }
 
 /// 1234567 → "1,234,567"

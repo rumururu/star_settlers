@@ -586,6 +586,8 @@ void main() {
   group('식민지 건물/정착 보호막', () {
     test('식민지 방어막: 탄을 대신 맞아 줄고, 깨지면 재충전 후 다시 켜진다', () {
       final w = rich(seed: 21);
+      // 첫 정착 직후 나오는 미니 두목(TASK 003)이 돔을 쏘지 않게 이 고정 장면에서는 이미 처치한 것으로
+      w.counters[GameWorld.miniBossKey] = 2;
       final p = w.planets.first;
       w.player.pos = p.pos + Offset(p.radius + 60, 0);
       w.upgradePlanet(p);

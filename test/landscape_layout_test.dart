@@ -9,13 +9,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:star_settlers/game/models.dart';
 import 'package:star_settlers/game/profile.dart';
 import 'package:star_settlers/game/world.dart';
-import 'package:star_settlers/l10n/l.dart' show Lang, L10n;
+import 'package:star_settlers/l10n/l.dart' show Lang, L10n, tr;
 import 'package:star_settlers/main.dart' show TitleScreen;
 import 'package:star_settlers/services/app_state.dart';
 import 'package:star_settlers/services/audio.dart';
 import 'package:star_settlers/services/orientation.dart';
 import 'package:star_settlers/ui/colony_panel.dart';
-import 'package:star_settlers/ui/common.dart' show keepAll;
+import 'package:star_settlers/ui/common.dart' show compact, keepAll;
 import 'package:star_settlers/ui/game_screen.dart';
 import 'package:star_settlers/ui/hangar_screen.dart';
 import 'package:star_settlers/ui/home_screen.dart';
@@ -38,6 +38,8 @@ class Screen {
 
 const screens = [
   Screen('portrait phone 390x844', Size(390, 844), EdgeInsets.only(top: 47, bottom: 34)),
+  // 갤럭시 S8·S9 등 작은 안드로이드 폰 (상태 바 24)
+  Screen('portrait android 360x740', Size(360, 740), EdgeInsets.only(top: 24)),
   Screen('landscape phone 844x390', Size(844, 390), EdgeInsets.only(left: 47, right: 47, bottom: 21)),
   Screen('landscape phone 932x430', Size(932, 430), EdgeInsets.only(left: 59, right: 59, bottom: 21)),
   Screen('landscape android 800x360', Size(800, 360), EdgeInsets.only(left: 24)),
@@ -119,13 +121,21 @@ Map<String, Rect> hudRects(WidgetTester tester) {
     return f.evaluate().isEmpty ? null : tester.getRect(f);
   }
 
-  for (final k in ['hud-captain', 'hud-info', 'hud-joystick', 'hud-cruise', 'hud-combat', 'hud-autofire']) {
+  for (final k in ['hud-captain', 'hud-info', 'hud-map', 'hud-joystick', 'hud-cruise', 'hud-combat', 'hud-autofire']) {
     final r = rectOf(k);
     if (r != null) out[k] = r;
   }
   // 세로 HUD의 자동 사격 토글은 전투 묶음 안에 있다 (같은 묶음이므로 따로 비교하지 않는다)
   if (out.containsKey('hud-autofire') && out['hud-combat']!.contains(out['hud-autofire']!.center)) {
     out.remove('hud-autofire');
+  }
+  // '다음 목표' 칩은 선장 카드 안에 있다: 잘리지 않고 통째로 보여야 한다 (선장 카드 사각형으로 겹침을 본다)
+  final goal = rectOf('hud-goal');
+  if (goal != null) {
+    final cap = out['hud-captain']!;
+    if (!(cap.inflate(0.5).contains(goal.topLeft) && cap.inflate(0.5).contains(goal.bottomRight))) {
+      out['hud-goal'] = goal; // 선장 카드 밖으로 나가거나 잘리면 겹침 검사에 따로 걸린다
+    }
   }
   var dialog = rectOf('hud-dialog');
   final zone = rectOf('hud-dialog-zone');
@@ -261,13 +271,23 @@ void main() {
           addTearDown(tester.view.reset);
           final w = busyWorld();
           await expectNoOverflow(tester, s, GameScreen(world: w), what: 'HUD');
-          // 가로 HUD와 iPad: 조작·정보 위젯끼리 겹치지 않고 안전 영역 안에 있다
-          if (s.size.width > s.size.height) {
+          // 항성계 배지는 폭에 맞춰 줄어든다(FittedBox). 너무 줄어 읽기 어려워지면 안 된다
+          {
+            final sector = find.textContaining(tr.u_hudSector(
+                w.sectorName, (w.development * 100).floor(), w.threat.toStringAsFixed(1), compact(w.empireValue)));
+            expect(sector, findsOneWidget, reason: '$s');
+            final scale = tester.getRect(sector).height / tester.getSize(sector).height;
+            expect(Ts.caption.fontSize! * scale, greaterThanOrEqualTo(10), reason: '$s 항성계 배지 글자 크기');
+          }
+          // 세로·가로 HUD와 iPad: 조작·정보 위젯끼리 겹치지 않고 안전 영역 안에 있다
+          {
             final rects = hudRects(tester);
             if (Platform.environment['LAYOUT_DEBUG'] != null) {
               debugPrint('$s\n${rects.entries.map((e) => '  ${e.key}: ${e.value}').join('\n')}');
             }
             expect(rects.keys, containsAll(['hud-captain', 'hud-info', 'hud-joystick', 'hud-cruise', 'hud-combat', 'hud-dialog']));
+            expect(rects.keys, isNot(contains('hud-goal')), reason: '$s 목표 칩이 선장 카드 안에서 잘리지 않는다');
+            expect(find.byKey(const ValueKey('hud-goal')), findsOneWidget);
             expect(rects.keys.where((k) => k.startsWith('action')), isNotEmpty);
             expect(overlaps(rects), isEmpty, reason: '$s');
             expect(outsideSafeArea(rects, s), isEmpty, reason: '$s');

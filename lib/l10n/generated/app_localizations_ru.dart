@@ -3740,4 +3740,541 @@ class L10nRu extends L10n {
     });
     return '$_temp0';
   }
+
+  @override
+  String get codex_title => 'Кодекс';
+
+  @override
+  String codex_tab(String tab) {
+    String _temp0 = intl.Intl.selectLogic(tab, {
+      'enemies': 'Враги',
+      'planets': 'Планеты',
+      'systems': 'Системы',
+      'crew': 'Экипаж',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_progress(int found, int total, int pct) {
+    return 'Найдено $found/$total · $pct%';
+  }
+
+  @override
+  String codex_enemy(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'scout': 'Разведчик',
+      'raider': 'Налётчик',
+      'bomber': 'Бомбардировщик',
+      'sniper': 'Снайпер',
+      'jelly': 'Космическая медуза',
+      'boss': 'Главарь пиратов',
+      'commander': 'Командир вторжения',
+      'missile': 'Ракетоносец',
+      'mine': 'Минный заградитель',
+      'laser': 'Лазерный корабль',
+      'warden': 'Страж щита',
+      'phantom': 'Фантом',
+      'medic': 'Ремонтник',
+      'carrier': 'Авианосец дронов',
+      'juggernaut': 'Джаггернаут',
+      'arch_fleet': 'Пиратский адмирал',
+      'arch_devourer': 'Пожиратель жил',
+      'arch_flare': 'Канонерка вспышек',
+      'arch_wraith': 'Ионный призрак',
+      'arch_gravity': 'Гравитационный владыка',
+      'arch_plunder': 'Торговец-грабитель',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_kills(int n) {
+    return 'Побеждено: $n';
+  }
+
+  @override
+  String codex_fromSystem(int n) {
+    return 'С системы $n';
+  }
+
+  @override
+  String codex_planetKind(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'garden': 'Мир-сад',
+      'desert': 'Пустынный мир',
+      'ice': 'Ледяной мир',
+      'lava': 'Лавовый мир',
+      'gas': 'Газовый гигант',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get codex_planetHint => 'Заселите планету этого типа';
+
+  @override
+  String codex_settled(int n) {
+    return 'Заселено планет: $n';
+  }
+
+  @override
+  String get codex_settledNone => 'Пока нет заселённых планет';
+
+  @override
+  String get codex_home => 'Родная система · без особых условий';
+
+  @override
+  String get codex_unreached => 'Доберитесь через варп-врата';
+
+  @override
+  String get codex_crewHint => 'Наймите, чтобы открыть';
+
+  @override
+  String get codex_rewards => 'Награды за коллекцию';
+
+  @override
+  String codex_rewardCrew(String stars) {
+    return 'Член экипажа $stars';
+  }
+
+  @override
+  String get codex_outfitName => 'Звёздный картограф';
+
+  @override
+  String codex_newEntry(String name) {
+    return 'Новая запись в кодексе: $name';
+  }
+
+  @override
+  String get codex_claimedLater => 'Награды придут, когда вы начнёте игру';
+
+  @override
+  String codex_pendingCrew(int n) {
+    return 'Экипаж полон: $n ждут места';
+  }
+
+  @override
+  String r3_goalSettle(String planet) {
+    return 'Заселить $planet';
+  }
+
+  @override
+  String r3_goalSettleNeed(String planet, int n) {
+    return 'До $planet: ещё 💰$n';
+  }
+
+  @override
+  String r3_goalColonyUp(String planet, int level) {
+    return 'Колония $planet: ур. $level';
+  }
+
+  @override
+  String r3_goalBuild(String planet, String building) {
+    return '$planet: построить $building';
+  }
+
+  @override
+  String get r3_goalAssignCrew => 'Назначить экипаж на станции';
+
+  @override
+  String get r3_goalWarp => 'Варп в следующую систему';
+
+  @override
+  String r3_goalDevelop(String sector) {
+    return 'Стабилизировать $sector';
+  }
+
+  @override
+  String get r3_goalMiniBoss => 'Победить пиратского лейтенанта';
+
+  @override
+  String get r3_miniBossName => 'Пиратский лейтенант';
+
+  @override
+  String get r3_miniBossArrive =>
+      'Лейтенант прибыл! Новичок, твой корабль теперь мой!';
+
+  @override
+  String get r3_miniBossHint =>
+      'Это пиратский лейтенант! Твой корабль справится. Стреляй без остановки, а при низкой прочности отступи!';
+
+  @override
+  String get r3_miniBossLose => 'Н-не может быть… Я всё расскажу боссу!';
+
+  @override
+  String get r3_miniBossDown =>
+      'Лейтенант сбит! Из его деталей я бесплатно улучшила твоё оружие!';
+
+  @override
+  String r3_weaponUp(int level) {
+    return 'Оружие ур. $level!';
+  }
+
+  @override
+  String r3_star3Line(String name) {
+    return 'Отличный полёт! Штаб прислал ветерана ★3. Встречай: $name!';
+  }
+
+  @override
+  String get r3_crewAssigned => 'Назначен автоматически — бонус уже действует';
+
+  @override
+  String get rift_title => 'Забег в Разлом';
+
+  @override
+  String get rift_menuSub => 'Разлом дня · 3–5 мин';
+
+  @override
+  String rift_locked(String step) {
+    return 'Откроется после этапа «$step»';
+  }
+
+  @override
+  String get rift_rules =>
+      'Продержитесь 10 волн и победите босса Разлома на 10-й волне. После каждой волны выбирайте карту усиления. Улучшения из основной игры не действуют — все летят на одинаковом корабле через один и тот же Разлом дня.';
+
+  @override
+  String rift_bestLine(String score, int wave) {
+    return 'Рекорд $score очк. · Волна $wave';
+  }
+
+  @override
+  String get rift_noBest => 'Рекордов пока нет';
+
+  @override
+  String rift_fullLeft(int n) {
+    return 'Полная награда: осталось забегов сегодня — $n';
+  }
+
+  @override
+  String get rift_fullUsed => 'Полные награды на сегодня получены (дальше 1/4)';
+
+  @override
+  String get rift_start => 'На вылет';
+
+  @override
+  String rift_wave(int n, int total) {
+    return 'Волна $n/$total';
+  }
+
+  @override
+  String rift_score(String score) {
+    return 'Очки $score';
+  }
+
+  @override
+  String rift_incoming(int n, int s) {
+    return 'Волна $n через $s с';
+  }
+
+  @override
+  String rift_bossIncoming(int s) {
+    return 'Босс Разлома через $s с';
+  }
+
+  @override
+  String rift_enemiesLeft(int n) {
+    return 'Осталось врагов: $n';
+  }
+
+  @override
+  String get rift_collapse => 'Разлом рушится!';
+
+  @override
+  String rift_pickTitle(int n) {
+    return 'Волна $n пройдена! Выберите карту';
+  }
+
+  @override
+  String rift_cardLevel(int lv, int max) {
+    return 'Ур. $lv/$max';
+  }
+
+  @override
+  String get rift_rarityCommon => 'Обычная';
+
+  @override
+  String get rift_rarityRare => 'Редкая';
+
+  @override
+  String get rift_rarityEpic => 'Эпическая';
+
+  @override
+  String get rift_cardDamage => 'Огневая мощь';
+
+  @override
+  String get rift_cardDamageDesc => 'Урон выстрелов +25%';
+
+  @override
+  String get rift_cardRapid => 'Скорострельность';
+
+  @override
+  String get rift_cardRapidDesc => 'Интервал стрельбы −15%';
+
+  @override
+  String get rift_cardMultishot => 'Мультивыстрел';
+
+  @override
+  String get rift_cardMultishotDesc => 'На 1 пулю больше за выстрел';
+
+  @override
+  String get rift_cardPierce => 'Бронебойные пули';
+
+  @override
+  String get rift_cardPierceDesc => 'Пули пробивают ещё 1 врага';
+
+  @override
+  String get rift_cardHoming => 'Самонаводящиеся ракеты';
+
+  @override
+  String get rift_cardHomingDesc =>
+      'Ракеты запускаются сами каждые несколько секунд';
+
+  @override
+  String get rift_cardRegen => 'Регенерация щита';
+
+  @override
+  String get rift_cardRegenDesc => 'Восстанавливает 2 ОЗ в секунду';
+
+  @override
+  String get rift_cardDrone => 'Боевой дрон';
+
+  @override
+  String get rift_cardDroneDesc =>
+      'Дрон стреляет по ближним врагам. С уровнем сильнее';
+
+  @override
+  String get rift_cardMagnet => 'Магнит';
+
+  @override
+  String get rift_cardMagnetDesc => 'Притягивает осколки Разлома издалека';
+
+  @override
+  String get rift_cardCrit => 'Критический удар';
+
+  @override
+  String get rift_cardCritDesc => '12% шанс нанести урон ×2,5';
+
+  @override
+  String get rift_cardBlades => 'Вращающиеся клинки';
+
+  @override
+  String get rift_cardBladesDesc => '+1 клинок вокруг корабля';
+
+  @override
+  String get rift_cardHull => 'Укреплённый корпус';
+
+  @override
+  String get rift_cardHullDesc => 'Макс. ОЗ +35, полный ремонт';
+
+  @override
+  String get rift_cardEngine => 'Ускорители';
+
+  @override
+  String get rift_cardEngineDesc => 'Скорость +12%';
+
+  @override
+  String get rift_cardShockwave => 'Ударная волна';
+
+  @override
+  String get rift_cardShockwaveDesc => 'Периодически бьёт всех врагов рядом';
+
+  @override
+  String get rift_cardGuard => 'Барьер';
+
+  @override
+  String get rift_cardGuardDesc =>
+      'Блокирует один удар каждые несколько секунд';
+
+  @override
+  String get rift_cardVampire => 'Поглощение';
+
+  @override
+  String get rift_cardVampireDesc => '+3 ОЗ за каждого сбитого врага';
+
+  @override
+  String get rift_resultWin => 'Разлом покорён!';
+
+  @override
+  String get rift_resultLose => 'Сбит в Разломе';
+
+  @override
+  String get rift_resultGaveUp => 'Отступление из Разлома';
+
+  @override
+  String rift_reached(int n) {
+    return 'Достигнута волна $n';
+  }
+
+  @override
+  String get rift_newBest => 'Новый рекорд!';
+
+  @override
+  String get rift_rewardTitle => 'Награда в основную игру';
+
+  @override
+  String get rift_rewardReduced => 'С 4-го забега за день награда — 1/4';
+
+  @override
+  String get rift_noSave =>
+      'Нет сохранения основной игры — кредиты и руда не начислены';
+
+  @override
+  String get rift_again => 'Ещё раз';
+
+  @override
+  String get rift_exit => 'Выйти';
+
+  @override
+  String get rift_giveUp => 'Сдаться и выйти';
+
+  @override
+  String get rift_giveUpNote =>
+      'Выход завершает забег. Очки и награда за пройденные волны сохраняются.';
+
+  @override
+  String get rift_tabPioneer => 'Очки освоения';
+
+  @override
+  String get rift_tabRift => 'Разлом';
+
+  @override
+  String get rift_boardHow =>
+      'Рейтинг по лучшему забегу за неделю. Все проходят один и тот же Разлом дня на одинаковом корабле.';
+
+  @override
+  String rift_myWeek(String score, int wave) {
+    return 'Лучшее за неделю: $score очк. · Волна $wave';
+  }
+
+  @override
+  String get rift_noWeekRun => 'На этой неделе забегов ещё нет';
+
+  @override
+  String rift_waveShort(int n) {
+    return 'В$n';
+  }
+
+  @override
+  String get r4_calendarTitle => '7 дней входа';
+
+  @override
+  String r4_calendarStreak(int n) {
+    return '$n-й день подряд';
+  }
+
+  @override
+  String get r4_calendarHint =>
+      'Пропустишь день — начнёшь с 1-го. На 7-й день — эксклюзивный облик корабля!';
+
+  @override
+  String get r4_calendarToday => 'Сегодня';
+
+  @override
+  String get r4_calendarClaim => 'Забрать награду';
+
+  @override
+  String get r4_calendarClaimed => 'Награда за сегодня получена!';
+
+  @override
+  String get r4_rewardOre => 'Ящик руды';
+
+  @override
+  String get r4_rewardCredits => 'Пачка кредитов';
+
+  @override
+  String get r4_rewardCrew2 => 'Член экипажа ★2';
+
+  @override
+  String get r4_rewardCrew3 => 'Член экипажа ★3';
+
+  @override
+  String get r4_rewardSkin => 'Особый облик';
+
+  @override
+  String r4_tomorrow(String reward) {
+    return 'Завтра: $reward';
+  }
+
+  @override
+  String get r4_skinName => 'Звёздная серия';
+
+  @override
+  String get r4_attendanceOnly => 'Награда за 7 дней';
+
+  @override
+  String get r4_notifCalendarTitle => 'Награда за вход ждёт';
+
+  @override
+  String r4_notifCalendarBody(String reward) {
+    return 'Сегодня: $reward';
+  }
+
+  @override
+  String get r4_notifExpeditionTitle => 'Экспедиция вернулась!';
+
+  @override
+  String get r4_notifExpeditionBody =>
+      'Экипаж вернулся с добычей. Забери её на станции.';
+
+  @override
+  String get r4_expTitle => 'Экспедиции';
+
+  @override
+  String r4_expSlots(int n, int max) {
+    return '$n/$max отр.';
+  }
+
+  @override
+  String get r4_expHint =>
+      'Отправь незанятый экипаж. Время идёт даже при закрытом приложении.';
+
+  @override
+  String get r4_expPassSlot => 'Пропуск командира: +1 отряд';
+
+  @override
+  String get r4_expNoIdle => 'Нет свободных. Сними с поста или найми новых.';
+
+  @override
+  String r4_expHours(int h) {
+    return '$h ч';
+  }
+
+  @override
+  String get r4_expLuck => 'Удача ⭐/★3';
+
+  @override
+  String r4_expLeft(String time) {
+    return 'ещё $time';
+  }
+
+  @override
+  String get r4_expClaim => 'Вернулись! Забрать';
+
+  @override
+  String get r4_expAway => 'В экспедиции';
+
+  @override
+  String r4_expGot(String rewards) {
+    return 'Добыча: $rewards';
+  }
+
+  @override
+  String r4_timeHm(int h, int m) {
+    return '$h ч $m мин';
+  }
+
+  @override
+  String r4_timeM(int m) {
+    return '$m мин';
+  }
+
+  @override
+  String r4_ascendExpWarn(int n) {
+    return '$n членов экипажа в экспедиции тоже уйдут, без награды.';
+  }
 }

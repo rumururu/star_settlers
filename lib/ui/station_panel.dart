@@ -10,6 +10,7 @@ import '../game/ships.dart';
 import '../game/world.dart';
 import 'chibi.dart';
 import 'common.dart';
+import 'expedition_panel.dart';
 import 'game_icons.dart';
 import 'hangar_screen.dart';
 import '../l10n/l.dart';
@@ -380,6 +381,9 @@ class _CrewTab extends StatelessWidget {
         Text(tr.u_crewHeader(w.roster.length, w.rosterCap, w.assignedCount, w.crewSlots),
             style: sectionStyle),
         const SizedBox(height: 8),
+        // 승무원 원정 (TASK 004)
+        ExpeditionPanel(world: w, act: act),
+        const SizedBox(height: 8),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -463,6 +467,10 @@ class _CrewTab extends StatelessWidget {
                     ],
                   ),
                 ),
+                // 원정 중: 배치·강화·해고 대신 표시만
+                if (w.crewAway(c))
+                  glass(Text(keepAll('🚀 ${tr.r4_expAway}'), style: bodyStyle.copyWith(color: kSky)))
+                else
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [

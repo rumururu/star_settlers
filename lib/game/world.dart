@@ -4,14 +4,21 @@ import 'dart:ui';
 import '../l10n/l.dart';
 
 import 'crew.dart';
+import 'expedition.dart';
+import 'game_telemetry.dart';
 import 'campaign.dart';
 import 'home.dart';
 import 'missions.dart';
 import 'models.dart';
+import 'next_goal.dart';
 import 'profile.dart';
+import 'rift.dart';
 import 'ships.dart';
 import 'star_catalog.dart';
 import 'system_traits.dart';
+
+/// 균열 런 아레나 (TASK 005). 같은 라이브러리라 엔진의 비공개 갱신 함수를 그대로 쓴다.
+part 'rift_world.dart';
 
 class InputState {
   Offset move = Offset.zero; // 길이 0..1
@@ -223,6 +230,40 @@ class GameWorld {
   int storyIndex = 0;
   int storyBase = 0;
   double storyTimer = 0;
+
+  // ---------- 첫 5분 (TASK 003) ----------
+  /// 첫 항성계 미니 두목 상태 카운터: 0 아직 / 1 등장 / 2 처치
+  static const miniBossKey = 'r3MiniBoss';
+
+  /// ★3 승무원 확정 지급 여부 카운터 (한 월드에 한 번)
+  static const star3GiftKey = 'r3Crew';
+
+  /// ★3 확정 지급 시각(초) — 해적 단계를 이보다 늦게 마쳐도 이때 준다
+  static const star3GiftSeconds = 180.0;
+
+  /// 미니 두목 등장 시각(초) — 첫 정착이 이보다 늦어도 이때 나온다
+  static const miniBossSeconds = 240.0;
+
+  NextGoal? _goal;
+
+  /// HUD '다음 목표' (0.5초마다 다시 고른다)
+  NextGoal get goal => _goal ??= nextGoal(this);
+
+  /// 방금 이룬 목표와 완료 연출 남은 시간
+  NextGoal? goalDone;
+  double goalFlash = 0;
+
+  /// 목표 칩을 누르면 잠깐 그 목표 쪽으로 안내 화살표를 보여 준다
+  double goalPing = 0;
+
+  /// 카드로 공개할 새 승무원 (화면이 보여 주고 비운다)
+  CrewMember? crewReveal;
+
+  // ---------- 승무원 원정 (TASK 004) ----------
+  final expeditions = <Expedition>[];
+
+  /// 되돌릴 수 없는 원정 시계 (저장된다)
+  final expeditionClock = ExpeditionClock();
 
   double totalTime = 0;
   double antimatterExposure = 0;
@@ -834,13 +875,16 @@ class GameWorld {
       ..pos = arrive + const Offset(0, 180)
       ..vel = Offset.zero
       ..invulnerable = 2;
+    GameTelemetry.emit(TelemetryEvent.firstWarp);
     if (to > counter('maxSector')) {
       counters['maxSector'] = to;
+      GameTelemetry.emit(TelemetryEvent.systemReached, to + 1);
       // 주간 개척 점수: 처음 가 보는 항성계 (환생 뒤 다시 도착해도 센다)
       profile.weeklyScore.addNewSystem();
       profile.dirty = true;
     }
     profile.maxStat('sector', to + 1);
+    profile.codex.recordSystem(to); // 도감 (TASK 006)
     if (to == campaignFinalSector) _queueCampaignSector(to);
     sfx.add(Sfx.warp);
     shake = 12;
@@ -891,8 +935,17 @@ class GameWorld {
     if (floats.length > 60) floats.removeAt(0);
   }
 
-  /// 스토리(튜토리얼) 단계가 가리키는 위치 (초록 화살표)
+  /// 초록 안내 화살표가 가리키는 곳. 목표 칩을 누른 직후에는 그 목표 쪽
   Offset? get storyTarget {
+    if (goalPing > 0) {
+      final t = _goal?.target2;
+      if (t != null) return t;
+    }
+    return storyGuideTarget;
+  }
+
+  /// 스토리(튜토리얼) 단계가 가리키는 위치
+  Offset? get storyGuideTarget {
     if (sector == campaignFinalSector &&
         finalMissionStage != FinalMissionStage.complete) {
       if (development < 1) {
@@ -1078,11 +1131,12 @@ class GameWorld {
     if (best == null) return;
     _havenLaserCooldown = hb.laserInterval;
     beams.add(LaserBeam(base, best.pos));
-    final dmg = best.kind == PirateKind.boss
+    // 두목급(미니 두목 포함)은 레이저 한 발 피해에 상한: 본거지 옆에서 레이저가 대신 잡지 않게
+    final dmg = best.kind == PirateKind.boss || best.miniBoss
         ? min(
             hb.laserDamage,
             best.maxHp *
-                (best.sectorBoss && best.archetype != null
+                ((best.sectorBoss && best.archetype != null) || best.miniBoss
                     ? havenSectorBossDamageRatio
                     : havenBossDamageRatio),
           )
@@ -1129,10 +1183,12 @@ class GameWorld {
     if (p.colonyLevel >= colonyLevelCap) return false;
     if (!_pay(planetCost(p))) return false;
     p.colonyLevel++;
+    profile.codex.recordColony(sector, planets.indexOf(p), planets.length, p.kind, p.colonyLevel); // 도감
     profile.addStat('colonyUps');
     profile.weeklyScore.addColonyLevel();
     if (p.colonyLevel == 1) {
       _count('colonies');
+      GameTelemetry.emit(TelemetryEvent.firstColony);
       profile.addStat('colonies');
       say(Speaker.captain, tr.g_dlgSettled(p.name));
       _raiseDome(p);
@@ -1236,6 +1292,7 @@ class GameWorld {
       if (p.colonyLevel >= colonyLevelCap) return false;
       if (!_pay(remotePlanetCost(sector, p))) return false;
       p.colonyLevel++;
+      profile.codex.recordColony(sector, index, save.colonyLevels.length, p.kind, p.colonyLevel); // 도감
       profile.addStat('colonyUps');
       profile.weeklyScore.addColonyLevel();
       if (p.colonyLevel == 5) profile.maxStat('maxColony', 1);
@@ -1346,6 +1403,7 @@ class GameWorld {
       );
     }
     profile.addStat('colonyBuilds');
+    GameTelemetry.emit(TelemetryEvent.firstBuilding);
     sfx.add(Sfx.upgrade);
     _float(
       p.pos + Offset(0, -p.radius - 30),
@@ -1387,6 +1445,32 @@ class GameWorld {
       !p.domeUp &&
       p.relayShieldHp > 0 &&
       p.relayShieldCooldown <= 0;
+
+  /// 식민지 포탑이 지금 쏠 표적 (사거리 안 가장 가까운 해적). 발사 판정과 화면의 포신 조준이 같이 쓴다.
+  Pirate? colonyTurretTarget(Planet p) {
+    if (p.colonyLevel == 0 || p.building(ColonyBuilding.turret) == 0) {
+      return null;
+    }
+    Pirate? best;
+    var bestD = p.turretRange;
+    for (final e in pirates) {
+      if (!e.isPirate || e.cloaked) continue;
+      final d = (e.pos - p.pos).distance;
+      if (d < bestD) {
+        bestD = d;
+        best = e;
+      }
+    }
+    return best;
+  }
+
+  /// 식민지 포탑이 방금 쐈으면 0→1로 줄어드는 섬광 세기 (발사 때 냉각이 [Planet.turretInterval]로 다시 찬다)
+  double colonyTurretFlash(Planet p) {
+    if (p.building(ColonyBuilding.turret) == 0) return 0;
+    const flashTime = 0.12;
+    final since = p.turretInterval - p.turretCooldown;
+    return since < 0 || since >= flashTime ? 0 : 1 - since / flashTime;
+  }
 
   static const relayRegenPerLevel = .12;
 
@@ -1738,7 +1822,9 @@ class GameWorld {
   /// 크레딧 팩: 기초 보상 배율([baseRewardMul])을 따라간다 = 직접 플레이로 버는 돈과 같은 속도로 커진다.
   /// 비용 배율을 따르면 뒤 항성계에서 무료 젬 환전이 진행의 70%를 넘고,
   /// 생산 배율만 따르면 뒤로 갈수록 쓸모가 없어진다.
-  static const creditPackBase = 12000;
+  /// 1.0.8: 12000 → 13500. 첫 5분 보상(★3 승무원·미니 두목 무기+1)과 도감·원정으로 무료 진행이 빨라져
+  /// (S3~S6 8.18일 → 7.22일) 팩 이점이 22% → 17%로 줄었다. 13500에서 무료 7.04일·팩 5.45일(22.6%)로 원래 차이 회복.
+  static const creditPackBase = 13500;
 
   /// 첫 항성계는 발전 비용 자체가 작아서(4만대) 팩 하나가 20%나 된다 → 이 비율만.
   /// 튜토리얼 젬으로 첫 항성계를 건너뛰지 않게.
@@ -1829,7 +1915,9 @@ class GameWorld {
   CrewMember _addCrew(CrewMember c) {
     if (assignedCount < crewSlots) c.assigned = true;
     roster.add(c);
+    profile.codex.recordCrew(c.role, c.rarity); // 도감
     profile.addStat('crew');
+    GameTelemetry.emit(TelemetryEvent.firstCrew);
     if (c.rarity >= 3) profile.addStat('crew3');
     sfx.add(Sfx.gem);
     say(
@@ -1845,6 +1933,7 @@ class GameWorld {
       _addCrew(CrewMember.random(_rng, _nextId++, odds: {rarity: 100}));
 
   bool toggleAssign(CrewMember c) {
+    if (crewAway(c)) return false; // 원정 중에는 배치할 수 없다
     if (c.assigned) {
       c.assigned = false;
     } else {
@@ -1864,7 +1953,88 @@ class GameWorld {
     return true;
   }
 
-  void dismissCrew(CrewMember c) => roster.remove(c);
+  /// 원정 중인 승무원은 해고할 수 없다
+  void dismissCrew(CrewMember c) {
+    if (crewAway(c)) return;
+    roster.remove(c);
+  }
+
+  // ---------- 승무원 원정 ----------
+  int get expeditionSlots => Expeditions.slots(premium: profile.premium);
+
+  bool crewAway(CrewMember c) => expeditions.any((e) => e.crewId == c.id);
+
+  /// 원정 보낼 수 있는 승무원: 배치되지 않았고 원정 중이 아닌
+  Iterable<CrewMember> get idleCrew =>
+      roster.where((c) => !c.assigned && !crewAway(c));
+
+  /// [c]를 [hours]시간 원정에 보낸다. 슬롯이 없거나 배치·원정 중이면 null
+  Expedition? startExpedition(CrewMember c, int hours, DateTime now) {
+    if (!Expeditions.durations.contains(hours)) return null;
+    if (expeditions.length >= expeditionSlots) return null;
+    if (c.assigned || crewAway(c) || !roster.contains(c)) return null;
+    final e = Expeditions.plan(
+      crewId: c.id,
+      rarity: c.rarity,
+      hours: hours,
+      startMs: expeditionClock.now(now),
+      creditIncome: creditIncome,
+      oreIncome: oreIncome,
+      sectorMul: sectorMul,
+      rng: _rng,
+    );
+    expeditions.add(e);
+    GameTelemetry.emit(TelemetryEvent.expeditionStart, hours);
+    return e;
+  }
+
+  /// 돌아온 원정 보상을 받는다. 아직이면 null
+  ExpeditionReward? claimExpedition(Expedition e, DateTime now) {
+    if (!expeditions.contains(e) || !e.isDone(expeditionClock.now(now))) {
+      return null;
+    }
+    expeditions.remove(e);
+    credits += e.credits;
+    ore += e.ore;
+    final c = roster.where((m) => m.id == e.crewId).firstOrNull;
+    final ups = c?.gainXp(e.xp) ?? 0;
+    if (e.gems > 0) profile.earnGems('play', '', e.gems);
+    var rare = false;
+    if (e.rareCrew && roster.length < rosterCap) {
+      crewReveal = grantCrew(3);
+      rare = true;
+    }
+    sfx.add(Sfx.coin);
+    GameTelemetry.emit(TelemetryEvent.expeditionClaim, e.hours);
+    return ExpeditionReward(
+      credits: e.credits,
+      ore: e.ore,
+      xp: e.xp,
+      gems: e.gems,
+      levelUps: ups,
+      rareCrew: rare,
+    );
+  }
+
+  /// 출석 달력의 월드 보상(광석·크레딧·★2 승무원)을 넣는다 (프로필에 쌓인 것, 보상 배율 적용)
+  void deliverCalendarRewards() {
+    final p = profile;
+    if (p.pendingOre > 0) {
+      ore += p.pendingOre * baseRewardMul;
+      p.pendingOre = 0;
+      p.dirty = true;
+    }
+    if (p.pendingCredits > 0) {
+      credits += p.pendingCredits * baseRewardMul;
+      p.pendingCredits = 0;
+      p.dirty = true;
+    }
+    while (p.pendingCrew2 > 0 && roster.length < rosterCap) {
+      p.pendingCrew2--;
+      crewReveal = grantCrew(2);
+      p.dirty = true;
+    }
+  }
 
   // ---------- 임무 ----------
   void _refreshOffers() {
@@ -2277,7 +2447,9 @@ class GameWorld {
       big: true,
     );
     storyIndex++;
+    GameTelemetry.emit(TelemetryEvent.tutorialStep, storyIndex);
     if (storyIndex == storySteps.length) profile.tutorialDone = true;
+    if (storyIndex == storySteps.length) GameTelemetry.emit(TelemetryEvent.tutorialDone);
     // 첫 튜토리얼(소행성·해적)을 마치면 순항을 켜고 버튼을 알려 준다. 처음부터 켜 두면 조작을 익히기 전에 흘러가 버린다
     if (storyIndex == cruiseTipStep && !profile.cruiseTipShown) {
       profile
@@ -2291,6 +2463,123 @@ class GameWorld {
       }
     }
     _startStoryStep();
+  }
+
+  // ---------- 첫 5분: ★3 승무원 · 미니 두목 · 다음 목표 ----------
+  /// ★3 확정 지급 때가 됐는데 아직 안 줬다 (다음 0.5초 판정에서 준다 — 화면은 이걸 보고 다른 창을 미룬다)
+  bool get star3GiftDue =>
+      counter(star3GiftKey) == 0 &&
+      !profile.tutorialDone &&
+      sector == 0 &&
+      (storyIndex >= 2 || totalTime >= star3GiftSeconds);
+
+  void _checkFirstMinutes() {
+    if (!player.alive) return;
+    // ★3 승무원: 해적 단계를 마치거나 3분이 지나면 한 번 (튜토리얼 중인 새 월드만)
+    if (star3GiftDue && roster.length < rosterCap) {
+      counters[star3GiftKey] = 1;
+      final c = grantCrew(3);
+      if (assignedCount < crewSlots) c.assigned = true;
+      say(Speaker.advisor, tr.r3_star3Line(c.displayName));
+      crewReveal = c;
+    }
+    // 미니 두목: 첫 정착 직후 또는 4분, 첫 항성계에서 한 번
+    final bossState = counter(miniBossKey);
+    if (bossState == 1 && !pirates.any((e) => e.miniBoss)) {
+      counters[miniBossKey] = 0; // 저장·불러오기로 사라졌으면 다시 나온다
+    }
+    if (counter(miniBossKey) == 0 &&
+        sector == 0 &&
+        counter('maxSector') == 0 &&
+        !invasionActive &&
+        (counter('colonies') >= 1 || totalTime >= miniBossSeconds)) {
+      counters[miniBossKey] = 1;
+      // 본거지 레이저 사거리 밖에서 나온다 (레이저가 대신 잡으면 싸움이 없다)
+      final home = homeBase;
+      final away = player.pos - home.pos;
+      final dir = away.distance < 1
+          ? OffsetX.fromAngle(_rng.nextDouble() * 2 * pi, 1)
+          : away / away.distance;
+      var pos = player.pos + dir * 650;
+      final minFromHome = home.safeRadius + 600;
+      if ((pos - home.pos).distance < minFromHome) {
+        pos = home.pos + dir * minFromHome;
+      }
+      pos = _clampWorld(pos, (_) {});
+      pirates.add(
+        _makePirate(PirateKind.raider, pos, hpMul: miniBossHpMul, dmgMul: 0.8)
+          ..miniBoss = true,
+      );
+      sfx.add(Sfx.alarm);
+      say(Speaker.pirate, tr.r3_miniBossArrive);
+      say(Speaker.advisor, tr.r3_miniBossHint);
+    }
+  }
+
+  /// 미니 두목 체력 배수 (습격선 기준). 시작 함선이 20~30초에 잡는다 — tool/fight_sim_test.dart
+  static const miniBossHpMul = 10.0;
+
+  /// 미니 두목 처치 보상 크레딧 (현상금과 별도)
+  static const miniBossCredits = 300;
+
+  void _miniBossDown(Pirate e) {
+    counters[miniBossKey] = 2;
+    _count('miniBossKills');
+    GameTelemetry.emit(TelemetryEvent.miniBossKill);
+    credits += miniBossCredits;
+    _dropPickups(e.pos, PickupKind.ore, 60, 4);
+    // 함선 무기 +1 무료 (상한이면 크레딧으로)
+    final k = UpgradeKind.weapon;
+    if (level(k) < upgradeCap(k)) {
+      levels[k] = level(k) + 1;
+      _float(
+        player.pos + const Offset(0, -70),
+        tr.r3_weaponUp(level(k)),
+        const Color(0xFFFFD54F),
+        big: true,
+      );
+    } else {
+      credits += upgradeCost(k).$1;
+    }
+    _float(
+      e.pos + const Offset(0, -40),
+      '+💰$miniBossCredits',
+      const Color(0xFF7CFFB2),
+      big: true,
+    );
+    sfx.add(Sfx.upgrade);
+    shake = min(20, shake + 10);
+    say(Speaker.pirate, tr.r3_miniBossLose);
+    say(Speaker.advisor, tr.r3_miniBossDown);
+  }
+
+  /// 다음 목표를 다시 고른다. 목표가 바뀌는 순간 이전 목표를 이뤘으면 완료 연출과 통계
+  void _updateGoal() {
+    final next = nextGoal(this);
+    final prev = _goal;
+    if (prev != null && prev.signature != next.signature && prev.isDone(this)) {
+      goalDone = prev;
+      goalFlash = goalFlashSeconds;
+      GameTelemetry.emit(TelemetryEvent.goalDone, prev.kind.index);
+      // 스토리 단계는 [_checkStory]가 보상과 함께 이미 띄운다
+      if (prev.kind != GoalKind.story) {
+        _float(
+          player.pos + const Offset(0, -50),
+          '✔ ${tr.g_floatGoalDone}',
+          const Color(0xFF7CFFB2),
+          big: true,
+        );
+      }
+    }
+    _goal = next;
+  }
+
+  static const goalFlashSeconds = 1.6;
+
+  /// 목표 칩을 눌렀다: 안내 화살표를 잠깐 그 목표 쪽으로
+  void pingGoal() {
+    _goal = nextGoal(this);
+    goalPing = 6;
   }
 
   // ---------- 스킬 ----------
@@ -2459,6 +2748,8 @@ class GameWorld {
     }
     shake = max(0, shake - dt * 30);
     boostTime = max(0, boostTime - dt);
+    goalFlash = max(0, goalFlash - dt);
+    goalPing = max(0, goalPing - dt);
     _updateShields(dt);
     _updateOrbits();
 
@@ -2494,6 +2785,8 @@ class GameWorld {
         _queueFirstWarpScene();
       }
       _checkStory();
+      _checkFirstMinutes();
+      _updateGoal();
       profile.maxStat('credits', credits.floor());
     }
 
@@ -2689,6 +2982,7 @@ class GameWorld {
         ..awaitingRevive = true
         ..deadTime = 0
         ..deathPos = p.pos;
+      GameTelemetry.emit(TelemetryEvent.firstDeath);
       shake = 20;
       sfx.add(Sfx.bigExplode);
       _burst(p.pos, const Color(0xFFFF7043), 70);
@@ -3368,16 +3662,7 @@ class GameWorld {
       if (p.building(ColonyBuilding.turret) == 0) continue;
       p.turretCooldown -= dt;
       if (p.turretCooldown > 0) continue;
-      Pirate? best;
-      var bestD = p.turretRange;
-      for (final e in pirates) {
-        if (!e.isPirate || e.cloaked) continue;
-        final d = (e.pos - p.pos).distance;
-        if (d < bestD) {
-          bestD = d;
-          best = e;
-        }
-      }
+      final best = colonyTurretTarget(p);
       if (best != null) {
         p.turretCooldown = p.turretInterval;
         final dir = (best.pos - p.pos).normalized();
@@ -3574,6 +3859,7 @@ class GameWorld {
   }
 
   void _onKilled(Pirate e) {
+    profile.codex.recordKill(e); // 도감 (TASK 006)
     if (e.campaignChapter == sector && campaignMissionActive) {
       counters['campaignKills_$sector'] = campaignKills + 1;
       if (sector == 16) {
@@ -3628,6 +3914,7 @@ class GameWorld {
       profile.weeklyScore.addPirateKill();
     }
     profile.addStat('kills');
+    GameTelemetry.emit(TelemetryEvent.firstKill);
     for (final m in activeMissions) {
       if (m.type == MissionType.kill) m.progress++;
       if (m.type == MissionType.bounty && e.missionId == m.id) m.progress = 1;
@@ -3646,8 +3933,11 @@ class GameWorld {
       );
     }
 
-    if (boss) {
+    if (e.miniBoss) {
+      _miniBossDown(e);
+    } else if (boss) {
       profile.addStat('bosses');
+      GameTelemetry.emit(TelemetryEvent.firstBoss);
       profile.weeklyScore.addBossDefeated();
       _dropPickups(e.pos, PickupKind.ore, (120 * sectorMul).round(), 6);
       _dropPickups(e.pos, PickupKind.gem, 5, 5);
@@ -4456,6 +4746,8 @@ class GameWorld {
     'current': _saveCurrentSector().toJson(),
     'sectors': {for (final e in sectors.entries) '${e.key}': e.value.toJson()},
     'roster': roster.map((c) => c.toJson()).toList(),
+    'expeditions': expeditions.map((e) => e.toJson()).toList(),
+    'expClock': expeditionClock.latestMs,
     'recruits': recruitCount,
     'nextId': _nextId,
     'missions': activeMissions.map((m) => m.toJson()).toList(),
@@ -4559,6 +4851,15 @@ class GameWorld {
     }
     w.recruitCount = j['recruits'] as int;
     w._nextId = j['nextId'] as int;
+    // 원정 (없으면 빈 목록). 명단에 없는 승무원의 원정은 버린다
+    final clock = j['expClock'];
+    if (clock is int) w.expeditionClock.latestMs = clock;
+    for (final e in (j['expeditions'] as List?) ?? const []) {
+      final x = Expedition.fromJson(e);
+      if (x != null && w.roster.any((c) => c.id == x.crewId && !c.assigned)) {
+        w.expeditions.add(x);
+      }
+    }
     w.player.pos = Offset(
       (j['px'] as num).toDouble(),
       (j['py'] as num).toDouble(),

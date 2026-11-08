@@ -14,6 +14,7 @@ import 'cloud_backup.dart';
 import 'leaderboard.dart';
 import 'monetization.dart';
 import 'notifications.dart';
+import 'telemetry.dart';
 import 'wallet.dart';
 
 /// 앱 전역 상태: 프로필, 결제, 오디오, 현재 월드
@@ -34,6 +35,9 @@ class AppState {
     save: () => SaveService.saveProfile(profile),
     onFlags: applyPurchaseFlags,
   );
+
+  /// 게임 개선 통계 (이탈 지점 측정). 출시 빌드만 서버로 보낸다. 테스트는 가짜 서버로 바꿔 끼운다.
+  static TelemetryService telemetry = TelemetryService(installId: () => leaderboard.installId);
 
   /// 클라우드 백업 (Play 게임즈 / Game Center)
   static CloudBackup cloud = CloudBackup.standard(() => profile);
@@ -138,6 +142,8 @@ class AppState {
   static Future<void> init() async {
     profile = await SaveService.loadProfile();
     profile.refreshDaily(DateTime.now());
+    await telemetry.load();
+    telemetry.attach();
     money.onGrant = grant;
     if (useServerWallet) {
       Profile.onEarn = wallet.earned;
@@ -161,7 +167,9 @@ class AppState {
   /// 광고가 아직 준비되지 않았으면 false.
   static Future<bool> watchAd() async {
     if (profile.premium) return true;
-    return money.showRewardedAd();
+    final ok = await money.showRewardedAd();
+    if (ok) GameTelemetry.emit(TelemetryEvent.adWatch);
+    return ok;
   }
 
   static void haptic() {
@@ -203,6 +211,7 @@ class AppState {
       profile.pendingStarCrew--;
       w.grantCrew(3);
     }
+    w.deliverCalendarRewards(); // 출석 달력의 광석·크레딧·★2 (TASK 004)
   }
 }
 

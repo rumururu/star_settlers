@@ -3685,4 +3685,546 @@ class L10nFr extends L10n {
     });
     return '$_temp0';
   }
+
+  @override
+  String get codex_title => 'Codex';
+
+  @override
+  String codex_tab(String tab) {
+    String _temp0 = intl.Intl.selectLogic(tab, {
+      'enemies': 'Ennemis',
+      'planets': 'Planètes',
+      'systems': 'Systèmes',
+      'crew': 'Équipage',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_progress(int found, int total, int pct) {
+    return '$found/$total découverts · $pct %';
+  }
+
+  @override
+  String codex_enemy(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'scout': 'Éclaireur',
+      'raider': 'Pillard',
+      'bomber': 'Bombardier',
+      'sniper': 'Tireur d’élite',
+      'jelly': 'Méduse spatiale',
+      'boss': 'Chef pirate',
+      'commander': 'Commandant d’invasion',
+      'missile': 'Lance-missiles',
+      'mine': 'Poseur de mines',
+      'laser': 'Vaisseau laser',
+      'warden': 'Gardien',
+      'phantom': 'Fantôme',
+      'medic': 'Vaisseau de réparation',
+      'carrier': 'Porte-drones',
+      'juggernaut': 'Mastodonte',
+      'arch_fleet': 'Amiral pirate',
+      'arch_devourer': 'Dévoreur de filons',
+      'arch_flare': 'Canonnière d’éruption',
+      'arch_wraith': 'Spectre ionique',
+      'arch_gravity': 'Seigneur gravitationnel',
+      'arch_plunder': 'Cargo pillard',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_kills(int n) {
+    return 'Vaincus : $n';
+  }
+
+  @override
+  String codex_fromSystem(int n) {
+    return 'Dès le système $n';
+  }
+
+  @override
+  String codex_planetKind(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'garden': 'Monde-jardin',
+      'desert': 'Monde désertique',
+      'ice': 'Monde glacé',
+      'lava': 'Monde de lave',
+      'gas': 'Géante gazeuse',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get codex_planetHint => 'Colonisez une planète de ce type';
+
+  @override
+  String codex_settled(int n) {
+    return 'Planètes colonisées : $n';
+  }
+
+  @override
+  String get codex_settledNone => 'Aucune planète colonisée pour l’instant';
+
+  @override
+  String get codex_home => 'Système natal · aucune condition spéciale';
+
+  @override
+  String get codex_unreached => 'Atteignez-le par un portail de distorsion';
+
+  @override
+  String get codex_crewHint => 'Recrutez pour le débloquer';
+
+  @override
+  String get codex_rewards => 'Récompenses de collection';
+
+  @override
+  String codex_rewardCrew(String stars) {
+    return 'Équipier $stars';
+  }
+
+  @override
+  String get codex_outfitName => 'Explorateur cartographe';
+
+  @override
+  String codex_newEntry(String name) {
+    return 'Nouvelle entrée du codex : $name';
+  }
+
+  @override
+  String get codex_claimedLater =>
+      'Les récompenses arrivent au lancement de la partie';
+
+  @override
+  String codex_pendingCrew(int n) {
+    return 'Équipage complet : $n en attente d’une place';
+  }
+
+  @override
+  String r3_goalSettle(String planet) {
+    return 'Coloniser $planet';
+  }
+
+  @override
+  String r3_goalSettleNeed(String planet, int n) {
+    return 'Encore 💰$n pour $planet';
+  }
+
+  @override
+  String r3_goalColonyUp(String planet, int level) {
+    return 'Colonie $planet niv. $level';
+  }
+
+  @override
+  String r3_goalBuild(String planet, String building) {
+    return '$planet : construire $building';
+  }
+
+  @override
+  String get r3_goalAssignCrew => 'Affecter l\'équipage à une station';
+
+  @override
+  String get r3_goalWarp => 'Distorsion vers le système suivant';
+
+  @override
+  String r3_goalDevelop(String sector) {
+    return 'Stabiliser $sector';
+  }
+
+  @override
+  String get r3_goalMiniBoss => 'Vaincre le lieutenant pirate';
+
+  @override
+  String get r3_miniBossName => 'Lieutenant pirate';
+
+  @override
+  String get r3_miniBossArrive =>
+      'Le lieutenant arrive ! Bleu, ton vaisseau est à moi !';
+
+  @override
+  String get r3_miniBossHint =>
+      'C\'est le lieutenant pirate ! Ton vaisseau actuel peut le battre. Tire sans arrêt et recule si ta coque faiblit !';
+
+  @override
+  String get r3_miniBossLose =>
+      'C-c\'est impossible… Je vais le dire au chef !';
+
+  @override
+  String get r3_miniBossDown =>
+      'Lieutenant abattu ! Avec ses pièces, j\'ai amélioré ton arme gratuitement !';
+
+  @override
+  String r3_weaponUp(int level) {
+    return 'Arme niv. $level !';
+  }
+
+  @override
+  String r3_star3Line(String name) {
+    return 'Joli pilotage ! Le QG nous envoie un vétéran ★3. Dis bonjour à $name !';
+  }
+
+  @override
+  String get r3_crewAssigned => 'Affecté automatiquement — bonus actif';
+
+  @override
+  String get rift_title => 'Course de la Faille';
+
+  @override
+  String get rift_menuSub => 'Faille du jour · 3–5 min';
+
+  @override
+  String rift_locked(String step) {
+    return 'Se débloque après « $step »';
+  }
+
+  @override
+  String get rift_rules =>
+      'Survivez à 10 vagues et battez le boss de la Faille à la vague 10. Après chaque vague, choisissez une carte pour vous renforcer. Les améliorations du jeu principal ne comptent pas : tout le monde pilote le même vaisseau dans la même Faille du jour.';
+
+  @override
+  String rift_bestLine(String score, int wave) {
+    return 'Record $score pts · Vague $wave';
+  }
+
+  @override
+  String get rift_noBest => 'Pas encore de record';
+
+  @override
+  String rift_fullLeft(int n) {
+    return 'Récompense complète : encore $n partie(s) aujourd\'hui';
+  }
+
+  @override
+  String get rift_fullUsed => 'Récompenses complètes épuisées (désormais 1/4)';
+
+  @override
+  String get rift_start => 'Décoller';
+
+  @override
+  String rift_wave(int n, int total) {
+    return 'Vague $n/$total';
+  }
+
+  @override
+  String rift_score(String score) {
+    return 'Score $score';
+  }
+
+  @override
+  String rift_incoming(int n, int s) {
+    return 'Vague $n dans $s s';
+  }
+
+  @override
+  String rift_bossIncoming(int s) {
+    return 'Boss de la Faille dans $s s';
+  }
+
+  @override
+  String rift_enemiesLeft(int n) {
+    return '$n ennemis restants';
+  }
+
+  @override
+  String get rift_collapse => 'La Faille s\'effondre !';
+
+  @override
+  String rift_pickTitle(int n) {
+    return 'Vague $n réussie ! Choisissez une carte';
+  }
+
+  @override
+  String rift_cardLevel(int lv, int max) {
+    return 'Niv. $lv/$max';
+  }
+
+  @override
+  String get rift_rarityCommon => 'Commune';
+
+  @override
+  String get rift_rarityRare => 'Rare';
+
+  @override
+  String get rift_rarityEpic => 'Épique';
+
+  @override
+  String get rift_cardDamage => 'Puissance de feu';
+
+  @override
+  String get rift_cardDamageDesc => 'Dégâts des tirs +25 %';
+
+  @override
+  String get rift_cardRapid => 'Tir rapide';
+
+  @override
+  String get rift_cardRapidDesc => 'Intervalle de tir −15 %';
+
+  @override
+  String get rift_cardMultishot => 'Tir multiple';
+
+  @override
+  String get rift_cardMultishotDesc => 'Une balle de plus par tir';
+
+  @override
+  String get rift_cardPierce => 'Balles perforantes';
+
+  @override
+  String get rift_cardPierceDesc => 'Les tirs traversent 1 ennemi de plus';
+
+  @override
+  String get rift_cardHoming => 'Missiles guidés';
+
+  @override
+  String get rift_cardHomingDesc =>
+      'Des missiles guidés partent toutes les quelques secondes';
+
+  @override
+  String get rift_cardRegen => 'Régén. du bouclier';
+
+  @override
+  String get rift_cardRegenDesc => 'Rend 2 PV par seconde';
+
+  @override
+  String get rift_cardDrone => 'Drone de combat';
+
+  @override
+  String get rift_cardDroneDesc =>
+      'Un drone tire sur les ennemis proches. Plus fort en cumul';
+
+  @override
+  String get rift_cardMagnet => 'Aimant';
+
+  @override
+  String get rift_cardMagnetDesc => 'Attire les éclats de Faille de plus loin';
+
+  @override
+  String get rift_cardCrit => 'Coups critiques';
+
+  @override
+  String get rift_cardCritDesc => '12 % de chances d\'infliger 2,5× dégâts';
+
+  @override
+  String get rift_cardBlades => 'Lames tournoyantes';
+
+  @override
+  String get rift_cardBladesDesc => '+1 lame en orbite autour du vaisseau';
+
+  @override
+  String get rift_cardHull => 'Coque renforcée';
+
+  @override
+  String get rift_cardHullDesc => 'PV max +35, réparation complète';
+
+  @override
+  String get rift_cardEngine => 'Propulseurs';
+
+  @override
+  String get rift_cardEngineDesc => 'Vitesse +12 %';
+
+  @override
+  String get rift_cardShockwave => 'Onde de choc';
+
+  @override
+  String get rift_cardShockwaveDesc =>
+      'Blesse régulièrement tous les ennemis proches';
+
+  @override
+  String get rift_cardGuard => 'Barrière';
+
+  @override
+  String get rift_cardGuardDesc =>
+      'Bloque un coup toutes les quelques secondes';
+
+  @override
+  String get rift_cardVampire => 'Siphon';
+
+  @override
+  String get rift_cardVampireDesc => 'Rend 3 PV par ennemi détruit';
+
+  @override
+  String get rift_resultWin => 'Faille conquise !';
+
+  @override
+  String get rift_resultLose => 'Abattu dans la Faille';
+
+  @override
+  String get rift_resultGaveUp => 'Retraite de la Faille';
+
+  @override
+  String rift_reached(int n) {
+    return 'Vague $n atteinte';
+  }
+
+  @override
+  String get rift_newBest => 'Nouveau record !';
+
+  @override
+  String get rift_rewardTitle => 'Récompenses pour le jeu principal';
+
+  @override
+  String get rift_rewardReduced =>
+      'Dès la 4e partie du jour, les récompenses sont à 1/4';
+
+  @override
+  String get rift_noSave =>
+      'Pas de sauvegarde du jeu principal : crédits et minerai non ajoutés';
+
+  @override
+  String get rift_again => 'Rejouer';
+
+  @override
+  String get rift_exit => 'Quitter';
+
+  @override
+  String get rift_giveUp => 'Abandonner et quitter';
+
+  @override
+  String get rift_giveUpNote =>
+      'Quitter met fin à la partie. Vous gardez score et récompenses jusqu\'à la vague atteinte.';
+
+  @override
+  String get rift_tabPioneer => 'Score de pionnier';
+
+  @override
+  String get rift_tabRift => 'Faille';
+
+  @override
+  String get rift_boardHow =>
+      'Classement selon votre meilleur score de la semaine. Tout le monde affronte la même Faille du jour avec le même vaisseau.';
+
+  @override
+  String rift_myWeek(String score, int wave) {
+    return 'Meilleur de la semaine : $score pts · Vague $wave';
+  }
+
+  @override
+  String get rift_noWeekRun => 'Aucune course cette semaine';
+
+  @override
+  String rift_waveShort(int n) {
+    return 'V$n';
+  }
+
+  @override
+  String get r4_calendarTitle => 'Connexion sur 7 jours';
+
+  @override
+  String r4_calendarStreak(int n) {
+    return '$n jours d\'affilée';
+  }
+
+  @override
+  String get r4_calendarHint =>
+      'Un jour manqué et tout recommence au jour 1. Jour 7 : skin de vaisseau exclusif !';
+
+  @override
+  String get r4_calendarToday => 'Auj.';
+
+  @override
+  String get r4_calendarClaim => 'Récupérer la récompense';
+
+  @override
+  String get r4_calendarClaimed => 'Récompense du jour obtenue !';
+
+  @override
+  String get r4_rewardOre => 'Caisse de minerai';
+
+  @override
+  String get r4_rewardCredits => 'Lot de crédits';
+
+  @override
+  String get r4_rewardCrew2 => 'Équipier ★2';
+
+  @override
+  String get r4_rewardCrew3 => 'Équipier ★3';
+
+  @override
+  String get r4_rewardSkin => 'Skin exclusif';
+
+  @override
+  String r4_tomorrow(String reward) {
+    return 'Demain : $reward';
+  }
+
+  @override
+  String get r4_skinName => 'Lumière d\'assiduité';
+
+  @override
+  String get r4_attendanceOnly => 'Récompense 7 jours';
+
+  @override
+  String get r4_notifCalendarTitle => 'Ta récompense t\'attend';
+
+  @override
+  String r4_notifCalendarBody(String reward) {
+    return 'Aujourd\'hui : $reward';
+  }
+
+  @override
+  String get r4_notifExpeditionTitle => 'L\'expédition est rentrée !';
+
+  @override
+  String get r4_notifExpeditionBody =>
+      'Ton équipage rapporte un butin. Récupère-le en station.';
+
+  @override
+  String get r4_expTitle => 'Expéditions';
+
+  @override
+  String r4_expSlots(int n, int max) {
+    return '$n/$max équipes';
+  }
+
+  @override
+  String get r4_expHint =>
+      'Envoie l\'équipage non affecté. Le temps passe même appli fermée.';
+
+  @override
+  String get r4_expPassSlot => 'Passe commandant : +1 équipe';
+
+  @override
+  String get r4_expNoIdle =>
+      'Personne de libre. Retire une affectation ou recrute.';
+
+  @override
+  String r4_expHours(int h) {
+    return '$h h';
+  }
+
+  @override
+  String get r4_expLuck => 'Chance ⭐/★3';
+
+  @override
+  String r4_expLeft(String time) {
+    return 'encore $time';
+  }
+
+  @override
+  String get r4_expClaim => 'Rentré ! Récupérer';
+
+  @override
+  String get r4_expAway => 'En expédition';
+
+  @override
+  String r4_expGot(String rewards) {
+    return 'Butin : $rewards';
+  }
+
+  @override
+  String r4_timeHm(int h, int m) {
+    return '$h h $m min';
+  }
+
+  @override
+  String r4_timeM(int m) {
+    return '$m min';
+  }
+
+  @override
+  String r4_ascendExpWarn(int n) {
+    return '$n équipiers en expédition partiront aussi, sans butin.';
+  }
 }

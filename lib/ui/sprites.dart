@@ -10,7 +10,20 @@ abstract final class Sprites {
 
   static ui.Image? get(String name) => _images[name];
 
+  /// 식민지 건물 스프라이트 (종류 × 외형 3단계, 포탑은 받침·포신 분리).
+  /// 앱 시작 때 [load]를 처음 부를 때 함께 읽는다. 파일이 없으면 도형으로 대신 그린다.
+  static final buildingNames = [
+    for (final t in [1, 2, 3]) ...['bld_turret_${t}_base', 'bld_turret_${t}_gun'],
+    for (final k in ['mine', 'trade', 'dock', 'shieldGen', 'stabilizer'])
+      for (final t in [1, 2, 3]) 'bld_${k}_$t',
+  ];
+  static bool _buildingsRequested = false;
+
   static Future<void> load(Iterable<String> names) async {
+    if (!_buildingsRequested) {
+      _buildingsRequested = true;
+      names = [...names, ...buildingNames];
+    }
     await Future.wait(names.map((n) async {
       try {
         final data = await rootBundle.load('assets/sprites/$n.png');

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
+import '../game/attendance.dart';
 import '../game/cosmetics.dart';
+import '../game/crew.dart';
 import '../game/campaign.dart';
 import '../game/missions.dart';
 import '../game/models.dart';
@@ -17,10 +19,14 @@ import '../services/audio.dart';
 import '../services/notifications.dart';
 import 'chibi.dart';
 import 'colonies_panel.dart';
+import 'codex_screen.dart';
+import 'calendar_panel.dart';
 import 'colony_panel.dart';
+import 'crew_reveal.dart';
 import 'home_screen.dart';
 import 'leaderboard_screen.dart';
 import 'pause_menu.dart';
+import 'rift_screen.dart';
 import 'common.dart';
 import 'game_icons.dart';
 import 'merchant_panel.dart';
@@ -52,6 +58,12 @@ enum _Overlay {
   system,
   colonies,
   pause,
+
+  /// 새 승무원 카드 공개 (첫 ★3 확정 지급 등)
+  crewReveal,
+
+  /// 7일 출석 달력 (TASK 004)
+  calendar,
 }
 
 class _GameScreenState extends State<GameScreen>
@@ -70,6 +82,12 @@ class _GameScreenState extends State<GameScreen>
   bool _touchFire = false;
   bool _autoFire = false;
   _Overlay _overlay = _Overlay.none;
+
+  /// [_Overlay.crewReveal]로 보여 주는 승무원
+  CrewMember? _revealCrew;
+
+  /// 게임 진입·복귀 때 한 번 출석 달력을 띄울지 본다 (처음 받는 사람은 해적 단계를 마칠 때까지 기다린다)
+  bool _calendarArmed = true;
   bool _modal = false; // 다이얼로그/다른 화면이 떠 있음
 
   /// 모달이 끝날 때: 그 사이 백그라운드에 다녀왔다면 오프라인 수입 정산
@@ -168,6 +186,7 @@ class _GameScreenState extends State<GameScreen>
       // 전화·알림창·결제창 등으로 잠깐 가려질 때도 저장 (이대로 앱이 종료되면 최대 20초를 잃었다)
       if (_canSave) _lifecycleSave();
     } else if (state == AppLifecycleState.resumed) {
+      _calendarArmed = true; // 자정을 넘겨 돌아왔으면 달력
       AudioService.instance.startMusic();
       NotificationService.instance.cancelAll();
       AppState.syncWallet(refresh: true); // 앱 밖에 있는 동안 들어온 결제
@@ -182,9 +201,19 @@ class _GameScreenState extends State<GameScreen>
       AppState.submitLeaderboard();
       AppState.syncWallet();
       if (w.profile.notifications) {
+        final now = DateTime.now();
         NotificationService.instance.scheduleReturn(
           storageFullIn: Duration(hours: w.profile.premium ? 8 : 2),
           hasColonies: w.counter('colonies') > 0,
+          // 다음 날 출석 보상 미리보기 + 원정 귀환 (TASK 004)
+          tomorrowReward: calendarCellText(
+            Attendance.cell(Attendance.streakTomorrow(w.profile, now)),
+            w.profile,
+          ),
+          expeditionsDone: [
+            for (final e in w.expeditions)
+              DateTime.fromMillisecondsSinceEpoch(e.endMs),
+          ],
         );
       }
       AudioService.instance.stopMusic();
@@ -268,6 +297,36 @@ class _GameScreenState extends State<GameScreen>
         w.pendingStoryScene == null) {
       w.colonyTutorialPending = false;
       if (_nearbyColony != null) _setOverlay(_Overlay.colony);
+    }
+    // 새 승무원 카드 공개 (대사·다른 창이 없을 때)
+    if (w.crewReveal != null &&
+        _overlay == _Overlay.none &&
+        !_modal &&
+        w.pendingStoryScene == null) {
+      _revealCrew = w.crewReveal;
+      w.crewReveal = null;
+      AudioService.instance.play(Sfx.gem);
+      _setOverlay(_Overlay.crewReveal);
+    }
+    // 출석 달력: 받을 보상이 있으면 (처음이면 첫 튜토리얼 뒤). 타이틀에서 받았으면 뜨지 않는다
+    if (_calendarArmed &&
+        _overlay == _Overlay.none &&
+        !_modal &&
+        w.pendingStoryScene == null &&
+        w.crewReveal == null &&
+        !w.star3GiftDue && // 첫 ★3 카드가 먼저
+        w.player.alive) {
+      final now = DateTime.now();
+      if (!Attendance.claimable(w.profile, now)) {
+        _calendarArmed = false;
+      } else if (Attendance.showInGame(
+        w.profile,
+        now,
+        storyIndex: w.storyIndex,
+      )) {
+        _calendarArmed = false;
+        _setOverlay(_Overlay.calendar);
+      }
     }
     _maybeAskNotifications();
     _frame.tick();
@@ -466,6 +525,13 @@ class _GameScreenState extends State<GameScreen>
               style: bodyStyle,
               textAlign: TextAlign.center,
             ),
+            // 원정은 월드에 속한다: 환생하면 원정 중인 승무원도 다른 승무원처럼 사라진다 (TASK 004)
+            if (w.expeditions.isNotEmpty)
+              Text(
+                keepAll(tr.r4_ascendExpWarn(w.expeditions.length)),
+                style: bodyStyle.copyWith(color: const Color(0xFFFFB74D)),
+                textAlign: TextAlign.center,
+              ),
             const SizedBox(height: 10),
             if (can)
               Text(
@@ -631,8 +697,35 @@ class _GameScreenState extends State<GameScreen>
                   onClose: () => _setOverlay(_Overlay.none),
                 ),
               ),
+            Positioned.fill(
+              child: CodexHud(world: w, frame: _frame),
+            ), // 도감 토스트·보상 (TASK 006)
             if (_overlay == _Overlay.pause)
               Positioned.fill(child: _pauseMenu()),
+            if (_overlay == _Overlay.calendar)
+              Positioned.fill(
+                child: CalendarPanel(
+                  profile: w.profile,
+                  onClose: () => _setOverlay(_Overlay.none),
+                  onClaimed: () {
+                    AudioService.instance.play(Sfx.gem);
+                    AppState.deliverPending();
+                    SaveService.saveProfile(w.profile);
+                    SaveService.save(w);
+                  },
+                ),
+              ),
+            if (_overlay == _Overlay.crewReveal && _revealCrew != null)
+              Positioned.fill(
+                child: CrewRevealCard(
+                  crew: _revealCrew!,
+                  assigned: _revealCrew!.assigned,
+                  onClose: () {
+                    _revealCrew = null;
+                    _setOverlay(_Overlay.none);
+                  },
+                ),
+              ),
             Positioned.fill(
               child: ListenableBuilder(
                 listenable: _frame,
@@ -719,14 +812,14 @@ class _GameScreenState extends State<GameScreen>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (w.dialogs.isNotEmpty)
+                      if (_message() case final msg?)
                         Flexible(
                           child: clipTop(
                             'hud-dialog-zone',
                             Center(
                               child: KeyedSubtree(
                                 key: const ValueKey('hud-dialog'),
-                                child: _dialog(w.dialogs.last),
+                                child: msg,
                               ),
                             ),
                           ),
@@ -788,7 +881,9 @@ class _GameScreenState extends State<GameScreen>
 
   Widget _hudTall(BuildContext context) {
     final p = w.player;
-    final narrow = MediaQuery.sizeOf(context).width < 720;
+    if (MediaQuery.sizeOf(context).width < Layout.contentMaxWidth) {
+      return _hudPortrait();
+    }
     return SafeArea(
       child: Stack(
         children: [
@@ -808,16 +903,15 @@ class _GameScreenState extends State<GameScreen>
               child: _rightColumn(),
             ),
           ),
-          if (w.dialogs.isNotEmpty)
+          if (_message() case final msg?)
             Positioned(
-              // 좁은 화면: 미니맵 아래 침공 배너(여러 줄)를 가리지 않게 조금 내린다
-              top: narrow ? (w.invasion != null ? 300 : 230) : 70,
-              left: narrow ? 8 : 240,
-              right: narrow ? 8 : 150,
+              top: 70,
+              left: 240,
+              right: 150,
               child: Center(
                 child: KeyedSubtree(
                   key: const ValueKey('hud-dialog'),
-                  child: _dialog(w.dialogs.last),
+                  child: msg,
                 ),
               ),
             ),
@@ -851,7 +945,7 @@ class _GameScreenState extends State<GameScreen>
             Positioned(
               left: 8,
               right: 8,
-              bottom: narrow ? 200 : 150,
+              bottom: 150,
               child: Wrap(
                 key: const ValueKey('hud-actions'),
                 alignment: WrapAlignment.center,
@@ -866,9 +960,113 @@ class _GameScreenState extends State<GameScreen>
     );
   }
 
+  /// 세로 폰: 정보와 조작을 각각 한 행에 묶고, 대사와 상황 버튼은 그 사이에 둔다.
+  /// 하단 행의 실제 높이만큼 공간을 예약하므로 번역이나 버튼 크기가 달라도 겹치지 않는다.
+  Widget _hudPortrait() => SafeArea(
+    child: Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(Space.s),
+          child: Column(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    KeyedSubtree(
+                      key: const ValueKey('hud-info'),
+                      child: _rightColumn(bottom: false),
+                    ),
+                    const SizedBox(height: Space.s),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: KeyedSubtree(
+                            key: const ValueKey('hud-captain'),
+                            child: _captainCard(),
+                          ),
+                        ),
+                        const SizedBox(width: Space.s),
+                        // 미니맵 열: 경보 글자가 길어도(글자 배율·독일어) 선장 카드 몫을 빼앗지 않게 폭을 묶는다
+                        ConstrainedBox(
+                          key: const ValueKey('hud-map'),
+                          constraints: BoxConstraints(
+                            maxWidth: max(
+                              _minimapSize,
+                              MediaQuery.sizeOf(context).width * 0.38,
+                            ),
+                          ),
+                          child: _rightColumn(top: false),
+                        ),
+                      ],
+                    ),
+                    if (_message() case final msg?) ...[
+                      const SizedBox(height: Space.s),
+                      Flexible(
+                        child: ClipRect(
+                          key: const ValueKey('hud-dialog-zone'),
+                          child: SingleChildScrollView(
+                            child: KeyedSubtree(
+                              key: const ValueKey('hud-dialog'),
+                              child: msg,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              if (w.player.alive) ...[
+                const SizedBox(height: Space.s),
+                Wrap(
+                  key: const ValueKey('hud-actions'),
+                  alignment: WrapAlignment.center,
+                  spacing: Space.s,
+                  runSpacing: Space.s,
+                  children: _contextActions(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(Space.s),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            KeyedSubtree(
+                              key: const ValueKey('hud-cruise'),
+                              child: _cruiseToggle(),
+                            ),
+                            const SizedBox(height: Space.m),
+                            KeyedSubtree(
+                              key: const ValueKey('hud-joystick'),
+                              child: _joystick(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: Space.s),
+                      KeyedSubtree(
+                        key: const ValueKey('hud-combat'),
+                        child: _combatButtons(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        if (!w.player.alive) Positioned.fill(child: _reviveOverlay()),
+      ],
+    ),
+  );
+
   Widget _captainCard() {
     final p = w.player;
-    final (sv, st) = w.storyProgress;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -876,9 +1074,14 @@ class _GameScreenState extends State<GameScreen>
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ChibiPortrait(
-                style: ChibiStyle.captainIn(outfitById(w.profile.outfit)),
-                size: 54,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: ChibiPortrait(
+                    style: ChibiStyle.captainIn(outfitById(w.profile.outfit)),
+                    size: 54,
+                  ),
+                ),
               ),
               const SizedBox(width: 8),
               Column(
@@ -912,35 +1115,7 @@ class _GameScreenState extends State<GameScreen>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  keepAll(
-                    '🎯 ${w.sector == campaignFinalSector
-                        ? tr.c_finalTitle
-                        : w.campaignMissionActive
-                        ? w.sectorName
-                        : w.story.title}',
-                  ),
-                  style: Ts.caption.copyWith(
-                    color: Color(0xFF7CFFB2),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                if (w.campaignMissionActive)
-                  Text(
-                    keepAll(
-                      '${w.campaignObjective}${w.campaignWorking ? ' · ${(w.campaignWorkProgress * 100).round()}%' : ''}',
-                    ),
-                    style: Ts.caption.copyWith(color: kSky),
-                  ),
-                if (w.sector == campaignFinalSector)
-                  Text(
-                    keepAll(_finalObjective),
-                    style: Ts.caption.copyWith(color: kSky),
-                  ),
-                if (w.sector != campaignFinalSector &&
-                    !w.campaignMissionActive &&
-                    st > 1)
-                  Text('$sv / $st', style: dimStyle),
+                _goalChip(),
                 for (final m in w.activeMissions)
                   Text(
                     '${m.icon} ${_missionShort(m)}',
@@ -953,24 +1128,33 @@ class _GameScreenState extends State<GameScreen>
                       p.colonyLevel > 0 &&
                       p.shieldHp < p.shieldMax(w.sectorMul) - 0.5,
                 ))
-                  iconValue(
-                    'dome',
-                    pl.domeUp
-                        ? '${pl.name} ${(100 * pl.shieldHp / pl.shieldMax(w.sectorMul)).floor()}%'
-                        : w.relayShieldActive(pl)
-                        ? '${pl.name} · ${tr.u_sharedShield} ${pl.relayShieldHp.round()}'
-                        : tr.u_shieldBroken(pl.name),
-                    size: 20,
-                    style: Ts.caption.copyWith(
-                      color: WorldPainter.shieldColor(
-                        pl.domeUp
-                            ? pl.shieldHp / pl.shieldMax(w.sectorMul)
-                            : w.relayShieldActive(pl)
-                            ? pl.relayShieldHp / w.relayShieldMax(pl)
-                            : 0,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const GameIcon('dome', size: IconSz.inline),
+                      const SizedBox(width: Space.xs),
+                      Flexible(
+                        child: Text(
+                          keepAll(
+                            pl.domeUp
+                                ? '${pl.name} ${(100 * pl.shieldHp / pl.shieldMax(w.sectorMul)).floor()}%'
+                                : w.relayShieldActive(pl)
+                                ? '${pl.name} · ${tr.u_sharedShield} ${pl.relayShieldHp.round()}'
+                                : tr.u_shieldBroken(pl.name),
+                          ),
+                          style: Ts.caption.copyWith(
+                            color: WorldPainter.shieldColor(
+                              pl.domeUp
+                                  ? pl.shieldHp / pl.shieldMax(w.sectorMul)
+                                  : w.relayShieldActive(pl)
+                                  ? pl.relayShieldHp / w.relayShieldMax(pl)
+                                  : 0,
+                            ),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                      fontWeight: FontWeight.bold,
-                    ),
+                    ],
                   ),
                 if (w.buffs.isNotEmpty)
                   Text(
@@ -1061,7 +1245,13 @@ class _GameScreenState extends State<GameScreen>
     return free.clamp(96.0, 170.0);
   }
 
-  Widget _rightColumn({bool short = false}) {
+  /// [top]: 항성계 배지 + 메뉴 줄, [bottom]: 미니맵 + 경보. 세로 폰은 둘을 나눠
+  /// 배지 줄을 화면 폭 전체에 놓는다 (반쪽 폭에 넣으면 글자가 4~6px로 줄어 읽을 수 없었다).
+  Widget _rightColumn({
+    bool short = false,
+    bool top = true,
+    bool bottom = true,
+  }) {
     final invasionBanner = _invasionBanner(short: short);
     final alerts = <Widget>[
       ?invasionBanner,
@@ -1111,56 +1301,67 @@ class _GameScreenState extends State<GameScreen>
     // 항성계 정보 폭: 세로는 화면 절반(왼쪽 선장 카드를 덮지 않게), 가로는 오른쪽 존 폭 안
     final sectorMax = short
         ? _rightZoneWidth - Tap.min - 6
+        : !bottom
+        ? double.infinity
         : MediaQuery.sizeOf(context).width / 2 - 64;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // 누르면 항성계 현황
-            GestureDetector(
-              onTap: () => _setOverlay(_Overlay.system),
-              // 언어마다 길이가 달라서, 왼쪽 선장 카드를 덮지 않게 화면 절반 안으로 줄인다
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: sectorMax),
-                child: glass(
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const GameIcon('menu_home', size: 30),
-                        const SizedBox(width: Space.xs),
-                        Text(
-                          tr.u_hudSector(
-                            w.sectorName,
-                            (w.development * 100).floor(),
-                            w.threat.toStringAsFixed(1),
-                            compact(w.empireValue),
-                          ),
-                          textAlign: TextAlign.right,
-                          style: Ts.caption.copyWith(color: Colors.white),
+        if (top)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 누르면 항성계 현황
+              Flexible(
+                child: GestureDetector(
+                  onTap: () => _setOverlay(_Overlay.system),
+                  // 언어마다 길이가 달라서, 왼쪽 선장 카드를 덮지 않게 화면 절반 안으로 줄인다
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: Tap.min,
+                      minHeight: Tap.min,
+                      maxWidth: sectorMax,
+                    ),
+                    child: glass(
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const GameIcon('menu_home', size: 30),
+                            const SizedBox(width: Space.xs),
+                            Text(
+                              tr.u_hudSector(
+                                w.sectorName,
+                                (w.development * 100).floor(),
+                                w.threat.toStringAsFixed(1),
+                                compact(w.empireValue),
+                              ),
+                              textAlign: TextAlign.right,
+                              style: Ts.caption.copyWith(color: Colors.white),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 6),
-            Badge(
-              isLabelVisible:
-                  w.profile.claimable.isNotEmpty ||
-                  w.profile.dailyClaimable > 0,
-              smallSize: 10,
-              child: _iconBtn(Icons.menu, () => _setOverlay(_Overlay.pause)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6),
-        if (short)
+              const SizedBox(width: 6),
+              Badge(
+                isLabelVisible:
+                    w.profile.claimable.isNotEmpty ||
+                    w.profile.dailyClaimable > 0,
+                smallSize: 10,
+                child: _iconBtn(Icons.menu, () => _setOverlay(_Overlay.pause)),
+              ),
+            ],
+          ),
+        if (top && bottom) const SizedBox(height: 6),
+        if (!bottom)
+          const SizedBox.shrink()
+        else if (short)
           Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1334,25 +1535,106 @@ class _GameScreenState extends State<GameScreen>
     return out;
   }
 
-  String get _finalObjective {
-    if (w.finalMissionStage != FinalMissionStage.complete &&
-        w.development < 1) {
-      return '${tr.c_stabilize} · ${(w.development * 100).floor()}%';
-    }
-    if (w.finalMissionStage == FinalMissionStage.synchronize &&
-        !w.atFinalRelay) {
-      return tr.c_syncReady;
-    }
-    return switch (w.finalMissionStage) {
-      FinalMissionStage.dormant ||
-      FinalMissionStage.stabilize => tr.c_syncReady,
-      FinalMissionStage.synchronize => tr.c_syncProgress(
-        (w.finalSyncProgress * 100).clamp(0, 100).round(),
+  /// HUD '다음 목표' 칩: 아이콘 + 한 줄 + 진행 막대. 누르면 안내 화살표가 그 목표를 잠깐 가리킨다.
+  /// 목표를 이루면 잠깐 초록으로 빛나며 '목표 달성!'을 보여 준다.
+  Widget _goalChip() {
+    final g = w.goal;
+    final done = w.goalFlash > 0 ? w.goalDone : null;
+    const green = Color(0xFF7CFFB2);
+    final pulse = done == null
+        ? 0.0
+        : sin(pi * (w.goalFlash / GameWorld.goalFlashSeconds).clamp(0.0, 1.0));
+    final chip = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (done == null && g.heading != null)
+          Text(
+            keepAll('🎯 ${g.heading}'),
+            style: Ts.caption.copyWith(
+              color: green,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GameIcon(done?.icon ?? g.icon, size: IconSz.inline),
+            const SizedBox(width: Space.xs),
+            Flexible(
+              child: Text(
+                keepAll(done != null ? '✔ ${tr.g_floatGoalDone}' : g.text),
+                style: Ts.caption.copyWith(
+                  color: done != null || g.heading == null ? green : kSky,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (done == null && g.hasProgress)
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    width: 96,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(3),
+                      child: LinearProgressIndicator(
+                        value: g.fraction,
+                        minHeight: 5,
+                        backgroundColor: Colors.white12,
+                        color: green,
+                      ),
+                    ),
+                  ),
+                ),
+                if (g.progressLabel != null) ...[
+                  const SizedBox(width: Space.s),
+                  Text(g.progressLabel!, style: Ts.caption),
+                ],
+              ],
+            ),
+          ),
+      ],
+    );
+    return GestureDetector(
+      key: const ValueKey('hud-goal'),
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        w.pingGoal();
+        AppState.haptic();
+      },
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: Tap.min,
+          minWidth: Tap.min,
+        ),
+        child: Container(
+          alignment: Alignment.centerLeft,
+          decoration: done == null
+              ? null
+              : BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: green.withValues(alpha: 0.5 * pulse),
+                      blurRadius: 12 * pulse,
+                    ),
+                  ],
+                ),
+          child: Transform.scale(
+            scale: 1 + 0.06 * pulse,
+            alignment: Alignment.centerLeft,
+            child: chip,
+          ),
+        ),
       ),
-      FinalMissionStage.guardian => tr.c_guardian,
-      FinalMissionStage.counterattack => tr.c_counterattack,
-      FinalMissionStage.complete => tr.c_complete,
-    };
+    );
   }
 
   Widget _joystick() {
@@ -1406,12 +1688,14 @@ class _GameScreenState extends State<GameScreen>
                   : Colors.white60,
             ),
             const SizedBox(width: 4),
-            Text(
-              '${tr.u_cruise} ${w.profile.cruise ? tr.u_autoFireOn : tr.u_autoFireOff}',
-              style: Ts.caption.copyWith(
-                color: w.profile.cruise
-                    ? const Color(0xFF7CFFB2)
-                    : Colors.white60,
+            Flexible(
+              child: Text(
+                '${tr.u_cruise} ${w.profile.cruise ? tr.u_autoFireOn : tr.u_autoFireOff}',
+                style: Ts.caption.copyWith(
+                  color: w.profile.cruise
+                      ? const Color(0xFF7CFFB2)
+                      : Colors.white60,
+                ),
               ),
             ),
           ],
@@ -1429,11 +1713,11 @@ class _GameScreenState extends State<GameScreen>
   static const _rightZoneWidth = 236.0;
 
   /// 자동 사격 토글. 세로 HUD는 전투 버튼 묶음 맨 위, 가로 HUD는 묶음 바로 위에 따로 놓는다.
-  Widget _autoFireToggle({bool short = true}) => GestureDetector(
+  Widget _autoFireToggle() => GestureDetector(
     key: const ValueKey('hud-autofire'),
     onTap: () => setState(() => _autoFire = !_autoFire),
     child: ConstrainedBox(
-      constraints: BoxConstraints(minHeight: short ? Tap.min : 0),
+      constraints: const BoxConstraints(minHeight: Tap.min, minWidth: Tap.min),
       child: glass(
         iconValue(
           'cmb_auto',
@@ -1443,13 +1727,16 @@ class _GameScreenState extends State<GameScreen>
             color: _autoFire ? const Color(0xFF7CFFB2) : Colors.white60,
           ),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: short ? 12 : 4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Space.s,
+          vertical: Space.m,
+        ),
       ),
     ),
   );
 
   /// 발사 버튼(오른쪽 아래)과 그 둘레의 스킬 버튼.
-  /// 세로: 스킬이 발사 버튼 위로 쌓인다 (190×200, 맨 위에 자동 사격).
+  /// 세로: 스킬과 발사 버튼을 두 열로 쌓고, 맨 위에 자동 사격을 둔다.
   /// 가로(낮은 화면): 스킬을 발사 버튼 왼쪽으로 펼쳐 높이를 줄인다 (224×122, 자동 사격은 묶음 밖).
   Widget _combatButtons({bool short = false}) {
     final p = w.player;
@@ -1505,18 +1792,36 @@ class _GameScreenState extends State<GameScreen>
         ),
       );
     }
-    return SizedBox(
-      width: 190,
-      height: 200,
-      child: Stack(
-        children: [
-          Positioned(right: 0, bottom: 0, child: fire),
-          Positioned(right: 104, bottom: 0, child: boost),
-          Positioned(right: 96, bottom: 66, child: missile),
-          Positioned(right: 28, bottom: 104, child: shield),
-          Positioned(right: 0, top: 0, child: _autoFireToggle(short: false)),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        _autoFireToggle(),
+        const SizedBox(height: Space.s),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                missile,
+                const SizedBox(height: Space.m),
+                boost,
+              ],
+            ),
+            const SizedBox(width: Space.m),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                shield,
+                const SizedBox(height: Space.m),
+                fire,
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -1627,6 +1932,13 @@ class _GameScreenState extends State<GameScreen>
     );
   }
 
+  /// HUD 대사 칸에 보일 것: 대사가 먼저, 대사가 없을 때 도감 새 항목 토스트([CodexHud]가 순서를 정함).
+  Widget? _message() {
+    if (w.dialogs.isNotEmpty) return _dialog(w.dialogs.last);
+    final f = w.profile.codex.showing;
+    return f == null ? null : Center(child: CodexToastChip(f));
+  }
+
   Widget _dialog(DialogLine d) {
     final name = switch (d.speaker) {
       Speaker.captain => tr.u_spkCaptain,
@@ -1701,7 +2013,7 @@ class _GameScreenState extends State<GameScreen>
     child: IconButton(
       icon: Icon(icon, color: Colors.white),
       onPressed: onTap,
-      visualDensity: VisualDensity.compact,
+      visualDensity: VisualDensity.standard,
     ),
   );
 
@@ -1718,6 +2030,11 @@ class _GameScreenState extends State<GameScreen>
     ),
     resumeLabel: tr.u_resume,
     onResume: () => _setOverlay(_Overlay.none),
+    // 내일 출석 보상 미리보기 (누르면 달력)
+    banner: TomorrowCard(
+      profile: w.profile,
+      onTap: () => _setOverlay(_Overlay.calendar),
+    ),
     tiles: [
       MenuTile(
         tr.u_shop,
@@ -1730,6 +2047,12 @@ class _GameScreenState extends State<GameScreen>
         'menu_trophy',
         () => _modalRoute(const AchievementsScreen()),
         badge: w.profile.claimable.length,
+      ),
+      MenuTile(
+        tr.codex_title,
+        codexMenuIcon,
+        () => _modalRoute(const CodexScreen()),
+        badge: w.profile.codex.badge,
       ),
       MenuTile(
         tr.u_dailyQuests,
@@ -1752,6 +2075,14 @@ class _GameScreenState extends State<GameScreen>
         'menu_home',
         () => _modalRoute(const HomePlanetScreen()),
       ),
+      // 균열 런 (TASK 005): 잠겨 있으면 해금 조건만 알린다
+      MenuTile(tr.rift_title, riftMenuIcon, () async {
+        if (await riftUnlocked(w.profile)) {
+          _modalRoute(RiftScreen(mainWorld: w));
+        } else if (mounted) {
+          toast(context, tr.rift_locked(tr.g_storyKillsTitle));
+        }
+      }),
       MenuTile(tr.u_ascendMenu, 'act_warp', _showAscend),
       MenuTile(
         tr.u_settings,

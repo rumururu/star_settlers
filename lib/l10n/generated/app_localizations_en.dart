@@ -3488,4 +3488,541 @@ class L10nEn extends L10n {
     });
     return '$_temp0';
   }
+
+  @override
+  String get codex_title => 'Codex';
+
+  @override
+  String codex_tab(String tab) {
+    String _temp0 = intl.Intl.selectLogic(tab, {
+      'enemies': 'Enemies',
+      'planets': 'Planets',
+      'systems': 'Systems',
+      'crew': 'Crew',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_progress(int found, int total, int pct) {
+    return '$found/$total found · $pct%';
+  }
+
+  @override
+  String codex_enemy(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'scout': 'Scout',
+      'raider': 'Raider',
+      'bomber': 'Bomber',
+      'sniper': 'Sniper',
+      'jelly': 'Space Jellyfish',
+      'boss': 'Pirate Boss',
+      'commander': 'Invasion Commander',
+      'missile': 'Missile Carrier',
+      'mine': 'Mine Layer',
+      'laser': 'Laser Lancer',
+      'warden': 'Shield Warden',
+      'phantom': 'Phantom',
+      'medic': 'Repair Tender',
+      'carrier': 'Drone Carrier',
+      'juggernaut': 'Juggernaut',
+      'arch_fleet': 'Pirate Admiral',
+      'arch_devourer': 'Vein Devourer',
+      'arch_flare': 'Flare Gunship',
+      'arch_wraith': 'Ion Wraith',
+      'arch_gravity': 'Gravity Lord',
+      'arch_plunder': 'Plunder Freighter',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_kills(int n) {
+    return 'Defeated $n';
+  }
+
+  @override
+  String codex_fromSystem(int n) {
+    return 'From system $n';
+  }
+
+  @override
+  String codex_planetKind(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'garden': 'Garden World',
+      'desert': 'Desert World',
+      'ice': 'Ice World',
+      'lava': 'Lava World',
+      'gas': 'Gas Giant',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get codex_planetHint => 'Settle a planet of this kind to fill it';
+
+  @override
+  String codex_settled(int n) {
+    return 'Settled planets: $n';
+  }
+
+  @override
+  String get codex_settledNone => 'No settled planets yet';
+
+  @override
+  String get codex_home => 'Home system · no special conditions';
+
+  @override
+  String get codex_unreached => 'Reach it through a warp gate';
+
+  @override
+  String get codex_crewHint => 'Recruit to fill';
+
+  @override
+  String get codex_rewards => 'Collection rewards';
+
+  @override
+  String codex_rewardCrew(String stars) {
+    return '$stars crew';
+  }
+
+  @override
+  String get codex_outfitName => 'Star Chart Explorer';
+
+  @override
+  String codex_newEntry(String name) {
+    return 'New codex entry: $name';
+  }
+
+  @override
+  String get codex_claimedLater => 'Rewards arrive when you start playing';
+
+  @override
+  String codex_pendingCrew(int n) {
+    return 'Crew full: $n waiting for a free slot';
+  }
+
+  @override
+  String r3_goalSettle(String planet) {
+    return 'Settle $planet';
+  }
+
+  @override
+  String r3_goalSettleNeed(String planet, int n) {
+    return '💰$n more to settle $planet';
+  }
+
+  @override
+  String r3_goalColonyUp(String planet, int level) {
+    return '$planet colony to Lv.$level';
+  }
+
+  @override
+  String r3_goalBuild(String planet, String building) {
+    return '$planet: build $building';
+  }
+
+  @override
+  String get r3_goalAssignCrew => 'Assign crew at a station';
+
+  @override
+  String get r3_goalWarp => 'Warp to the next system';
+
+  @override
+  String r3_goalDevelop(String sector) {
+    return 'Stabilize $sector';
+  }
+
+  @override
+  String get r3_goalMiniBoss => 'Defeat the Pirate Lieutenant';
+
+  @override
+  String get r3_miniBossName => 'Pirate Lieutenant';
+
+  @override
+  String get r3_miniBossArrive =>
+      'The Lieutenant is here! Rookie captain, your ship is mine!';
+
+  @override
+  String get r3_miniBossHint =>
+      'It\'s the Pirate Lieutenant! Your current ship can take him. Keep firing, and back off if your hull gets low!';
+
+  @override
+  String get r3_miniBossLose => 'N-no way… I\'m telling the boss!';
+
+  @override
+  String get r3_miniBossDown =>
+      'You got the Lieutenant! I used the parts he dropped to upgrade your weapon for free!';
+
+  @override
+  String r3_weaponUp(int level) {
+    return 'Weapon Lv.$level!';
+  }
+
+  @override
+  String r3_star3Line(String name) {
+    return 'Nice flying! HQ sent us a ★3 veteran. Say hi to $name!';
+  }
+
+  @override
+  String get r3_crewAssigned => 'Assigned automatically — bonus active now';
+
+  @override
+  String get rift_title => 'Rift Run';
+
+  @override
+  String get rift_menuSub => 'Today\'s Rift · 3–5 min';
+
+  @override
+  String rift_locked(String step) {
+    return 'Unlocks after “$step”';
+  }
+
+  @override
+  String get rift_rules =>
+      'Survive 10 waves and defeat the Rift Boss on wave 10. After each wave, pick a card to power up. Your main-game upgrades don\'t apply — everyone flies the same ship through the same daily rift.';
+
+  @override
+  String rift_bestLine(String score, int wave) {
+    return 'Best $score pts · Wave $wave';
+  }
+
+  @override
+  String get rift_noBest => 'No record yet';
+
+  @override
+  String rift_fullLeft(int n) {
+    return 'Full rewards: $n runs left today';
+  }
+
+  @override
+  String get rift_fullUsed => 'Today\'s full rewards used (now 1/4)';
+
+  @override
+  String get rift_start => 'Launch';
+
+  @override
+  String rift_wave(int n, int total) {
+    return 'Wave $n/$total';
+  }
+
+  @override
+  String rift_score(String score) {
+    return 'Score $score';
+  }
+
+  @override
+  String rift_incoming(int n, int s) {
+    return 'Wave $n incoming in ${s}s';
+  }
+
+  @override
+  String rift_bossIncoming(int s) {
+    return 'Rift Boss arrives in ${s}s';
+  }
+
+  @override
+  String rift_enemiesLeft(int n) {
+    return '$n enemies left';
+  }
+
+  @override
+  String get rift_collapse => 'Rift collapsing!';
+
+  @override
+  String rift_pickTitle(int n) {
+    return 'Wave $n cleared! Pick a card';
+  }
+
+  @override
+  String rift_cardLevel(int lv, int max) {
+    return 'Lv $lv/$max';
+  }
+
+  @override
+  String get rift_rarityCommon => 'Common';
+
+  @override
+  String get rift_rarityRare => 'Rare';
+
+  @override
+  String get rift_rarityEpic => 'Epic';
+
+  @override
+  String get rift_cardDamage => 'Firepower';
+
+  @override
+  String get rift_cardDamageDesc => 'Bullet damage +25%';
+
+  @override
+  String get rift_cardRapid => 'Rapid Fire';
+
+  @override
+  String get rift_cardRapidDesc => 'Fire interval −15%';
+
+  @override
+  String get rift_cardMultishot => 'Multishot';
+
+  @override
+  String get rift_cardMultishotDesc => 'One extra bullet per shot';
+
+  @override
+  String get rift_cardPierce => 'Piercing Rounds';
+
+  @override
+  String get rift_cardPierceDesc => 'Bullets pass through 1 more enemy';
+
+  @override
+  String get rift_cardHoming => 'Homing Missiles';
+
+  @override
+  String get rift_cardHomingDesc =>
+      'Homing missiles launch automatically every few seconds';
+
+  @override
+  String get rift_cardRegen => 'Shield Regen';
+
+  @override
+  String get rift_cardRegenDesc => 'Restore 2 HP per second';
+
+  @override
+  String get rift_cardDrone => 'Combat Drone';
+
+  @override
+  String get rift_cardDroneDesc =>
+      'A drone shoots nearby enemies. Stronger when stacked';
+
+  @override
+  String get rift_cardMagnet => 'Magnet';
+
+  @override
+  String get rift_cardMagnetDesc => 'Pulls rift shards from farther away';
+
+  @override
+  String get rift_cardCrit => 'Critical Hits';
+
+  @override
+  String get rift_cardCritDesc => '12% chance to deal 2.5× damage';
+
+  @override
+  String get rift_cardBlades => 'Spinning Blades';
+
+  @override
+  String get rift_cardBladesDesc => '+1 blade orbiting your ship';
+
+  @override
+  String get rift_cardHull => 'Reinforced Hull';
+
+  @override
+  String get rift_cardHullDesc => 'Max HP +35 and fully repaired';
+
+  @override
+  String get rift_cardEngine => 'Thrusters';
+
+  @override
+  String get rift_cardEngineDesc => 'Move speed +12%';
+
+  @override
+  String get rift_cardShockwave => 'Shockwave';
+
+  @override
+  String get rift_cardShockwaveDesc =>
+      'Periodically damages all nearby enemies';
+
+  @override
+  String get rift_cardGuard => 'Barrier';
+
+  @override
+  String get rift_cardGuardDesc => 'Blocks one hit every few seconds';
+
+  @override
+  String get rift_cardVampire => 'Siphon';
+
+  @override
+  String get rift_cardVampireDesc => 'Restore 3 HP per enemy destroyed';
+
+  @override
+  String get rift_resultWin => 'Rift Conquered!';
+
+  @override
+  String get rift_resultLose => 'Shot down in the Rift';
+
+  @override
+  String get rift_resultGaveUp => 'Retreated from the Rift';
+
+  @override
+  String rift_reached(int n) {
+    return 'Reached wave $n';
+  }
+
+  @override
+  String get rift_newBest => 'New personal best!';
+
+  @override
+  String get rift_rewardTitle => 'Rewards for your main game';
+
+  @override
+  String get rift_rewardReduced => 'From the 4th run today, rewards are 1/4';
+
+  @override
+  String get rift_noSave =>
+      'No main-game save, so credits and ore weren\'t added';
+
+  @override
+  String get rift_again => 'Try Again';
+
+  @override
+  String get rift_exit => 'Exit';
+
+  @override
+  String get rift_giveUp => 'Give up and exit';
+
+  @override
+  String get rift_giveUpNote =>
+      'Leaving ends this run. You keep the score and rewards up to the wave you reached.';
+
+  @override
+  String get rift_tabPioneer => 'Pioneer Score';
+
+  @override
+  String get rift_tabRift => 'Rift';
+
+  @override
+  String get rift_boardHow =>
+      'Ranked by your best Rift Run score this week. Everyone races the same daily rift with the same ship.';
+
+  @override
+  String rift_myWeek(String score, int wave) {
+    return 'This week\'s best: $score pts · Wave $wave';
+  }
+
+  @override
+  String get rift_noWeekRun => 'No Rift Run this week yet';
+
+  @override
+  String rift_waveShort(int n) {
+    return 'W$n';
+  }
+
+  @override
+  String get r4_calendarTitle => '7-Day Check-in';
+
+  @override
+  String r4_calendarStreak(int n) {
+    return 'Day $n in a row';
+  }
+
+  @override
+  String get r4_calendarHint =>
+      'Miss a day and it starts over from day 1. Day 7 gives a check-in-only ship skin!';
+
+  @override
+  String get r4_calendarToday => 'Today';
+
+  @override
+  String get r4_calendarClaim => 'Claim today\'s reward';
+
+  @override
+  String get r4_calendarClaimed => 'Today\'s reward claimed!';
+
+  @override
+  String get r4_rewardOre => 'Ore crate';
+
+  @override
+  String get r4_rewardCredits => 'Credit bundle';
+
+  @override
+  String get r4_rewardCrew2 => '★2 crew';
+
+  @override
+  String get r4_rewardCrew3 => '★3 crew';
+
+  @override
+  String get r4_rewardSkin => 'Exclusive ship skin';
+
+  @override
+  String r4_tomorrow(String reward) {
+    return 'Tomorrow: $reward';
+  }
+
+  @override
+  String get r4_skinName => 'Starlight Streak';
+
+  @override
+  String get r4_attendanceOnly => '7-day check-in reward';
+
+  @override
+  String get r4_notifCalendarTitle => 'Your check-in reward is ready';
+
+  @override
+  String r4_notifCalendarBody(String reward) {
+    return 'Today\'s check-in: $reward';
+  }
+
+  @override
+  String get r4_notifExpeditionTitle => 'Expedition is back!';
+
+  @override
+  String get r4_notifExpeditionBody =>
+      'Your crew brought back rewards. Collect them at a station.';
+
+  @override
+  String get r4_expTitle => 'Crew Expeditions';
+
+  @override
+  String r4_expSlots(int n, int max) {
+    return '$n/$max teams';
+  }
+
+  @override
+  String get r4_expHint =>
+      'Send unassigned crew. Time keeps running even with the app closed.';
+
+  @override
+  String get r4_expPassSlot => 'Commander Pass: +1 team';
+
+  @override
+  String get r4_expNoIdle => 'No crew free. Unassign someone or recruit.';
+
+  @override
+  String r4_expHours(int h) {
+    return '${h}h';
+  }
+
+  @override
+  String get r4_expLuck => '⭐/★3 luck';
+
+  @override
+  String r4_expLeft(String time) {
+    return '$time left';
+  }
+
+  @override
+  String get r4_expClaim => 'Back! Collect';
+
+  @override
+  String get r4_expAway => 'On expedition';
+
+  @override
+  String r4_expGot(String rewards) {
+    return 'Expedition loot: $rewards';
+  }
+
+  @override
+  String r4_timeHm(int h, int m) {
+    return '${h}h ${m}m';
+  }
+
+  @override
+  String r4_timeM(int m) {
+    return '${m}m';
+  }
+
+  @override
+  String r4_ascendExpWarn(int n) {
+    return '$n crew on expeditions will leave too, without rewards.';
+  }
 }

@@ -40,6 +40,7 @@ class PauseMenu extends StatelessWidget {
     required this.onQuit,
     required this.onClose,
     this.footer,
+    this.banner,
   });
 
   final String title;
@@ -51,6 +52,9 @@ class PauseMenu extends StatelessWidget {
   final VoidCallback onQuit;
   final VoidCallback onClose;
   final String? footer;
+
+  /// 통계 아래 작은 카드 (내일 출석 보상 미리보기 등, TASK 004)
+  final Widget? banner;
 
   @override
   Widget build(BuildContext context) => OverlayPanel(
@@ -81,6 +85,10 @@ class PauseMenu extends StatelessWidget {
           style: Ts.caption.copyWith(color: Colors.white60),
           textAlign: TextAlign.center,
         ),
+        if (banner != null) ...[
+          const SizedBox(height: Space.s),
+          banner!,
+        ],
         const SizedBox(height: Space.l),
         _resume(),
         const SizedBox(height: Space.m),

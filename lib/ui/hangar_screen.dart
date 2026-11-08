@@ -8,6 +8,8 @@ import '../game/ships.dart';
 import '../l10n/l.dart';
 import '../services/app_state.dart';
 import 'common.dart';
+import 'skin_image.dart';
+import '../game/cosmetics.dart' show skinById;
 import 'game_icons.dart';
 
 /// 함선 크게 보기: 한 장씩 넘겨 보며 탑승·구매한다.
@@ -203,11 +205,11 @@ class _HangarScreenState extends State<HangarScreen> with SingleTickerProviderSt
                         },
                         child: Opacity(
                           opacity: unlocked ? 1 : 0.55,
-                          child: Image.asset(
-                            'assets/sprites/ship_${t.id}_${p.skin}.png',
+                          child: shipSkinImage(
+                            t.id,
+                            skinById(p.skin),
                             width: shipSize * 0.9,
                             height: shipSize * 0.9,
-                            filterQuality: FilterQuality.medium,
                           ),
                         ),
                       ),

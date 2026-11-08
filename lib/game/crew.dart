@@ -100,6 +100,7 @@ class CrewMember {
     required this.lookSeed,
     this.level = 1,
     this.assigned = false,
+    this.xp = 0,
   }) : rawName = name;
 
   final int id;
@@ -117,6 +118,23 @@ class CrewMember {
   final int lookSeed;
   int level;
   bool assigned;
+
+  /// 원정 경험치 (TASK 004). 쌓이면 크레딧 없이 레벨이 오른다 ([gainXp])
+  int xp;
+
+  /// 경험치를 더하고 오른 레벨 수를 돌려준다 (Lv.n → n+1 에 n×3, 최고 레벨이면 쌓지 않는다)
+  int gainXp(int amount) {
+    if (level >= maxLevel) return 0;
+    xp += amount;
+    var ups = 0;
+    while (level < maxLevel && xp >= level * 3) {
+      xp -= level * 3;
+      level++;
+      ups++;
+    }
+    if (level >= maxLevel) xp = 0;
+    return ups;
+  }
 
   static const maxLevel = 5;
 
@@ -164,6 +182,7 @@ class CrewMember {
         'look': lookSeed,
         'level': level,
         'assigned': assigned,
+        'xp': xp,
       };
 
   static CrewMember fromJson(Map<String, dynamic> j) => CrewMember(
@@ -174,6 +193,7 @@ class CrewMember {
         lookSeed: j['look'] as int,
         level: j['level'] as int,
         assigned: j['assigned'] as bool,
+        xp: j['xp'] as int? ?? 0,
       );
 
   /// 희귀도 확률표 (게임 내 공개용)

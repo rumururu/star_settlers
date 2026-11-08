@@ -3390,4 +3390,531 @@ class L10nKo extends L10n {
     });
     return '$_temp0';
   }
+
+  @override
+  String get codex_title => '도감';
+
+  @override
+  String codex_tab(String tab) {
+    String _temp0 = intl.Intl.selectLogic(tab, {
+      'enemies': '적',
+      'planets': '행성',
+      'systems': '항성계',
+      'crew': '승무원',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_progress(int found, int total, int pct) {
+    return '$found/$total 발견 · $pct%';
+  }
+
+  @override
+  String codex_enemy(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'scout': '정찰선',
+      'raider': '습격선',
+      'bomber': '폭격선',
+      'sniper': '저격선',
+      'jelly': '우주 해파리',
+      'boss': '해적 두목',
+      'commander': '침공 지휘함',
+      'missile': '유도탄 포격선',
+      'mine': '기뢰 부설선',
+      'laser': '레이저 함',
+      'warden': '방패선',
+      'phantom': '유령선',
+      'medic': '수리선',
+      'carrier': '드론 모함',
+      'juggernaut': '중장갑 돌격함',
+      'arch_fleet': '해적 함대장',
+      'arch_devourer': '광맥 포식자',
+      'arch_flare': '플레어 포격함',
+      'arch_wraith': '이온 유령',
+      'arch_gravity': '중력 군주',
+      'arch_plunder': '약탈 상선',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String codex_kills(int n) {
+    return '처치 $n';
+  }
+
+  @override
+  String codex_fromSystem(int n) {
+    return '항성계 $n부터';
+  }
+
+  @override
+  String codex_planetKind(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'garden': '정원 행성',
+      'desert': '사막 행성',
+      'ice': '얼음 행성',
+      'lava': '용암 행성',
+      'gas': '가스 행성',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get codex_planetHint => '이 종류 행성에 정착하면 채워져요';
+
+  @override
+  String codex_settled(int n) {
+    return '정착한 행성 $n';
+  }
+
+  @override
+  String get codex_settledNone => '아직 정착한 행성이 없어요';
+
+  @override
+  String get codex_home => '본거지 · 특별한 환경 없음';
+
+  @override
+  String get codex_unreached => '워프 게이트로 도달하면 채워져요';
+
+  @override
+  String get codex_crewHint => '모집하면 채워져요';
+
+  @override
+  String get codex_rewards => '수집 보상';
+
+  @override
+  String codex_rewardCrew(String stars) {
+    return '$stars 승무원';
+  }
+
+  @override
+  String get codex_outfitName => '별지도 탐험가';
+
+  @override
+  String codex_newEntry(String name) {
+    return '도감에 새 항목: $name';
+  }
+
+  @override
+  String get codex_claimedLater => '보상은 게임을 시작하면 들어와요';
+
+  @override
+  String codex_pendingCrew(int n) {
+    return '정원이 차서 승무원 $n명이 자리를 기다려요';
+  }
+
+  @override
+  String r3_goalSettle(String planet) {
+    return '$planet에 정착하기';
+  }
+
+  @override
+  String r3_goalSettleNeed(String planet, int n) {
+    return '$planet 정착까지 💰$n';
+  }
+
+  @override
+  String r3_goalColonyUp(String planet, int level) {
+    return '$planet 식민지 Lv.$level';
+  }
+
+  @override
+  String r3_goalBuild(String planet, String building) {
+    return '$planet: $building 짓기';
+  }
+
+  @override
+  String get r3_goalAssignCrew => '정거장에서 승무원 배치하기';
+
+  @override
+  String get r3_goalWarp => '워프 게이트로 다음 항성계';
+
+  @override
+  String r3_goalDevelop(String sector) {
+    return '$sector 안정화 올리기';
+  }
+
+  @override
+  String get r3_goalMiniBoss => '해적 부두목 격파';
+
+  @override
+  String get r3_miniBossName => '해적 부두목';
+
+  @override
+  String get r3_miniBossArrive => '부두목 납신다! 신참 함장, 네 배는 내가 접수하지!';
+
+  @override
+  String get r3_miniBossHint =>
+      '해적 부두목이에요! 지금 함선으로도 잡을 수 있어요. 계속 쏘면서 체력이 줄면 물러났다가 다시 붙어요!';
+
+  @override
+  String get r3_miniBossLose => '이, 이럴 수가… 두목님께 이를 거야!';
+
+  @override
+  String get r3_miniBossDown => '부두목을 잡았어요! 떨어뜨린 부품으로 무기를 공짜로 강화했어요!';
+
+  @override
+  String r3_weaponUp(int level) {
+    return '무기 Lv.$level!';
+  }
+
+  @override
+  String r3_star3Line(String name) {
+    return '실력이 좋은데요? 본부에서 ★3 베테랑을 보내 줬어요. 반겨 주세요, $name!';
+  }
+
+  @override
+  String get r3_crewAssigned => '자동 배치 완료 — 효과가 바로 적용돼요';
+
+  @override
+  String get rift_title => '균열 런';
+
+  @override
+  String get rift_menuSub => '오늘의 균열 · 3~5분';
+
+  @override
+  String rift_locked(String step) {
+    return '‘$step’ 단계를 마치면 열려요';
+  }
+
+  @override
+  String get rift_rules =>
+      '파도 10개를 버티고 10파의 균열 두목을 쓰러뜨리세요. 파도를 넘길 때마다 카드 한 장으로 강해져요. 메인 게임 강화는 적용되지 않아요 — 모두 같은 함선으로 같은 오늘의 균열을 달려요.';
+
+  @override
+  String rift_bestLine(String score, int wave) {
+    return '개인 최고 $score점 · 파도 $wave';
+  }
+
+  @override
+  String get rift_noBest => '아직 기록이 없어요';
+
+  @override
+  String rift_fullLeft(int n) {
+    return '오늘 전액 보상 $n판 남음';
+  }
+
+  @override
+  String get rift_fullUsed => '오늘 전액 보상을 다 받았어요 (이후 1/4)';
+
+  @override
+  String get rift_start => '출격';
+
+  @override
+  String rift_wave(int n, int total) {
+    return '파도 $n/$total';
+  }
+
+  @override
+  String rift_score(String score) {
+    return '점수 $score';
+  }
+
+  @override
+  String rift_incoming(int n, int s) {
+    return '파도 $n · $s초 뒤 접근';
+  }
+
+  @override
+  String rift_bossIncoming(int s) {
+    return '균열 두목 · $s초 뒤 출현';
+  }
+
+  @override
+  String rift_enemiesLeft(int n) {
+    return '남은 적 $n';
+  }
+
+  @override
+  String get rift_collapse => '균열 붕괴 중!';
+
+  @override
+  String rift_pickTitle(int n) {
+    return '파도 $n 돌파! 카드를 한 장 고르세요';
+  }
+
+  @override
+  String rift_cardLevel(int lv, int max) {
+    return 'Lv $lv/$max';
+  }
+
+  @override
+  String get rift_rarityCommon => '일반';
+
+  @override
+  String get rift_rarityRare => '희귀';
+
+  @override
+  String get rift_rarityEpic => '영웅';
+
+  @override
+  String get rift_cardDamage => '화력 강화';
+
+  @override
+  String get rift_cardDamageDesc => '탄 피해 +25%';
+
+  @override
+  String get rift_cardRapid => '연사';
+
+  @override
+  String get rift_cardRapidDesc => '발사 간격 −15%';
+
+  @override
+  String get rift_cardMultishot => '다중 사격';
+
+  @override
+  String get rift_cardMultishotDesc => '한 번에 1발 더 쏩니다';
+
+  @override
+  String get rift_cardPierce => '관통탄';
+
+  @override
+  String get rift_cardPierceDesc => '탄이 적을 1척 더 뚫고 나가요';
+
+  @override
+  String get rift_cardHoming => '유도 미사일';
+
+  @override
+  String get rift_cardHomingDesc => '몇 초마다 유도 미사일이 자동으로 날아가요';
+
+  @override
+  String get rift_cardRegen => '실드 재생';
+
+  @override
+  String get rift_cardRegenDesc => '초당 체력 2 회복';
+
+  @override
+  String get rift_cardDrone => '전투 드론';
+
+  @override
+  String get rift_cardDroneDesc => '드론이 근처 적을 쏴요. 겹칠수록 강해져요';
+
+  @override
+  String get rift_cardMagnet => '자석';
+
+  @override
+  String get rift_cardMagnetDesc => '균열 조각을 더 멀리서 끌어와요';
+
+  @override
+  String get rift_cardCrit => '치명타';
+
+  @override
+  String get rift_cardCritDesc => '12% 확률로 2.5배 피해';
+
+  @override
+  String get rift_cardBlades => '회전 칼날';
+
+  @override
+  String get rift_cardBladesDesc => '함선 주위를 도는 칼날 +1';
+
+  @override
+  String get rift_cardHull => '강화 선체';
+
+  @override
+  String get rift_cardHullDesc => '최대 체력 +35, 즉시 전부 회복';
+
+  @override
+  String get rift_cardEngine => '추진기';
+
+  @override
+  String get rift_cardEngineDesc => '이동 속도 +12%';
+
+  @override
+  String get rift_cardShockwave => '충격파';
+
+  @override
+  String get rift_cardShockwaveDesc => '주기적으로 주변 적 모두에게 피해';
+
+  @override
+  String get rift_cardGuard => '보호막';
+
+  @override
+  String get rift_cardGuardDesc => '몇 초마다 피격 1회를 막아요';
+
+  @override
+  String get rift_cardVampire => '흡수';
+
+  @override
+  String get rift_cardVampireDesc => '적을 격추할 때마다 체력 3 회복';
+
+  @override
+  String get rift_resultWin => '균열 정복!';
+
+  @override
+  String get rift_resultLose => '균열에서 격추됐어요';
+
+  @override
+  String get rift_resultGaveUp => '균열에서 철수했어요';
+
+  @override
+  String rift_reached(int n) {
+    return '도달 파도 $n';
+  }
+
+  @override
+  String get rift_newBest => '개인 최고 기록!';
+
+  @override
+  String get rift_rewardTitle => '메인 게임으로 가져가는 보상';
+
+  @override
+  String get rift_rewardReduced => '오늘 4판째부터는 보상이 1/4이에요';
+
+  @override
+  String get rift_noSave => '메인 게임 저장이 없어 크레딧·광석은 받지 못했어요';
+
+  @override
+  String get rift_again => '다시 도전';
+
+  @override
+  String get rift_exit => '나가기';
+
+  @override
+  String get rift_giveUp => '포기하고 나가기';
+
+  @override
+  String get rift_giveUpNote => '나가면 이번 판은 포기로 끝나요. 도달한 파도까지의 점수와 보상은 받아요.';
+
+  @override
+  String get rift_tabPioneer => '개척 점수';
+
+  @override
+  String get rift_tabRift => '균열';
+
+  @override
+  String get rift_boardHow =>
+      '이번 주 균열 런 최고 점수로 순위를 매겨요. 모두 같은 오늘의 균열과 같은 함선으로 겨뤄요.';
+
+  @override
+  String rift_myWeek(String score, int wave) {
+    return '이번 주 최고 $score점 · 파도 $wave';
+  }
+
+  @override
+  String get rift_noWeekRun => '이번 주 균열 기록이 아직 없어요';
+
+  @override
+  String rift_waveShort(int n) {
+    return '$n파';
+  }
+
+  @override
+  String get r4_calendarTitle => '7일 출석 달력';
+
+  @override
+  String r4_calendarStreak(int n) {
+    return '연속 $n일째 접속';
+  }
+
+  @override
+  String get r4_calendarHint => '하루라도 빠지면 1일째부터 다시 시작해요. 7일째에는 출석 전용 함선 스킨!';
+
+  @override
+  String get r4_calendarToday => '오늘';
+
+  @override
+  String get r4_calendarClaim => '오늘 보상 받기';
+
+  @override
+  String get r4_calendarClaimed => '오늘 보상을 받았어요!';
+
+  @override
+  String get r4_rewardOre => '광석 상자';
+
+  @override
+  String get r4_rewardCredits => '크레딧 묶음';
+
+  @override
+  String get r4_rewardCrew2 => '★2 승무원';
+
+  @override
+  String get r4_rewardCrew3 => '★3 승무원';
+
+  @override
+  String get r4_rewardSkin => '전용 함선 스킨';
+
+  @override
+  String r4_tomorrow(String reward) {
+    return '내일 접속: $reward';
+  }
+
+  @override
+  String get r4_skinName => '개근 별빛';
+
+  @override
+  String get r4_attendanceOnly => '7일 출석 보상';
+
+  @override
+  String get r4_notifCalendarTitle => '출석 보상이 기다려요';
+
+  @override
+  String r4_notifCalendarBody(String reward) {
+    return '오늘 접속 보상: $reward';
+  }
+
+  @override
+  String get r4_notifExpeditionTitle => '원정대 귀환!';
+
+  @override
+  String get r4_notifExpeditionBody => '승무원이 보상을 들고 돌아왔어요. 정거장에서 받아요.';
+
+  @override
+  String get r4_expTitle => '승무원 원정';
+
+  @override
+  String r4_expSlots(int n, int max) {
+    return '$n/$max팀';
+  }
+
+  @override
+  String get r4_expHint => '배치하지 않은 승무원을 보내요. 앱을 꺼도 시간이 흘러요.';
+
+  @override
+  String get r4_expPassSlot => '사령관 패스: 원정 +1팀';
+
+  @override
+  String get r4_expNoIdle => '보낼 승무원이 없어요. 배치를 풀거나 새로 영입해요.';
+
+  @override
+  String r4_expHours(int h) {
+    return '$h시간';
+  }
+
+  @override
+  String get r4_expLuck => '⭐·★3 행운';
+
+  @override
+  String r4_expLeft(String time) {
+    return '$time 남음';
+  }
+
+  @override
+  String get r4_expClaim => '귀환! 보상 받기';
+
+  @override
+  String get r4_expAway => '원정 중';
+
+  @override
+  String r4_expGot(String rewards) {
+    return '원정 보상: $rewards';
+  }
+
+  @override
+  String r4_timeHm(int h, int m) {
+    return '$h시간 $m분';
+  }
+
+  @override
+  String r4_timeM(int m) {
+    return '$m분';
+  }
+
+  @override
+  String r4_ascendExpWarn(int n) {
+    return '원정 중인 승무원 $n명도 보상 없이 함께 떠나요.';
+  }
 }
