@@ -4227,4 +4227,193 @@ class L10nFr extends L10n {
   String r4_ascendExpWarn(int n) {
     return '$n équipiers en expédition partiront aussi, sans butin.';
   }
+
+  @override
+  String srf_dlgUnlock(String planet) {
+    return 'On peut se poser sur $planet ! Touchez « Atterrir et explorer » près de la planète pour chercher ruines et filons en rover.';
+  }
+
+  @override
+  String get srf_dlgOxygen =>
+      'Plus que 30 secondes d\'oxygène ! Les créatures affluent. Suivez la flèche jusqu\'à l\'atterrisseur !';
+
+  @override
+  String srf_site(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Ruines',
+      'wreck': 'Épave',
+      'nest': 'Nid alien',
+      'vein': 'Filon rare',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_floatSite(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Fouille finie !',
+      'wreck': 'Cargaison récupérée !',
+      'nest': 'Nid détruit !',
+      'vein': 'Filon trouvé !',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_floatRelic => 'Relique trouvée !';
+
+  @override
+  String srf_relicName(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': 'Carte stellaire antique',
+      'crystalCore': 'Noyau de cristal',
+      'idol': 'Idole extraterrestre',
+      'gear': 'Engrenage antique',
+      'seed': 'Graine fossile',
+      'mask': 'Masque rituel',
+      'tablet': 'Tablette de pierre',
+      'compass': 'Boussole gravitationnelle',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_relicDesc(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': 'Une plaque gravée de constellations disparues.',
+      'crystalCore': 'Il palpite doucement dans la main.',
+      'idol': 'Personne ne sait qui elle représente.',
+      'gear': 'Il tourne encore, très lentement.',
+      'seed': 'Elle germera peut-être si on l\'arrose.',
+      'mask': 'Un masque rituel à trois trous pour les yeux.',
+      'tablet': 'Couverte d\'une écriture que même Mina ne lit pas.',
+      'compass': 'L\'aiguille pointe toujours le centre galactique.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_codexTab => 'Reliques';
+
+  @override
+  String get srf_relicHint => 'À déterrer dans les ruines';
+
+  @override
+  String get srf_land => 'Atterrir et explorer';
+
+  @override
+  String get srf_gasNoLand => 'Géante gazeuse — atterrissage impossible';
+
+  @override
+  String srf_introTitle(String planet) {
+    return 'Surface de $planet';
+  }
+
+  @override
+  String srf_disc(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Filon trouvé',
+      'nest': 'Nid détruit',
+      'surveyed': 'Exploration complète',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_discEffect(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Minerai +0,4/s × niveau',
+      'nest': 'Bouclier max ×1,25',
+      'surveyed': 'Crédits ×1,1',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_noDisc => 'Aucune découverte sur cette planète';
+
+  @override
+  String get srf_discPending => 'Effet actif après colonisation';
+
+  @override
+  String srf_fullLeft(int n, int total) {
+    return 'Récompenses complètes aujourd\'hui : $n/$total';
+  }
+
+  @override
+  String get srf_reduced =>
+      'Les récompenses complètes du jour sont épuisées. Crédits et minerai à 30 % cette fois. Découvertes et reliques comptent toujours.';
+
+  @override
+  String get srf_rule1 => 'Trouvez et explorez les 5 sites';
+
+  @override
+  String get srf_rule2 =>
+      'Revenez à l\'atterrisseur avant d\'être à court d\'oxygène';
+
+  @override
+  String get srf_rule3 => 'Détruit ou sans oxygène : la moitié du butin';
+
+  @override
+  String get srf_launch => 'Atterrir';
+
+  @override
+  String get srf_oxygen => 'O₂';
+
+  @override
+  String srf_sitesLeft(int n) {
+    return 'Sites restants $n';
+  }
+
+  @override
+  String get srf_return => 'Repartir';
+
+  @override
+  String get srf_leaveTitle => 'Arrêter l\'exploration ?';
+
+  @override
+  String get srf_leaveBody =>
+      'Un retour d\'urgence ne garde que la moitié du butin.';
+
+  @override
+  String get srf_leaveYes => 'Retour d\'urgence';
+
+  @override
+  String srf_resultTitle(String reason) {
+    String _temp0 = intl.Intl.selectLogic(reason, {
+      'returned': 'Retour réussi !',
+      'oxygen': 'Retour d\'urgence',
+      'destroyed': 'Rover détruit',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_kept(int pct) {
+    return '$pct % du butin conservé';
+  }
+
+  @override
+  String srf_sitesDone(int done, int total) {
+    return 'Sites explorés $done/$total';
+  }
+
+  @override
+  String get srf_newDisc => 'Nouvelles découvertes';
+
+  @override
+  String get srf_newRelic => 'Nouvelles reliques';
+
+  @override
+  String get srf_back => 'Retour en orbite';
+
+  @override
+  String get srf_colonyDisc => 'Découvertes en surface';
 }

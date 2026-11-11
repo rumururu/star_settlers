@@ -4277,4 +4277,192 @@ class L10nRu extends L10n {
   String r4_ascendExpWarn(int n) {
     return '$n членов экипажа в экспедиции тоже уйдут, без награды.';
   }
+
+  @override
+  String srf_dlgUnlock(String planet) {
+    return 'На $planet можно сесть! Нажмите «Высадка» рядом с планетой, чтобы искать на поверхности руины и жилы на вездеходе.';
+  }
+
+  @override
+  String get srf_dlgOxygen =>
+      'Кислорода осталось на 30 секунд! Твари наступают. Следуйте за стрелкой к посадочному модулю!';
+
+  @override
+  String srf_site(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Руины',
+      'wreck': 'Обломки корабля',
+      'nest': 'Гнездо чужих',
+      'vein': 'Редкая жила',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_floatSite(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Раскопано!',
+      'wreck': 'Груз найден!',
+      'nest': 'Гнездо уничтожено!',
+      'vein': 'Жила найдена!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_floatRelic => 'Найдена реликвия!';
+
+  @override
+  String srf_relicName(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': 'Древняя звёздная карта',
+      'crystalCore': 'Кристальное ядро',
+      'idol': 'Инопланетный идол',
+      'gear': 'Древняя шестерня',
+      'seed': 'Окаменелое семя',
+      'mask': 'Ритуальная маска',
+      'tablet': 'Каменная скрижаль',
+      'compass': 'Гравикомпас',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_relicDesc(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': 'Металлическая пластина с исчезнувшими созвездиями.',
+      'crystalCore': 'В руке оно едва заметно пульсирует.',
+      'idol': 'Никто не знает, кого он изображает.',
+      'gear': 'Она всё ещё очень медленно вращается.',
+      'seed': 'Если полить, может, и прорастёт.',
+      'mask': 'Ритуальная маска с тремя прорезями для глаз.',
+      'tablet': 'Испещрена письменами, которые не может прочесть даже Мина.',
+      'compass': 'Стрелка всегда указывает на центр Галактики.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_codexTab => 'Реликвии';
+
+  @override
+  String get srf_relicHint => 'Ищите в руинах планет';
+
+  @override
+  String get srf_land => 'Высадка';
+
+  @override
+  String get srf_gasNoLand => 'Газовый гигант — посадка невозможна';
+
+  @override
+  String srf_introTitle(String planet) {
+    return 'Поверхность: $planet';
+  }
+
+  @override
+  String srf_disc(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Жила найдена',
+      'nest': 'Гнездо уничтожено',
+      'surveyed': 'Полностью исследовано',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_discEffect(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Руда +0,4/с × уровень',
+      'nest': 'Макс. щит ×1,25',
+      'surveyed': 'Кредиты ×1,1',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_noDisc => 'На этой планете пока ничего не найдено';
+
+  @override
+  String get srf_discPending => 'Действует после заселения';
+
+  @override
+  String srf_fullLeft(int n, int total) {
+    return 'Полных наград сегодня: $n/$total';
+  }
+
+  @override
+  String get srf_reduced =>
+      'Полные награды на сегодня исчерпаны. Кредиты и руда — 30 %. Находки и реликвии засчитываются как обычно.';
+
+  @override
+  String get srf_rule1 => 'Найдите и исследуйте 5 точек';
+
+  @override
+  String get srf_rule2 => 'Вернитесь к модулю, пока не кончился кислород';
+
+  @override
+  String get srf_rule3 => 'Уничтожены или без кислорода — половина добычи';
+
+  @override
+  String get srf_launch => 'Сесть';
+
+  @override
+  String get srf_oxygen => 'O₂';
+
+  @override
+  String srf_sitesLeft(int n) {
+    return 'Осталось точек $n';
+  }
+
+  @override
+  String get srf_return => 'Взлёт';
+
+  @override
+  String get srf_leaveTitle => 'Прервать вылазку?';
+
+  @override
+  String get srf_leaveBody =>
+      'При экстренном взлёте сохранится только половина добычи.';
+
+  @override
+  String get srf_leaveYes => 'Экстренный взлёт';
+
+  @override
+  String srf_resultTitle(String reason) {
+    String _temp0 = intl.Intl.selectLogic(reason, {
+      'returned': 'Успешный взлёт!',
+      'oxygen': 'Экстренный взлёт',
+      'destroyed': 'Вездеход уничтожен',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_kept(int pct) {
+    return 'Сохранено $pct% добычи';
+  }
+
+  @override
+  String srf_sitesDone(int done, int total) {
+    return 'Исследовано точек $done/$total';
+  }
+
+  @override
+  String get srf_newDisc => 'Новые находки';
+
+  @override
+  String get srf_newRelic => 'Новые реликвии';
+
+  @override
+  String get srf_back => 'На орбиту';
+
+  @override
+  String get srf_colonyDisc => 'Находки на поверхности';
 }

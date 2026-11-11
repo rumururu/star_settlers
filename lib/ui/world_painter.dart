@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../game/cosmetics.dart';
 import '../game/campaign.dart';
 import '../game/models.dart';
+import '../game/surface.dart' show creatureOf;
 import '../game/system_traits.dart';
 import '../game/world.dart';
 import '../l10n/l.dart';
@@ -12,6 +13,7 @@ import 'chibi.dart';
 import 'colony_buildings.dart';
 import 'sprites.dart';
 import 'star_systems.dart';
+import 'surface_painter.dart';
 
 class _Star {
   _Star(this.x, this.y, this.depth, this.size, this.twinkle);
@@ -80,19 +82,26 @@ class WorldPainter extends CustomPainter {
         ? Offset((r.nextDouble() - 0.5) * shake, (r.nextDouble() - 0.5) * shake)
         : Offset.zero;
     final t = world.totalTime;
+    final w = world;
+    // 지표 탐험: 우주 배경 대신 지형 (surface_painter.dart)
+    final surface = w is SurfaceWorld ? w : null;
 
-    final look = starSystemLook(world.sector);
-    final tint = look.bg;
-    canvas.drawRect(
-      Offset.zero & size,
-      Paint()
-        ..shader = RadialGradient(
-          colors: [tint.$1, tint.$2],
-          radius: 1.2,
-        ).createShader(Offset.zero & size),
-    );
-    _paintNebula(canvas, size, cam, look.nebula);
-    _paintStars(canvas, size, cam, t);
+    if (surface != null) {
+      paintSurfaceBackdrop(canvas, size, surface);
+    } else {
+      final look = starSystemLook(world.sector);
+      final tint = look.bg;
+      canvas.drawRect(
+        Offset.zero & size,
+        Paint()
+          ..shader = RadialGradient(
+            colors: [tint.$1, tint.$2],
+            radius: 1.2,
+          ).createShader(Offset.zero & size),
+      );
+      _paintNebula(canvas, size, cam, look.nebula);
+      _paintStars(canvas, size, cam, t);
+    }
 
     canvas.save();
     canvas.translate(
@@ -108,6 +117,79 @@ class WorldPainter extends CustomPainter {
       height: size.height / zoom + 600,
     );
 
+    if (surface != null) {
+      paintSurfaceGround(canvas, surface, view, t);
+    } else {
+      _paintSpace(canvas, view, t);
+    }
+    for (final k in world.pickups) {
+      if (view.contains(k.pos)) _paintPickup(canvas, k, t);
+    }
+    final pp = Paint();
+    for (final p in world.particles) {
+      if (!view.contains(p.pos)) continue;
+      final f = (p.life / p.maxLife).clamp(0.0, 1.0);
+      pp.color = p.color.withValues(alpha: f);
+      canvas.drawCircle(p.pos, p.size * (0.5 + f * 0.5), pp);
+    }
+    for (final b in world.beams) {
+      final a = b.life / LaserBeam.duration;
+      canvas.drawLine(
+        b.from,
+        b.to,
+        Paint()
+          ..color =
+              (b.hostile ? const Color(0xFFFF1744) : const Color(0xFFFFD54F))
+                  .withValues(alpha: 0.35 * a)
+          ..strokeWidth = b.hostile ? 20 : 14
+          ..strokeCap = StrokeCap.round,
+      );
+      canvas.drawLine(
+        b.from,
+        b.to,
+        Paint()
+          ..color = Colors.white.withValues(alpha: a)
+          ..strokeWidth = 4
+          ..strokeCap = StrokeCap.round,
+      );
+    }
+    if (world.sector == campaignFinalSector) _paintFinalMission(canvas, t);
+    for (final b in world.bullets) {
+      _paintBullet(canvas, b);
+    }
+    for (final m in world.missiles) {
+      _paintMissile(canvas, m);
+    }
+    for (final m in world.mines) {
+      if (view.contains(m.pos)) _paintMine(canvas, m, t);
+    }
+    for (final m in world.enemyMissiles) {
+      _paintEnemyMissile(canvas, m);
+    }
+    for (final e in world.pirates) {
+      if (view.inflate(60).contains(e.pos)) _paintPirate(canvas, e, t);
+    }
+    if (world.player.alive && surface != null) {
+      paintRover(canvas, surface, t);
+      if (world.droneLevel > 0) _paintDrone(canvas, t);
+    } else if (world.player.alive) {
+      _paintPlayer(canvas, t);
+      if (world.droneLevel > 0) _paintDrone(canvas, t);
+    }
+    for (final f in world.floats) {
+      // 알파를 4단계로 나눠 TextPainter 캐시 재사용
+      final a = ((f.life.clamp(0.0, 1.0) * 4).ceil() / 4).clamp(0.25, 1.0);
+      final tp = _text(f.text, f.color.withValues(alpha: a), f.big ? 20 : 15);
+      tp.paint(canvas, f.pos - Offset(tp.width / 2, tp.height / 2));
+    }
+
+    canvas.restore();
+    _paintOffscreenArrows(canvas, size, cam);
+    if (surface != null) paintSurfaceArrows(canvas, size, cam, zoom, surface, t);
+  }
+
+  /// 우주 배경 위 물체: 경계·궤도·항성·게이트·행성·정거장·이벤트·임무 표시·소행성
+  void _paintSpace(Canvas canvas, Rect view, double t) {
     _paintBoundary(canvas);
     _paintOrbits(canvas, view);
     _paintEnergyLinks(canvas, t);
@@ -198,66 +280,6 @@ class WorldPainter extends CustomPainter {
     for (final a in world.asteroids) {
       if (view.contains(a.pos)) _paintAsteroid(canvas, a);
     }
-    for (final k in world.pickups) {
-      if (view.contains(k.pos)) _paintPickup(canvas, k, t);
-    }
-    final pp = Paint();
-    for (final p in world.particles) {
-      if (!view.contains(p.pos)) continue;
-      final f = (p.life / p.maxLife).clamp(0.0, 1.0);
-      pp.color = p.color.withValues(alpha: f);
-      canvas.drawCircle(p.pos, p.size * (0.5 + f * 0.5), pp);
-    }
-    for (final b in world.beams) {
-      final a = b.life / LaserBeam.duration;
-      canvas.drawLine(
-        b.from,
-        b.to,
-        Paint()
-          ..color =
-              (b.hostile ? const Color(0xFFFF1744) : const Color(0xFFFFD54F))
-                  .withValues(alpha: 0.35 * a)
-          ..strokeWidth = b.hostile ? 20 : 14
-          ..strokeCap = StrokeCap.round,
-      );
-      canvas.drawLine(
-        b.from,
-        b.to,
-        Paint()
-          ..color = Colors.white.withValues(alpha: a)
-          ..strokeWidth = 4
-          ..strokeCap = StrokeCap.round,
-      );
-    }
-    if (world.sector == campaignFinalSector) _paintFinalMission(canvas, t);
-    for (final b in world.bullets) {
-      _paintBullet(canvas, b);
-    }
-    for (final m in world.missiles) {
-      _paintMissile(canvas, m);
-    }
-    for (final m in world.mines) {
-      if (view.contains(m.pos)) _paintMine(canvas, m, t);
-    }
-    for (final m in world.enemyMissiles) {
-      _paintEnemyMissile(canvas, m);
-    }
-    for (final e in world.pirates) {
-      if (view.inflate(60).contains(e.pos)) _paintPirate(canvas, e, t);
-    }
-    if (world.player.alive) {
-      _paintPlayer(canvas, t);
-      if (world.droneLevel > 0) _paintDrone(canvas, t);
-    }
-    for (final f in world.floats) {
-      // 알파를 4단계로 나눠 TextPainter 캐시 재사용
-      final a = ((f.life.clamp(0.0, 1.0) * 4).ceil() / 4).clamp(0.25, 1.0);
-      final tp = _text(f.text, f.color.withValues(alpha: a), f.big ? 20 : 15);
-      tp.paint(canvas, f.pos - Offset(tp.width / 2, tp.height / 2));
-    }
-
-    canvas.restore();
-    _paintOffscreenArrows(canvas, size, cam);
   }
 
   void _paintNebula(Canvas canvas, Size size, Offset cam, List<Color> colors) {
@@ -1707,6 +1729,12 @@ class WorldPainter extends CustomPainter {
     }
     if (e.kind == PirateKind.jelly) {
       _paintJelly(canvas, e, t);
+      return;
+    }
+    // 지표 탐험: 적 대신 생물 그림
+    final creature = world is SurfaceWorld ? creatureOf(e.kind) : null;
+    if (creature != null) {
+      paintCreature(canvas, e, creature, t);
       return;
     }
     if (e.enraged) {

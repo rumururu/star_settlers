@@ -4035,4 +4035,191 @@ class L10nId extends L10n {
   String r4_ascendExpWarn(int n) {
     return '$n kru yang sedang ekspedisi juga pergi tanpa hadiah.';
   }
+
+  @override
+  String srf_dlgUnlock(String planet) {
+    return 'Kita bisa mendarat di $planet! Ketuk \"Mendarat & jelajahi\" di dekat planet untuk mencari reruntuhan dan urat bijih dengan rover.';
+  }
+
+  @override
+  String get srf_dlgOxygen =>
+      'Oksigen tinggal 30 detik! Makhluk berdatangan. Ikuti panah kembali ke pendarat!';
+
+  @override
+  String srf_site(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Reruntuhan',
+      'wreck': 'Bangkai kapal',
+      'nest': 'Sarang alien',
+      'vein': 'Urat langka',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_floatSite(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Tergali!',
+      'wreck': 'Muatan didapat!',
+      'nest': 'Sarang hancur!',
+      'vein': 'Urat ditemukan!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_floatRelic => 'Relik ditemukan!';
+
+  @override
+  String srf_relicName(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': 'Peta Bintang Kuno',
+      'crystalCore': 'Inti Kristal',
+      'idol': 'Patung Alien',
+      'gear': 'Roda Gigi Kuno',
+      'seed': 'Biji Fosil',
+      'mask': 'Topeng Ritual',
+      'tablet': 'Prasasti Batu',
+      'compass': 'Kompas Gravitasi',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_relicDesc(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': 'Pelat logam berukir rasi bintang yang sudah tiada.',
+      'crystalCore': 'Berdenyut samar saat digenggam.',
+      'idol': 'Tak ada yang tahu siapa yang dimiripinya.',
+      'gear': 'Masih berputar, sangat pelan.',
+      'seed': 'Mungkin bertunas jika disiram.',
+      'mask': 'Topeng ritual dengan tiga lubang mata.',
+      'tablet': 'Penuh tulisan yang bahkan Mina tak bisa baca.',
+      'compass': 'Jarumnya selalu menunjuk pusat galaksi.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_codexTab => 'Relik';
+
+  @override
+  String get srf_relicHint => 'Gali di reruntuhan planet';
+
+  @override
+  String get srf_land => 'Mendarat & jelajahi';
+
+  @override
+  String get srf_gasNoLand => 'Planet gas — tak bisa mendarat';
+
+  @override
+  String srf_introTitle(String planet) {
+    return 'Permukaan $planet';
+  }
+
+  @override
+  String srf_disc(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Urat ditemukan',
+      'nest': 'Sarang hancur',
+      'surveyed': 'Jelajah tuntas',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_discEffect(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Bijih +0,4/dtk × level',
+      'nest': 'Perisai maks ×1,25',
+      'surveyed': 'Kredit ×1,1',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_noDisc => 'Belum ada temuan di planet ini';
+
+  @override
+  String get srf_discPending => 'Berlaku setelah dihuni';
+
+  @override
+  String srf_fullLeft(int n, int total) {
+    return 'Hadiah penuh hari ini: sisa $n/$total';
+  }
+
+  @override
+  String get srf_reduced =>
+      'Hadiah penuh hari ini sudah habis. Kredit dan bijih kali ini 30%. Temuan dan relik tetap didapat.';
+
+  @override
+  String get srf_rule1 => 'Temukan dan selidiki 5 lokasi';
+
+  @override
+  String get srf_rule2 => 'Kembali ke pendarat sebelum oksigen habis';
+
+  @override
+  String get srf_rule3 => 'Hancur atau kehabisan oksigen: rampasan separuh';
+
+  @override
+  String get srf_launch => 'Mendarat';
+
+  @override
+  String get srf_oxygen => 'O₂';
+
+  @override
+  String srf_sitesLeft(int n) {
+    return 'Sisa lokasi $n';
+  }
+
+  @override
+  String get srf_return => 'Kembali';
+
+  @override
+  String get srf_leaveTitle => 'Berhenti menjelajah?';
+
+  @override
+  String get srf_leaveBody => 'Kembali darurat hanya membawa separuh rampasan.';
+
+  @override
+  String get srf_leaveYes => 'Kembali darurat';
+
+  @override
+  String srf_resultTitle(String reason) {
+    String _temp0 = intl.Intl.selectLogic(reason, {
+      'returned': 'Kembali selamat!',
+      'oxygen': 'Kembali darurat',
+      'destroyed': 'Rover hancur',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_kept(int pct) {
+    return '$pct% rampasan dibawa';
+  }
+
+  @override
+  String srf_sitesDone(int done, int total) {
+    return 'Lokasi diselidiki $done/$total';
+  }
+
+  @override
+  String get srf_newDisc => 'Temuan baru';
+
+  @override
+  String get srf_newRelic => 'Relik baru';
+
+  @override
+  String get srf_back => 'Kembali ke orbit';
+
+  @override
+  String get srf_colonyDisc => 'Temuan permukaan';
 }

@@ -2,12 +2,14 @@ import 'crew.dart';
 import 'models.dart';
 import 'profile.dart';
 import 'star_catalog.dart';
+import 'surface.dart' show relicIds;
 import 'system_traits.dart';
 
 /// 도감 (TASK 006). 만난 적·정착한 행성 종류·도달한 항성계·얻어 본 승무원 조합을 모은다.
 /// 계정 단위([Profile.codex])라 새 게임·은하 명예(환생) 뒤에도 남는다.
 /// 게임 코드는 [GameWorld]의 기존 처치/정착/도착/승무원 지점에서 한 줄씩 부른다.
-enum CodexTab { enemies, planets, systems, crew }
+/// 유물(relics)은 행성 지표 탐험 유적에서 발굴한다 (surface-exploration).
+enum CodexTab { enemies, planets, systems, crew, relics }
 
 /// 적 도감 항목 (등장 순서). 항성계 두목 원형은 `arch_<원형>`.
 const codexEnemyIds = [
@@ -83,6 +85,26 @@ int codexEnemySector(String id) {
 /// 마일스톤 (탭별 퍼센트)
 const codexMilestones = [25, 50, 75, 100];
 
+/// 탭의 마일스톤. 유물 탭은 8종 모두 모았을 때 한 번 ([codexRelicReward]).
+List<int> codexMilestonesOf(CodexTab tab) =>
+    tab == CodexTab.relics ? const [100] : codexMilestones;
+
+/// 유물 8종 모두: ★3 승무원 + 크레딧·광석 (젬 없음)
+const codexRelicReward = CodexReward(credits: 8000, ore: 4000, crewRarity: 3);
+
+/// 탭별 마일스톤 보상
+CodexReward codexRewardOf(CodexTab tab, int pct) =>
+    tab == CodexTab.relics ? codexRelicReward : codexReward(pct);
+
+/// 유물 그림 이름 (assets/sprites)
+String relicSprite(String id) => 'relic_$id';
+
+/// 유물 id → 번역 select 키 (star_map → starMap)
+String relicKey(String id) => id.replaceAllMapped(
+  RegExp(r'_([a-z])'),
+  (m) => m.group(1)!.toUpperCase(),
+);
+
 /// 마일스톤 보상. 젬은 쓰지 않는다 (공통 규칙: 새 젬 출처 금지).
 /// 100%: ★3 승무원 + 도감 전용 선장 의상(처음 한 번).
 class CodexReward {
@@ -129,6 +151,9 @@ class Codex {
 
   /// 얻어 본 승무원 "직업:★"
   final crew = <String>{};
+
+  /// 발굴한 유물 ([relicIds])
+  final relics = <String>{};
 
   /// 받은 마일스톤 "탭:퍼센트"
   final claimed = <String>{};
@@ -203,12 +228,19 @@ class Codex {
     return _discover(CodexTab.crew, id, silent: silent);
   }
 
+  /// 유물 발굴. 처음이면 true (도감 토스트)
+  bool recordRelic(String id) {
+    if (!relicIds.contains(id) || !relics.add(id)) return false;
+    return _discover(CodexTab.relics, id);
+  }
+
   // ---------- 진행도 ----------
   bool found(CodexTab tab, String id) => switch (tab) {
     CodexTab.enemies => (kills[id] ?? 0) > 0,
     CodexTab.planets => planetKinds.contains(id),
     CodexTab.systems => systems.contains(int.tryParse(id)),
     CodexTab.crew => crew.contains(id),
+    CodexTab.relics => relics.contains(id),
   };
 
   static List<String> ids(CodexTab tab) => switch (tab) {
@@ -216,6 +248,7 @@ class Codex {
     CodexTab.planets => [for (final k in PlanetKind.values) k.name],
     CodexTab.systems => [for (var s = 0; s < catalogSystemCount; s++) '$s'],
     CodexTab.crew => codexCrewIds,
+    CodexTab.relics => relicIds,
   };
 
   int foundCount(CodexTab tab) => ids(tab).where((id) => found(tab, id)).length;
@@ -231,7 +264,7 @@ class Codex {
   /// 받을 수 있는 마일스톤 수
   int get claimable => [
     for (final t in CodexTab.values)
-      for (final m in codexMilestones)
+      for (final m in codexMilestonesOf(t))
         if (canClaim(t, m)) 1,
   ].length;
 
@@ -252,9 +285,11 @@ class Codex {
   /// 마일스톤 수령. 보상은 [pendingCredits] 등에 쌓이고 [deliver]가 월드에 넣는다.
   /// 의상은 [profile]에 바로 준다. 이미 받았거나 아직이면 null.
   CodexReward? claim(CodexTab tab, int pct, Profile profile) {
-    if (!codexMilestones.contains(pct) || !canClaim(tab, pct)) return null;
+    if (!codexMilestonesOf(tab).contains(pct) || !canClaim(tab, pct)) {
+      return null;
+    }
     claimed.add('${tab.name}:$pct');
-    final r = codexReward(pct);
+    final r = codexRewardOf(tab, pct);
     pendingCredits += r.credits;
     pendingOre += r.ore;
     if (r.crewRarity > 0) pendingCrew.add(r.crewRarity);
@@ -291,6 +326,7 @@ class Codex {
     'pl': colonies,
     'sy': systems.toList(),
     'cr': crew.toList(),
+    'rl': relics.toList(),
     'cl': claimed.toList(),
     'new': fresh.toList(),
     'pc': pendingCredits,
@@ -311,6 +347,9 @@ class Codex {
     });
     systems.addAll(((j['sy'] as List?) ?? const []).whereType<int>());
     crew.addAll(((j['cr'] as List?) ?? const []).whereType<String>());
+    relics.addAll(
+      ((j['rl'] as List?) ?? const []).whereType<String>().where(relicIds.contains),
+    );
     claimed.addAll(((j['cl'] as List?) ?? const []).whereType<String>());
     fresh.addAll(((j['new'] as List?) ?? const []).whereType<String>());
     pendingCredits = j['pc'] as int? ?? 0;

@@ -3917,4 +3917,190 @@ class L10nKo extends L10n {
   String r4_ascendExpWarn(int n) {
     return '원정 중인 승무원 $n명도 보상 없이 함께 떠나요.';
   }
+
+  @override
+  String srf_dlgUnlock(String planet) {
+    return '$planet에는 착륙할 수 있어요! 행성 곁에서 「착륙 탐사」를 누르면 탐사 차량으로 지표를 돌며 유적과 광맥을 찾을 수 있어요.';
+  }
+
+  @override
+  String get srf_dlgOxygen => '산소가 30초 남았어요! 생물들이 몰려와요. 화살표를 따라 착륙선으로!';
+
+  @override
+  String srf_site(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': '유적',
+      'wreck': '추락선 잔해',
+      'nest': '에일리언 둥지',
+      'vein': '희귀 광맥',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_floatSite(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': '발굴 완료!',
+      'wreck': '화물 회수!',
+      'nest': '둥지 소탕!',
+      'vein': '광맥 발견!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_floatRelic => '유물 발견!';
+
+  @override
+  String srf_relicName(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': '고대 성도',
+      'crystalCore': '수정 핵',
+      'idol': '외계 신상',
+      'gear': '고대 톱니',
+      'seed': '화석 씨앗',
+      'mask': '의식 가면',
+      'tablet': '석판',
+      'compass': '중력 나침반',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_relicDesc(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': '지금은 없는 별자리가 새겨진 금속판.',
+      'crystalCore': '손에 쥐면 희미하게 맥박이 뛴다.',
+      'idol': '누구를 닮았는지 아무도 모르는 신상.',
+      'gear': '아직도 아주 천천히 돌고 있다.',
+      'seed': '물을 주면 싹이 틀지도 모른다.',
+      'mask': '눈구멍이 세 개인 의식용 가면.',
+      'tablet': '미나도 읽지 못하는 글자가 빼곡하다.',
+      'compass': '바늘이 늘 은하 중심을 가리킨다.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_codexTab => '유물';
+
+  @override
+  String get srf_relicHint => '행성 유적에서 발굴';
+
+  @override
+  String get srf_land => '착륙 탐사';
+
+  @override
+  String get srf_gasNoLand => '가스 행성 — 착륙 불가';
+
+  @override
+  String srf_introTitle(String planet) {
+    return '$planet 지표 탐사';
+  }
+
+  @override
+  String srf_disc(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': '광맥 발견',
+      'nest': '둥지 소탕',
+      'surveyed': '완전 탐사',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_discEffect(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': '광석 생산 +0.4/초 × 레벨',
+      'nest': '방어막 최대치 ×1.25',
+      'surveyed': '크레딧 생산 ×1.1',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_noDisc => '아직 이 행성에서 찾은 발견이 없어요';
+
+  @override
+  String get srf_discPending => '정착하면 효과가 적용돼요';
+
+  @override
+  String srf_fullLeft(int n, int total) {
+    return '오늘 온전한 보상 $n/$total회 남음';
+  }
+
+  @override
+  String get srf_reduced =>
+      '오늘 온전한 보상을 다 썼어요. 이번 탐사의 크레딧·광석은 30%예요. 발견과 유물은 그대로 얻어요.';
+
+  @override
+  String get srf_rule1 => '지점 5곳을 찾아 조사하세요';
+
+  @override
+  String get srf_rule2 => '산소가 다 되기 전에 착륙선으로 돌아오세요';
+
+  @override
+  String get srf_rule3 => '격추되거나 산소가 떨어지면 전리품은 절반';
+
+  @override
+  String get srf_launch => '착륙';
+
+  @override
+  String get srf_oxygen => '산소';
+
+  @override
+  String srf_sitesLeft(int n) {
+    return '남은 지점 $n';
+  }
+
+  @override
+  String get srf_return => '귀환';
+
+  @override
+  String get srf_leaveTitle => '탐사를 그만둘까요?';
+
+  @override
+  String get srf_leaveBody => '비상 귀환하면 전리품은 절반만 챙겨요.';
+
+  @override
+  String get srf_leaveYes => '비상 귀환';
+
+  @override
+  String srf_resultTitle(String reason) {
+    String _temp0 = intl.Intl.selectLogic(reason, {
+      'returned': '귀환 성공!',
+      'oxygen': '비상 귀환',
+      'destroyed': '탐사 차량 파괴',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_kept(int pct) {
+    return '전리품 $pct% 챙김';
+  }
+
+  @override
+  String srf_sitesDone(int done, int total) {
+    return '조사한 지점 $done/$total';
+  }
+
+  @override
+  String get srf_newDisc => '새 발견';
+
+  @override
+  String get srf_newRelic => '새 유물';
+
+  @override
+  String get srf_back => '돌아가기';
+
+  @override
+  String get srf_colonyDisc => '지표 발견';
 }

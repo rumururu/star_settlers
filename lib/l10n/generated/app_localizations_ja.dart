@@ -3919,4 +3919,190 @@ class L10nJa extends L10n {
   String r4_ascendExpWarn(int n) {
     return '遠征中の乗組員$n人も報酬なしで去ります。';
   }
+
+  @override
+  String srf_dlgUnlock(String planet) {
+    return '$planetには着陸できます！惑星のそばで「着陸探査」を押すと、探査車で地表を回って遺跡や鉱脈を探せます。';
+  }
+
+  @override
+  String get srf_dlgOxygen => '酸素が残り30秒！生物が押し寄せてきます。矢印に従って着陸船へ！';
+
+  @override
+  String srf_site(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': '遺跡',
+      'wreck': '墜落船の残骸',
+      'nest': 'エイリアンの巣',
+      'vein': '希少鉱脈',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_floatSite(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': '発掘完了！',
+      'wreck': '積荷回収！',
+      'nest': '巣を掃討！',
+      'vein': '鉱脈発見！',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_floatRelic => '遺物発見！';
+
+  @override
+  String srf_relicName(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': '古代星図',
+      'crystalCore': '水晶核',
+      'idol': '異星の神像',
+      'gear': '古代の歯車',
+      'seed': '化石の種',
+      'mask': '儀式の仮面',
+      'tablet': '石板',
+      'compass': '重力コンパス',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_relicDesc(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': '今はない星座が刻まれた金属板。',
+      'crystalCore': '握るとかすかに脈打つ。',
+      'idol': '誰に似せたのか誰も知らない神像。',
+      'gear': '今もとてもゆっくり回っている。',
+      'seed': '水をやれば芽が出るかもしれない。',
+      'mask': '目の穴が三つある儀式用の仮面。',
+      'tablet': 'ミナにも読めない文字がびっしり。',
+      'compass': '針はいつも銀河の中心を指す。',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_codexTab => '遺物';
+
+  @override
+  String get srf_relicHint => '惑星の遺跡で発掘';
+
+  @override
+  String get srf_land => '着陸探査';
+
+  @override
+  String get srf_gasNoLand => 'ガス惑星 — 着陸不可';
+
+  @override
+  String srf_introTitle(String planet) {
+    return '$planet 地表探査';
+  }
+
+  @override
+  String srf_disc(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': '鉱脈発見',
+      'nest': '巣を掃討',
+      'surveyed': '完全探査',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_discEffect(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': '鉱石生産 +0.4/秒 × レベル',
+      'nest': 'シールド最大値 ×1.25',
+      'surveyed': 'クレジット生産 ×1.1',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_noDisc => 'この惑星での発見はまだありません';
+
+  @override
+  String get srf_discPending => '入植すると効果が出ます';
+
+  @override
+  String srf_fullLeft(int n, int total) {
+    return '今日の満額報酬 残り$n/$total回';
+  }
+
+  @override
+  String get srf_reduced =>
+      '今日の満額報酬は使い切りました。今回のクレジット・鉱石は30%です。発見と遺物はそのまま得られます。';
+
+  @override
+  String get srf_rule1 => '5か所の地点を見つけて調査しよう';
+
+  @override
+  String get srf_rule2 => '酸素が尽きる前に着陸船へ戻ろう';
+
+  @override
+  String get srf_rule3 => '撃破されるか酸素切れだと戦利品は半分';
+
+  @override
+  String get srf_launch => '着陸';
+
+  @override
+  String get srf_oxygen => '酸素';
+
+  @override
+  String srf_sitesLeft(int n) {
+    return '残り地点 $n';
+  }
+
+  @override
+  String get srf_return => '帰還';
+
+  @override
+  String get srf_leaveTitle => '探査をやめますか？';
+
+  @override
+  String get srf_leaveBody => '緊急帰還すると戦利品は半分になります。';
+
+  @override
+  String get srf_leaveYes => '緊急帰還';
+
+  @override
+  String srf_resultTitle(String reason) {
+    String _temp0 = intl.Intl.selectLogic(reason, {
+      'returned': '帰還成功！',
+      'oxygen': '緊急帰還',
+      'destroyed': '探査車大破',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_kept(int pct) {
+    return '戦利品の$pct%を確保';
+  }
+
+  @override
+  String srf_sitesDone(int done, int total) {
+    return '調査した地点 $done/$total';
+  }
+
+  @override
+  String get srf_newDisc => '新しい発見';
+
+  @override
+  String get srf_newRelic => '新しい遺物';
+
+  @override
+  String get srf_back => '戻る';
+
+  @override
+  String get srf_colonyDisc => '地表の発見';
 }

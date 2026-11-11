@@ -15,10 +15,14 @@ import 'profile.dart';
 import 'rift.dart';
 import 'ships.dart';
 import 'star_catalog.dart';
+import 'surface.dart';
 import 'system_traits.dart';
 
 /// 균열 런 아레나 (TASK 005). 같은 라이브러리라 엔진의 비공개 갱신 함수를 그대로 쓴다.
 part 'rift_world.dart';
+
+/// 행성 지표 탐험 (surface-exploration). 균열 런처럼 엔진을 다시 쓴다.
+part 'surface_world.dart';
 
 class InputState {
   Offset move = Offset.zero; // 길이 0..1
@@ -65,8 +69,14 @@ class SectorSave {
     this.buildings = const [],
     this.defenses = const [],
     this.specs = const [],
+    this.discoveries = const [],
   });
   final List<int> colonyLevels;
+
+  /// 행성별 지표 탐험 영구 발견 비트 ([Planet.discoveries]). 지표 탐험 도입 전 저장은 빈 목록
+  final List<int> discoveries;
+
+  int discAt(int index) => index < discoveries.length ? discoveries[index] : 0;
 
   /// 행성별 특화 이름 (특화 없음은 ''). 특화 도입 전 저장은 빈 목록
   final List<String> specs;
@@ -130,6 +140,7 @@ class SectorSave {
     'bld': buildings,
     'defenses': defenses,
     'spec': specs,
+    if (discoveries.any((d) => d != 0)) 'disc': discoveries,
   };
 
   static SectorSave fromJson(Map<String, dynamic> j) => SectorSave(
@@ -148,6 +159,9 @@ class SectorSave {
         (d as List).cast<num>(),
     ],
     specs: [for (final x in (j['spec'] as List?) ?? const []) '${x ?? ''}'],
+    discoveries: [
+      for (final x in (j['disc'] as List?) ?? const []) x is int ? x : 0,
+    ],
   );
 }
 
@@ -702,6 +716,7 @@ class GameWorld {
       }
       for (var i = 0; i < planets.length; i++) {
         planets[i].spec = save.specAt(i);
+        planets[i].discoveries = save.discAt(i);
       }
       for (var i = 0; i < planets.length; i++) {
         final p = planets[i];
@@ -788,6 +803,7 @@ class GameWorld {
         ],
     ],
     specs: [for (final p in planets) p.spec?.name ?? ''],
+    discoveries: [for (final p in planets) p.discoveries],
     stations: stations.map(_stationToJson).toList(),
     elapsed: sectorElapsed,
     bossDefeated: bossDefeated,
@@ -1023,6 +1039,27 @@ class GameWorld {
     return null;
   }
 
+  // ---------- 행성 지표 탐험 (surface-exploration) ----------
+  /// 해금: 식민지가 하나라도 있으면 (어느 항성계든) 또는 두 번째 항성계부터
+  bool get landUnlocked =>
+      sector > 0 ||
+      planets.any((p) => p.colonyLevel > 0) ||
+      sectors.values.any((s) => s.colonyLevels.any((l) => l > 0));
+
+  /// 이 행성에 착륙할 수 있는지 (가스 행성은 안 된다)
+  bool canLand(Planet p) => landUnlocked && p.kind != PlanetKind.gas;
+
+  /// 해금 뒤 처음 착륙할 수 있는 행성 곁에 가면 미나가 한 번 알려 준다 (프로필 플래그 — 새 게임에서도 다시 안 한다)
+  void _checkLandHint() {
+    if (!player.alive || !landUnlocked) return;
+    final p = nearbyPlanet;
+    if (p == null || !canLand(p)) return;
+    final rec = SurfaceRecords(profile.stats, onChanged: () => profile.dirty = true);
+    if (rec.hinted) return;
+    rec.markHinted();
+    say(Speaker.advisor, tr.srf_dlgUnlock(p.name));
+  }
+
   // ---------- 본거지 방어 ----------
   /// 섹터의 첫 정거장(알파 성역에서는 헤이븐 기지)이 본거지다.
   /// 안전 구역 안으로 들어온 해적 탄은 본거지가 대신 맞고(함선은 무사), 레이저 포대가 해적을 쏜다.
@@ -1253,6 +1290,7 @@ class GameWorld {
       nameOf: () => planetIdentity(sector, index, count).name,
     )..colonyLevel = save.colonyLevels[index];
     p.spec = save.specAt(index);
+    p.discoveries = save.discAt(index);
     final lv = index < save.buildings.length ? save.buildings[index] : null;
     for (final b in ColonyBuilding.values) {
       p.buildings[b] = lv != null && b.index < lv.length
@@ -1364,6 +1402,7 @@ class GameWorld {
     sectors[sector] = SectorSave(
       colonyLevels: List<int>.from(save.colonyLevels)..[index] = p.colonyLevel,
       specs: specs,
+      discoveries: save.discoveries,
       stations: save.stations,
       elapsed: save.elapsed,
       bossDefeated: save.bossDefeated,
@@ -2786,6 +2825,7 @@ class GameWorld {
       }
       _checkStory();
       _checkFirstMinutes();
+      _checkLandHint();
       _updateGoal();
       profile.maxStat('credits', credits.floor());
     }
@@ -3043,7 +3083,10 @@ class GameWorld {
 
       Offset desired;
       if (target == null ||
-          (targetDist > 1600 && raid == null && !invader && e.name == null)) {
+          (targetDist > _aggroRange(e) &&
+              raid == null &&
+              !invader &&
+              e.name == null)) {
         e.wanderAngle += randRange(_rng, -1, 1) * dt;
         desired = OffsetX.fromAngle(e.wanderAngle, e.speed * 0.4);
       } else {
@@ -3167,6 +3210,9 @@ class GameWorld {
   }
 
   final _spawnQueue = <Pirate>[];
+
+  /// 이 거리 밖의 적은 선장을 쫓지 않고 배회한다 (지표 탐험 생물은 더 짧다)
+  double _aggroRange(Pirate e) => 1600;
 
   // ---------- 후반 적 ----------
   /// 거리를 두고 싸우는 후반 적의 (가까운 한계, 먼 한계)

@@ -34,6 +34,7 @@ import 'meta_screens.dart';
 import 'shop_screen.dart';
 import 'station_panel.dart';
 import 'story_panel.dart';
+import 'surface_screen.dart';
 import 'system_panel.dart';
 import 'world_painter.dart';
 
@@ -970,51 +971,68 @@ class _GameScreenState extends State<GameScreen>
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  children: [
-                    KeyedSubtree(
-                      key: const ValueKey('hud-info'),
-                      child: _rightColumn(bottom: false),
-                    ),
-                    const SizedBox(height: Space.s),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: KeyedSubtree(
-                            key: const ValueKey('hud-captain'),
-                            child: _captainCard(),
-                          ),
-                        ),
-                        const SizedBox(width: Space.s),
-                        // 미니맵 열: 경보 글자가 길어도(글자 배율·독일어) 선장 카드 몫을 빼앗지 않게 폭을 묶는다
-                        ConstrainedBox(
-                          key: const ValueKey('hud-map'),
-                          constraints: BoxConstraints(
-                            maxWidth: max(
-                              _minimapSize,
-                              MediaQuery.sizeOf(context).width * 0.38,
-                            ),
-                          ),
-                          child: _rightColumn(top: false),
-                        ),
-                      ],
-                    ),
-                    if (_message() case final msg?) ...[
-                      const SizedBox(height: Space.s),
-                      Flexible(
+                child: LayoutBuilder(
+                  builder: (context, box) => Column(
+                    children: [
+                      // 작은 화면·큰 글자에서 정보+선장 묶음이 이 칸보다 길면 넘치지 않고 아래가 잘린다 (SM-G525N 339×697dp ×1.3에서 24px 넘침)
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: box.maxHeight),
                         child: ClipRect(
-                          key: const ValueKey('hud-dialog-zone'),
                           child: SingleChildScrollView(
-                            child: KeyedSubtree(
-                              key: const ValueKey('hud-dialog'),
-                              child: msg,
+                            physics: const NeverScrollableScrollPhysics(),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                KeyedSubtree(
+                                  key: const ValueKey('hud-info'),
+                                  child: _rightColumn(bottom: false),
+                                ),
+                                const SizedBox(height: Space.s),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: KeyedSubtree(
+                                        key: const ValueKey('hud-captain'),
+                                        child: _captainCard(),
+                                      ),
+                                    ),
+                                    const SizedBox(width: Space.s),
+                                    // 미니맵 열: 경보 글자가 길어도(글자 배율·독일어) 선장 카드 몫을 빼앗지 않게 폭을 묶는다
+                                    ConstrainedBox(
+                                      key: const ValueKey('hud-map'),
+                                      constraints: BoxConstraints(
+                                        maxWidth: max(
+                                          _minimapSize,
+                                          MediaQuery.sizeOf(context).width *
+                                              0.38,
+                                        ),
+                                      ),
+                                      child: _rightColumn(top: false),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
+                      if (_message() case final msg?) ...[
+                        const SizedBox(height: Space.s),
+                        Flexible(
+                          child: ClipRect(
+                            key: const ValueKey('hud-dialog-zone'),
+                            child: SingleChildScrollView(
+                              child: KeyedSubtree(
+                                key: const ValueKey('hud-dialog'),
+                                child: msg,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
               if (w.player.alive) ...[
@@ -1488,6 +1506,23 @@ class _GameScreenState extends State<GameScreen>
             () => _setOverlay(_Overlay.colony),
             icon: pl.raided ? 'raid' : 'colony_levelup',
             color: const Color(0xFF2E7D32),
+          ),
+        );
+      }
+      // 지표 탐험: 해금되면 행성 곁에 「착륙 탐사」 (가스 행성은 이유와 함께 비활성)
+      if (w.landUnlocked) {
+        out.add(
+          KeyedSubtree(
+            key: const ValueKey('act-land'),
+            child: pl.kind == PlanetKind.gas
+                ? actionBtn(tr.srf_gasNoLand, false, null, icon: landIcon)
+                : actionBtn(
+                    tr.srf_land,
+                    true,
+                    () => _modalRoute(SurfaceScreen(mainWorld: w, planet: pl)),
+                    icon: landIcon,
+                    color: const Color(0xFF00796B),
+                  ),
           ),
         );
       }

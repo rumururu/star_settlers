@@ -21,6 +21,7 @@ import 'ui/meta_screens.dart';
 import 'ui/rift_screen.dart';
 import 'ui/shop_screen.dart';
 import 'ui/sprites.dart';
+import 'ui/surface_painter.dart' show surfaceSpriteNames;
 import 'ui/star_systems.dart';
 
 Future<void> main() async {
@@ -41,6 +42,7 @@ Future<void> main() async {
       'station',
       for (final f in StarFace.values) f.sprite,
       'antimatter_earth',
+      ...surfaceSpriteNames, // 지표 탐험 (차량·생물·지점·바위·바닥 타일·유물)
     ]),
   ]);
   AppState.money.confirm = (title, body) async {

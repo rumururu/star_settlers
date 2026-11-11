@@ -4025,4 +4025,192 @@ class L10nEn extends L10n {
   String r4_ascendExpWarn(int n) {
     return '$n crew on expeditions will leave too, without rewards.';
   }
+
+  @override
+  String srf_dlgUnlock(String planet) {
+    return 'We can land on $planet! Tap \"Land & Explore\" next to the planet to search the surface for ruins and ore veins in a rover.';
+  }
+
+  @override
+  String get srf_dlgOxygen =>
+      '30 seconds of oxygen left! Creatures are swarming. Follow the arrow back to the lander!';
+
+  @override
+  String srf_site(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Ruins',
+      'wreck': 'Crash site',
+      'nest': 'Alien nest',
+      'vein': 'Rare vein',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_floatSite(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': 'Excavated!',
+      'wreck': 'Cargo recovered!',
+      'nest': 'Nest cleared!',
+      'vein': 'Vein found!',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_floatRelic => 'Relic found!';
+
+  @override
+  String srf_relicName(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': 'Ancient Star Map',
+      'crystalCore': 'Crystal Core',
+      'idol': 'Alien Idol',
+      'gear': 'Ancient Gear',
+      'seed': 'Fossil Seed',
+      'mask': 'Ritual Mask',
+      'tablet': 'Stone Tablet',
+      'compass': 'Gravity Compass',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_relicDesc(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap':
+          'A metal plate engraved with constellations that no longer exist.',
+      'crystalCore': 'It pulses faintly when you hold it.',
+      'idol': 'No one knows whom it is meant to resemble.',
+      'gear': 'It is still turning, very slowly.',
+      'seed': 'It might sprout if you water it.',
+      'mask': 'A ritual mask with three eye holes.',
+      'tablet': 'Covered in script even Mina can\'t read.',
+      'compass': 'The needle always points to the galactic core.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_codexTab => 'Relics';
+
+  @override
+  String get srf_relicHint => 'Dig up in planet ruins';
+
+  @override
+  String get srf_land => 'Land & Explore';
+
+  @override
+  String get srf_gasNoLand => 'Gas giant — can\'t land';
+
+  @override
+  String srf_introTitle(String planet) {
+    return '$planet surface';
+  }
+
+  @override
+  String srf_disc(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Vein found',
+      'nest': 'Nest cleared',
+      'surveyed': 'Fully surveyed',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_discEffect(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': 'Ore +0.4/s × level',
+      'nest': 'Shield max ×1.25',
+      'surveyed': 'Credit output ×1.1',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_noDisc => 'No discoveries on this planet yet';
+
+  @override
+  String get srf_discPending => 'Takes effect once you settle';
+
+  @override
+  String srf_fullLeft(int n, int total) {
+    return 'Full rewards today: $n/$total left';
+  }
+
+  @override
+  String get srf_reduced =>
+      'Today\'s full rewards are used up. Credits and ore are 30% this time. Discoveries and relics still count.';
+
+  @override
+  String get srf_rule1 => 'Find and survey the 5 sites';
+
+  @override
+  String get srf_rule2 => 'Get back to the lander before your oxygen runs out';
+
+  @override
+  String get srf_rule3 => 'Destroyed or out of oxygen: you keep half the loot';
+
+  @override
+  String get srf_launch => 'Land';
+
+  @override
+  String get srf_oxygen => 'O₂';
+
+  @override
+  String srf_sitesLeft(int n) {
+    return 'Sites left $n';
+  }
+
+  @override
+  String get srf_return => 'Return';
+
+  @override
+  String get srf_leaveTitle => 'Stop exploring?';
+
+  @override
+  String get srf_leaveBody => 'An emergency return keeps only half the loot.';
+
+  @override
+  String get srf_leaveYes => 'Emergency return';
+
+  @override
+  String srf_resultTitle(String reason) {
+    String _temp0 = intl.Intl.selectLogic(reason, {
+      'returned': 'Back safely!',
+      'oxygen': 'Emergency return',
+      'destroyed': 'Rover destroyed',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_kept(int pct) {
+    return 'Kept $pct% of the loot';
+  }
+
+  @override
+  String srf_sitesDone(int done, int total) {
+    return 'Sites surveyed $done/$total';
+  }
+
+  @override
+  String get srf_newDisc => 'New discoveries';
+
+  @override
+  String get srf_newRelic => 'New relics';
+
+  @override
+  String get srf_back => 'Back to orbit';
+
+  @override
+  String get srf_colonyDisc => 'Surface finds';
 }

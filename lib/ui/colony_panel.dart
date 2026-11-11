@@ -6,6 +6,7 @@ import '../l10n/l.dart';
 import 'common.dart';
 import 'game_icons.dart';
 import 'station_panel.dart' show ActFn;
+import 'surface_screen.dart' show SurfaceDiscoveryBadge, planetDiscoveries;
 
 /// 식민지 관리: 레벨업 + 건물 짓기. 첫 정착 때는 그림 안내 카드가 위에 붙는다.
 class ColonyPanel extends StatelessWidget {
@@ -122,6 +123,28 @@ class ColonyPanel extends StatelessWidget {
                     ),
                   ],
                 ),
+                // 지표 탐험 영구 발견: 배지 + 효과 한 줄
+                if (planetDiscoveries(p).isNotEmpty) ...[
+                  const SizedBox(height: Space.xs),
+                  Wrap(
+                    key: const ValueKey('colony-discoveries'),
+                    spacing: Space.xs,
+                    runSpacing: Space.xs,
+                    children: [
+                      for (final k in planetDiscoveries(p))
+                        SurfaceDiscoveryBadge(k, compact: true),
+                    ],
+                  ),
+                  Text(
+                    keepAll(
+                      [
+                        for (final k in planetDiscoveries(p))
+                          tr.srf_discEffect(k),
+                      ].join(' · '),
+                    ),
+                    style: Ts.caption,
+                  ),
+                ],
               ],
             ),
           ),

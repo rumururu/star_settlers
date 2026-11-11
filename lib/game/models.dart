@@ -486,7 +486,8 @@ class Planet {
   double shieldMax(double sectorMul) =>
       (200 + 100 * colonyLevel + 250 * building(ColonyBuilding.shieldGen)) *
       sectorMul *
-      (activeSpec == ColonySpec.fortress ? ColonySpec.fortressShieldMul : 1);
+      (activeSpec == ColonySpec.fortress ? ColonySpec.fortressShieldMul : 1) *
+      (nest ? nestShieldMul : 1);
 
   /// 초당 재충전량 (안 맞은 지 [shieldRegenDelay]초 뒤부터)
   double shieldRegen(double sectorMul) =>
@@ -501,6 +502,28 @@ class Planet {
 
   /// 진척에 따른 상한과 별개인 식민지의 절대 최대 레벨.
   static const maxLevel = 12;
+
+  // ---------- 지표 탐험 영구 발견 (surface-exploration) ----------
+  /// 희귀 광맥 발견: 광석 생산 +[veinOrePerLevel]/초 × 식민지 레벨 (광석이 없던 종류에도 생긴다)
+  bool vein = false;
+
+  /// 둥지 소탕: 방어막 최대치 ×[nestShieldMul]
+  bool nest = false;
+
+  /// 완전 탐사: 크레딧 생산 ×[surveyedCreditMul]
+  bool surveyed = false;
+
+  static const veinOrePerLevel = 0.4;
+  static const nestShieldMul = 1.25;
+  static const surveyedCreditMul = 1.10;
+
+  /// 저장용 비트 (1 광맥, 2 둥지, 4 완전 탐사)
+  int get discoveries => (vein ? 1 : 0) | (nest ? 2 : 0) | (surveyed ? 4 : 0);
+  set discoveries(int bits) {
+    vein = bits & 1 != 0;
+    nest = bits & 2 != 0;
+    surveyed = bits & 4 != 0;
+  }
 
   // ---------- 특화 ----------
   /// 고른 특화. 레벨이 [ColonySpec.minLevel] 아래로 떨어져도 유지한다.
@@ -568,9 +591,12 @@ class Planet {
       colonyLevel *
       (1 + 0.25 * building(ColonyBuilding.trade)) *
       (1 + anchorIncomePerLevel * building(ColonyBuilding.stabilizer)) *
-      (activeSpec == ColonySpec.industry ? ColonySpec.industryCreditMul : 1);
+      (activeSpec == ColonySpec.industry ? ColonySpec.industryCreditMul : 1) *
+      (surveyed ? surveyedCreditMul : 1);
   double get baseOreRate =>
-      (ratePerLevel.$2 * colonyLevel + 0.8 * building(ColonyBuilding.mine)) *
+      (ratePerLevel.$2 * colonyLevel +
+          0.8 * building(ColonyBuilding.mine) +
+          (vein ? veinOrePerLevel * colonyLevel : 0)) *
       (activeSpec == ColonySpec.mining ? ColonySpec.miningOreMul : 1);
 
   Cost buildingBaseCost(ColonyBuilding b) {

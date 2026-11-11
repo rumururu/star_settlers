@@ -25,7 +25,7 @@ export '../game/game_telemetry.dart' show TelemetryEvent, GameTelemetry;
 abstract final class TelemetryConfig {
   /// 앱 버전 이름. pubspec.yaml `version:`의 + 앞부분과 같아야 한다 (test/telemetry_test.dart가 확인한다).
   /// package_info 의존성을 늘리지 않으려고 상수로 둔다. 버전을 올릴 때 같이 고친다.
-  static const appVersion = '1.0.8';
+  static const appVersion = '1.0.9';
 
   static const maxQueue = 200;
 

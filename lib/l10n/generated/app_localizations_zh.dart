@@ -3905,4 +3905,189 @@ class L10nZh extends L10n {
   String r4_ascendExpWarn(int n) {
     return '远征中的$n名船员也会离开，不会获得奖励。';
   }
+
+  @override
+  String srf_dlgUnlock(String planet) {
+    return '$planet可以着陆！在行星旁点击「着陆探索」，就能驾驶探测车在地表寻找遗迹和矿脉。';
+  }
+
+  @override
+  String get srf_dlgOxygen => '氧气只剩30秒！生物正在涌来。跟着箭头回到着陆艇！';
+
+  @override
+  String srf_site(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': '遗迹',
+      'wreck': '坠毁飞船残骸',
+      'nest': '异形巢穴',
+      'vein': '稀有矿脉',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_floatSite(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'ruin': '发掘完成！',
+      'wreck': '货物回收！',
+      'nest': '巢穴清除！',
+      'vein': '发现矿脉！',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_floatRelic => '发现遗物！';
+
+  @override
+  String srf_relicName(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': '远古星图',
+      'crystalCore': '水晶核心',
+      'idol': '外星神像',
+      'gear': '远古齿轮',
+      'seed': '化石种子',
+      'mask': '仪式面具',
+      'tablet': '石板',
+      'compass': '重力罗盘',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_relicDesc(String id) {
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'starMap': '刻着早已消失的星座的金属板。',
+      'crystalCore': '握在手里会微微搏动。',
+      'idol': '没人知道它照着谁的样子雕刻。',
+      'gear': '至今仍在极慢地转动。',
+      'seed': '浇点水也许会发芽。',
+      'mask': '有三个眼孔的仪式面具。',
+      'tablet': '写满了连米娜都读不懂的文字。',
+      'compass': '指针始终指向银河中心。',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_codexTab => '遗物';
+
+  @override
+  String get srf_relicHint => '在行星遗迹中发掘';
+
+  @override
+  String get srf_land => '着陆探索';
+
+  @override
+  String get srf_gasNoLand => '气态行星 — 无法着陆';
+
+  @override
+  String srf_introTitle(String planet) {
+    return '$planet 地表探索';
+  }
+
+  @override
+  String srf_disc(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': '发现矿脉',
+      'nest': '巢穴清除',
+      'surveyed': '完全探索',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_discEffect(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'vein': '矿石产量 +0.4/秒 × 等级',
+      'nest': '护盾上限 ×1.25',
+      'surveyed': '信用点产量 ×1.1',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get srf_noDisc => '尚未在这颗行星上有所发现';
+
+  @override
+  String get srf_discPending => '殖民后生效';
+
+  @override
+  String srf_fullLeft(int n, int total) {
+    return '今日全额奖励剩余 $n/$total 次';
+  }
+
+  @override
+  String get srf_reduced => '今日全额奖励已用完。本次信用点和矿石为30%。发现和遗物照常获得。';
+
+  @override
+  String get srf_rule1 => '找到并调查5个地点';
+
+  @override
+  String get srf_rule2 => '在氧气耗尽前回到着陆艇';
+
+  @override
+  String get srf_rule3 => '被击毁或氧气耗尽时战利品减半';
+
+  @override
+  String get srf_launch => '着陆';
+
+  @override
+  String get srf_oxygen => '氧气';
+
+  @override
+  String srf_sitesLeft(int n) {
+    return '剩余地点 $n';
+  }
+
+  @override
+  String get srf_return => '返航';
+
+  @override
+  String get srf_leaveTitle => '要结束探索吗？';
+
+  @override
+  String get srf_leaveBody => '紧急返航只能带回一半战利品。';
+
+  @override
+  String get srf_leaveYes => '紧急返航';
+
+  @override
+  String srf_resultTitle(String reason) {
+    String _temp0 = intl.Intl.selectLogic(reason, {
+      'returned': '成功返航！',
+      'oxygen': '紧急返航',
+      'destroyed': '探测车被毁',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String srf_kept(int pct) {
+    return '带回 $pct% 战利品';
+  }
+
+  @override
+  String srf_sitesDone(int done, int total) {
+    return '已调查地点 $done/$total';
+  }
+
+  @override
+  String get srf_newDisc => '新发现';
+
+  @override
+  String get srf_newRelic => '新遗物';
+
+  @override
+  String get srf_back => '返回';
+
+  @override
+  String get srf_colonyDisc => '地表发现';
 }

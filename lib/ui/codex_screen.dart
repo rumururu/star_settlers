@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../game/codex.dart';
+import '../game/surface.dart' show relicIds;
 import '../game/codex_world.dart';
 import '../game/cosmetics.dart';
 import '../game/crew.dart';
@@ -39,7 +40,12 @@ String codexEntryName(CodexTab tab, String id) => switch (tab) {
     final (role, r) = _crewOf(id);
     return '${role.label} ${'★' * r}';
   }(),
+  CodexTab.relics => tr.srf_relicName(relicKey(id)),
 };
+
+/// 탭 이름 (유물 탭은 지표 탐험 문구)
+String codexTabName(CodexTab t) =>
+    t == CodexTab.relics ? tr.srf_codexTab : tr.codex_tab(t.name);
 
 (CrewRole, int) _crewOf(String id) {
   final [role, r] = id.split(':');
@@ -163,9 +169,13 @@ class _CodexScreenState extends State<CodexScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(tr.codex_tab(t.name)),
+                    if (t == CodexTab.relics) ...[
+                      const GameIcon('menu_relic', size: IconSz.inline),
+                      const SizedBox(width: Space.xs),
+                    ],
+                    Text(codexTabName(t)),
                     if (c.freshIn(t) > 0 ||
-                        codexMilestones.any((m) => c.canClaim(t, m))) ...[
+                        codexMilestonesOf(t).any((m) => c.canClaim(t, m))) ...[
                       const SizedBox(width: Space.xs),
                       _dot(),
                     ],
@@ -197,6 +207,9 @@ class _CodexScreenState extends State<CodexScreen>
         CodexTab.planets => _planets(),
         CodexTab.systems => _systems(),
         CodexTab.crew => _crew(),
+        CodexTab.relics => _grid([
+          for (final id in relicIds) _relicCell(id),
+        ], minCell: 150),
       },
     ],
   );
@@ -240,8 +253,9 @@ class _CodexScreenState extends State<CodexScreen>
           // 마일스톤 4개: 받음(민트) · 받을 수 있음(분홍) · 아직(어둡게)
           Row(
             children: [
-              for (final m in codexMilestones) ...[
-                if (m != codexMilestones.first) const SizedBox(width: Space.xs),
+              for (final m in codexMilestonesOf(tab)) ...[
+                if (m != codexMilestonesOf(tab).first)
+                  const SizedBox(width: Space.xs),
                 Expanded(child: _pill(tab, m)),
               ],
             ],
@@ -292,10 +306,10 @@ class _CodexScreenState extends State<CodexScreen>
     final c = _codex;
     final p = AppState.profile;
     final pct =
-        codexMilestones.where((m) => c.canClaim(tab, m)).firstOrNull ??
-        codexMilestones.where((m) => !c.isClaimed(tab, m)).firstOrNull;
+        codexMilestonesOf(tab).where((m) => c.canClaim(tab, m)).firstOrNull ??
+        codexMilestonesOf(tab).where((m) => !c.isClaimed(tab, m)).firstOrNull;
     if (pct == null) {
-      if (!p.ownedOutfits.contains(codexOutfitId)) {
+      if (tab == CodexTab.relics || !p.ownedOutfits.contains(codexOutfitId)) {
         return const SizedBox.shrink();
       }
       return Row(
@@ -334,7 +348,7 @@ class _CodexScreenState extends State<CodexScreen>
                 style: Ts.body.copyWith(color: kSky),
               ),
               const SizedBox(height: Space.xs),
-              _RewardLine(reward: codexReward(pct)),
+              _RewardLine(reward: codexRewardOf(tab, pct)),
             ],
           ),
         ),
@@ -466,6 +480,18 @@ class _CodexScreenState extends State<CodexScreen>
       sub: found
           ? tr.codex_kills(c.kills[id] ?? 0)
           : (from > 0 ? tr.codex_fromSystem(from + 1) : null),
+    );
+  }
+
+  Widget _relicCell(String id) {
+    final found = _codex.found(CodexTab.relics, id);
+    return _cell(
+      key: ValueKey('codex-relics-$id'),
+      found: found,
+      fresh: _fresh.contains('relics:$id'),
+      picture: _shade(found, _sprite(relicSprite(id))),
+      title: tr.srf_relicName(relicKey(id)),
+      sub: found ? tr.srf_relicDesc(relicKey(id)) : tr.srf_relicHint,
     );
   }
 

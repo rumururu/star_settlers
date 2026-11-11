@@ -54,7 +54,15 @@ enum TelemetryEvent {
 
   /// 균열 런 끝. value = 도달한 파도 번호
   riftEnd('rift_end'),
-  codexOpen('codex_open');
+  codexOpen('codex_open'),
+
+  // ---- 1.0.9 surface-exploration. 서버 목록: 20261111000000_starset_events_v3.sql ----
+
+  /// 행성 지표 탐험 시작. value = 행성 종류 index (PlanetKind)
+  surfaceStart('surface_start'),
+
+  /// 지표 탐험 끝. value = 0 귀환, 1 산소·비상 귀환, 2 격추
+  surfaceEnd('surface_end');
 
   const TelemetryEvent(this.wire, {this.once = false});
 

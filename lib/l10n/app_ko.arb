@@ -5847,5 +5847,216 @@
         "type": "int"
       }
     }
+  },
+  "srf_dlgUnlock": "{planet}에는 착륙할 수 있어요! 행성 곁에서 「착륙 탐사」를 누르면 탐사 차량으로 지표를 돌며 유적과 광맥을 찾을 수 있어요.",
+  "@srf_dlgUnlock": {
+    "description": "Surface exploration unlocked: Mina's one-time hint when the captain first goes next to a landable planet. planet = planet name",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_dlgOxygen": "산소가 30초 남았어요! 생물들이 몰려와요. 화살표를 따라 착륙선으로!",
+  "@srf_dlgOxygen": {
+    "description": "Surface exploration: 30 seconds of oxygen left, creatures swarm (Mina)"
+  },
+  "srf_site": "{kind, select, ruin{유적} wreck{추락선 잔해} nest{에일리언 둥지} vein{희귀 광맥} other{}}",
+  "@srf_site": {
+    "description": "Surface exploration site name. kind = ruin/wreck/nest/vein",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_floatSite": "{kind, select, ruin{발굴 완료!} wreck{화물 회수!} nest{둥지 소탕!} vein{광맥 발견!} other{}}",
+  "@srf_floatSite": {
+    "description": "Surface exploration: floating text when a site is finished. kind = ruin/wreck/nest/vein",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_floatRelic": "유물 발견!",
+  "@srf_floatRelic": {
+    "description": "Surface exploration: floating text when a ruin gives a relic"
+  },
+  "srf_relicName": "{id, select, starMap{고대 성도} crystalCore{수정 핵} idol{외계 신상} gear{고대 톱니} seed{화석 씨앗} mask{의식 가면} tablet{석판} compass{중력 나침반} other{}}",
+  "@srf_relicName": {
+    "description": "Relic name (codex relic tab). id = starMap/crystalCore/idol/gear/seed/mask/tablet/compass",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_relicDesc": "{id, select, starMap{지금은 없는 별자리가 새겨진 금속판.} crystalCore{손에 쥐면 희미하게 맥박이 뛴다.} idol{누구를 닮았는지 아무도 모르는 신상.} gear{아직도 아주 천천히 돌고 있다.} seed{물을 주면 싹이 틀지도 모른다.} mask{눈구멍이 세 개인 의식용 가면.} tablet{미나도 읽지 못하는 글자가 빼곡하다.} compass{바늘이 늘 은하 중심을 가리킨다.} other{}}",
+  "@srf_relicDesc": {
+    "description": "Relic one-line description (codex relic tab). id = starMap/crystalCore/idol/gear/seed/mask/tablet/compass",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_codexTab": "유물",
+  "@srf_codexTab": {
+    "description": "Codex tab title for relics dug up on planet surfaces"
+  },
+  "srf_relicHint": "행성 유적에서 발굴",
+  "@srf_relicHint": {
+    "description": "Codex relic tab: hint under an undiscovered relic"
+  },
+  "srf_land": "착륙 탐사",
+  "@srf_land": {
+    "description": "Action button next to a planet: land and explore its surface"
+  },
+  "srf_gasNoLand": "가스 행성 — 착륙 불가",
+  "@srf_gasNoLand": {
+    "description": "Shown instead of the land button next to a gas giant"
+  },
+  "srf_introTitle": "{planet} 지표 탐사",
+  "@srf_introTitle": {
+    "description": "Surface intro card title. planet = planet name",
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_disc": "{kind, select, vein{광맥 발견} nest{둥지 소탕} surveyed{완전 탐사} other{}}",
+  "@srf_disc": {
+    "description": "Permanent planet discovery name. kind = vein/nest/surveyed",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_discEffect": "{kind, select, vein{광석 생산 +0.4/초 × 레벨} nest{방어막 최대치 ×1.25} surveyed{크레딧 생산 ×1.1} other{}}",
+  "@srf_discEffect": {
+    "description": "Effect of a permanent discovery on the planet's colony. kind = vein/nest/surveyed",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_noDisc": "아직 이 행성에서 찾은 발견이 없어요",
+  "@srf_noDisc": {
+    "description": "Surface intro: no permanent discoveries on this planet yet"
+  },
+  "srf_discPending": "정착하면 효과가 적용돼요",
+  "@srf_discPending": {
+    "description": "Colony panel: discoveries take effect once the planet is settled"
+  },
+  "srf_fullLeft": "오늘 온전한 보상 {n}/{total}회 남음",
+  "@srf_fullLeft": {
+    "description": "Full-reward surface runs left today. n = runs left, total = daily runs",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "srf_reduced": "오늘 온전한 보상을 다 썼어요. 이번 탐사의 크레딧·광석은 30%예요. 발견과 유물은 그대로 얻어요.",
+  "@srf_reduced": {
+    "description": "Surface: daily full rewards used up; this run pays 30%"
+  },
+  "srf_rule1": "지점 5곳을 찾아 조사하세요",
+  "@srf_rule1": {
+    "description": "Surface intro rule 1"
+  },
+  "srf_rule2": "산소가 다 되기 전에 착륙선으로 돌아오세요",
+  "@srf_rule2": {
+    "description": "Surface intro rule 2"
+  },
+  "srf_rule3": "격추되거나 산소가 떨어지면 전리품은 절반",
+  "@srf_rule3": {
+    "description": "Surface intro rule 3"
+  },
+  "srf_launch": "착륙",
+  "@srf_launch": {
+    "description": "Surface intro: start button"
+  },
+  "srf_oxygen": "산소",
+  "@srf_oxygen": {
+    "description": "Surface HUD: oxygen label"
+  },
+  "srf_sitesLeft": "남은 지점 {n}",
+  "@srf_sitesLeft": {
+    "description": "Surface HUD: sites left. n = count",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "srf_return": "귀환",
+  "@srf_return": {
+    "description": "Surface HUD: big button inside the lander radius to return with all loot"
+  },
+  "srf_leaveTitle": "탐사를 그만둘까요?",
+  "@srf_leaveTitle": {
+    "description": "Surface: confirm leaving mid-run"
+  },
+  "srf_leaveBody": "비상 귀환하면 전리품은 절반만 챙겨요.",
+  "@srf_leaveBody": {
+    "description": "Surface: leaving mid-run is an emergency return with half the loot"
+  },
+  "srf_leaveYes": "비상 귀환",
+  "@srf_leaveYes": {
+    "description": "Surface: confirm emergency return"
+  },
+  "srf_resultTitle": "{reason, select, returned{귀환 성공!} oxygen{비상 귀환} destroyed{탐사 차량 파괴} other{}}",
+  "@srf_resultTitle": {
+    "description": "Surface result title. reason = returned/oxygen/destroyed",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "srf_kept": "전리품 {pct}% 챙김",
+  "@srf_kept": {
+    "description": "Surface result: share of loot kept. pct = percent",
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "srf_sitesDone": "조사한 지점 {done}/{total}",
+  "@srf_sitesDone": {
+    "description": "Surface result: surveyed sites. done/total",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "srf_newDisc": "새 발견",
+  "@srf_newDisc": {
+    "description": "Surface result: section title for new permanent discoveries"
+  },
+  "srf_newRelic": "새 유물",
+  "@srf_newRelic": {
+    "description": "Surface result: section title for new relics"
+  },
+  "srf_back": "돌아가기",
+  "@srf_back": {
+    "description": "Surface result: back to the main game"
+  },
+  "srf_colonyDisc": "지표 발견",
+  "@srf_colonyDisc": {
+    "description": "Colony panel: header for surface discoveries on this planet"
   }
 }

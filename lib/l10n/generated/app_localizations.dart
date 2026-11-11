@@ -6486,6 +6486,216 @@ abstract class L10n {
   /// In ko, this message translates to:
   /// **'원정 중인 승무원 {n}명도 보상 없이 함께 떠나요.'**
   String r4_ascendExpWarn(int n);
+
+  /// Surface exploration unlocked: Mina's one-time hint when the captain first goes next to a landable planet. planet = planet name
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet}에는 착륙할 수 있어요! 행성 곁에서 「착륙 탐사」를 누르면 탐사 차량으로 지표를 돌며 유적과 광맥을 찾을 수 있어요.'**
+  String srf_dlgUnlock(String planet);
+
+  /// Surface exploration: 30 seconds of oxygen left, creatures swarm (Mina)
+  ///
+  /// In ko, this message translates to:
+  /// **'산소가 30초 남았어요! 생물들이 몰려와요. 화살표를 따라 착륙선으로!'**
+  String get srf_dlgOxygen;
+
+  /// Surface exploration site name. kind = ruin/wreck/nest/vein
+  ///
+  /// In ko, this message translates to:
+  /// **'{kind, select, ruin{유적} wreck{추락선 잔해} nest{에일리언 둥지} vein{희귀 광맥} other{}}'**
+  String srf_site(String kind);
+
+  /// Surface exploration: floating text when a site is finished. kind = ruin/wreck/nest/vein
+  ///
+  /// In ko, this message translates to:
+  /// **'{kind, select, ruin{발굴 완료!} wreck{화물 회수!} nest{둥지 소탕!} vein{광맥 발견!} other{}}'**
+  String srf_floatSite(String kind);
+
+  /// Surface exploration: floating text when a ruin gives a relic
+  ///
+  /// In ko, this message translates to:
+  /// **'유물 발견!'**
+  String get srf_floatRelic;
+
+  /// Relic name (codex relic tab). id = starMap/crystalCore/idol/gear/seed/mask/tablet/compass
+  ///
+  /// In ko, this message translates to:
+  /// **'{id, select, starMap{고대 성도} crystalCore{수정 핵} idol{외계 신상} gear{고대 톱니} seed{화석 씨앗} mask{의식 가면} tablet{석판} compass{중력 나침반} other{}}'**
+  String srf_relicName(String id);
+
+  /// Relic one-line description (codex relic tab). id = starMap/crystalCore/idol/gear/seed/mask/tablet/compass
+  ///
+  /// In ko, this message translates to:
+  /// **'{id, select, starMap{지금은 없는 별자리가 새겨진 금속판.} crystalCore{손에 쥐면 희미하게 맥박이 뛴다.} idol{누구를 닮았는지 아무도 모르는 신상.} gear{아직도 아주 천천히 돌고 있다.} seed{물을 주면 싹이 틀지도 모른다.} mask{눈구멍이 세 개인 의식용 가면.} tablet{미나도 읽지 못하는 글자가 빼곡하다.} compass{바늘이 늘 은하 중심을 가리킨다.} other{}}'**
+  String srf_relicDesc(String id);
+
+  /// Codex tab title for relics dug up on planet surfaces
+  ///
+  /// In ko, this message translates to:
+  /// **'유물'**
+  String get srf_codexTab;
+
+  /// Codex relic tab: hint under an undiscovered relic
+  ///
+  /// In ko, this message translates to:
+  /// **'행성 유적에서 발굴'**
+  String get srf_relicHint;
+
+  /// Action button next to a planet: land and explore its surface
+  ///
+  /// In ko, this message translates to:
+  /// **'착륙 탐사'**
+  String get srf_land;
+
+  /// Shown instead of the land button next to a gas giant
+  ///
+  /// In ko, this message translates to:
+  /// **'가스 행성 — 착륙 불가'**
+  String get srf_gasNoLand;
+
+  /// Surface intro card title. planet = planet name
+  ///
+  /// In ko, this message translates to:
+  /// **'{planet} 지표 탐사'**
+  String srf_introTitle(String planet);
+
+  /// Permanent planet discovery name. kind = vein/nest/surveyed
+  ///
+  /// In ko, this message translates to:
+  /// **'{kind, select, vein{광맥 발견} nest{둥지 소탕} surveyed{완전 탐사} other{}}'**
+  String srf_disc(String kind);
+
+  /// Effect of a permanent discovery on the planet's colony. kind = vein/nest/surveyed
+  ///
+  /// In ko, this message translates to:
+  /// **'{kind, select, vein{광석 생산 +0.4/초 × 레벨} nest{방어막 최대치 ×1.25} surveyed{크레딧 생산 ×1.1} other{}}'**
+  String srf_discEffect(String kind);
+
+  /// Surface intro: no permanent discoveries on this planet yet
+  ///
+  /// In ko, this message translates to:
+  /// **'아직 이 행성에서 찾은 발견이 없어요'**
+  String get srf_noDisc;
+
+  /// Colony panel: discoveries take effect once the planet is settled
+  ///
+  /// In ko, this message translates to:
+  /// **'정착하면 효과가 적용돼요'**
+  String get srf_discPending;
+
+  /// Full-reward surface runs left today. n = runs left, total = daily runs
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 온전한 보상 {n}/{total}회 남음'**
+  String srf_fullLeft(int n, int total);
+
+  /// Surface: daily full rewards used up; this run pays 30%
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 온전한 보상을 다 썼어요. 이번 탐사의 크레딧·광석은 30%예요. 발견과 유물은 그대로 얻어요.'**
+  String get srf_reduced;
+
+  /// Surface intro rule 1
+  ///
+  /// In ko, this message translates to:
+  /// **'지점 5곳을 찾아 조사하세요'**
+  String get srf_rule1;
+
+  /// Surface intro rule 2
+  ///
+  /// In ko, this message translates to:
+  /// **'산소가 다 되기 전에 착륙선으로 돌아오세요'**
+  String get srf_rule2;
+
+  /// Surface intro rule 3
+  ///
+  /// In ko, this message translates to:
+  /// **'격추되거나 산소가 떨어지면 전리품은 절반'**
+  String get srf_rule3;
+
+  /// Surface intro: start button
+  ///
+  /// In ko, this message translates to:
+  /// **'착륙'**
+  String get srf_launch;
+
+  /// Surface HUD: oxygen label
+  ///
+  /// In ko, this message translates to:
+  /// **'산소'**
+  String get srf_oxygen;
+
+  /// Surface HUD: sites left. n = count
+  ///
+  /// In ko, this message translates to:
+  /// **'남은 지점 {n}'**
+  String srf_sitesLeft(int n);
+
+  /// Surface HUD: big button inside the lander radius to return with all loot
+  ///
+  /// In ko, this message translates to:
+  /// **'귀환'**
+  String get srf_return;
+
+  /// Surface: confirm leaving mid-run
+  ///
+  /// In ko, this message translates to:
+  /// **'탐사를 그만둘까요?'**
+  String get srf_leaveTitle;
+
+  /// Surface: leaving mid-run is an emergency return with half the loot
+  ///
+  /// In ko, this message translates to:
+  /// **'비상 귀환하면 전리품은 절반만 챙겨요.'**
+  String get srf_leaveBody;
+
+  /// Surface: confirm emergency return
+  ///
+  /// In ko, this message translates to:
+  /// **'비상 귀환'**
+  String get srf_leaveYes;
+
+  /// Surface result title. reason = returned/oxygen/destroyed
+  ///
+  /// In ko, this message translates to:
+  /// **'{reason, select, returned{귀환 성공!} oxygen{비상 귀환} destroyed{탐사 차량 파괴} other{}}'**
+  String srf_resultTitle(String reason);
+
+  /// Surface result: share of loot kept. pct = percent
+  ///
+  /// In ko, this message translates to:
+  /// **'전리품 {pct}% 챙김'**
+  String srf_kept(int pct);
+
+  /// Surface result: surveyed sites. done/total
+  ///
+  /// In ko, this message translates to:
+  /// **'조사한 지점 {done}/{total}'**
+  String srf_sitesDone(int done, int total);
+
+  /// Surface result: section title for new permanent discoveries
+  ///
+  /// In ko, this message translates to:
+  /// **'새 발견'**
+  String get srf_newDisc;
+
+  /// Surface result: section title for new relics
+  ///
+  /// In ko, this message translates to:
+  /// **'새 유물'**
+  String get srf_newRelic;
+
+  /// Surface result: back to the main game
+  ///
+  /// In ko, this message translates to:
+  /// **'돌아가기'**
+  String get srf_back;
+
+  /// Colony panel: header for surface discoveries on this planet
+  ///
+  /// In ko, this message translates to:
+  /// **'지표 발견'**
+  String get srf_colonyDisc;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
